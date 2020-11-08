@@ -1,0 +1,40 @@
+# Backup files
+*~
+.\#*
+\#*\#
+*.*.swp
+# OS cruft
+.DS_Store
+.Spotlight-V100
+Thumbs.db
+.Trashes
+# Binaries or build artefacts
+*.a
+*.core
+.deps
+_deps
+*.dSYM
+*.exe
+*.ncb
+*.o
+*.suo
+# CMake build stuff
+*.cmake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts
+compile_commands.json
+Makefile
+Testing
+# Test files. Take care of the .txt case...
+*.bat
+*.bmp
+CHAR_????
+*.LFL
+*.log
+*-new
+*-tmp
+*~~*tmp*
+*.txt
+!CMakeLists.txt
+XY.txt
