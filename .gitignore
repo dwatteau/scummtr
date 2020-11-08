@@ -19,6 +19,7 @@ _deps
 *.o
 *.suo
 # CMake build stuff
+build/
 *.cmake
 CMakeCache.txt
 CMakeFiles/
