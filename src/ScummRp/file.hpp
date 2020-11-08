@@ -470,7 +470,7 @@ public:
 				_srcFile.close();
 			}
 			catch (std::exception &) { }
-			cerr << "Unhandled exception in SeqFile::~SeqFile:" << endl << e.what() << endl;
+			std::cerr << "Unhandled exception in SeqFile::~SeqFile:" << std::endl << e.what() << std::endl;
 		}
 		catch (...)
 		{
@@ -480,7 +480,7 @@ public:
 				_srcFile.close();
 			}
 			catch (std::exception &) { }
-			cerr << "Unhandled exception in SeqFile::~SeqFile." << endl;
+			std::cerr << "Unhandled exception in SeqFile::~SeqFile." << std::endl;
 		}
 	}
 private: // Not copiable
