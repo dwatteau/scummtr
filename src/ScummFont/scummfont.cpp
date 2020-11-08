@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 #include <stdexcept>
 #include <iostream>
 #include <fstream>

@@ -23,6 +23,7 @@
 
 #include "io.hpp"
 
+#include <stdlib.h>
 #include <iostream>
 
 using namespace std;

@@ -27,6 +27,8 @@
 #include "rptypes.hpp"
 #include "toolbox.hpp"
 
+#include <stdio.h>
+#include <string.h>
 #include <iostream>
 #include <algorithm>
 

@@ -30,6 +30,8 @@
 #include "trblock.hpp"
 #include "io.hpp"
 
+#include <cstring>
+
 using namespace std;
 
 /*
