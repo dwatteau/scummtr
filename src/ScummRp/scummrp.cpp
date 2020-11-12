@@ -389,9 +389,8 @@ void ScummRp::_processGameFilesV4567()
 
 int ScummRp::main(int argc, const char **argv)
 {
-	int r, g, i;
+	int g, i;
 
-	r = 0;
 	ScummRp::_getOptions(argc, argv, ScummRp::_rpParameters);
 	ScummRpIO::setInfoSlots(ScummRp::_infoSlots);
 	ScummRpIO::info(INF_GLOBAL, xsprintf("%s %s by %s", ScummRp::NAME, ScummRp::VERSION, ScummRp::AUTHOR));

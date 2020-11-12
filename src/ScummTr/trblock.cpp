@@ -445,7 +445,7 @@ template <int I> void OldObjectCodeBlock::_importName(Text &input, int32 &script
 	byte b, o;
 	list<int32> verbs;
 	list<int32>::iterator i;
-	int32 size, sizeDiff, minOffset;
+	int32 size, sizeDiff;
 
 	_file->seekg(I + _headerSize, ios::beg);
 	_file->getByte(o);
@@ -466,7 +466,6 @@ template <int I> void OldObjectCodeBlock::_importName(Text &input, int32 &script
 		scriptOffset += sizeDiff;
 		if (sizeDiff != 0)
 		{
-			minOffset = o + size;
 			_listVerbs(verbs, scriptOffset);
 			for (i = verbs.begin(); i != verbs.end(); ++i)
 				*i += sizeDiff;

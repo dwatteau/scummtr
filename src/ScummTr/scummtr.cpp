@@ -322,9 +322,8 @@ int32 ScummTr::getRscNameMaxLengh(ScummTr::RscType t, int32 id)
 
 int ScummTr::main(int argc, const char **argv)
 {
-	int r, g, i;
+	int g, i;
 
-	r = 0;
 	ScummTr::_getOptions(argc, argv, ScummTr::_trParameters);
 	ScummRpIO::setInfoSlots(ScummRp::_infoSlots);
 	ScummRpIO::info(INF_GLOBAL, xsprintf("%s %s by %s", ScummTr::NAME, ScummTr::VERSION, ScummTr::AUTHOR));
