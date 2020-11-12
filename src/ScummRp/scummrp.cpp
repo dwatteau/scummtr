@@ -132,8 +132,8 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 		else
 			switch (blockPtr->getTag())
 			{
-			case 'LECF':
-			case 'LE':
+			case MKTAG4('L','E','C','F'):
+			case MKTAG2('L','E'):
 				if (processedBlocks.find(filename) == processedBlocks.end())
 				{
 					TreeBlockPtr lecf;
@@ -183,47 +183,47 @@ template <int A> void ScummRp::_exploreIndex(TreeBlock &index)
 	while ((tocBlockPtr = index.nextBlock()) != 0)
 		switch (tocBlockPtr->getTag())
 		{
-		case 'DROO':
-		case '0R':
-		case '0Rv1':
-		case '0Rv2':
-		case '0Rv3':
+		case MKTAG4('D','R','O','O'):
+		case MKTAG2('0','R'):
+		case MKTAG4('0','R','v','1'):
+		case MKTAG4('0','R','v','2'):
+		case MKTAG4('0','R','v','3'):
 			if (A == ScummRp::ACT_SAVE)
 				tocBlockPtr->importToc(ScummRp::_mainTocSet.roomToc);
 			else if (A == ScummRp::ACT_LOAD)
 				tocBlockPtr->exportToc(ScummRp::_mainTocSet.roomToc);
 			break;
-		case 'DSCR':
-		case '0S':
-		case '0Sv1':
-		case '0Sv2':
-		case '0Sv3':
+		case MKTAG4('D','S','C','R'):
+		case MKTAG2('0','S'):
+		case MKTAG4('0','S','v','1'):
+		case MKTAG4('0','S','v','2'):
+		case MKTAG4('0','S','v','3'):
 			if (A == ScummRp::ACT_SAVE)
 				tocBlockPtr->importToc(ScummRp::_mainTocSet.scrpToc);
 			else if (A == ScummRp::ACT_LOAD)
 				tocBlockPtr->exportToc(ScummRp::_mainTocSet.scrpToc);
 			break;
-		case 'DSOU':
-		case '0N':
-		case '0Nv1':
-		case '0Nv2':
-		case '0Nv3':
+		case MKTAG4('D','S','O','U'):
+		case MKTAG2('0','N'):
+		case MKTAG4('0','N','v','1'):
+		case MKTAG4('0','N','v','2'):
+		case MKTAG4('0','N','v','3'):
 			if (A == ScummRp::ACT_SAVE)
 				tocBlockPtr->importToc(ScummRp::_mainTocSet.sounToc);
 			else if (A == ScummRp::ACT_LOAD)
 				tocBlockPtr->exportToc(ScummRp::_mainTocSet.sounToc);
 			break;
-		case 'DCOS':
-		case '0C':
-		case '0Cv1':
-		case '0Cv2':
-		case '0Cv3':
+		case MKTAG4('D','C','O','S'):
+		case MKTAG2('0','C'):
+		case MKTAG4('0','C','v','1'):
+		case MKTAG4('0','C','v','2'):
+		case MKTAG4('0','C','v','3'):
 			if (A == ScummRp::ACT_SAVE)
 				tocBlockPtr->importToc(ScummRp::_mainTocSet.costToc);
 			else if (A == ScummRp::ACT_LOAD)
 				tocBlockPtr->exportToc(ScummRp::_mainTocSet.costToc);
 			break;
-		case 'DCHR':
+		case MKTAG4('D','C','H','R'):
 			if (A == ScummRp::ACT_SAVE)
 				tocBlockPtr->importToc(ScummRp::_mainTocSet.charToc);
 			else if (A == ScummRp::ACT_LOAD)
@@ -371,7 +371,7 @@ void ScummRp::_processGameFilesV4567()
 		dataPath += '/';
 		dataPath += dataFileName;
 		disk = new BlocksFile(dataPath.c_str(), ScummRp::_fileOptions,
-							  ScummRp::_backupSystem, i, 'DISK', ScummRp::_game.dataXorKey);
+							  ScummRp::_backupSystem, i, MKTAG4('D','I','S','K'), ScummRp::_game.dataXorKey);
 		if (ScummRp::_options & ScummRp::OPT_IMPORT)
 			ScummRp::_explore(*disk, ScummRp::ACT_IMPORT);
 		else

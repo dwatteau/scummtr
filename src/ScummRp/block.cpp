@@ -235,13 +235,13 @@ int TreeBlock::_findIdInBlock(TreeBlock &block)
 
 	switch (block._tag)
 	{
-	case 'OBIM':
+	case MKTAG4('O','B','I','M'):
 		{
 			TreeBlock subblock;
 
 			block.firstBlock();
 			while (block.nextBlock(subblock))
-				if (subblock._tag == 'IMHD')
+				if (subblock._tag == MKTAG4('I','M','H','D'))
 				{
 					if (ScummRp::game.version < 7)
 						subblock._file->seekg(subblock._headerSize, ios::beg);
@@ -253,13 +253,13 @@ int TreeBlock::_findIdInBlock(TreeBlock &block)
 			throw Block::InvalidDataFromGame("Cannot find IMHD block in OBIM block",
 											 block._file->name(), block._file->fullOffset());
 		}
-	case 'OBCD':
+	case MKTAG4('O','B','C','D'):
 		{
 			TreeBlock subblock;
 
 			block.firstBlock();
 			while (block.nextBlock(subblock))
-				if (subblock._tag == 'CDHD')
+				if (subblock._tag == MKTAG4('C','D','H','D'))
 				{
 					if (ScummRp::game.version < 7)
 						subblock._file->seekg(subblock._headerSize, ios::beg);
@@ -271,16 +271,16 @@ int TreeBlock::_findIdInBlock(TreeBlock &block)
 			throw Block::InvalidDataFromGame("Cannot find CDHD block in OBCD block",
 											 block._file->name(), block._file->fullOffset());
 		}
-	case 'OI':
-	case 'OC':
-	case 'OCv1':
-	case 'OCv2':
-	case 'OCv3':
+	case MKTAG2('O','I'):
+	case MKTAG2('O','C'):
+	case MKTAG4('O','C','v','1'):
+	case MKTAG4('O','C','v','2'):
+	case MKTAG4('O','C','v','3'):
 		block._file->seekg(block._headerSize, ios::beg);
 		block._file->getLE16(w);
 		return w;
-	case 'LSCR':
-	case 'LS':
+	case MKTAG4('L','S','C','R'):
+	case MKTAG2('L','S'):
 		block._file->seekg(block._headerSize, ios::beg);
 		block._file->getByte(b);
 		return b;
@@ -824,13 +824,13 @@ TreeBlock *IndexFile::nextBlock()
  */
 
 LFLFile::LFLFile(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
-	BlocksFile(path, opts, bak, id, 'LF', xorKey), RoomPack()
+	BlocksFile(path, opts, bak, id, MKTAG2('L','F'), xorKey), RoomPack()
 {
 	RoomPack::_eraseOffsetsInRange((byte)_id, _file->size(), 0xFFFFFFFF);
 }
 
 LFLFile::LFLFile(const char *path, int opts, int id, byte xorKey) :
-	BlocksFile(path, opts, id, 'LF', xorKey), RoomPack()
+	BlocksFile(path, opts, id, MKTAG2('L','F'), xorKey), RoomPack()
 {
 	RoomPack::_eraseOffsetsInRange((byte)_id, _file->size(), 0xFFFFFFFF);
 }
@@ -1023,7 +1023,7 @@ bool LECFPack::nextBlock(TreeBlock &subblock)
 	if (_nextSubblockOffset == 0)
 		throw TreeBlock::InvalidBlock("LECFPack::nextBlock: Index not loaded yet");
 	nextOffset = _file->size();
-	if (_tag == 'LECF')
+	if (_tag == MKTAG4('L','E','C','F'))
 	{
 		nextOffset += ScummRp::game.blockHeaderSize;
 		_nextSubblockOffset += ScummRp::game.blockHeaderSize;
@@ -1032,7 +1032,7 @@ bool LECFPack::nextBlock(TreeBlock &subblock)
 	while (_loff.nextId(roomId))
 		if ((int32)_loff[roomId] >= _nextSubblockOffset && (int32)_loff[roomId] < nextOffset)
 			nextOffset = _loff[roomId];
-	if (_tag == 'LECF')
+	if (_tag == MKTAG4('L','E','C','F'))
 		nextOffset -= ScummRp::game.blockHeaderSize;
 	_nextSubblockOffset = nextOffset;
 	return TreeBlock::nextBlock(subblock);
@@ -1049,7 +1049,7 @@ void LECFPack::_init()
 
 	TreeBlock::firstBlock();
 	if (TreeBlock::nextBlock(block))
-		if (block._tag == 'LOFF' || block._tag == 'FO')
+		if (block._tag == MKTAG4('L','O','F','F') || block._tag == MKTAG2('F','O'))
 		{
 			_LOFFOffset = _headerSize + block._headerSize;
 			_firstBlockOffset = block._file->size();
@@ -1065,9 +1065,9 @@ int LECFPack::_findSubblockId(TreeBlock &subblock) const
 {
 	switch (subblock._tag)
 	{
-	case 'LFLF':
+	case MKTAG4('L','F','L','F'):
 		return _loff.findId((uint32)(subblock._file->offset() + subblock._headerSize));
-	case 'LF':
+	case MKTAG2('L','F'):
 		return _loff.findId((uint32)(subblock._file->offset()));
 	default:
 		return TreeBlock::_findSubblockId(subblock);
@@ -1218,7 +1218,7 @@ bool OldIndexFile::nextBlock(TreeBlock &subblock)
  * OldIndexFileV1
  */
 
-const uint32 OldIndexFileV1::TAGS[] = { '0Ov1', '0Rv1', '0Cv1', '0Sv1', '0Nv1', 0 };
+const uint32 OldIndexFileV1::TAGS[] = { MKTAG4('0','O','v','1'), MKTAG4('0','R','v','1'), MKTAG4('0','C','v','1'), MKTAG4('0','S','v','1'), MKTAG4('0','N','v','1'), 0 };
 const int OldIndexFileV1::MM_SIZES[] = { 0x0320, 0xA5, 0x69, 0x258, 0x12C, 0 };
 const int OldIndexFileV1::ZAK_SIZES[] = { 0x0307, 0xB7, 0x6F, 0x1D1, 0x168, 0 };
 
@@ -1281,7 +1281,7 @@ bool OldIndexFileV1::nextBlock(TreeBlock &subblock)
  * OldIndexFileV2
  */
 
-const uint32 OldIndexFileV2::TAGS[] = { '0Ov2', '0Rv2', '0Cv2', '0Sv2', '0Nv2', 0 };
+const uint32 OldIndexFileV2::TAGS[] = { MKTAG4('0','O','v','2'), MKTAG4('0','R','v','2'), MKTAG4('0','C','v','2'), MKTAG4('0','S','v','2'), MKTAG4('0','N','v','2'), 0 };
 
 OldIndexFileV2::OldIndexFileV2(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
 	OldIndexFile(path, opts, bak, id, xorKey)
@@ -1301,7 +1301,7 @@ OldIndexFileV2::~OldIndexFileV2()
  * OldIndexFileV3
  */
 
-const uint32 OldIndexFileV3::TAGS[] = { '0Ov3', '0Rv3', '0Cv3', '0Sv3', '0Nv3', 0 };
+const uint32 OldIndexFileV3::TAGS[] = { MKTAG4('0','O','v','3'), MKTAG4('0','R','v','3'), MKTAG4('0','C','v','3'), MKTAG4('0','S','v','3'), MKTAG4('0','N','v','3'), 0 };
 
 OldIndexFileV3::OldIndexFileV3(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
 	OldIndexFile(path, opts, bak, id, xorKey)
@@ -1438,18 +1438,18 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
  * OldLFLFileV1
  */
 
-const uint32 OldLFLFileV1::TAGS[] = { 'ROv1', 'COv1', 'SCv1', 'SOv1' };
+const uint32 OldLFLFileV1::TAGS[] = { MKTAG4('R','O','v','1'), MKTAG4('C','O','v','1'), MKTAG4('S','C','v','1'), MKTAG4('S','O','v','1') };
 
 OldLFLFileV1::OldLFLFileV1(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
 	OldLFLFile(path, opts, bak, id, xorKey)
 {
-	_tag = 'LFv1';
+	_tag = MKTAG4('L','F','v','1');
 }
 
 OldLFLFileV1::OldLFLFileV1(const char *path, int opts, int id, byte xorKey) :
 	OldLFLFile(path, opts, id, xorKey)
 {
-	_tag = 'LFv1';
+	_tag = MKTAG4('L','F','v','1');
 }
 
 OldLFLFileV1::~OldLFLFileV1()
@@ -1465,18 +1465,18 @@ TreeBlock *OldLFLFileV1::nextBlock()
  * OldLFLFileV2
  */
 
-const uint32 OldLFLFileV2::TAGS[] = { 'ROv2', 'COv2', 'SCv2', 'SOv2' };
+const uint32 OldLFLFileV2::TAGS[] = { MKTAG4('R','O','v','2'), MKTAG4('C','O','v','2'), MKTAG4('S','C','v','2'), MKTAG4('S','O','v','2') };
 
 OldLFLFileV2::OldLFLFileV2(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
 	OldLFLFile(path, opts, bak, id, xorKey)
 {
-	_tag = 'LFv2';
+	_tag = MKTAG4('L','F','v','2');
 }
 
 OldLFLFileV2::OldLFLFileV2(const char *path, int opts, int id, byte xorKey) :
 	OldLFLFile(path, opts, id, xorKey)
 {
-	_tag = 'LFv2';
+	_tag = MKTAG4('L','F','v','2');
 }
 
 OldLFLFileV2::~OldLFLFileV2()
@@ -1492,18 +1492,18 @@ TreeBlock *OldLFLFileV2::nextBlock()
  * OldLFLFileV3
  */
 
-const uint32 OldLFLFileV3::TAGS[] = { 'ROv3', 'COv3', 'SCv3', 'SOv3' };
+const uint32 OldLFLFileV3::TAGS[] = { MKTAG4('R','O','v','3'), MKTAG4('C','O','v','3'), MKTAG4('S','C','v','3'), MKTAG4('S','O','v','3') };
 
 OldLFLFileV3::OldLFLFileV3(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
 	OldLFLFile(path, opts, bak, id, xorKey)
 {
-	_tag = 'LFv3';
+	_tag = MKTAG4('L','F','v','3');
 }
 
 OldLFLFileV3::OldLFLFileV3(const char *path, int opts, int id, byte xorKey) :
 	OldLFLFile(path, opts, id, xorKey)
 {
-	_tag = 'LFv3';
+	_tag = MKTAG4('L','F','v','3');
 }
 
 OldLFLFileV3::~OldLFLFileV3()
@@ -2123,21 +2123,21 @@ void OldRoom::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 	if (sizeDiff != 0)
 	{
 		minOffset = subblock._file->offset() + subblock._file->size() - sizeDiff;
-		if ((subblock._tag & 0xFFFFFF00) == ('HDv#' & 0xFFFFFF00)) // TODO _tagToType(): 'HDv1' -> BT_HD
+		if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('H','D','v','#') & 0xFFFFFF00)) // TODO _tagToType(): 'HDv1' -> BT_HD
 			throw InvalidDataFromDump(xsprintf("%s blocks must always be 4 bytes long", tagToStr(subblock._tag)));
 		else if ((oiBlockPtr = dynamic_cast<OldOIBlock *> (&subblock)) != 0)
 			_oiSize[oiBlockPtr->_num] = subblock._file->size();
 		else if ((lsBlockPtr = dynamic_cast<OldLSBlock *> (&subblock)) != 0)
 			_lsSize[lsBlockPtr->_num] = subblock._file->size();
-		else if ((subblock._tag & 0xFFFFFF00) == ('NLv#' & 0xFFFFFF00)
-				 || (subblock._tag & 0xFFFFFF00) == ('SLv#' & 0xFFFFFF00))
+		else if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('N','L','v','#') & 0xFFFFFF00)
+				 || (subblock._tag & 0xFFFFFF00) == (MKTAG4('S','L','v','#') & 0xFFFFFF00))
 		{
 			if (subblock._file->size() & 0xFFFFFF00)
 				throw InvalidDataFromDump(xsprintf("%s blocks must be smaller than 256 bytes",
 												   tagToStr(subblock._tag)));
-			if ((subblock._tag & 0xFFFFFF00) == ('SLv#' & 0xFFFFFF00))
+			if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('S','L','v','#') & 0xFFFFFF00))
 				_file->seekp(_oSLSize(), ios::beg);
-			else // ((subblock._tag & 0xFFFFFF00) == ('NLv#' & 0xFFFFFF00))
+			else // ((subblock._tag & 0xFFFFFF00) == (MKTAG4('N','L','v','#') & 0xFFFFFF00))
 				_file->seekp(_oNLSize(), ios::beg);
 			_file->putByte((byte)subblock._file->size());
 			_oLSTOC = (uint16)(_oLSTOC + sizeDiff);
@@ -2164,10 +2164,10 @@ void OldRoom::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
  * OldRoomV1
  */
 
-const uint32 OldRoomV1::TAGS[] = { 0, 'HDv1', 'BXv1', 'BMv1', 'OIv1', 'NLv1',
-								   'SLv1', 'OCv1', 'EXv1', 'ENv1', 0 };
+const uint32 OldRoomV1::TAGS[] = { 0, MKTAG4('H','D','v','1'), MKTAG4('B','X','v','1'), MKTAG4('B','M','v','1'), MKTAG4('O','I','v','1'), MKTAG4('N','L','v','1'),
+								   MKTAG4('S','L','v','1'), MKTAG4('O','C','v','1'), MKTAG4('E','X','v','1'), MKTAG4('E','N','v','1'), 0 };
 
-const uint32 OldRoomV1::BMTAGS[] = { 'B1v1', 'B2v1', 'B3v1', 'B4v1', 'B5v1', 0 };
+const uint32 OldRoomV1::BMTAGS[] = { MKTAG4('B','1','v','1'), MKTAG4('B','2','v','1'), MKTAG4('B','3','v','1'), MKTAG4('B','4','v','1'), MKTAG4('B','5','v','1'), 0 };
 
 OldRoomV1::OldRoomV1() :
 	OldRoom()
@@ -2297,10 +2297,10 @@ uint16 OldRoomV1::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
  * OldRoomV2
  */
 
-const uint32 OldRoomV2::TAGS[] = { 0, 'HDv2', 'BXv2', 'BMv2', 'OIv2', 'NLv2',
-								   'SLv2', 'OCv2', 'EXv2', 'ENv2', 0 };
+const uint32 OldRoomV2::TAGS[] = { 0, MKTAG4('H','D','v','2'), MKTAG4('B','X','v','2'), MKTAG4('B','M','v','2'), MKTAG4('O','I','v','2'), MKTAG4('N','L','v','2'),
+								   MKTAG4('S','L','v','2'), MKTAG4('O','C','v','2'), MKTAG4('E','X','v','2'), MKTAG4('E','N','v','2'), 0 };
 
-const uint32 OldRoomV2::BMTAGS[] = { 'IMv2', 'MAv2', 0 };
+const uint32 OldRoomV2::BMTAGS[] = { MKTAG4('I','M','v','2'), MKTAG4('M','A','v','2'), 0 };
 
 OldRoomV2::OldRoomV2() :
 	OldRoom()
@@ -2450,10 +2450,10 @@ uint16 OldRoomV2::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
  * OldRoomV3
  */
 
-const uint32 OldRoomV3::TAGS[] = { 0, 'HDv3', 'BXv3', 'BMv3', 'OIv3', 'NLv3',
-								   'SLv3', 'OCv3', 'EXv3', 'ENv3', 'LSv3', 0 };
+const uint32 OldRoomV3::TAGS[] = { 0, MKTAG4('H','D','v','3'), MKTAG4('B','X','v','3'), MKTAG4('B','M','v','3'), MKTAG4('O','I','v','3'), MKTAG4('N','L','v','3'),
+								   MKTAG4('S','L','v','3'), MKTAG4('O','C','v','3'), MKTAG4('E','X','v','3'), MKTAG4('E','N','v','3'), MKTAG4('L','S','v','3'), 0 };
 
-const uint32 OldRoomV3::BMTAGS[] = { 'IMv3', 'MAv3', 0 };
+const uint32 OldRoomV3::BMTAGS[] = { MKTAG4('I','M','v','3'), MKTAG4('M','A','v','3'), 0 };
 
 OldRoomV3::OldRoomV3() :
 	OldRoom()

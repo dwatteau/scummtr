@@ -74,8 +74,8 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 		else
 			switch (blockPtr->getTag())
 			{
-			case 'LECF':
-			case 'LE':
+			case MKTAG4('L','E','C','F'):
+			case MKTAG2('L','E'):
 				{
 					TreeBlockPtr lecf;
 
@@ -83,22 +83,22 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 					ScummTr::_explore(*lecf, action, text);
 				}
 				break;
-			case 'SCRP':
-			case 'SC':
-			case 'SCv3':
-			case 'SCv2':
-			case 'SCv1':
-			case 'ENCD':
-			case 'EXCD':
-			case 'EN':
-			case 'EX':
-			case 'ENv3':
-			case 'EXv3':
-			case 'ENv2':
-			case 'EXv2':
-			case 'ENv1':
-			case 'EXv1':
-			case 'LSv3':
+			case MKTAG4('S','C','R','P'):
+			case MKTAG2('S','C'):
+			case MKTAG4('S','C','v','3'):
+			case MKTAG4('S','C','v','2'):
+			case MKTAG4('S','C','v','1'):
+			case MKTAG4('E','N','C','D'):
+			case MKTAG4('E','X','C','D'):
+			case MKTAG2('E','N'):
+			case MKTAG2('E','X'):
+			case MKTAG4('E','N','v','3'):
+			case MKTAG4('E','X','v','3'):
+			case MKTAG4('E','N','v','2'):
+			case MKTAG4('E','X','v','2'):
+			case MKTAG4('E','N','v','1'):
+			case MKTAG4('E','X','v','1'):
+			case MKTAG4('L','S','v','3'):
 				{
 					if (action == ScummRp::ACT_IMPORT)
 						ScriptBlock(*blockPtr).importText(text);
@@ -108,8 +108,8 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 						ScriptBlock(*blockPtr).getRscNameLimits();
 				}
 				break;
-			case 'LSCR':
-			case 'LS':
+			case MKTAG4('L','S','C','R'):
+			case MKTAG2('L','S'):
 				{
 					if (action == ScummRp::ACT_IMPORT)
 						ScriptBlock(*blockPtr, (ScummRp::_game.version == 7) ? 2 : 1).importText(text);
@@ -119,10 +119,10 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 						ScriptBlock(*blockPtr, (ScummRp::_game.version == 7) ? 2 : 1).getRscNameLimits();
 				}
 				break;
-			case 'OBCD':
+			case MKTAG4('O','B','C','D'):
 				ScummTr::_explore(*blockPtr, action, text);
 				break;
-			case 'OBNA':
+			case MKTAG4('O','B','N','A'):
 				{
 					if (action == ScummRp::ACT_IMPORT)
 						ObjectNameBlock(*blockPtr).importText(text);
@@ -132,7 +132,7 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 						ObjectNameBlock(*blockPtr).getRscNameLimits();
 				}
 				break;
-			case 'VERB':
+			case MKTAG4('V','E','R','B'):
 				{
 					if (action == ScummRp::ACT_IMPORT)
 						ObjectCodeBlock(*blockPtr).importText(text);
@@ -142,8 +142,8 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 						ObjectCodeBlock(*blockPtr).getRscNameLimits();
 				}
 				break;
-			case 'OC':
-			case 'OCv3':
+			case MKTAG2('O','C'):
+			case MKTAG4('O','C','v','3'):
 				{
 					if (action == ScummRp::ACT_IMPORT)
 						OldObjectCodeBlock(*blockPtr).importText(text);
@@ -153,8 +153,8 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 						OldObjectCodeBlock(*blockPtr).getRscNameLimits();
 				}
 				break;
-			case 'OCv2':
-			case 'OCv1':
+			case MKTAG4('O','C','v','2'):
+			case MKTAG4('O','C','v','1'):
 				{
 					if (action == ScummRp::ACT_IMPORT)
 						OldObjectCodeBlockV1(*blockPtr).importText(text);
