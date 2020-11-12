@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.1)
 
-project ("ScummTR")
+project ("ScummTR" CXX)
 
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -22,7 +22,7 @@ else()
 
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         add_compile_options(-fcheck-new)
-    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
+    elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     endif()
 
     if(IS_BIG_ENDIAN)
