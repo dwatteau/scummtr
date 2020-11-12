@@ -246,7 +246,7 @@ void ScummTr::_processGameFilesV4567()
 			dataPath += '/';
 			dataPath += dataFileName;
 			disk = new BlocksFile(dataPath.c_str(), ScummRp::_fileOptions,
-								  ScummRp::_backupSystem, i, 'DISK', ScummRp::_game.dataXorKey);
+								  ScummRp::_backupSystem, i, MKTAG4('D','I','S','K'), ScummRp::_game.dataXorKey);
 			if (ScummRp::_options & ScummRp::OPT_IMPORT)
 				ScummTr::_explore(*disk, ScummRp::ACT_IMPORT, text);
 			else
