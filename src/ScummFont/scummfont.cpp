@@ -32,6 +32,9 @@
 #include <fstream>
 #include <string>
 
+#define MKTAG2(a,b)	((unsigned short)((b) | ((a) << 8)))
+#define MKTAG4(a,b,c,d)	((unsigned int)((d) | ((c) << 8) | ((b) << 16) | ((a) << 24)))
+
 static unsigned char glPalette[0x400] = {
 	0xFF, 0x00, 0xFF, 0, 0xFF, 0xFF, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0xFF, 0x00, 0,
 	0x00, 0x00, 0xFF, 0, 0x00, 0xFF, 0xFF, 0, 0x00, 0x7F, 0x7F, 0, 0x7F, 0x00, 0x00, 0,
@@ -141,7 +144,7 @@ static void getFontInfo(long &baseOffset, ifstream &file, int &version, int &bpp
 	lineSpacing = 0;
 	file.exceptions(ios::eofbit | ios::failbit | ios::badbit);
 	file.read((char *)&tag, 4);
-	baseOffset = tag == 'RAHC' ? 8 : 0;
+	baseOffset = tag == MKTAG4('R','A','H','C') ? 8 : 0;
 	file.seekg(baseOffset + 0x04, ios::beg);
 	if (file.get() != 'c')
 		throw runtime_error("Not a scumm font");
@@ -282,7 +285,7 @@ static void loadBmp(const char *path)
 	if (!file.is_open())
 		throw runtime_error("Cannot open BMP file");
 	file.read((char *)&w, 2);
-	if (w != 'MB')
+	if (w != MKTAG2('M','B'))
 		throw runtime_error("This is not a BMP file");
 	file.seekg(8, ios::cur);
 	file.read((char *)&off, 4);
