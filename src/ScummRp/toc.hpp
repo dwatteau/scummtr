@@ -31,8 +31,6 @@
 #include <string>
 #include <stdexcept>
 
-enum GlobalTocFormat;
-
 /*
  * TableOfContent
  */
