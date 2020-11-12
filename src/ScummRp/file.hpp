@@ -314,23 +314,23 @@ public:
 		T::open(backupSystem.backup(filename, false).c_str(), std::ios::binary | std::ios::in | std::ios::out | std::ios::trunc);
 		if (!File::isReadOnly(filename))
 			_srcFile.open(filename, std::ios::binary | std::ios::in);
-		if (is_open() != _srcFile.is_open())
+		if (this->is_open() != _srcFile.is_open())
 		{
 			T::close();
 			_srcFile.close();
 		}
 		_shift = 0;
 		_tmpSize = 0;
-		_setSize(_srcFile.size());
+		this->_setSize(_srcFile.size());
 	}
 	virtual void close()
 	{
-		if (!is_open())
+		if (!this->is_open())
 			return;
-		if (_tmpSize < _size)
+		if (_tmpSize < this->_size)
 			if (_tmpSize - _shift < _srcFile.size())
 			{
-				seekp(_tmpSize, std::ios::beg);
+				this->seekp(_tmpSize, std::ios::beg);
 				_srcFile.seekg(_tmpSize - _shift, std::ios::beg);
 				File::write(_srcFile, _srcFile.size() + _shift - _tmpSize);
 			}
@@ -351,18 +351,18 @@ public:
 	{
 		std::streamoff gpos, ppos;
 
-		gpos = tellg(std::ios::beg);
-		if (gpos + n > _size)
-			throw File::UnexpectedEOF(xsprintf("Unexpected EOF in: %s", _path));
+		gpos = this->tellg(std::ios::beg);
+		if (gpos + n > this->_size)
+			throw File::UnexpectedEOF(xsprintf("Unexpected EOF in: %s", this->_path));
 		if (gpos + n > _tmpSize)
 		{
-			ppos = tellp(std::ios::beg);
-			seekp(_tmpSize, std::ios::beg);
+			ppos = this->tellp(std::ios::beg);
+			this->seekp(_tmpSize, std::ios::beg);
 			_srcFile.seekg(_tmpSize - _shift, std::ios::beg);
 			File::write(_srcFile, gpos + n - _tmpSize);
-			seekp(ppos, std::ios::beg);
+			this->seekp(ppos, std::ios::beg);
 		}
-		seekg(gpos, std::ios::beg);
+		this->seekg(gpos, std::ios::beg);
 		T::read(s, n);
 		return *this;
 	}
@@ -370,12 +370,12 @@ public:
 	{
 		std::streamoff ppos;
 
-		ppos = tellp(std::ios::beg);
-		if (ppos + n > _size)
-			_setSize(ppos + n);
+		ppos = this->tellp(std::ios::beg);
+		if (ppos + n > this->_size)
+			this->_setSize(ppos + n);
 		if (ppos > _tmpSize)
 		{
-			seekp(_tmpSize, std::ios::beg);
+			this->seekp(_tmpSize, std::ios::beg);
 			_srcFile.seekg(_tmpSize - _shift, std::ios::beg);
 			if (ppos - _shift > _srcFile.size())
 			{
@@ -388,7 +388,7 @@ public:
 		}
 		if (ppos + n > _tmpSize)
 			_tmpSize = ppos + n;
-		seekp(ppos, std::ios::beg);
+		this->seekp(ppos, std::ios::beg);
 		T::write(s, n);
 		return *this;
 	}
@@ -402,10 +402,10 @@ public:
 		std::streamsize oldSize;
 		char c;
 
-		oldSize = _size;
+		oldSize = this->_size;
 		if (offset == 0)
 			return;
-		ppos = tellp(std::ios::beg);
+		ppos = this->tellp(std::ios::beg);
 		if (offset > 0)
 			if (ppos == _tmpSize && _tmpSize >= _srcFile.size() + _shift)
 				return;
@@ -415,7 +415,7 @@ public:
 			{
 				if (_tmpSize < ppos)
 				{
-					seekg(ppos, std::ios::beg);
+					this->seekg(ppos, std::ios::beg);
 					read(&c, 0);
 				}
 				_tmpSize += offset;
@@ -425,7 +425,7 @@ public:
 				throw std::out_of_range("SeqFile::_moveEnd: Tried moving data past beginning of file");
 			else if (_tmpSize < ppos + offset)
 			{
-				seekg(ppos + offset, std::ios::beg);
+				this->seekg(ppos + offset, std::ios::beg);
 				read(&c, 0);
 			}
 			else if (_tmpSize > ppos)
@@ -435,9 +435,9 @@ public:
 			}
 			else
 				_tmpSize = ppos + offset;
-		_setSize(oldSize + offset);
+		this->_setSize(oldSize + offset);
 		_shift += offset;
-		seekp(ppos, std::ios::beg);
+		this->seekp(ppos, std::ios::beg);
 	}
 public:
 	SeqFile() :
@@ -448,19 +448,19 @@ public:
 		T(backupSystem.backup(filename, false).c_str(), std::ios::binary | std::ios::in | std::ios::out | std::ios::trunc),
 		_srcFile(filename, std::ios::binary | std::ios::in | std::ios::out), _tmpSize(0), _shift(0)
 	{
-		if (is_open() != _srcFile.is_open())
+		if (this->is_open() != _srcFile.is_open())
 		{
 			T::close();
 			_srcFile.close();
 		}
-		_setSize(_srcFile.size());
+		this->_setSize(_srcFile.size());
 	}
 	virtual ~SeqFile()
 	{
 		// A destructor shouldn't throw exceptions, so let's catch them all.
 		try
 		{
-			close();
+			this->close();
 		}
 		catch (std::exception &e)
 		{
