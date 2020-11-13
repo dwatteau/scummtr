@@ -338,7 +338,7 @@ public:
 			{
 				T::close();
 				_srcFile.close();
-				throw SeqFile::Error("SeqFile::close: Wrong size");
+				throw typename SeqFile::Error("SeqFile::close: Wrong size");
 			}
 		T::close();
 		_srcFile.close();
