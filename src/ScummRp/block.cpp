@@ -32,8 +32,6 @@
 #include <iostream>
 #include <algorithm>
 
-using namespace std;
-
 /*
  * Block
  */
@@ -244,9 +242,9 @@ int TreeBlock::_findIdInBlock(TreeBlock &block)
 				if (subblock._tag == MKTAG4('I','M','H','D'))
 				{
 					if (ScummRp::game.version < 7)
-						subblock._file->seekg(subblock._headerSize, ios::beg);
+						subblock._file->seekg(subblock._headerSize, std::ios::beg);
 					else
-						subblock._file->seekg(subblock._headerSize + 4, ios::beg);
+						subblock._file->seekg(subblock._headerSize + 4, std::ios::beg);
 					subblock._file->getLE16(w);
 					return w;
 				}
@@ -262,9 +260,9 @@ int TreeBlock::_findIdInBlock(TreeBlock &block)
 				if (subblock._tag == MKTAG4('C','D','H','D'))
 				{
 					if (ScummRp::game.version < 7)
-						subblock._file->seekg(subblock._headerSize, ios::beg);
+						subblock._file->seekg(subblock._headerSize, std::ios::beg);
 					else
-						subblock._file->seekg(subblock._headerSize + 4, ios::beg);
+						subblock._file->seekg(subblock._headerSize + 4, std::ios::beg);
 					subblock._file->getLE16(w);
 					return w;
 				}
@@ -276,12 +274,12 @@ int TreeBlock::_findIdInBlock(TreeBlock &block)
 	case MKTAG4('O','C','v','1'):
 	case MKTAG4('O','C','v','2'):
 	case MKTAG4('O','C','v','3'):
-		block._file->seekg(block._headerSize, ios::beg);
+		block._file->seekg(block._headerSize, std::ios::beg);
 		block._file->getLE16(w);
 		return w;
 	case MKTAG4('L','S','C','R'):
 	case MKTAG2('L','S'):
-		block._file->seekg(block._headerSize, ios::beg);
+		block._file->seekg(block._headerSize, std::ios::beg);
 		block._file->getByte(b);
 		return b;
 	default:
@@ -297,7 +295,7 @@ int TreeBlock::_findSubblockId(TreeBlock &subblock) const
 void TreeBlock::_leaveParent()
 {
 	if (_childrenCount > 0)
-		throw logic_error("TreeBlock::_leaveParent: Block has children");
+		throw std::logic_error("TreeBlock::_leaveParent: Block has children");
 	if (_parent)
 	{
 		--_parent->_childrenCount;
@@ -319,7 +317,7 @@ void TreeBlock::_makeSubblock(TreeBlock &subblock, BlockFormat blockFormat, int3
 
 	subblock._blockFormat = blockFormat;
 	subblock._headerSize = headerSize;
-	_file->seekg(_nextSubblockOffset, ios::beg);
+	_file->seekg(_nextSubblockOffset, std::ios::beg);
 	Block::_readHeader(subblock._blockFormat, *_file, size, subblock._tag);
 	if (size < 0 || size + _nextSubblockOffset > _file->size())
 		throw Block::InvalidDataFromGame(xsprintf("Block too big: 0x%X", size),
@@ -395,14 +393,14 @@ void TreeBlock::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 		_parent->_subblockUpdated(*this, sizeDiff);
 	if (sizeDiff == 0)
 		return;
-	_file->seekp(0, ios::beg);
+	_file->seekp(0, std::ios::beg);
 	Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag);
 	if (_nextSubblockOffset > subblock._file->offset())
 		_nextSubblockOffset += sizeDiff;
 	subblock._parentVersion = ++_version;
 }
 
-void TreeBlock::makePath(string &dir, string &name) const
+void TreeBlock::makePath(std::string &dir, std::string &name) const
 {
 	if (_parent != 0)
 	{
@@ -418,14 +416,14 @@ void TreeBlock::dump(const char *path)
 {
 	File output;
 
-	output.open(path, ios::binary | ios::out | ios::trunc);
+	output.open(path, std::ios::binary | std::ios::out | std::ios::trunc);
 	if (!output.is_open())
 	{
 		ScummRpIO::warning(xsprintf("Cannot open %s", path));
 		return;
 	}
 	ScummRpIO::info(INF_LISTING, xsprintf("Exporting %s", path));
-	_file->seekg(0, ios::beg);
+	_file->seekg(0, std::ios::beg);
 	output.write(*_file, _file->size());
 	output.close();
 #ifdef SCUMMRP_TODO_REMOVE_ME
@@ -434,7 +432,7 @@ void TreeBlock::dump(const char *path)
 	// leftover from early development.
 	if (_tag == 'CLUT')
 	{
-		_file->seekg(0, ios::beg);
+		_file->seekg(0, std::ios::beg);
 		for (int i = 0; i < 256; ++i)
 		{
 			if ()
@@ -452,12 +450,12 @@ void TreeBlock::update(const char *path)
 
 	if (_childrenCount > 0)
 #ifdef SCUMMRP_NO_THROW_FIX
-		logic_error("TreeBlock::update: The block has children");
+		std::logic_error("TreeBlock::update: The block has children");
 #else
 		// XXX: only the last version, after the official release, had this
-		throw logic_error("TreeBlock::update: The block has children");
+		throw std::logic_error("TreeBlock::update: The block has children");
 #endif
-	input.open(path, ios::binary | ios::in);
+	input.open(path, std::ios::binary | std::ios::in);
 	if (!input.is_open())
 		return;
 	newSize = input.size();
@@ -469,10 +467,10 @@ void TreeBlock::update(const char *path)
 		ScummRpIO::info(INF_LISTING, xsprintf("Importing %s", path));
 		if (newSize < _file->size())
 			_file->resize(newSize);
-		_file->seekp(0, ios::beg);
-		input.seekg(0, ios::beg);
+		_file->seekp(0, std::ios::beg);
+		input.seekg(0, std::ios::beg);
 		_file->write(input, newSize);
-		_file->seekp(0, ios::beg);
+		_file->seekp(0, std::ios::beg);
 		Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag); // Ignore the imported header
 		if (_parent != 0)
 			_parent->_subblockUpdated(*this, sizeDiff);
@@ -522,13 +520,13 @@ GlobalTocBlock::~GlobalTocBlock()
 
 void GlobalTocBlock::exportToc(TableOfContent &toc)
 {
-	_file->seekg(_headerSize, ios::beg);
+	_file->seekg(_headerSize, std::ios::beg);
 	toc.load(*_file, ScummRp::game.globalTocFormat);
 }
 
 void GlobalTocBlock::importToc(TableOfContent &toc)
 {
-	_file->seekp(_headerSize, ios::beg);
+	_file->seekp(_headerSize, std::ios::beg);
 	toc.save(*_file, ScummRp::game.globalTocFormat);
 }
 
@@ -547,13 +545,13 @@ GlobalTocBlockV1::~GlobalTocBlockV1()
 
 void GlobalTocBlockV1::exportToc(TableOfContent &toc)
 {
-	_file->seekg(_headerSize, ios::beg);
+	_file->seekg(_headerSize, std::ios::beg);
 	toc.load(*_file, GTCFMT_8SEP16, _file->size() / 3);
 }
 
 void GlobalTocBlockV1::importToc(TableOfContent &toc)
 {
-	_file->seekp(_headerSize, ios::beg);
+	_file->seekp(_headerSize, std::ios::beg);
 	toc.save(*_file, GTCFMT_8SEP16, true);
 }
 
@@ -609,7 +607,7 @@ void BlocksFile::_init(const char *path, int opts, BackUp *bak, int id, uint32 t
 	if (opts & BlocksFile::BFOPT_READONLY)
 	{
 		f = (opts & BlocksFile::BFOPT_RAM) ? &_ownRAMFile : &_ownFile;
-		f->open(path, ios::binary | ios::in);
+		f->open(path, std::ios::binary | std::ios::in);
 	}
 	else
 	{
@@ -627,12 +625,12 @@ void BlocksFile::_init(const char *path, int opts, BackUp *bak, int id, uint32 t
 					f = &_ownSeqFile;
 				}
 			else
-				f->open(bak->backup(path).c_str(), ios::binary | ios::out | ios::in);
+				f->open(bak->backup(path).c_str(), std::ios::binary | std::ios::out | std::ios::in);
 		else
-			f->open(path, ios::binary | ios::out | ios::in);
+			f->open(path, std::ios::binary | std::ios::out | std::ios::in);
 	}
 	if (!f->is_open())
-		throw runtime_error(xsprintf("Cannot open %s", path));
+		throw std::runtime_error(xsprintf("Cannot open %s", path));
 	_file = new FilePart(*f);
 	_file->setXORKey(xorKey);
 }
@@ -1053,7 +1051,7 @@ void LECFPack::_init()
 		{
 			_LOFFOffset = _headerSize + block._headerSize;
 			_firstBlockOffset = block._file->size();
-			block._file->seekg(block._headerSize, ios::beg);
+			block._file->seekg(block._headerSize, std::ios::beg);
 			_loff.load(*block._file);
 			return;
 		}
@@ -1087,7 +1085,7 @@ void LECFPack::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 	while (_loff.nextId(roomId))
 		if (_loff[roomId] >= minOffset)
 			_loff[roomId] += sizeDiff;
-	_file->seekp(_LOFFOffset, ios::beg);
+	_file->seekp(_LOFFOffset, std::ios::beg);
 	_loff.save(*_file);
 }
 
@@ -1193,13 +1191,13 @@ bool OldIndexFile::nextBlock(TreeBlock &subblock)
 	subblock._nextSubblockOffset = 0;
 	if (_pos == 0) // Object flags (different format)
 	{
-		_file->seekg(_nextSubblockOffset, ios::beg);
+		_file->seekg(_nextSubblockOffset, std::ios::beg);
 		_file->getLE16(w);
 		size = sizeof (uint16) + w * (int32)_sizeOfObjFlag();
 	}
 	else
 	{
-		_file->seekg(_nextSubblockOffset, ios::beg);
+		_file->seekg(_nextSubblockOffset, std::ios::beg);
 		_file->getByte(b);
 		size = sizeof (byte) + b * (sizeof (uint16) + sizeof (byte));
 	}
@@ -1264,7 +1262,7 @@ bool OldIndexFileV1::nextBlock(TreeBlock &subblock)
 		size = ZAK_SIZES[_pos];
 		break;
 	default:
-		throw logic_error("OldIndexFileV1::nextBlock: V1 game is neither Zak nor MM");
+		throw std::logic_error("OldIndexFileV1::nextBlock: V1 game is neither Zak nor MM");
 	}
 	if (size + _nextSubblockOffset > _file->size())
 		throw Block::InvalidDataFromGame(xsprintf("Block too big: 0x%X", size),
@@ -1395,7 +1393,7 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 		}
 		if (o < _nextSubblockOffset)
 			gap = true;
-		_file->seekg(_nextSubblockOffset, ios::beg);
+		_file->seekg(_nextSubblockOffset, std::ios::beg);
 		_file->getLE16(w);
 		_file->getByte(b);
 		// TODO Hack for Indy3 Mac. In 76.LFL SO_27 (0x4CA8) has a wrong size and hides 4 sounds.
@@ -1421,7 +1419,7 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 		subblock._tag = _tags(3);
 		break;
 	default:
-		throw logic_error("OldLFLFile::nextBlock: Unknown TOC type");
+		throw std::logic_error("OldLFLFile::nextBlock: Unknown TOC type");
 	}
 	if (!TreeBlock::nextBlock(subblock))
 		return false;
@@ -1619,7 +1617,7 @@ void OldRoom::_prepareBlockOO(TreeBlock &subblock, int32 offsetToOffset, int32 s
 {
 	uint16 w;
 
-	_file->seekg(offsetToOffset, ios::beg);
+	_file->seekg(offsetToOffset, std::ios::beg);
 	_file->getLE16(w);
 	_prepareBlockO(subblock, w, size, type);
 }
@@ -1655,7 +1653,7 @@ TreeBlock *OldRoom::nextBlock()
 					_init();
 					ScummRpIO::setQuiet(false);
 				}
-				catch (exception &) { ScummRpIO::setQuiet(false); throw; }
+				catch (std::exception &) { ScummRpIO::setQuiet(false); throw; }
 			return 0;
 		case BT_HD:
 			subblock = new LeafBlock();
@@ -1684,22 +1682,22 @@ TreeBlock *OldRoom::nextBlock()
 			break;
 		case BT_NL:
 			subblock = new LeafBlock();
-			_file->seekg(_oNLSize(), ios::beg);
+			_file->seekg(_oNLSize(), std::ios::beg);
 			_file->getByte(b);
 			_prepareBlockO(*subblock, _oObjTOC() + (int)_oiSize.size() * 4, b, _type);
 			break;
 		case BT_SL:
 			subblock = new LeafBlock();
-			_file->seekg(_oNLSize(), ios::beg);
+			_file->seekg(_oNLSize(), std::ios::beg);
 			_file->getByte(b);
 			w = (uint16)(_oObjTOC() + _oiSize.size() * 4 + b);
-			_file->seekg(_oSLSize(), ios::beg);
+			_file->seekg(_oSLSize(), std::ios::beg);
 			_file->getByte(b);
 			_prepareBlockO(*subblock, w, b, _type);
 			break;
 		case BT_OC:
 			subblock = new LeafBlock();
-			_file->seekg(_oObjTOC() + _pos * 2 + _n * 2, ios::beg);
+			_file->seekg(_oObjTOC() + _pos * 2 + _n * 2, std::ios::beg);
 			_file->getLE16(w);
 			_nextSubblockOffset = w;
 			_makeSubblock(*subblock, BFMT_SIZEONLY, 4);
@@ -1729,7 +1727,7 @@ TreeBlock *OldRoom::nextBlock()
 			lsBlock->_num = _pos;
 			subblock = lsBlock;
 			_prepareBlockOO(*subblock, _oLSTOC + _pos * 3 + 1, _lsSize[_pos], _type);
-			_file->seekg(_oLSTOC + _pos * 3, ios::beg);
+			_file->seekg(_oLSTOC + _pos * 3, std::ios::beg);
 			_file->getByte(b);
 			subblock->_id = b;
 			break;
@@ -1764,14 +1762,14 @@ void OldRoom::_getSizes()
 	byte objNbr, nlSize, slSize;
 	uint16 w, bmLastOffset;
 	int32 bxEnd, bmEnd, ocEnd, exEnd, enEnd;
-	vector<uint16> bmOffsets, oiOffsets, ocOffsets, lsOffsets;
+	std::vector<uint16> bmOffsets, oiOffsets, ocOffsets, lsOffsets;
 
 	bmEnd = ocEnd = exEnd = enEnd = (uint16)_file->size();
-	_file->seekg(_oObjNbr(), ios::beg);
+	_file->seekg(_oObjNbr(), std::ios::beg);
 	_file->getByte(objNbr);
-	_file->seekg(_oNLSize(), ios::beg);
+	_file->seekg(_oNLSize(), std::ios::beg);
 	_file->getByte(nlSize);
-	_file->seekg(_oSLSize(), ios::beg);
+	_file->seekg(_oSLSize(), std::ios::beg);
 	_file->getByte(slSize);
 	// -- LS --
 	_getLSOffsets(lsOffsets, objNbr, nlSize, slSize);
@@ -1779,7 +1777,7 @@ void OldRoom::_getSizes()
 		enEnd = *min_element(lsOffsets.begin(), lsOffsets.end());
 	_calcSizes(_lsSize, lsOffsets, _file->size());
 	// -- EN --
-	_file->seekg(_ooEN(), ios::beg);
+	_file->seekg(_ooEN(), std::ios::beg);
 	_file->getLE16(w);
 	if (w != 0)
 	{
@@ -1789,7 +1787,7 @@ void OldRoom::_getSizes()
 	else
 		_enSize = 0;
 	// -- EX --
-	_file->seekg(_ooEX(), ios::beg);
+	_file->seekg(_ooEX(), std::ios::beg);
 	_file->getLE16(w);
 	if (w != 0)
 	{
@@ -1801,7 +1799,7 @@ void OldRoom::_getSizes()
 	// -- BM (1) --
 	_getBMOffsets(bmOffsets);
 	if (bmOffsets.size() == 0)
-		throw logic_error("OldRoom::_getSizes: no BM offsets");
+		throw std::logic_error("OldRoom::_getSizes: no BM offsets");
 	bmLastOffset = *max_element(bmOffsets.begin(), bmOffsets.end());
 	bxEnd = *min_element(bmOffsets.begin(), bmOffsets.end());
 	// -- OI, OC --
@@ -1809,7 +1807,7 @@ void OldRoom::_getSizes()
 	{
 		oiOffsets.resize(objNbr);
 		ocOffsets.resize(objNbr);
-		_file->seekg(_oObjTOC(), ios::beg);
+		_file->seekg(_oObjTOC(), std::ios::beg);
 		for (i = 0; i < objNbr; ++i)
 			_file->getLE16(oiOffsets[i]);
 		for (i = 0; i < objNbr; ++i)
@@ -1835,7 +1833,7 @@ void OldRoom::_getSizes()
 	_updated = false;
 }
 
-void OldRoom::_findMostLikelyOIId(vector<int> &candidates) const
+void OldRoom::_findMostLikelyOIId(std::vector<int> &candidates) const
 {
 	struct
 	{
@@ -1893,7 +1891,7 @@ void OldRoom::_findMostLikelyOIId(vector<int> &candidates) const
 		{ 9, 2, { 2, 3 }, { 697, 698 }, 1 },   // room 47
 		//
 		{ 0, 0, { 0 }, { 0 }, 0 } };
-	string msg;
+	std::string msg;
 	int i, j, k;
 
 	for (i = 0; pref[i].oiNbr != 0; ++i)
@@ -1928,12 +1926,12 @@ void OldRoom::_findMostLikelyOIId(vector<int> &candidates) const
 }
 
 // oiOffset.size() == ocOffset.size() && oiOffset.size() > 0
-void OldRoom::_getOIInfo(uint16 bmLastOffset, vector<uint16> &oiOffset, const vector<uint16> &ocOffset)
+void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, const std::vector<uint16> &ocOffset)
 {
 	byte b;
 	uint16 firstOCOffset, w;
-	vector<OldRoom::OIInfo> oiInfo;
-	vector<int> v;
+	std::vector<OldRoom::OIInfo> oiInfo;
+	std::vector<int> v;
 	int n, i, j, k;
 	bool ambiguousSize;
 
@@ -1946,13 +1944,13 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, vector<uint16> &oiOffset, const ve
 	{
 		uint16 width, height;
 
-		_file->seekg(ocOffset[i] + _oOCId(), ios::beg);
+		_file->seekg(ocOffset[i] + _oOCId(), std::ios::beg);
 		_file->getLE16(w);
 		_oiId[i] = w;
-		_file->seekg(ocOffset[i] + _oOCWidth(), ios::beg);
+		_file->seekg(ocOffset[i] + _oOCWidth(), std::ios::beg);
 		_file->getByte(b);
 		width = b << 3;
-		_file->seekg(ocOffset[i] + _oOCHeight(), ios::beg);
+		_file->seekg(ocOffset[i] + _oOCHeight(), std::ios::beg);
 		_file->getByte(b);
 		height = b & 0xF8;
 		if (oiOffset[i] >= firstOCOffset || oiOffset[i] <= bmLastOffset) // (1)
@@ -2017,7 +2015,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, vector<uint16> &oiOffset, const ve
 			_oiSize[oiInfo[i].num] = oiInfo[i].size;
 }
 
-void OldRoom::_defCheckOCSizes(const vector<uint16> &ocOffset, int32 ocEnd)
+void OldRoom::_defCheckOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd)
 {
 	int i;
 	uint16 w;
@@ -2030,7 +2028,7 @@ void OldRoom::_defCheckOCSizes(const vector<uint16> &ocOffset, int32 ocEnd)
 		int32 end;
 
 		end = i < lastObj ? ocOffset[i + 1] : ocEnd;
-		_file->seekg(ocOffset[i], ios::beg);
+		_file->seekg(ocOffset[i], std::ios::beg);
 		_file->getLE16(w);
 		if ((int32)(w + ocOffset[i]) != end)
 			throw Block::InvalidDataFromGame(xsprintf("Bad %s offset or size", Block::tagToStr(_tags(BT_OC))),
@@ -2038,13 +2036,13 @@ void OldRoom::_defCheckOCSizes(const vector<uint16> &ocOffset, int32 ocEnd)
 	}
 }
 
-void OldRoom::_getBMOffsets(vector<uint16> &bmOffset)
+void OldRoom::_getBMOffsets(std::vector<uint16> &bmOffset)
 {
 	uint16 w;
 	int i;
 
 	bmOffset.resize(_bmNbr());
-	_file->seekg(_ooBM(), ios::beg);
+	_file->seekg(_ooBM(), std::ios::beg);
 	for (i = 0; i < _bmNbr(); ++i)
 	{
 		_file->getLE16(w);
@@ -2052,12 +2050,12 @@ void OldRoom::_getBMOffsets(vector<uint16> &bmOffset)
 	}
 }
 
-void OldRoom::_calcSizes(vector<int32> &sizes, const vector<uint16> &offsets, int32 end)
+void OldRoom::_calcSizes(std::vector<int32> &sizes, const std::vector<uint16> &offsets, int32 end)
 {
 	int i;
-	vector<uint16> orderedOffsets;
+	std::vector<uint16> orderedOffsets;
 	size_t n;
-	vector<uint16>::iterator pos;
+	std::vector<uint16>::iterator pos;
 
 	n = offsets.size();
 	sizes.resize(n);
@@ -2084,13 +2082,13 @@ void OldRoom::_updateOffset(int32 offsetToOffset, int32 minOffset, int32 shift, 
 {
 	uint16 offset;
 
-	_file->seekg(offsetToOffset, ios::beg);
+	_file->seekg(offsetToOffset, std::ios::beg);
 	_file->getLE16(offset);
 	if (offset >= minOffset)
 	{
 		if ((offset + shift) & 0xFFFF0000)
 			throw InvalidDataFromDump(xsprintf("%s block too big", tagToStr(subblockTag)));
-		_file->seekp(offsetToOffset, ios::beg);
+		_file->seekp(offsetToOffset, std::ios::beg);
 		_file->putLE16((uint16)(offset + shift));
 	}
 }
@@ -2104,7 +2102,7 @@ void OldRoom::_cleanup()
 	for (i = 0; i < (int)_oiSize.size(); ++i)
 		if (_oiId[i] == -1)
 		{
-			_file->seekp(_oObjTOC() + 2 * i, ios::beg);
+			_file->seekp(_oObjTOC() + 2 * i, std::ios::beg);
 			_file->putLE16((uint16)0);
 		}
 }
@@ -2136,9 +2134,9 @@ void OldRoom::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 				throw InvalidDataFromDump(xsprintf("%s blocks must be smaller than 256 bytes",
 												   tagToStr(subblock._tag)));
 			if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('S','L','v','#') & 0xFFFFFF00))
-				_file->seekp(_oSLSize(), ios::beg);
+				_file->seekp(_oSLSize(), std::ios::beg);
 			else // ((subblock._tag & 0xFFFFFF00) == (MKTAG4('N','L','v','#') & 0xFFFFFF00))
-				_file->seekp(_oNLSize(), ios::beg);
+				_file->seekp(_oNLSize(), std::ios::beg);
 			_file->putByte((byte)subblock._file->size());
 			_oLSTOC = (uint16)(_oLSTOC + sizeDiff);
 		}
@@ -2203,7 +2201,7 @@ void OldRoomV1::_init()
 	}
 }
 
-void OldRoomV1::_checkOCSizes(const vector<uint16> &ocOffset, int32 ocEnd)
+void OldRoomV1::_checkOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd)
 {
 	// V1 files aren't clean enough to pass the same test as V2 and V3 files
 	int i;
@@ -2214,14 +2212,14 @@ void OldRoomV1::_checkOCSizes(const vector<uint16> &ocOffset, int32 ocEnd)
 	objNbr = (int)ocOffset.size() - 1;
 	for (i = 0; i < objNbr; ++i)
 	{
-		_file->seekg(ocOffset[i], ios::beg);
+		_file->seekg(ocOffset[i], std::ios::beg);
 		_file->getLE16(w);
 		if (w + ocOffset[i] != ocOffset[i + 1])
 			throw Block::InvalidDataFromGame(xsprintf("Bad %s offset or size", Block::tagToStr(_tags(BT_OC))),
 											 _file->name(), _file->fullOffset());
 	}
 	// last block
-	_file->seekg(ocOffset.back(), ios::beg);
+	_file->seekg(ocOffset.back(), std::ios::beg);
 	_file->getLE16(w);
 	if (w + ocOffset[i] > ocEnd) // <- difference with V2/V3. junk is allowed at the end.
 		throw Block::InvalidDataFromGame(xsprintf("Bad %s offset or size", Block::tagToStr(_tags(BT_OC))),
@@ -2230,7 +2228,7 @@ void OldRoomV1::_checkOCSizes(const vector<uint16> &ocOffset, int32 ocEnd)
 
 void OldRoomV1::_setBXOffset(uint16 o)
 {
-	_file->seekp(_ooBX(), ios::beg);
+	_file->seekp(_ooBX(), std::ios::beg);
 	_file->putByte((byte)o);
 }
 
@@ -2238,12 +2236,12 @@ uint16 OldRoomV1::_getBXOffset()
 {
 	byte b;
 
-	_file->seekg(_ooBX(), ios::beg);
+	_file->seekg(_ooBX(), std::ios::beg);
 	_file->getByte(b);
 	return (uint16)b;
 }
 
-void OldRoomV1::_getLSOffsets(vector<uint16> &, byte, byte, byte)
+void OldRoomV1::_getLSOffsets(std::vector<uint16> &, byte, byte, byte)
 {
 	// no LS blocks in V1
 }
@@ -2258,7 +2256,7 @@ uint16 OldRoomV1::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 	try
 	{
 		ambiguous = false;
-		_file->seekg(offset, ios::beg);
+		_file->seekg(offset, std::ios::beg);
 		size = (width >> 3) * (height >> 3) * 3;
 		for (z = 0; z < 4; ++z)
 			_file->getByte(common[z]);
@@ -2285,7 +2283,7 @@ uint16 OldRoomV1::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 					++x;
 				}
 		}
-		return (uint16)((int32)_file->tellg(ios::beg) - offset);
+		return (uint16)((int32)_file->tellg(std::ios::beg) - offset);
 	}
 	catch (File::UnexpectedEOF &)
 	{
@@ -2336,14 +2334,14 @@ void OldRoomV2::_init()
 	}
 }
 
-void OldRoomV2::_checkOCSizes(const vector<uint16> &ocOffset, int32 ocEnd)
+void OldRoomV2::_checkOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd)
 {
 	_defCheckOCSizes(ocOffset, ocEnd);
 }
 
 void OldRoomV2::_setBXOffset(uint16 o)
 {
-	_file->seekp(_ooBX(), ios::beg);
+	_file->seekp(_ooBX(), std::ios::beg);
 	_file->putByte((byte)o);
 }
 
@@ -2351,12 +2349,12 @@ uint16 OldRoomV2::_getBXOffset()
 {
 	byte b;
 
-	_file->seekg(_ooBX(), ios::beg);
+	_file->seekg(_ooBX(), std::ios::beg);
 	_file->getByte(b);
 	return (uint16)b;
 }
 
-void OldRoomV2::_getLSOffsets(vector<uint16> &, byte, byte, byte)
+void OldRoomV2::_getLSOffsets(std::vector<uint16> &, byte, byte, byte)
 {
 	// no LS blocks in V2
 }
@@ -2369,7 +2367,7 @@ uint16 OldRoomV2::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 	try
 	{
 		ambiguous = false;
-		_file->seekg(offset, ios::beg);
+		_file->seekg(offset, std::ios::beg);
 		x = 0;
 		y = 0;
 		while (x < width)
@@ -2438,7 +2436,7 @@ uint16 OldRoomV2::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 				}
 			}
 		}
-		return (uint16)((int32)_file->tellg(ios::beg) - offset);
+		return (uint16)((int32)_file->tellg(std::ios::beg) - offset);
 	}
 	catch (File::UnexpectedEOF &)
 	{
@@ -2489,14 +2487,14 @@ void OldRoomV3::_init()
 	}
 }
 
-void OldRoomV3::_checkOCSizes(const vector<uint16> &ocOffset, int32 ocEnd)
+void OldRoomV3::_checkOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd)
 {
 	_defCheckOCSizes(ocOffset, ocEnd);
 }
 
 void OldRoomV3::_setBXOffset(uint16 o)
 {
-	_file->seekp(_ooBX(), ios::beg);
+	_file->seekp(_ooBX(), std::ios::beg);
 	_file->putLE16(o);
 }
 
@@ -2504,18 +2502,18 @@ uint16 OldRoomV3::_getBXOffset()
 {
 	uint16 w;
 
-	_file->seekg(_ooBX(), ios::beg);
+	_file->seekg(_ooBX(), std::ios::beg);
 	_file->getLE16(w);
 	return w;
 }
 
-void OldRoomV3::_getLSOffsets(vector<uint16> &lsOffset, byte objNbr, byte nlSize, byte slSize)
+void OldRoomV3::_getLSOffsets(std::vector<uint16> &lsOffset, byte objNbr, byte nlSize, byte slSize)
 {
 	uint16 w;
 	byte lsId;
 
 	_oLSTOC = _oObjTOC() + objNbr * 4 + nlSize + slSize;
-	_file->seekg(_oLSTOC, ios::beg);
+	_file->seekg(_oLSTOC, std::ios::beg);
 	for (_file->getByte(lsId); lsId != 0; _file->getByte(lsId))
 	{
 		_file->getLE16(w);
@@ -2535,20 +2533,20 @@ uint16 OldRoomV3::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 	{
 		ambiguous = false;
 		end = 0;
-		_file->seekg(offset, ios::beg);
+		_file->seekg(offset, std::ios::beg);
 		_file->getLE16(w);
-		_file->seekg(w - sizeof w, ios::cur);
-		maskOffset = _file->tellg(ios::beg);
+		_file->seekg(w - sizeof w, std::ios::cur);
+		maskOffset = _file->tellg(std::ios::beg);
 		x = 0;
 		y = 0;
 		while (x < width)
 		{
-			_file->seekg(maskOffset + (x / 8) * 2, ios::beg);
+			_file->seekg(maskOffset + (x / 8) * 2, std::ios::beg);
 			_file->getLE16(w);
 			if (w != 0)
 			{
 				ambiguous = false;
-				_file->seekg(maskOffset + w, ios::beg);
+				_file->seekg(maskOffset + w, std::ios::beg);
 				while (y < height)
 				{
 					_file->getByte(color);
@@ -2577,12 +2575,12 @@ uint16 OldRoomV3::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 						}
 					}
 				}
-				end = _file->tellg(ios::beg);
+				end = _file->tellg(std::ios::beg);
 			}
 			y = 0;
 			x += 8;
 		}
-		return end > 0 ? (uint16)(end - offset) : (uint16)((int32)_file->tellg(ios::beg) - offset);
+		return end > 0 ? (uint16)(end - offset) : (uint16)((int32)_file->tellg(std::ios::beg) - offset);
 	}
 	catch (File::UnexpectedEOF &)
 	{

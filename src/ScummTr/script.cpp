@@ -27,8 +27,6 @@
 
 #include <algorithm>
 
-using namespace std;
-
 /*
  * Script
  */
@@ -40,7 +38,7 @@ Script::Script() :
 {
 }
 
-Script::Script(FilePart &f, streamoff o, streamsize s) :
+Script::Script(FilePart &f, std::streamoff o, std::streamsize s) :
 	_file(new FilePart(f, o, s)), _text(), _jump(), _spot(),
 	_log(true), _gettingRscNameLimits(false), _usingRscNameLimits(false)
 {
@@ -52,7 +50,7 @@ Script::~Script()
 
 void Script::_updateJumps(int32 offset, int32 diff, int lineNumber)
 {
-	list<JumpRef>::iterator i;
+	std::list<JumpRef>::iterator i;
 	int32 val;
 
 	for (i = _jump.begin(); i != _jump.end(); ++i)
@@ -70,9 +68,9 @@ void Script::_updateJumps(int32 offset, int32 diff, int lineNumber)
 	}
 }
 
-void Script::_writeJumps(string &buffer)
+void Script::_writeJumps(std::string &buffer)
 {
-	list<JumpRef>::iterator i;
+	std::list<JumpRef>::iterator i;
 	int32 val;
 
 	for (i = _jump.begin(); i != _jump.end(); ++i)
@@ -85,10 +83,10 @@ void Script::_writeJumps(string &buffer)
 
 void Script::importText(Text &input)
 {
-	list<StringRef>::iterator i;
-	list<int32>::iterator j;
+	std::list<StringRef>::iterator i;
+	std::list<int32>::iterator j;
 	int32 lengthDiff, totalDiff, lastEnd, minOffset;
-	string buffer, s, t;
+	std::string buffer, s, t;
 
 	parse();
 	if (_text.size() == 0)
@@ -100,7 +98,7 @@ void Script::importText(Text &input)
 		if (!input.nextLine(s, i->type))
 			throw Script::Error("Not enough lines in imported text");
 		lengthDiff = (int32)s.size() + 1 - i->length;
-		_file->seekg(lastEnd, ios::beg);
+		_file->seekg(lastEnd, std::ios::beg);
 		_file->read(t, i->offset - lastEnd);
 		buffer.append(t);
 		buffer.append(s);
@@ -115,20 +113,20 @@ void Script::importText(Text &input)
 			if (*j >= minOffset)
 				*j += lengthDiff;
 	}
-	_file->seekg(lastEnd, ios::beg);
+	_file->seekg(lastEnd, std::ios::beg);
 	_file->read(t, _file->size() - lastEnd);
 	buffer.append(t);
 	_writeJumps(buffer);
 	if ((int32)buffer.size() < _file->size())
 		_file->resize((int32)buffer.size());
-	_file->seekp(0, ios::beg);
+	_file->seekp(0, std::ios::beg);
 	_file->write(buffer);
 }
 
 void Script::exportText(Text &output, bool pad)
 {
-	list<StringRef>::iterator i;
-	string s;
+	std::list<StringRef>::iterator i;
+	std::string s;
 
 	_usingRscNameLimits = pad;
 	try
@@ -139,7 +137,7 @@ void Script::exportText(Text &output, bool pad)
 	_usingRscNameLimits = false;
 	for (i = _text.begin(); i != _text.end(); ++i)
 	{
-		_file->seekg(i->offset, ios::beg);
+		_file->seekg(i->offset, std::ios::beg);
 		_file->read(s, i->length - 1);
 		if (pad && i->padding > i->length - 1)
 			s.resize(i->padding, '@');
@@ -158,13 +156,13 @@ void Script::getRscNameLimits()
 	_gettingRscNameLimits = false;
 }
 
-void Script::setTrackedSpots(const list<int32> &spots)
+void Script::setTrackedSpots(const std::list<int32> &spots)
 {
 	_spot.resize(spots.size());
 	copy(spots.begin(), spots.end(), _spot.begin());
 }
 
-void Script::getTrackedSpots(list<int32> &spots) const
+void Script::getTrackedSpots(std::list<int32> &spots) const
 {
 	spots.resize(_spot.size());
 	copy(_spot.begin(), _spot.end(), spots.begin());
@@ -173,11 +171,11 @@ void Script::getTrackedSpots(list<int32> &spots) const
 #ifdef CHECK_SCRIPT_JUMPS
 void Script::_checkJumps()
 {
-	list<JumpRef>::iterator i;
+	std::list<JumpRef>::iterator i;
 	int32 pos;
 	int count, n;
 
-	_file->seekg(0, ios::beg);
+	_file->seekg(0, std::ios::beg);
 	count = 0;
 	n = (int)_jump.size();
 	_log = false;
@@ -185,9 +183,9 @@ void Script::_checkJumps()
 	{
 		if (ScummRp::game.version <= 2)
 #ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE
-			while ((pos = _file->tellg(ios::end)) < 0 && count < n)
+			while ((pos = _file->tellg(std::ios::end)) < 0 && count < n)
 #else
-			while ((pos = _file->tellg(ios::beg)) < _file->size() && count < n)
+			while ((pos = _file->tellg(std::ios::beg)) < _file->size() && count < n)
 #endif
 			{
 				for (i = _jump.begin(); i != _jump.end(); ++i)
@@ -197,9 +195,9 @@ void Script::_checkJumps()
 			}
 		else if (ScummRp::game.version <= 5)
 #ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE
-			while ((pos = _file->tellg(ios::end)) < 0 && count < n)
+			while ((pos = _file->tellg(std::ios::end)) < 0 && count < n)
 #else
-			while ((pos = _file->tellg(ios::beg)) < _file->size() && count < n)
+			while ((pos = _file->tellg(std::ios::beg)) < _file->size() && count < n)
 #endif
 			{
 				for (i = _jump.begin(); i != _jump.end(); ++i)
@@ -209,9 +207,9 @@ void Script::_checkJumps()
 			}
 		else if (ScummRp::game.version <= 7)
 #ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE
-			while ((pos = _file->tellg(ios::end)) < 0 && count < n)
+			while ((pos = _file->tellg(std::ios::end)) < 0 && count < n)
 #else
-			while ((pos = _file->tellg(ios::beg)) < _file->size() && count < n)
+			while ((pos = _file->tellg(std::ios::beg)) < _file->size() && count < n)
 #endif
 			{
 				for (i = _jump.begin(); i != _jump.end(); ++i)
@@ -231,29 +229,29 @@ void Script::parse()
 {
 	_text.resize(0);
 	_jump.resize(0);
-	_file->seekg(0, ios::beg);
+	_file->seekg(0, std::ios::beg);
 	try
 	{
 		if (ScummRp::game.version <= 2)
 #ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE
-			while (_file->tellg(ios::end) < 0)
+			while (_file->tellg(std::ios::end) < 0)
 #else
-			while (_file->tellg(ios::beg) < _file->size())
+			while (_file->tellg(std::ios::beg) < _file->size())
 #endif
 				_opv12();
 		else if (ScummRp::game.version <= 5)
 #ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE
-			while (_file->tellg(ios::end) < 0)
+			while (_file->tellg(std::ios::end) < 0)
 
 #else
-			while (_file->tellg(ios::beg) < _file->size())
+			while (_file->tellg(std::ios::beg) < _file->size())
 #endif
 				_opv345();
 		else if (ScummRp::game.version <= 7)
 #ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE
-			while (_file->tellg(ios::end) < 0)
+			while (_file->tellg(std::ios::end) < 0)
 #else
-			while (_file->tellg(ios::beg) < _file->size())
+			while (_file->tellg(std::ios::beg) < _file->size())
 #endif
 				_opv67();
 #ifdef CHECK_SCRIPT_JUMPS
@@ -263,13 +261,13 @@ void Script::parse()
 	catch (File::UnexpectedEOF &)
 	{
 		throw Script::ParseError(xsprintf("Unexpected end of script at 0x%X in %s",
-										  _file->fullOffset() + _file->tellg(ios::beg),
+										  _file->fullOffset() + _file->tellg(std::ios::beg),
 										  _file->name().c_str()));
 	}
 	catch (Script::ParseError &e)
 	{
 		throw Script::ParseError(xsprintf("Script error at 0x%X in %s (%s)",
-										  _file->fullOffset() + _file->tellg(ios::beg),
+										  _file->fullOffset() + _file->tellg(std::ios::beg),
 										  _file->name().c_str(), e.what()));
 	}
 }
@@ -287,7 +285,7 @@ byte Script::_peekByte()
 	byte b;
 
 	_file->getByte(b);
-	_file->seekg(-1, ios::cur);
+	_file->seekg(-1, std::ios::cur);
 	return b;
 }
 
@@ -346,7 +344,7 @@ void Script::_eatJump()
 	int16 val;
 	int32 offset;
 
-	offset = _file->tellg(ios::beg);
+	offset = _file->tellg(std::ios::beg);
 	val = (int16)_getWord();
 	if (_log)
 		_jump.push_back(JumpRef(offset, val + offset + sizeof (int16)));
@@ -356,7 +354,7 @@ int32 Script::_eatString(Text::LineType stringType, byte opcode)
 {
 	int32 start, length;
 
-	start = _file->tellg(ios::beg);
+	start = _file->tellg(std::ios::beg);
 	length = Text::getLineLength(_file, stringType);
 	if (length > 0 && _log) // Skip empty lines
 		_text.push_back(StringRef(start, length + 1, stringType, opcode));
@@ -1826,7 +1824,7 @@ void Script::_opv345(int r)
 			int i = _eatByteOrVar(opcode & 0x80);
 			_eatArgList();
 			if (i == 66)
-				cout << "ahoy" << endl;
+				std::cout << "ahoy" << std::endl;
 #else
 			_eatByteOrVar(opcode & 0x80);
 			_eatArgList();
@@ -2176,10 +2174,10 @@ void Script::_opv345(int r)
 			case 76:
 			case 77:
 			case 80:
-				cout << "startSound(" << i << ")" << endl;
+				std::cout << "startSound(" << i << ")" << std::endl;
 				break;
 			case -1:
-				cout << "startSound(?)" << endl;
+				std::cout << "startSound(?)" << std::endl;
 				break;
 			}
 #else
@@ -2607,10 +2605,10 @@ void Script::_opv345(int r)
 			case 76:
 			case 77:
 			case 80:
-				cout << "stopSound(" << i << ")" << endl;
+				std::cout << "stopSound(" << i << ")" << std::endl;
 				break;
 			case -1:
-				cout << "stopSound(?)" << endl;
+				std::cout << "stopSound(?)" << std::endl;
 				break;
 			}
 #else
@@ -2647,7 +2645,7 @@ void Script::_opv345(int r)
 			int i = _eatByteOrVar(opcode & 0x80);
 			_eatArgList();
 			if (i == 66)
-				cout << "ahoy" << endl;
+				std::cout << "ahoy" << std::endl;
 #else
 			_eatByteOrVar(opcode & 0x80);
 			_eatArgList();
@@ -2910,10 +2908,10 @@ void Script::_opv345(int r)
 			case 76:
 			case 77:
 			case 80:
-				cout << "isSoundRunning(" << i << ")" << endl;
+				std::cout << "isSoundRunning(" << i << ")" << std::endl;
 				break;
 			case -1:
-				cout << "isSoundRunning(?)" << endl;
+				std::cout << "isSoundRunning(?)" << std::endl;
 				break;
 			}
 #else

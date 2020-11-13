@@ -23,21 +23,19 @@
 
 #include "scummtr.hpp"
 
-using namespace std;
-
 int main(int argc, const char **argv) try
 {
 	ScummTr::main(argc, argv);
 }
-catch (runtime_error &e)
+catch (std::runtime_error &e)
 {
-	cerr << "ERROR: " << e.what() << endl;
+	std::cerr << "ERROR: " << e.what() << std::endl;
 }
-catch (exception &e)
+catch (std::exception &e)
 {
-	cerr << "BUG: " << e.what() << endl;
+	std::cerr << "BUG: " << e.what() << std::endl;
 }
 catch (...)
 {
-	cerr << "CRASH: Unexpected exception" << endl;
+	std::cerr << "CRASH: Unexpected exception" << std::endl;
 }

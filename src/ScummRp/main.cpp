@@ -23,21 +23,19 @@
 
 #include "scummrp.hpp"
 
-using namespace std;
-
 int main(int argc, const char **argv) try
 {
 	return ScummRp::main(argc, argv);
 }
-catch (logic_error &e)
+catch (std::logic_error &e)
 {
-	cerr << "BUG: " << e.what() << endl;
+	std::cerr << "BUG: " << e.what() << std::endl;
 }
-catch (exception &e)
+catch (std::exception &e)
 {
-	cerr << "ERROR: " << e.what() << endl;
+	std::cerr << "ERROR: " << e.what() << std::endl;
 }
 catch (...)
 {
-	cerr << "CRASH: Unexpected exception" << endl;
+	std::cerr << "CRASH: Unexpected exception" << std::endl;
 }

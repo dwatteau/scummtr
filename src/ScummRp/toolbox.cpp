@@ -51,8 +51,6 @@
 #endif
 #endif
 
-using namespace std;
-
 /*
  *
  */
@@ -91,8 +89,8 @@ void xremove(const char *path)
 {
 	if (remove(path))
 	{
-		string what("Cannot remove "); what += path;
-		throw runtime_error(what);
+		std::string what("Cannot remove "); what += path;
+		throw std::runtime_error(what);
 	}
 }
 
@@ -100,8 +98,8 @@ void xrename(const char *oldname, const char *newname)
 {
 	if (rename(oldname, newname))
 	{
-		string what("Cannot rename "); what += oldname; what += " to "; what += newname;
-		throw runtime_error(what);
+		std::string what("Cannot rename "); what += oldname; what += " to "; what += newname;
+		throw std::runtime_error(what);
 	}
 }
 

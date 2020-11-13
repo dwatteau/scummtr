@@ -26,8 +26,6 @@
 #include <stdlib.h>
 #include <iostream>
 
-using namespace std;
-
 /*
  * ScummRpIO
  */
@@ -37,37 +35,37 @@ bool ScummRpIO::_quiet = false;
 
 void ScummRpIO::info(const char *msg)
 {
-	cout << msg << endl;
+	std::cout << msg << std::endl;
 }
 
 void ScummRpIO::info(int slots, const char *msg)
 {
 	if (ScummRpIO::_infoSlots & slots && !ScummRpIO::_quiet)
-		cout << msg << endl;
+		std::cout << msg << std::endl;
 }
 
 void ScummRpIO::crash(const char *msg)
 {
-	cerr << "CRASH: " << msg << endl;
+	std::cerr << "CRASH: " << msg << std::endl;
 	abort();
 }
 
 void ScummRpIO::fatal(const char *msg)
 {
-	cerr << "ERROR: " << msg << endl;
+	std::cerr << "ERROR: " << msg << std::endl;
 	exit(1);
 }
 
 void ScummRpIO::error(const char *msg)
 {
 	if (!ScummRpIO::_quiet)
-		cerr << "ERROR: " << msg << endl;
+		std::cerr << "ERROR: " << msg << std::endl;
 }
 
 void ScummRpIO::warning(const char *msg)
 {
 	if (!ScummRpIO::_quiet)
-		cerr << "WARNING: " << msg << endl;
+		std::cerr << "WARNING: " << msg << std::endl;
 }
 
 void ScummRpIO::setQuiet(bool q)

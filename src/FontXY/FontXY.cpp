@@ -29,15 +29,13 @@
 #include <list>
 #include <iostream>
 
-using namespace std;
-
 // TODO paramètres
 
 int main(int argc, char **argv)
 {
 	if (argc != 3 || argv[1][0] == 0 || argv[1][1] != 0 || ((argv[1][0] | 0x20) != 'i' && (argv[1][0] | 0x20) != 'o'))
 	{
-		cout << "Usage: FontXY {i|o} <CHAR file>\n\nExamples:\tFontXY o CHAR_0002\n\t\tFontXY i CHAR_0003" << endl;
+		std::cout << "Usage: FontXY {i|o} <CHAR file>\n\nExamples:\tFontXY o CHAR_0002\n\t\tFontXY i CHAR_0003" << std::endl;
 		return 0;
 	}
 	bool	bImport = (argv[1][0] | 0x20) == 'i';
@@ -48,16 +46,16 @@ int main(int argc, char **argv)
 	{
 		char		szLine[1024];
 		// Ouvre le fichier CHAR
-		fstream		fChar(pszChar, fstream::in | fstream::out | fstream::binary);
+		std::fstream	fChar(pszChar, std::fstream::in | std::fstream::out | std::fstream::binary);
 		// Ouvre le fichier TXT
-		ifstream	fTxt(szTxt, ifstream::in);
+		std::ifstream	fTxt(szTxt, std::ifstream::in);
 		// Saute le header
 		fChar.seekg(8 + 0x17);
 		// Nombre de chars (<= 0x100)
 		short	snNumChars;
 		fChar.read((char *)&snNumChars, sizeof snNumChars);
 		int		nNumChars = snNumChars;
-		if (nNumChars > 0x100 || nNumChars <= 0) { cerr << "Error" << endl; return 1; }
+		if (nNumChars > 0x100 || nNumChars <= 0) { std::cerr << "Error" << std::endl; return 1; }
 		// Pour chaque char
 		for (int i = 0; i < nNumChars; ++i)
 		{
@@ -90,16 +88,16 @@ int main(int argc, char **argv)
 	else
 	{
 		// Ouvre le fichier CHAR
-		ifstream	fChar(pszChar, ifstream::in | ifstream::binary);
+		std::ifstream	fChar(pszChar, std::ifstream::in | std::ifstream::binary);
 		// Ouvre le fichier TXT
-		ofstream	fTxt(szTxt, ofstream::out | ofstream::trunc);
+		std::ofstream	fTxt(szTxt, std::ofstream::out | std::ofstream::trunc);
 		// Saute le header
 		fChar.seekg(8 + 0x17);
 		// Nombre de chars (<= 0x100)
 		short	snNumChars;
 		fChar.read((char *)&snNumChars, sizeof snNumChars);
 		int		nNumChars = snNumChars;
-		if (nNumChars > 0x100 || nNumChars <= 0) { cerr << "Error" << endl; return 1; }
+		if (nNumChars > 0x100 || nNumChars <= 0) { std::cerr << "Error" << std::endl; return 1; }
 		// Pour chaque char
 		for (int i = 0; i < nNumChars; ++i)
 		{
@@ -110,7 +108,7 @@ int main(int argc, char **argv)
 			// Si offset == 0, saute une ligne
 			if (uOffset == 0)
 			{
-				fTxt << endl;
+				fTxt << std::endl;
 			}
 			// Sinon, lit valeurs, écrit dans le TXT
 			else
@@ -120,7 +118,7 @@ int main(int argc, char **argv)
 				signed char	byTop;
 				fChar.read((char *)&byLeft, sizeof byLeft);
 				fChar.read((char *)&byTop, sizeof byTop);
-				fTxt << (int)byLeft << ";" << (int)byTop << endl;
+				fTxt << (int)byLeft << ";" << (int)byTop << std::endl;
 			}
 		}
 	}

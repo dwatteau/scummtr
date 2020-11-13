@@ -26,8 +26,6 @@
 #include "backup.hpp"
 #include "io.hpp"
 
-using namespace std;
-
 const char *const BackUp::SUFFIX = "~~scummrp-tmp";
 
 BackUp::BackUp() :
@@ -40,17 +38,17 @@ BackUp::~BackUp()
 	cancelChanges();
 }
 
-string BackUp::_backupPath(const char *f)
+std::string BackUp::_backupPath(const char *f)
 {
-	string bak(f);
+	std::string bak(f);
 
 	bak += BackUp::SUFFIX;
 	return bak;
 }
 
-string BackUp::backup(const char *f, bool createCopy)
+std::string BackUp::backup(const char *f, bool createCopy)
 {
-	string bak;
+	std::string bak;
 
 	if (File::isReadOnly(f))
 		throw File::IOError(xsprintf("Cannot open %s", f));
@@ -67,21 +65,21 @@ string BackUp::backup(const char *f, bool createCopy)
 	else
 		if (File::exists(bak.c_str()))
 			throw File::AlreadyExists(xsprintf("%s already exists", bak.c_str()));
-	_files.push_back(string(f));
+	_files.push_back(std::string(f));
 	return bak;
 }
 
 void BackUp::cancelChanges()
 {
-	list<string>::iterator i;
-	string bak;
+	std::list<std::string>::iterator i;
+	std::string bak;
 
 	for (i = _files.begin(); i !=_files.end(); ++i)
 		try
 		{
 			xremove(_backupPath(i->c_str()).c_str());
 		}
-		catch (runtime_error &e)
+		catch (std::runtime_error &e)
 		{
 			ScummRpIO::warning(e.what());
 		}
@@ -90,8 +88,8 @@ void BackUp::cancelChanges()
 
 void BackUp::applyChanges()
 {
-	list<string>::iterator i;
-	string bak;
+	std::list<std::string>::iterator i;
+	std::string bak;
 
 	for (i = _files.begin(); i != _files.end(); ++i)
 		try
@@ -99,7 +97,7 @@ void BackUp::applyChanges()
 			xremove(i->c_str());
 			xrename(_backupPath(i->c_str()).c_str(), i->c_str());
 		}
-		catch (runtime_error &e)
+		catch (std::runtime_error &e)
 		{
 			ScummRpIO::warning(e.what());
 		}

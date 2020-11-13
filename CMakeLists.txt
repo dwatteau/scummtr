@@ -12,7 +12,7 @@ TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
 if (MSVC)
     # /wd4996?
     add_compile_options(/wd4244 /wd4267 /wd26451 /wd26495)
-    add_definitions(/D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN /D_HAS_STD_BYTE=0)
+    add_definitions(/D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN)
     if(IS_BIG_ENDIAN)
         add_definitions(/DBIG_ENDIAN)
     endif()
@@ -30,7 +30,7 @@ else()
     endif()
 
     if (WIN32)
-        add_definitions(-D_CRT_SECURE_NO_WARNINGS -DWIN32_LEAN_AND_MEAN -D_HAS_STD_BYTE=0)
+        add_definitions(-D_CRT_SECURE_NO_WARNINGS -DWIN32_LEAN_AND_MEAN)
     endif()
 endif()
 

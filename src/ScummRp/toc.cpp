@@ -26,8 +26,6 @@
 
 #include <string.h>
 
-using namespace std;
-
 /*
  * TableOfContent
  */
@@ -81,7 +79,7 @@ void TableOfContent::merge(const TableOfContent &t)
 	memcpy(a, _accessed, sizeof a);
 	for (i = 0; i < _size; ++i)
 		if (_toc[i].roomId != t._toc[i].roomId)
-			throw logic_error("TableOfContent::merge: different roomIds");
+			throw std::logic_error("TableOfContent::merge: different roomIds");
 		else if (t._accessed[_toc[i].roomId])
 		{
 			if (_accessed[_toc[i].roomId] && _toc[i].offset != t._toc[i].offset)
@@ -315,7 +313,7 @@ void TableOfContent::load(FilePart &file, GlobalTocFormat format, int size)
 		_load8Sep16(file, size);
 		break;
 	default:
-		throw logic_error("TableOfContent::load: Invalid format (not V1)");
+		throw std::logic_error("TableOfContent::load: Invalid format (not V1)");
 	}
 }
 
@@ -336,7 +334,7 @@ void TableOfContent::load(FilePart &file, GlobalTocFormat format)
 		_load16Mix32(file);
 		break;
 	case GTCFMT_NULL:
-		throw logic_error("TableOfContent::load: Invalid format");
+		throw std::logic_error("TableOfContent::load: Invalid format");
 	}
 }
 
@@ -348,7 +346,7 @@ void TableOfContent::save(FilePart &file, GlobalTocFormat format, bool fixedSize
 		_save8Sep16(file, fixedSize);
 		break;
 	default:
-		throw logic_error("TableOfContent::save: Invalid format (not V1)");
+		throw std::logic_error("TableOfContent::save: Invalid format (not V1)");
 	}
 }
 
@@ -369,7 +367,7 @@ void TableOfContent::save(FilePart &file, GlobalTocFormat format)
 		_save16Mix32(file);
 		break;
 	case GTCFMT_NULL:
-		throw logic_error("TableOfContent::save: Invalid format");
+		throw std::logic_error("TableOfContent::save: Invalid format");
 	}
 }
 
@@ -414,7 +412,7 @@ int GlobalRoomIndex::count(byte, int32) const
 
 int GlobalRoomIndex::findId(byte, int32) const
 {
-	throw logic_error("GlobalRoomIndex::findId: Shouldn't be here");
+	throw std::logic_error("GlobalRoomIndex::findId: Shouldn't be here");
 }
 
 void GlobalRoomIndex::firstId(byte)

@@ -32,8 +32,6 @@
 #include <set>
 #include <string.h>
 
-using namespace std;
-
 /*
  * ScummRp
  */
@@ -68,8 +66,8 @@ char ScummRp::_paramTag[5] = "";
 // void ScummRp::_explore(TreeBlock &tree)
 // {
 // 	TreeBlockPtr blockPtr;
-// 	set<string> processedBlocks;
-// 	string path, filename;
+// 	std::set<string> processedBlocks;
+// 	std::string path, filename;
 
 // 	tree.firstBlock();
 // 	while ((blockPtr = tree.nextBlock()) != 0)
@@ -113,8 +111,8 @@ char ScummRp::_paramTag[5] = "";
 void ScummRp::_explore(TreeBlock &tree, int action)
 {
 	TreeBlockPtr blockPtr;
-	set<string> processedBlocks;
-	string path, filename;
+	std::set<std::string> processedBlocks;
+	std::string path, filename;
 
 	tree.firstBlock();
 	while ((blockPtr = tree.nextBlock()) != 0)
@@ -316,7 +314,7 @@ void ScummRp::_processGameFilesV123()
 {
 	int i;
 	char dataFileName[32];
-	string indexPath(ScummRp::_paramGameDir);
+	std::string indexPath(ScummRp::_paramGameDir);
 	TreeBlockPtr index;
 
 	indexPath += '/';
@@ -325,7 +323,7 @@ void ScummRp::_processGameFilesV123()
 	ScummRp::_exploreIndex<ScummRp::ACT_LOAD>(*index);
 	for (i = 1; i < 98; ++i)
 	{
-		string dataPath(ScummRp::_paramGameDir);
+		std::string dataPath(ScummRp::_paramGameDir);
 		TreeBlockPtr room;
 
 		sprintf(dataFileName, ScummRp::_game.dataFileName, i);
@@ -352,7 +350,7 @@ void ScummRp::_processGameFilesV4567()
 {
 	int i;
 	char dataFileName[32];
-	string indexPath(ScummRp::_paramGameDir);
+	std::string indexPath(ScummRp::_paramGameDir);
 	TreeBlockPtr index;
 	int numberOfDisks;
 
@@ -364,7 +362,7 @@ void ScummRp::_processGameFilesV4567()
 	ScummRp::_prepareTmpIndex();
 	for (i = 1; i < numberOfDisks; ++i)
 	{
-		string dataPath(ScummRp::_paramGameDir);
+		std::string dataPath(ScummRp::_paramGameDir);
 		TreeBlockPtr disk;
 
 		sprintf(dataFileName, ScummRp::_game.dataFileName, i);
@@ -439,7 +437,7 @@ void ScummRp::_queueParam(char *pendingParams, char c)
 		if (pendingParams[j] == c)
             return;
 	if (j >= ScummRp::MAX_PARAMS)
-		throw logic_error("ScummRp::_queueParam: Too many parameters");
+		throw std::logic_error("ScummRp::_queueParam: Too many parameters");
 	pendingParams[j] = c;
 	pendingParams[j + 1] = 0;
 }
@@ -500,24 +498,24 @@ bool ScummRp::_readOption(const char *arg, char *pendingParams)
 
 void ScummRp::_usage()
 {
-	cout << "options:" << endl;
-	cout << endl;
-	cout << " -g gameid  " << "Select a game" << endl;
-	cout << " -i         " << "Import blocks into the game files (Input)" << endl;
-	cout << " -o         " << "Export blocks from the game files (Output)" << endl;
-	cout << " -d path    " << "Path to dumping directory" << endl;
-	cout << " -p path    " << "Path to the game directory" << endl;
-	cout << " -t tag     " << "Only export/import blocks with this tag" << endl;
-// 	cout << " -m         " << "Work in memory (whole game files are loaded in RAM)" << endl;
-// 	cout << " -O         " << "Optimize for sequential access (with -i)" << endl;
-// 	cout << " -s         " << "Slow mode (disable automatic -m or -O)" << endl;
-	cout << " -L         " << "List supported games" << endl;
-	cout << " -v         " << "Verbose" << endl;
-	cout << " -V         " << "More verbose (lists blocks)" << endl;
-	cout << " -q         " << "Quiet" << endl;
-	cout << endl;
-	cout << "Example:" << endl;
-	cout << "ScummRp -gp monkey2 ./mi2 -id ./dumps/mi2" << endl;
+	std::cout << "options:" << std::endl;
+	std::cout << std::endl;
+	std::cout << " -g gameid  " << "Select a game" << std::endl;
+	std::cout << " -i         " << "Import blocks into the game files (Input)" << std::endl;
+	std::cout << " -o         " << "Export blocks from the game files (Output)" << std::endl;
+	std::cout << " -d path    " << "Path to dumping directory" << std::endl;
+	std::cout << " -p path    " << "Path to the game directory" << std::endl;
+	std::cout << " -t tag     " << "Only export/import blocks with this tag" << std::endl;
+// 	std::cout << " -m         " << "Work in memory (whole game files are loaded in RAM)" << std::endl;
+// 	std::cout << " -O         " << "Optimize for sequential access (with -i)" << std::endl;
+// 	std::cout << " -s         " << "Slow mode (disable automatic -m or -O)" << std::endl;
+	std::cout << " -L         " << "List supported games" << std::endl;
+	std::cout << " -v         " << "Verbose" << std::endl;
+	std::cout << " -V         " << "More verbose (lists blocks)" << std::endl;
+	std::cout << " -q         " << "Quiet" << std::endl;
+	std::cout << std::endl;
+	std::cout << "Example:" << std::endl;
+	std::cout << "ScummRp -gp monkey2 ./mi2 -id ./dumps/mi2" << std::endl;
 }
 
 void ScummRp::_getOptions(int argc, const char **argv, const ScummRp::Parameter *params)
@@ -570,22 +568,22 @@ void ScummRp::_listGames()
 	int i;
 	size_t l1, l2;
 
-	cout << "supported games:" << endl;
-	cout << endl;
-	cout << "id" << setw(12) << "| " << setw(0) << "description"
-		 << setw(42) << "| " << setw(0) << "file" << endl;
-	cout << "------------|-------------------------------------"
-		"---------------|-------------" << endl;
+	std::cout << "supported games:" << std::endl;
+	std::cout << std::endl;
+	std::cout << "id" << std::setw(12) << "| " << std::setw(0) << "description"
+		 << std::setw(42) << "| " << std::setw(0) << "file" << std::endl;
+	std::cout << "------------|-------------------------------------"
+		"---------------|-------------" << std::endl;
 	for (i = 0; ScummRp::_gameDef[i].shortName != 0; ++i)
 	{
 		l1 = strlen(ScummRp::_gameDef[i].shortName);
 		l2 = strlen(ScummRp::_gameDef[i].name);
-		cout << ScummRp::_gameDef[i].shortName
-			 << setw(14 - (streamsize)l1) << "| "
-			 << setw(0) << ScummRp::_gameDef[i].name
-			 << setw(53 - (streamsize)l2) << "| "
-			 << setw(0) << ScummRp::_gameDef[i].indexFileName
-			 << endl;
+		std::cout << ScummRp::_gameDef[i].shortName
+			 << std::setw(14 - (std::streamsize)l1) << "| "
+			 << std::setw(0) << ScummRp::_gameDef[i].name
+			 << std::setw(53 - (std::streamsize)l2) << "| "
+			 << std::setw(0) << ScummRp::_gameDef[i].indexFileName
+			 << std::endl;
 	}
 }
 

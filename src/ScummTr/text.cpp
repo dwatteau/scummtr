@@ -25,8 +25,6 @@
 #include "toolbox.hpp"
 #include "block.hpp" // for tagToStr
 
-using namespace std;
-
 const char Text::CT_NULL[256] = {
 	  0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
 	  0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -151,7 +149,7 @@ const char *const Text::CHARSETS[] = {
 };
 
 Text::Text(const char *path, int flags, Text::Charset charset) :
-	_file(path, (flags & Text::TXT_OUT) != 0 ? (ios::in | ios::out | ios::binary | ios::trunc) : (ios::in | ios::binary)),
+	_file(path, (flags & Text::TXT_OUT) != 0 ? (std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc) : (std::ios::in | std::ios::binary)),
 	_cur(0), _lineCount(0),	_lflfId(-1), _tag(0), _id(-1),
 	_escaped((flags & Text::TXT_BINARY) == 0), _crlf((flags & Text::TXT_CRLF) != 0),
 	_header((flags & Text::TXT_HEADER) != 0), _hex((flags & Text::TXT_HEXA) != 0),
@@ -263,7 +261,7 @@ void Text::_writeEscChar(byte b)
 	}
 }
 
-void Text::_writeEscPlain(const string &s)
+void Text::_writeEscPlain(const std::string &s)
 {
 	int i, size;
 
@@ -272,7 +270,7 @@ void Text::_writeEscPlain(const string &s)
 		_writeChar((byte)s[i]);
 }
 
-void Text::_writeEscRsc(const string &s)
+void Text::_writeEscRsc(const std::string &s)
 {
 	int i, size, countdown;
 
@@ -293,7 +291,7 @@ void Text::_writeEscRsc(const string &s)
 			_writeChar((byte)s[i]);
 }
 
-void Text::_writeEscOldMsg(const string &s)
+void Text::_writeEscOldMsg(const std::string &s)
 {
 	int i, size, countdown;
 
@@ -314,7 +312,7 @@ void Text::_writeEscOldMsg(const string &s)
 			_writeChar((byte)s[i]);
 }
 
-void Text::_writeEscMsg(const string &s)
+void Text::_writeEscMsg(const std::string &s)
 {
 	bool func;
 	int i, size, countdown;
@@ -343,7 +341,7 @@ void Text::_writeEscMsg(const string &s)
 			_writeChar((byte)s[i]);
 }
 
-void Text::_writeEsc(const string &s, Text::LineType t)
+void Text::_writeEsc(const std::string &s, Text::LineType t)
 {
 	switch (t)
 	{
@@ -366,7 +364,7 @@ void Text::_writeEsc(const string &s, Text::LineType t)
 		_file.write("\n", 1);
 }
 
-void Text::_checkMsg(const string &s, int l)
+void Text::_checkMsg(const std::string &s, int l)
 {
 	int i, size, countdown;
 	bool func;
@@ -390,7 +388,7 @@ void Text::_checkMsg(const string &s, int l)
 		throw Text::Error(xsprintf("Truncated function in line %i", l));
 }
 
-void Text::_checkRsc(const string &s, int l)
+void Text::_checkRsc(const std::string &s, int l)
 {
 	int i, size, countdown;
 
@@ -407,7 +405,7 @@ void Text::_checkRsc(const string &s, int l)
 		throw Text::Error(xsprintf("Truncated function in line %i", l));
 }
 
-void Text::_checkOldMsg(const string &s, int l)
+void Text::_checkOldMsg(const std::string &s, int l)
 {
 	int i, size, countdown;
 
@@ -426,7 +424,7 @@ void Text::_checkOldMsg(const string &s, int l)
 		throw Text::Error(xsprintf("Truncated function in line %i", l));
 }
 
-void Text::_checkPlain(const string &s, int l)
+void Text::_checkPlain(const std::string &s, int l)
 {
 	int i, size;
 
@@ -436,7 +434,7 @@ void Text::_checkPlain(const string &s, int l)
 			throw Text::Error(xsprintf("NULL char in line %i", l));
 }
 
-void Text::_unEsc(string &s, Text::LineType t) const
+void Text::_unEsc(std::string &s, Text::LineType t) const
 {
 	int i, j, size;
 
@@ -509,7 +507,7 @@ int Text::getLineLength(FileHandle &f, Text::LineType t)
 	case LT_OLDMSG:
 		return Text::getLengthOldMsg(f);
 	}
-	throw logic_error("Text::getLineLength: Wrong type");
+	throw std::logic_error("Text::getLineLength: Wrong type");
 }
 
 int Text::getLengthRsc(FileHandle &f)
@@ -517,11 +515,11 @@ int Text::getLengthRsc(FileHandle &f)
 	byte b;
 	int32 start;
 
-	start = f->tellg(ios::beg);
+	start = f->tellg(std::ios::beg);
 	while (!f->eof() && f->getByte(b) != 0)
 		if (b == 0xFF)
-			f->seekg(3, ios::cur);
-	return f->tellg(ios::beg) - start - 1;
+			f->seekg(3, std::ios::cur);
+	return f->tellg(std::ios::beg) - start - 1;
 }
 
 int Text::getLengthOldMsg(FileHandle &f)
@@ -529,11 +527,11 @@ int Text::getLengthOldMsg(FileHandle &f)
 	byte b;
 	int32 start;
 
-	start = f->tellg(ios::beg);
+	start = f->tellg(std::ios::beg);
 	while (!f->eof() && f->getByte(b) != 0)
 		if (b < 8 && b > 3)
 			f->getByte(b);
-	return f->tellg(ios::beg) - start - 1;
+	return f->tellg(std::ios::beg) - start - 1;
 }
 
 int Text::getLengthMsg(FileHandle &f)
@@ -542,14 +540,14 @@ int Text::getLengthMsg(FileHandle &f)
 	int32 start;
 	int i;
 
-	start = f->tellg(ios::beg);
+	start = f->tellg(std::ios::beg);
 	while (!f->eof() && f->getByte(b) != 0)
 		if (b == 0xFF || b == 0xFE)
 		{
 			i = Text::funcLen(f->getByte(b));
-			f->seekg(i, ios::cur);
+			f->seekg(i, std::ios::cur);
 		}
-	return f->tellg(ios::beg) - start - 1;
+	return f->tellg(std::ios::beg) - start - 1;
 }
 
 int Text::getLengthPlain(FileHandle &f)
@@ -557,13 +555,13 @@ int Text::getLengthPlain(FileHandle &f)
 	byte b;
 	int32 start;
 
-	start = f->tellg(ios::beg);
+	start = f->tellg(std::ios::beg);
 	while (!f->eof() && f->getByte(b) != 0)
 		;
-	return f->tellg(ios::beg) - start - 1;
+	return f->tellg(std::ios::beg) - start - 1;
 }
 
-void Text::_getBinaryLine(string &s, Text::LineType lineType)
+void Text::_getBinaryLine(std::string &s, Text::LineType lineType)
 {
 	int l;
 
@@ -586,7 +584,7 @@ void Text::_getBinaryLine(string &s, Text::LineType lineType)
 	_file->read(s, l);
 }
 
-void Text::_spaceCharToBit(string &s) const
+void Text::_spaceCharToBit(std::string &s) const
 {
 	int i, j, last;
 
@@ -607,9 +605,9 @@ void Text::_spaceCharToBit(string &s) const
 	s.resize(j);
 }
 
-void Text::_spaceBitToChar(string &s) const
+void Text::_spaceBitToChar(std::string &s) const
 {
-	string s2;
+	std::string s2;
 	int i, size;
 
 	size = (int)s.size();
@@ -629,14 +627,14 @@ void Text::_spaceBitToChar(string &s) const
 	s = s2;
 }
 
-bool Text::nextLine(string &s, Text::LineType lineType)
+bool Text::nextLine(std::string &s, Text::LineType lineType)
 {
 	if (_cur >= _file.size())
 	{
 		s.resize(0);
 		return false;
 	}
-	_file.seekg(_cur, ios::beg);
+	_file.seekg(_cur, std::ios::beg);
 	if (_escaped)
 	{
 		_file.getline(s, '\n');
@@ -651,17 +649,17 @@ bool Text::nextLine(string &s, Text::LineType lineType)
 	if (lineType == Text::LT_OLDMSG)
 		Text::_spaceCharToBit(s);
 	++_lineCount;
-	_cur = _file.tellg(ios::beg);
+	_cur = _file.tellg(std::ios::beg);
 	return true;
 }
 
-void Text::addLine(string s, Text::LineType lineType, int op)
+void Text::addLine(std::string s, Text::LineType lineType, int op)
 {
 	if (s.size() == 0) // empty lines are ignored
 		return;
 	if (lineType == Text::LT_OLDMSG)
 		Text::_spaceBitToChar(s);
-	_file.seekp(0, ios::end);
+	_file.seekp(0, std::ios::end);
 	if (_header)
 		_file.write(info());
 	if (_opcode)

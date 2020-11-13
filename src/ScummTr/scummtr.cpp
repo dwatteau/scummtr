@@ -32,8 +32,6 @@
 
 #include <cstring>
 
-using namespace std;
-
 /*
  * ScummTr
  */
@@ -172,7 +170,7 @@ void ScummTr::_processGameFilesV123()
 {
 	int i;
 	char dataFileName[32];
-	string indexPath(ScummRp::_paramGameDir);
+	std::string indexPath(ScummRp::_paramGameDir);
 	TreeBlockPtr index;
 	Text::Charset charset;
 
@@ -186,7 +184,7 @@ void ScummTr::_processGameFilesV123()
 
 		for (i = 1; i < 98; ++i)
 		{
-			string dataPath(ScummRp::_paramGameDir);
+			std::string dataPath(ScummRp::_paramGameDir);
 			TreeBlockPtr room;
 
 			sprintf(dataFileName, ScummRp::_game.dataFileName, i);
@@ -222,7 +220,7 @@ void ScummTr::_processGameFilesV4567()
 {
 	int i;
 	char dataFileName[32];
-	string indexPath(ScummRp::_paramGameDir);
+	std::string indexPath(ScummRp::_paramGameDir);
 	TreeBlockPtr index;
 	int numberOfDisks;
 	Text::Charset charset;
@@ -239,7 +237,7 @@ void ScummTr::_processGameFilesV4567()
 
 		for (i = 1; i < numberOfDisks; ++i)
 		{
-			string dataPath(ScummRp::_paramGameDir);
+			std::string dataPath(ScummRp::_paramGameDir);
 			TreeBlockPtr disk;
 
 			sprintf(dataFileName, ScummRp::_game.dataFileName, i);
@@ -503,31 +501,31 @@ bool ScummTr::_invalidOptions()
 
 void ScummTr::_usage()
 {
-	cout << "options:" << endl;
-	cout << endl;
-	cout << " -g gameid  " << "Select a game" << endl;
-	cout << " -i         " << "Import text into the game files (Input)" << endl;
-	cout << " -o         " << "Export text from the game files (Output)" << endl;
-	cout << " -f path    " << "Path to the text file" << endl;
-	cout << " -p path    " << "Path to the game directory" << endl;
-	cout << " -w         " << "Use the CrLf format (for Windows)" << endl;
-	cout << " -c         " << "Convert characters to the ANSI charset" << endl;
-	cout << " -l xx      " << "Language (for V1 & V2 games): en, de, it, fr" << endl;
-	cout << " -b         " << "Binary mode" << endl;
-	cout << " -h         " << "Add line headers in exported text (with -o)" << endl;
-	cout << " -H         " << "Hexadecimal char codes (with -o)" << endl;
-	cout << " -I         " << "Show instruction opcode (with -o)" << endl;
-	cout << " -a [oav]   " << "Pad Objects, Actors, Verbs with @ (with -o)" << endl;
-	cout << " -A [oav]   " << "-a with variable ids taken into account (with -o)" << endl;
-// 	cout << " -m         " << "Work in memory (whole game files are loaded in RAM)" << endl;
-// 	cout << " -O         " << "Optimize for sequential access (with -i)" << endl;
-// 	cout << " -s         " << "Slow mode (disable automatic -m or -O)" << endl;
-	cout << " -L         " << "List supported games" << endl;
-	cout << " -v         " << "Verbose" << endl;
-// 	cout << " -V         " << "More verbose (lists blocks)" << endl;
-	cout << " -q         " << "Quiet" << endl;
-	cout << endl;
-	cout << "Examples:" << endl;
-	cout << "scummtr -cw -gp monkey2 ./mi2 -if ./mi2_fr.txt" << endl;
-	cout << "scummtr -o -A ov -g zaktowns" << endl;
+	std::cout << "options:" << std::endl;
+	std::cout << std::endl;
+	std::cout << " -g gameid  " << "Select a game" << std::endl;
+	std::cout << " -i         " << "Import text into the game files (Input)" << std::endl;
+	std::cout << " -o         " << "Export text from the game files (Output)" << std::endl;
+	std::cout << " -f path    " << "Path to the text file" << std::endl;
+	std::cout << " -p path    " << "Path to the game directory" << std::endl;
+	std::cout << " -w         " << "Use the CrLf format (for Windows)" << std::endl;
+	std::cout << " -c         " << "Convert characters to the ANSI charset" << std::endl;
+	std::cout << " -l xx      " << "Language (for V1 & V2 games): en, de, it, fr" << std::endl;
+	std::cout << " -b         " << "Binary mode" << std::endl;
+	std::cout << " -h         " << "Add line headers in exported text (with -o)" << std::endl;
+	std::cout << " -H         " << "Hexadecimal char codes (with -o)" << std::endl;
+	std::cout << " -I         " << "Show instruction opcode (with -o)" << std::endl;
+	std::cout << " -a [oav]   " << "Pad Objects, Actors, Verbs with @ (with -o)" << std::endl;
+	std::cout << " -A [oav]   " << "-a with variable ids taken into account (with -o)" << std::endl;
+// 	std::cout << " -m         " << "Work in memory (whole game files are loaded in RAM)" << std::endl;
+// 	std::cout << " -O         " << "Optimize for sequential access (with -i)" << std::endl;
+// 	std::cout << " -s         " << "Slow mode (disable automatic -m or -O)" << std::endl;
+	std::cout << " -L         " << "List supported games" << std::endl;
+	std::cout << " -v         " << "Verbose" << std::endl;
+// 	std::cout << " -V         " << "More verbose (lists blocks)" << std::endl;
+	std::cout << " -q         " << "Quiet" << std::endl;
+	std::cout << std::endl;
+	std::cout << "Examples:" << std::endl;
+	std::cout << "scummtr -cw -gp monkey2 ./mi2 -if ./mi2_fr.txt" << std::endl;
+	std::cout << "scummtr -o -A ov -g zaktowns" << std::endl;
 }

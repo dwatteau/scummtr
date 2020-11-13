@@ -26,8 +26,6 @@
 #include "scummtr.hpp"
 #include "io.hpp"
 
-using namespace std;
-
 /*
  * TextBlock
  */
@@ -114,7 +112,7 @@ void ScriptBlock::importText(Text &input)
 	try
 	{
 		_script->importText(input);
-		_file->seekp(0, ios::beg);
+		_file->seekp(0, std::ios::beg);
 		Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag);
 		if (_parent != 0)
 			_parent->_subblockUpdated(*this, _file->size() - oldSize);
@@ -179,7 +177,7 @@ ObjectNameBlock &ObjectNameBlock::operator=(const TreeBlock &block)
 
 void ObjectNameBlock::importText(Text &input)
 {
-	string s;
+	std::string s;
 	int32 oldSize;
 
 	oldSize = _file->size();
@@ -187,12 +185,12 @@ void ObjectNameBlock::importText(Text &input)
 	{
 		if (!input.nextLine(s, Text::LT_RSC))
 			throw File::UnexpectedEOF("Not enough lines in imported text");
-		_file->seekp(_headerSize, ios::beg);
+		_file->seekp(_headerSize, std::ios::beg);
 		s += '\0';
 		_file->write(s);
 		if (oldSize > (int32)s.size() + _headerSize)
 			_file->resize((int32)s.size() + _headerSize);
-		_file->seekp(0, ios::beg);
+		_file->seekp(0, std::ios::beg);
 		Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag);
 		if (_parent != 0)
 			_parent->_subblockUpdated(*this, _file->size() - oldSize);
@@ -201,11 +199,11 @@ void ObjectNameBlock::importText(Text &input)
 
 void ObjectNameBlock::exportText(Text &output, bool pad)
 {
-	string s;
+	std::string s;
 	byte b;
 
 	s.reserve(32);
-	_file->seekg(_headerSize, ios::beg);
+	_file->seekg(_headerSize, std::ios::beg);
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 		s += (char)b;
 	output.setInfo(_lflfId(), _tag, _ownId());
@@ -219,7 +217,7 @@ void ObjectNameBlock::getRscNameLimits()
 	int i;
 	byte b;
 
-	_file->seekg(_headerSize, ios::beg);
+	_file->seekg(_headerSize, std::ios::beg);
 	i = 0;
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 		++i;
@@ -253,13 +251,13 @@ ObjectCodeBlock &ObjectCodeBlock::operator=(const TreeBlock &block)
 	return *this;
 }
 
-template <class T, int I> void ObjectCodeBlock::_tListVerbs(list<int32> &l, int32 scriptOffset)
+template <class T, int I> void ObjectCodeBlock::_tListVerbs(std::list<int32> &l, int32 scriptOffset)
 {
 	T o;
 	byte b;
 
 	l.resize(0);
-	_file->seekg(I + _headerSize, ios::beg);
+	_file->seekg(I + _headerSize, std::ios::beg);
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 	{
 		(*_file).getLE(o);
@@ -267,15 +265,15 @@ template <class T, int I> void ObjectCodeBlock::_tListVerbs(list<int32> &l, int3
 	}
 }
 
-template <class T, int I> void ObjectCodeBlock::_tUpdateVerbs(const list<int32> &l, int32 scriptOffset, int n)
+template <class T, int I> void ObjectCodeBlock::_tUpdateVerbs(const std::list<int32> &l, int32 scriptOffset, int n)
 {
 	T o;
-	list<int32>::const_iterator i;
+	std::list<int32>::const_iterator i;
 
-	_file->seekp(I + _headerSize, ios::beg);
+	_file->seekp(I + _headerSize, std::ios::beg);
 	for (i = l.begin(); i != l.end(); ++i)
 	{
-		_file->seekp(1, ios::cur);
+		_file->seekp(1, std::ios::cur);
 		if (((uint32)(*i + scriptOffset) >> (sizeof (T) * 8)) != 0)
 			throw ObjectCodeBlock::Error(xsprintf("Line too long (line %i)", n));
 		o = (T)(*i + scriptOffset);
@@ -289,7 +287,7 @@ template <class T, int I> int32 ObjectCodeBlock::_tFindScriptOffset()
 	T o;
 	byte b;
 
-	_file->seekg(I + _headerSize, ios::beg);
+	_file->seekg(I + _headerSize, std::ios::beg);
 	min = _file->size();
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 	{
@@ -300,12 +298,12 @@ template <class T, int I> int32 ObjectCodeBlock::_tFindScriptOffset()
 	return min;
 }
 
-void ObjectCodeBlock::_listVerbs(list<int32> &l, int32 scriptOffset)
+void ObjectCodeBlock::_listVerbs(std::list<int32> &l, int32 scriptOffset)
 {
 	ObjectCodeBlock::_tListVerbs<uint16, 0x00>(l, scriptOffset);
 }
 
-void ObjectCodeBlock::_updateVerbs(const list<int32> &l, int32 scriptOffset, int n)
+void ObjectCodeBlock::_updateVerbs(const std::list<int32> &l, int32 scriptOffset, int n)
 {
 	ObjectCodeBlock::_tUpdateVerbs<uint16, 0x00>(l, scriptOffset, n);
 }
@@ -317,7 +315,7 @@ int32 ObjectCodeBlock::_findScriptOffset()
 
 void ObjectCodeBlock::_importText(Text &input, int32 oldSize, int32 scriptOffset)
 {
-	list<int32> verbs;
+	std::list<int32> verbs;
 
 	_listVerbs(verbs, scriptOffset);
 	if (_script == 0)
@@ -334,7 +332,7 @@ void ObjectCodeBlock::_importText(Text &input, int32 oldSize, int32 scriptOffset
 		ScummRpIO::error(xsprintf("%s %s", e.what(), input.info()));
 	}
 	_updateVerbs(verbs, scriptOffset, input.lineNumber());
-	_file->seekp(0, ios::beg);
+	_file->seekp(0, std::ios::beg);
 	Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag);
 	if (_parent != 0)
 		_parent->_subblockUpdated(*this, _file->size() - oldSize);
@@ -403,12 +401,12 @@ OldObjectCodeBlock &OldObjectCodeBlock::operator=(const TreeBlock &block)
 	return *this;
 }
 
-void OldObjectCodeBlock::_listVerbs(list<int32> &l, int32 scriptOffset)
+void OldObjectCodeBlock::_listVerbs(std::list<int32> &l, int32 scriptOffset)
 {
 	ObjectCodeBlock::_tListVerbs<uint16, 0x0D>(l, scriptOffset);
 }
 
-void OldObjectCodeBlock::_updateVerbs(const list<int32> &l, int32 scriptOffset, int n)
+void OldObjectCodeBlock::_updateVerbs(const std::list<int32> &l, int32 scriptOffset, int n)
 {
 	ObjectCodeBlock::_tUpdateVerbs<uint16, 0x0D>(l, scriptOffset, n);
 }
@@ -421,16 +419,16 @@ int32 OldObjectCodeBlock::_findScriptOffset()
 // the bugs in gcc forced me to remove my template class
 template <int I> void OldObjectCodeBlock::_exportName(Text &output, bool pad)
 {
-	string s;
+	std::string s;
 	byte b;
 	uint32 tag;
 
 	tag = ((_tag & 0xFFFF0000) != 0) ? (_tag & 0xFF00FFFF) | ('N' << 16) : (_tag & 0x0000FF00) | 'N';
 	output.setInfo(_lflfId(), tag, _ownId());
 	s.reserve(32);
-	_file->seekg(I + _headerSize, ios::beg);
+	_file->seekg(I + _headerSize, std::ios::beg);
 	_file->getByte(b);
-	_file->seekg(b, ios::beg);
+	_file->seekg(b, std::ios::beg);
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 		s += (char)b;
 	if (pad && s.size() > 0 && ScummTr::getRscNameMaxLengh(ScummTr::RSCT_OBJECT, _id) > (int32)s.size())
@@ -440,26 +438,26 @@ template <int I> void OldObjectCodeBlock::_exportName(Text &output, bool pad)
 
 template <int I> void OldObjectCodeBlock::_importName(Text &input, int32 &scriptOffset)
 {
-	string s;
+	std::string s;
 	FilePartHandle f;
 	byte b, o;
-	list<int32> verbs;
-	list<int32>::iterator i;
+	std::list<int32> verbs;
+	std::list<int32>::iterator i;
 	int32 size, sizeDiff;
 
-	_file->seekg(I + _headerSize, ios::beg);
+	_file->seekg(I + _headerSize, std::ios::beg);
 	_file->getByte(o);
-	_file->seekg(o, ios::beg);
+	_file->seekg(o, std::ios::beg);
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 		;
-	size = _file->tellg(ios::beg) - o;
+	size = _file->tellg(std::ios::beg) - o;
 	if (size > 1) // Ignore empty lines
 	{
 		if (!input.nextLine(s, Text::LT_RSC))
 			throw File::UnexpectedEOF("Not enough lines in imported text");
 		f = new FilePart(*_file, o, size);
 		f->resize((int32)s.size() + 1);
-		f->seekp(0, ios::beg);
+		f->seekp(0, std::ios::beg);
 		f->write(s);
 		f->putByte((byte)0);
 		sizeDiff = f->size() - size;
@@ -495,9 +493,9 @@ void OldObjectCodeBlock::getRscNameLimits()
 	int i;
 	byte b;
 
-	_file->seekg(0x0C + _headerSize, ios::beg);
+	_file->seekg(0x0C + _headerSize, std::ios::beg);
 	_file->getByte(b);
-	_file->seekg(b, ios::beg);
+	_file->seekg(b, std::ios::beg);
 	i = 0;
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 		++i;
@@ -529,12 +527,12 @@ OldObjectCodeBlockV1 &OldObjectCodeBlockV1::operator=(const TreeBlock &block)
 	return *this;
 }
 
-void OldObjectCodeBlockV1::_listVerbs(list<int32> &l, int32 scriptOffset)
+void OldObjectCodeBlockV1::_listVerbs(std::list<int32> &l, int32 scriptOffset)
 {
 	ObjectCodeBlock::_tListVerbs<byte, 0x0B>(l, scriptOffset);
 }
 
-void OldObjectCodeBlockV1::_updateVerbs(const list<int32> &l, int32 scriptOffset, int n)
+void OldObjectCodeBlockV1::_updateVerbs(const std::list<int32> &l, int32 scriptOffset, int n)
 {
 	ObjectCodeBlock::_tUpdateVerbs<byte, 0x0B>(l, scriptOffset, n);
 }
@@ -565,9 +563,9 @@ void OldObjectCodeBlockV1::getRscNameLimits()
 	int i;
 	byte b;
 
-	_file->seekg(0x0A + _headerSize, ios::beg);
+	_file->seekg(0x0A + _headerSize, std::ios::beg);
 	_file->getByte(b);
-	_file->seekg(b, ios::beg);
+	_file->seekg(b, std::ios::beg);
 	i = 0;
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 		++i;
