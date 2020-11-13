@@ -1,6 +1,6 @@
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.1 FATAL_ERROR)
 
-project ("ScummTR" CXX)
+project ("ScummTR" C CXX)
 
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
