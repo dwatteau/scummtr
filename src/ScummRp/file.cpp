@@ -894,7 +894,7 @@ void FilePart::_move(std::streamoff start, std::streamoff shift)
 template <bool B, class T> T FilePart::get(T &i)
 {
 	read((char *)&i, sizeof i);
-#ifdef BIG_ENDIAN
+#ifdef SCUMMTR_USE_BIG_ENDIAN
 	if (!B && sizeof (T) > 1)
 		FilePart::_reverse(i);
 #else
@@ -906,7 +906,7 @@ template <bool B, class T> T FilePart::get(T &i)
 
 template <bool B, class T> void FilePart::put(T i)
 {
-#ifdef BIG_ENDIAN
+#ifdef SCUMMTR_USE_BIG_ENDIAN
 	if (!B && sizeof (T) > 1)
 		FilePart::_reverse(i);
 #else
