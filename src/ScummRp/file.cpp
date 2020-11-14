@@ -694,19 +694,11 @@ bool FilePart::eof()
 
 void FilePart::_xorBuffer(char *buffer, byte xorKey, std::streamsize n)
 {
-	int nd, nb;
-	uint32 xorKeyd;
-	uint32 *bufferd;
+	std::streamsize i;
 
-	bufferd = (uint32 *)buffer;
-	xorKeyd = xorKey | (uint32)xorKey << 8 | (uint32)xorKey << 16 | (uint32)xorKey << 24;
-	nd = n >> 2;
-	nb = n & 3;
-	while (nd-- > 0)
-		*bufferd++ ^= xorKeyd;
-	buffer = (char *)bufferd;
-	while (nb-- > 0)
-		*buffer++ ^= xorKey;
+	if (xorKey)
+		for (i = 0; i < n; i++)
+			buffer[i] ^= xorKey;
 }
 
 FilePart &FilePart::read(std::string &s, std::streamsize n)
