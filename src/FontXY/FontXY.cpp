@@ -29,8 +29,6 @@
 #include <list>
 #include <iostream>
 
-// TODO paramètres
-
 int main(int argc, char **argv)
 {
 	if (argc != 3 || argv[1][0] == 0 || argv[1][1] != 0 || ((argv[1][0] | 0x20) != 'i' && (argv[1][0] | 0x20) != 'o'))
@@ -40,35 +38,33 @@ int main(int argc, char **argv)
 	}
 	bool	bImport = (argv[1][0] | 0x20) == 'i';
 	char	*pszChar = argv[2];
-	char	szTxt[] = "XY.txt";
+	char	szTxt[] = "XY.txt"; // TODO: param
 
 	if (bImport)
 	{
 		char		szLine[1024];
-		// Ouvre le fichier CHAR
 		std::fstream	fChar(pszChar, std::fstream::in | std::fstream::out | std::fstream::binary);
-		// Ouvre le fichier TXT
 		std::ifstream	fTxt(szTxt, std::ifstream::in);
-		// Saute le header
+
+		// Seek after the header
 		fChar.seekg(8 + 0x17);
-		// Nombre de chars (<= 0x100)
-		short	snNumChars;
+
+		short	snNumChars; // <= 0x100
 		fChar.read((char *)&snNumChars, sizeof snNumChars);
 		int		nNumChars = snNumChars;
 		if (nNumChars > 0x100 || nNumChars <= 0) { std::cerr << "Error" << std::endl; return 1; }
-		// Pour chaque char
+
 		for (int i = 0; i < nNumChars; ++i)
 		{
-			// Offset
 			unsigned int	uOffset;
 			fChar.seekg(8 + 0x19 + i * 4);
 			fChar.read((char *)&uOffset, sizeof uOffset);
-			// Si offset == 0, saute une ligne
+
 			if (uOffset == 0)
 			{
 				fTxt.getline(szLine, sizeof szLine, '\n');
 			}
-			// Sinon, lecture de la ligne "x,y" et mise à jour dans fichier CHAR
+			// Read the "x,y" line and update the CHAR file
 			else
 			{
 				int			nLeft, nTop;
@@ -87,30 +83,29 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		// Ouvre le fichier CHAR
 		std::ifstream	fChar(pszChar, std::ifstream::in | std::ifstream::binary);
-		// Ouvre le fichier TXT
 		std::ofstream	fTxt(szTxt, std::ofstream::out | std::ofstream::trunc);
-		// Saute le header
+
+		// Seek after the header
 		fChar.seekg(8 + 0x17);
-		// Nombre de chars (<= 0x100)
-		short	snNumChars;
+
+		short	snNumChars; // <= 0x100
 		fChar.read((char *)&snNumChars, sizeof snNumChars);
 		int		nNumChars = snNumChars;
 		if (nNumChars > 0x100 || nNumChars <= 0) { std::cerr << "Error" << std::endl; return 1; }
-		// Pour chaque char
+
 		for (int i = 0; i < nNumChars; ++i)
 		{
-			// Offset
 			unsigned int	uOffset;
 			fChar.seekg(8 + 0x19 + i * 4);
 			fChar.read((char *)&uOffset, sizeof uOffset);
-			// Si offset == 0, saute une ligne
+
+			// Just add an empty line
 			if (uOffset == 0)
 			{
 				fTxt << std::endl;
 			}
-			// Sinon, lit valeurs, écrit dans le TXT
+			// Read the values, and write them in the TXT file
 			else
 			{
 				fChar.seekg(8 + 0x15 + uOffset + 2);
