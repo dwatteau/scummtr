@@ -383,7 +383,7 @@ File &File::read(char *s, std::streamsize n)
 File &File::write(const char *s, std::streamsize n)
 {
 	if (n <= 0)
-		throw File::IOError(xsprintf("File::write: n <= 0", _path));
+		throw File::IOError(xsprintf("File::write: n <= 0 in: %s", _path));
 	if (_seekedp)
 	{
 		_seekedp = false;

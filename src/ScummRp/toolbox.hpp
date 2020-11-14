@@ -24,11 +24,15 @@
 #ifndef __TOOLBOX_HPP__
 #define __TOOLBOX_HPP__
 
+#if !defined(__GNUC__) && !defined(__clang__)
+#  define  __attribute__(x)  /* NOTHING */
+#endif
+
 /*
  *
  */
 
-const char *xsprintf(const char *format, ...);
+const char *xsprintf(const char *format, ...) __attribute__((format(printf, 1, 2)));
 char *xstrdup(const char *src);
 void xremove(const char *path);
 void xrename(const char *oldname, const char *newname);

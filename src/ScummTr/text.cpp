@@ -214,7 +214,7 @@ int Text::funcLen(byte c)
 	case 0x0E:
 		return 2;
 	}
-	throw Text::Error(xsprintf("Unknown function id 0x%X"));
+	throw Text::Error(xsprintf("Unknown function id 0x%X", c));
 }
 
 void Text::_writeChar(byte b)
