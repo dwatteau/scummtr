@@ -168,7 +168,7 @@ void Script::getTrackedSpots(std::list<int32> &spots) const
 	copy(_spot.begin(), _spot.end(), spots.begin());
 }
 
-#ifdef CHECK_SCRIPT_JUMPS
+#ifdef SCUMMTR_CHECK_SCRIPT_JUMPS
 void Script::_checkJumps()
 {
 	std::list<JumpRef>::iterator i;
@@ -223,7 +223,7 @@ void Script::_checkJumps()
 	if (count < n)
 		throw Script::ParseError("Bad jump(s)");
 }
-#endif // CHECK_SCRIPT_JUMPS
+#endif // SCUMMTR_CHECK_SCRIPT_JUMPS
 
 void Script::parse()
 {
@@ -254,9 +254,9 @@ void Script::parse()
 			while (_file->tellg(std::ios::beg) < _file->size())
 #endif
 				_opv67();
-#ifdef CHECK_SCRIPT_JUMPS
+#ifdef SCUMMTR_CHECK_SCRIPT_JUMPS
 		_checkJumps();
-#endif // CHECK_SCRIPT_JUMPS
+#endif // SCUMMTR_CHECK_SCRIPT_JUMPS
 	}
 	catch (File::UnexpectedEOF &)
 	{

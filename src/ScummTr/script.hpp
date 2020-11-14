@@ -35,8 +35,8 @@
 #ifndef SCUMMTR_LAST_2005_CHANGE
 // note: this was enabled in the last official release from 2003, but after
 // some debugging in this area in 2004, it was disabled altogether on 2005-11-22.
-// No official release was ever shipped without CHECK_SCRIPT_JUMPS.
-#define CHECK_SCRIPT_JUMPS
+// No official release was ever shipped without SCUMMTR_CHECK_SCRIPT_JUMPS.
+#define SCUMMTR_CHECK_SCRIPT_JUMPS
 #endif
 
 /*
@@ -103,9 +103,9 @@ public:
 	void _opv67();
 	void _updateJumps(int32 offset, int32 diff, int lineNumber);
 	void _writeJumps(std::string &buffer);
-#ifdef CHECK_SCRIPT_JUMPS
+#ifdef SCUMMTR_CHECK_SCRIPT_JUMPS
 	void _checkJumps();
-#endif // CHECK_SCRIPT_JUMPS
+#endif // SCUMMTR_CHECK_SCRIPT_JUMPS
 public:
 	void setTrackedSpots(const std::list<int32> &spots);
 	void getTrackedSpots(std::list<int32> &spots) const;
