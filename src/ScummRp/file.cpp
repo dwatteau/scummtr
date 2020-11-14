@@ -877,11 +877,6 @@ void FilePart::_move(std::streamoff start, std::streamoff shift)
 	}
 }
 
-#ifdef _MSC_VER
-# pragma warning(push)
-# pragma warning(disable : 4127) // conditional expression is constant
-#endif // _MSC_VER
-
 // not sure those two templates are the only things to modify for a BE µp.
 template <bool B, class T> T FilePart::get(T &i)
 {
@@ -907,10 +902,6 @@ template <bool B, class T> void FilePart::put(T i)
 #endif
 	write((const char *)&i, sizeof i);
 }
-
-#ifdef _MSC_VER
-# pragma warning(pop)
-#endif // _MSC_VER
 
 // for GCC
 void FilePart::getLE(byte &i) { get<false, byte>(i); }

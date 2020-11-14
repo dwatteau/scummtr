@@ -55,13 +55,6 @@ char ScummRp::_paramGameDir[512] = ".";
 char ScummRp::_paramDumpingDir[512] = ".";
 char ScummRp::_paramTag[5] = "";
 
-#ifdef _MSC_VER
-# pragma warning(push)
-# pragma warning(disable : 4127) // conditional expression is constant
-#endif // _MSC_VER
-
-// Uncomment to discover why gcc currently sucks (among other things)
-
 // template <int A>
 // void ScummRp::_explore(TreeBlock &tree)
 // {
@@ -76,8 +69,8 @@ char ScummRp::_paramTag[5] = "";
 // 		else
 // 			switch (blockPtr->getTag())
 // 			{
-// 			case 'LECF':
-// 			case 'LE':
+// 			case MKTAG4('L','E','C','F'):
+// 			case MKTAG2('L','E'):
 // 				{
 // 					ScummRp::_explore<A>(LECFPack(*blockPtr));
 // 				}
@@ -229,10 +222,6 @@ template <int A> void ScummRp::_exploreIndex(TreeBlock &index)
 			break;
 		}
 }
-
-#ifdef _MSC_VER
-# pragma warning(pop)
-#endif // _MSC_VER
 
 int ScummRp::_findGameDef(const char *shortName)
 {

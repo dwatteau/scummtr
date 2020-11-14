@@ -430,7 +430,7 @@ void TreeBlock::dump(const char *path)
 	// XXX: This part only existed in the 2003-10-01 version, but not in
 	// the 2003-11-24 or the 2003-11-08 versions. This is probably debug
 	// leftover from early development.
-	if (_tag == 'CLUT')
+	if (_tag == MKTAG4('C','L','U','T'))
 	{
 		_file->seekg(0, std::ios::beg);
 		for (int i = 0; i < 256; ++i)
@@ -1364,11 +1364,6 @@ void OldLFLFile::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 			_blocks[i] += sizeDiff;
 }
 
-#ifdef _MSC_VER
-# pragma warning(push)
-# pragma warning(disable : 4127) // conditional expression is constant
-#endif // _MSC_VER
-
 bool OldLFLFile::nextBlock(TreeBlock &subblock)
 {
 	const TableOfContent *toc;
@@ -1427,10 +1422,6 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 		subblock._id = id;
 	return true;
 }
-
-#ifdef _MSC_VER
-# pragma warning(pop)
-#endif // _MSC_VER
 
 /*
  * OldLFLFileV1
