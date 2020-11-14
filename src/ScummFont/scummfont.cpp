@@ -482,7 +482,7 @@ static void loadFont(const char *path)
 	if (!file.is_open())
 		throw std::runtime_error("Cannot open font file");
 	getFontInfo(baseOffset, file, version, bpp, maxHeight, maxWidth, bytesPerChar, numChars);
-	delete glFontBitmap;
+	delete[] glFontBitmap;
 	glFontBitmap = 0;
 #ifdef SCUMMFONT_256
 	glFontBitmap = new unsigned char[128 * 128];
@@ -581,11 +581,11 @@ int main(int argc, char **argv) try
 }
 catch (std::exception &e)
 {
-	delete glFontBitmap;
+	delete[] glFontBitmap;
 	std::cerr << "ERROR: " << e.what() << std::endl;
 }
 catch (...)
 {
-	delete glFontBitmap;
+	delete[] glFontBitmap;
 	throw;
 }
