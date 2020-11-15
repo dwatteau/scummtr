@@ -1230,6 +1230,7 @@ void Script::_opv12()
 			break;
 		}
 		// else:
+		// fallthrough
 	case 0x99: // doSentence
 	case 0xB9: // doSentence
 	case 0xD9: // doSentence
@@ -1757,6 +1758,7 @@ void Script::_opv345(int r)
 			break;
 		}
 		// else goto drawObject
+		// fallthrough
 	case 0x05: // drawObject
 	case 0x45: // drawObject
 	case 0x85: // drawObject
