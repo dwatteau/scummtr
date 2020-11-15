@@ -109,7 +109,7 @@ static unsigned char *glFontBitmap = 0;
 static int glWidth = 0;
 static int glHeight = 0;
 
-const char *xsprintf(const char *format, ...)
+static const char *xsprintf(const char *format, ...)
 {
 	static char errorMessage[256];
 	va_list va;
