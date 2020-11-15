@@ -1,5 +1,10 @@
 cmake_minimum_required (VERSION 3.1 FATAL_ERROR)
 
+if (NOT CMAKE_BUILD_TYPE)
+    message(STATUS "No explicit CMAKE_BUILD_TYPE selected, default to RelWithDebInfo")
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build type" FORCE)
+endif()
+
 project ("ScummTR" C CXX)
 
 set(CMAKE_CXX_STANDARD 98)
