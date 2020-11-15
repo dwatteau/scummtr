@@ -424,7 +424,7 @@ void ScummRp::_queueParam(char *pendingParams, char c)
 
 	for (j = 0; pendingParams[j] != 0; ++j)
 		if (pendingParams[j] == c)
-            return;
+			return;
 	if (j >= ScummRp::MAX_PARAMS)
 		throw std::logic_error("ScummRp::_queueParam: Too many parameters");
 	pendingParams[j] = c;
