@@ -1,0 +1,51 @@
+.Dd $Mdocdate: November 19 2020 $
+.Dt SCUMMFONT 1
+.Os
+.Sh NAME
+.Nm scummfont
+.Nd transform SCUMM font files to bitmaps
+.Sh SYNOPSIS
+.Nm scummfont
+.Cm i
+.Ar FONTFILE
+.Ar image.bmp
+.Nm scummfont
+.Cm o
+.Ar FONTFILE
+.Ar image.bmp
+.Sh DESCRIPTION
+The
+.Nm
+tool transforms SCUMM font files between their internal format and a bitmap representation.
+The mode of operation is chosen with one of the following options:
+.Bl -tag -width Ds
+.It Cm i
+Import the content of an
+.Pa image.bmp
+bitmap file into the specified
+.Ar FONTFILE
+SCUMM resource, with a
+.Dq -new
+suffix added to it.
+.It Cm o
+Extract a font from a
+.Ar FONTFILE
+SCUMM resource into an
+.Pa image.bmp
+bitmap file.
+.El
+.Pp
+.Ar FONTFILE
+can either be a
+.Dq CHAR_*
+block extracted by
+.Xr scummrp 1 ,
+or an LFL file.
+.Sh HISTORY
+The
+.Nm
+tool was written between 2003 and 2004 by Thomas Combeleran for the ATP team,
+and was open-sourced in 2020 under an MIT license.
+.Sh CAVEATS
+Only extremely simple bitmap files are supported.
+They're sometimes called BMP3 files or Windows 3.x bitmap files.

@@ -1,0 +1,87 @@
+.Dd $Mdocdate: November 19 2020 $
+.Dt SCUMMRP 1
+.Os
+.Sh NAME
+.Nm scummrp
+.Nd pack and unpack SCUMM game data resources
+.Sh SYNOPSIS
+.Nm scummrp
+.Fl i
+.Op Fl qvV
+.Op Fl t Ar tag
+.Fl g Ar gameid
+.Fl p Ar gamedir
+.Fl d Ar dumpdir
+.Nm scummrp
+.Fl o
+.Op Fl qvV
+.Op Fl t Ar tag
+.Fl g Ar gameid
+.Fl p Ar gamedir
+.Fl d Ar dumpdir
+.Nm scummrp
+.Fl L
+.Sh DESCRIPTION
+The
+.Nm
+tool imports and exports game data resources for SCUMM engine games.
+The mode of operation is chosen with one of the following options:
+.Bl -tag -width Ds
+.It Fl i
+Pack the content of a dump directory into game data files.
+.It Fl o
+Unpack resources from game data files to a dump directory.
+.It Fl L
+List all supported games with their respective
+.Ar gameid .
+If any other option is given, it will be ignored.
+.El
+.Pp
+The other options are as follows:
+.Bl -tag -width Dsgamedir
+.It Fl d Ar dumpdir
+The dump directory.
+Game content is represented as a hierarchy of multiple files and subdirectories.
+If it doesn't exist, the directory will be created.
+.It Fl g Ar gameid
+The ID of the game variant to pack or unpack, as returned
+by the output of
+.Fl L .
+.It Fl p Ar gamedir
+The path to the directory containing the resource files of the game.
+.It Fl q
+Quiet mode.
+Suppress informational output.
+.It Fl t Ar tag
+Only export/import game resources matching the specified
+.Ar tag .
+A tag is the internal name of a resource type inside SCUMM.
+It is usually a four-letter name, such as
+.Dq SCRP .
+.It Fl v
+Verbose mode.
+.It Fl V
+Same as
+.Fl v ,
+but list resource names as they're being treated, too.
+.El
+.Sh EXAMPLES
+Dump all the resources of the original Monkey Island 2 game to the
+.Pa ./DUMP_MI2
+directory:
+.Pp
+.Dl $ scummrp -o -g monkey2 -p /path/to/MI2 -d ./DUMP_MI2
+.Pp
+Dump the script resources of the Talkie version of Loom:
+.Pp
+.Dl $ scummrp -o -g loomcd -p /path/to/LOOM -t SCRP -d ./DUMP_LOOM
+.Sh HISTORY
+The
+.Nm
+tool was written in 2003 by Thomas Combeleran for the ATP team,
+and was open-sourced in 2020 under an MIT license.
+.Sh CAVEATS
+On case-sensitive file systems, game data files must currently
+follow the DOS convention of being all-uppercase to be properly
+detected by
+.Nm .

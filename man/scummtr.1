@@ -1,0 +1,161 @@
+.Dd $Mdocdate: November 18 2020 $
+.Dt SCUMMTR 1
+.Os
+.Sh NAME
+.Nm scummtr
+.Nd import and export fan translations for SCUMM engine games
+.Sh SYNOPSIS
+.Nm scummtr
+.Fl i
+.Op Fl bcqvw
+.Op Fl l Ar language
+.Fl g Ar gameid
+.Fl p Ar gamedir
+.Fl f Ar input
+.Nm scummtr
+.Fl o
+.Op Fl bchHIqvw
+.Op Fl a Ar resource
+.Op Fl A Ar resource
+.Op Fl l Ar language
+.Fl g Ar gameid
+.Fl p Ar gamedir
+.Fl f Ar output
+.Nm scummtr
+.Fl L
+.Sh DESCRIPTION
+The
+.Nm
+tool imports and exports subtitles content for SCUMM engine games.
+The mode of operation is chosen with one of the following options:
+.Bl -tag -width Ds
+.It Fl i
+Import the content of a translation file to the game data files.
+.It Fl o
+Export the current subtitle content of a game to a translation file.
+.It Fl L
+List all supported games with their respective
+.Ar gameid .
+If any other option is given, it will be ignored.
+.El
+.Pp
+The other options are as follows:
+.Bl -tag -width Dslanguage
+.It Fl a Ar resource
+Protect the specified SCUMM resource types with extra padding, when
+exporting.
+.Pp
+Some game resources are created with a short name and use a longer
+name later in the game.
+By default, this must be handled with manual
+.Ql @
+character padding, to prevent buffer errors when the rename happens
+during the game.
+The
+.Fl a
+option just applies extra padding to all specified resource types to
+make things easier, at the cost of increased memory usage.
+.Pp
+Valid resource types for the
+.Fl a
+option are:
+.Bl -tag -width Ds
+.It Ic a
+Pad all actor resources.
+.It Ic o
+Pad all object resources.
+.It Ic v
+Pad all verb resources.
+.El
+.It Fl A Ar resource
+Same as
+.Fl a ,
+with variable IDs taken into account.
+.It Fl b
+Translation file will be handled in binary mode.
+.It Fl c
+Translation file will be handled as an ISO-8859-1 compatible file.
+Without
+.Fl c ,
+non-ASCII characters will be handled as escape sequences.
+.Pp
+Note that each game variant only supported its own internal subset of
+the ISO-8859-1 (or Windows-1252) encoding.
+.It Fl f Ar file
+The translation file to be used for the import or export.
+.It Fl g Ar gameid
+The ID of the game variant to be translated, as returned
+by the output of
+.Fl L .
+.It Fl h
+Add line headers, when exporting.
+.It Fl H
+Use hexadecimal character codes, when exporting.
+.It Fl I
+Show instruction opcode, when exporting.
+.It Fl l Ar language
+V1 and V2 games only.
+The name of the language charset to be used for this translation.
+.Pp
+Possible values are:
+.Bl -tag -width Ds
+.It Ic de
+Original German charset.
+.It Ic en
+Original English charset.
+.It Ic fr
+Original French charset.
+.It Ic it
+Original Italian charset.
+.El
+.It Fl p Ar gamedir
+The path to the directory containing the resource files of the game.
+.It Fl q
+Quiet mode.
+Suppress informational output.
+.It Fl v
+Verbose mode.
+.It Fl w
+Translation files use Windows-type newline characters (CRLF).
+.Pp
+By default,
+.Nm
+only uses Unix-type newline characters (LF), which may be less
+compatible with older text editors.
+.El
+.Sh EXAMPLES
+Extract the subtitles of the original Monkey Island 2 game to an
+ISO-8859-1 file compatible with Notepad.exe:
+.Pp
+.Dl $ scummtr -o -c -w -g monkey2 -p /path/to/MI2 -f ./mi2_orig.txt
+.Pp
+Import a new French translation to the game files:
+.Pp
+.Dl $ scummtr -i -c -w -g monkey2 -p /path/to/MI2 -f ./mi2_fr.txt
+.Pp
+Export the subtitle content of a German Zak McKracken V1 game:
+.Pp
+.Dl $ scummtr -o -c -w -g zakv1 -l de -p /path/to/ZAKV1_DE -f ./zakv1_de.txt
+.Sh HISTORY
+The
+.Nm
+tool was written between 2003 and 2005
+by Thomas Combeleran for the ATP team,
+and was open-sourced in 2020 under an MIT license.
+.Sh CAVEATS
+Your text editor must not remove trailing spaces or empty lines,
+otherwise you will have import errors.
+.Pp
+Since each game and each variant of each game had its own list of
+accepted characters, it is not possible to know if a character
+will be properly displayed without testing it in the game.
+See also
+.Xr scummfont 1 .
+.Pp
+Unicode files are not supported, and non-Roman languages need
+some extra work for convenient use.
+.Pp
+On case-sensitive file systems, game data files must currently
+follow the DOS convention of being all-uppercase to be properly
+detected by
+.Nm .

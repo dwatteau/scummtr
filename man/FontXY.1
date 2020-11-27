@@ -1,0 +1,54 @@
+.Dd $Mdocdate: November 19 2020 $
+.Dt FONTXY 1
+.Os
+.Sh NAME
+.Nm FontXY
+.Nd adjust glyph dimensions inside SCUMM fonts
+.Sh SYNOPSIS
+.Nm FontXY
+.Cm i
+.Ar CHARFILE
+.Nm FontXY
+.Cm o
+.Ar CHARFILE
+.Sh DESCRIPTION
+The
+.Nm
+tool lets you adjust the relative size of each glyph inside a
+SCUMM character file.
+The mode of operation is chosen with one of the following options:
+.Bl -tag -width Ds
+.It Cm i
+Import glyph dimensions from a
+.Pa XY.txt
+file into the specified
+.Ar CHARFILE
+resource.
+.It Cm o
+Export glyph dimensions from the specified
+.Ar CHARFILE
+resource into a
+.Pa XY.txt
+file.
+.El
+.Pp
+.Ar CHARFILE
+must be a
+.Dq CHAR_*
+resource file, as extracted by
+.Xr scummrp 1 .
+.Pp
+Glyph dimensions are represented as a series of
+.Ql X;Y
+coordinates, relative to zero, each glyph being separated by a newline character.
+Empty glyphs are represented as empty lines.
+.Sh HISTORY
+The
+.Nm
+tool was written in 2006 by Thomas Combeleran for the ATP team,
+and was open-sourced in 2020 under an MIT license.
+.Sh CAVEATS
+Only Unix-type newline characters (LF) are currently supported.
+.Pp
+.Pa XY.txt
+pathname is hardcoded.
