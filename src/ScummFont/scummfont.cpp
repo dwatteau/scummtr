@@ -132,11 +132,11 @@ static int usage()
 	return 0;
 }
 
-static void getFontInfo(long &baseOffset, std::ifstream &file, int &version, int &bpp,
+static void getFontInfo(int &baseOffset, std::ifstream &file, int &version, int &bpp,
 						int &maxHeight, int &maxWidth, int &bytesPerChar, short &numChars)
 {
 	int i;
-	long tag;
+	int tag;
 	int lineSpacing;
 
 	lineSpacing = 0;
@@ -170,7 +170,7 @@ static void getFontInfo(long &baseOffset, std::ifstream &file, int &version, int
 		maxWidth = maxHeight = 0;
 		for (i = 0; i < numChars; ++i)
 		{
-			long offset;
+			int offset;
 			int width, height;
 
 #ifdef SCUMMFONT_MAKETABLE
@@ -206,7 +206,7 @@ static void getFontInfo(long &baseOffset, std::ifstream &file, int &version, int
 		if (maxHeight < lineSpacing)
 			maxHeight = lineSpacing;
 	}
-	if ((unsigned)bytesPerChar < 8 || bpp == 0 || bpp == 3 || (unsigned)bpp > 4
+	if ((unsigned int)bytesPerChar < 8 || bpp == 0 || bpp == 3 || (unsigned int)bpp > 4
 		|| (unsigned short)numChars > 0x100 || maxHeight < 0 || maxWidth < 0)
 		throw std::runtime_error("Your font is strange...");
 }
@@ -312,7 +312,7 @@ static void saveFont(const char *path)
 	int i, j, k, version, bpp, maxHeight, maxWidth, bytesPerChar;
 	short numChars;
 	int newNumChars;
-	long baseOffset, endOffset;
+	int baseOffset, endOffset;
 
 	if (!file.is_open())
 		throw std::runtime_error("Cannot open font file");
@@ -379,7 +379,7 @@ static void saveFont(const char *path)
 			}
 			else
 			{
-				long offset;
+				int offset;
 				int x, y;
 
 				if (width != 0 && height != 0)
@@ -477,7 +477,7 @@ static void loadFont(const char *path)
 	std::ifstream file(path, std::ios::in | std::ios::binary);
 	int i, j, k, version, bpp, maxHeight, maxWidth, bytesPerChar;
 	short numChars;
-	long baseOffset;
+	int baseOffset;
 
 	if (!file.is_open())
 		throw std::runtime_error("Cannot open font file");
@@ -527,7 +527,7 @@ static void loadFont(const char *path)
 		}
 		else
 		{
-			long offset;
+			int offset;
 
 			file.seekg(baseOffset + 0x19 + i * 4, std::ios::beg);
 			file.read((char *)&offset, 4);
