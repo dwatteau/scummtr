@@ -426,20 +426,6 @@ void TreeBlock::dump(const char *path)
 	_file->seekg(0, std::ios::beg);
 	output.write(*_file, _file->size());
 	output.close();
-#ifdef SCUMMRP_TODO_REMOVE_ME
-	// XXX: This part only existed in the 2003-10-01 version, but not in
-	// the 2003-11-24 or the 2003-11-08 versions. This is probably debug
-	// leftover from early development.
-	if (_tag == MKTAG4('C','L','U','T'))
-	{
-		_file->seekg(0, std::ios::beg);
-		for (int i = 0; i < 256; ++i)
-		{
-			if ()
-		}
-	}
-	// --
-#endif
 }
 
 void TreeBlock::update(const char *path)
@@ -449,12 +435,8 @@ void TreeBlock::update(const char *path)
 	int id;
 
 	if (_childrenCount > 0)
-#ifdef SCUMMRP_NO_THROW_FIX
-		std::logic_error("TreeBlock::update: The block has children");
-#else
-		// XXX: only the last version, after the official release, had this
 		throw std::logic_error("TreeBlock::update: The block has children");
-#endif
+
 	input.open(path, std::ios::binary | std::ios::in);
 	if (!input.is_open())
 		return;

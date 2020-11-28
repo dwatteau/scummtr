@@ -672,11 +672,7 @@ void Text::addLine(std::string s, Text::LineType lineType, int op)
 	else
 	{
 		_file.write(s);
-#ifdef SCUMMTR_ORIGINAL_CONTENT_BUT_COMPILATION_ERROR_TODAY
-		_file->putByte('\0');
-#else
 		_file->putByte((byte)0);
-#endif
 	}
 }
 

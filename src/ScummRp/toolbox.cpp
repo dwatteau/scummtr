@@ -31,24 +31,12 @@
 #include <string>
 #include <stdexcept>
 
-#ifdef SCUMMRP_ORIGINAL_BUT_WRONG_INCLUDES
-#if defined (_MSC_VER)
-# include <direct.h>
-# define mkdir _mkdir
-#elif defined (UNIX)
-# include <sys/stat.h>
-# include <sys/types.h>
-#else
-# include <dir.h>
-#endif
-#else
 #if defined (_WIN32)
 # include <direct.h>
 # define mkdir _mkdir
 #else /* assume Unix */
 # include <sys/stat.h>
 # include <sys/types.h>
-#endif
 #endif
 
 /*
