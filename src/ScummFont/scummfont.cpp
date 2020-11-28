@@ -284,7 +284,9 @@ static void loadBmp(const char *path)
 	file.read((char *)&off, 4);
 	if (off < 0x36)
 		throw std::runtime_error("This is not a valid BMP file");
-	file.seekg(0x12, std::ios::beg);
+	file.read((char *)&dw, 4);
+	if (dw != 0x28)
+		throw std::runtime_error("This is not a BMPv3 file");
 	file.read((char *)&dw, 4);
 	glWidth = dw;
 	file.read((char *)&dw, 4);
