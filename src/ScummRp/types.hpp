@@ -33,15 +33,6 @@ typedef unsigned int uint;
 typedef __int8 int8;
 typedef __int16 int16;
 typedef __int32 int32;
-#elif defined(SCUMMRP_ORIGINAL_CONTENT_BUT_WRONG_TODAY)
-typedef unsigned char byte;
-typedef unsigned char uint8;
-typedef unsigned short uint16;
-typedef unsigned long uint32;
-typedef unsigned int uint;
-typedef char int8;
-typedef short int16;
-typedef long int32;
 #else
 // note: will do for almost any current 32-bit or 64-bit arch.
 typedef unsigned char byte;
