@@ -33,10 +33,10 @@
 
 #if defined (_WIN32)
 # include <direct.h>
-# define mkdir _mkdir
+# define mkdir(path, mode) _mkdir(path)
 #else /* assume Unix */
-# include <sys/stat.h>
 # include <sys/types.h>
+# include <sys/stat.h>
 #endif
 
 /*
@@ -106,22 +106,14 @@ int xmkdir(const char *path)
 		if (tmpPath[i] == '/' && i > 0 && prevChar != '/')
 		{
 			tmpPath[i] = 0;
-#ifdef _WIN32
-			ret = mkdir(tmpPath);
-#else
 			ret = mkdir(tmpPath, 0755);
-#endif
 			tmpPath[i] = '/';
 		}
 		prevChar = tmpPath[i];
 	}
 	if (prevChar != '/')
 	{
-#ifdef _WIN32
-		ret = mkdir(tmpPath);
-#else
 		ret = mkdir(tmpPath, 0755);
-#endif
 	}
 	delete []tmpPath;
 	return ret;
