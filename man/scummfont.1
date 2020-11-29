@@ -47,4 +47,10 @@ The
 tool was written between 2003 and 2004 by Thomas Combeleran for the ATP team,
 and was open-sourced in 2020 under an MIT license.
 .Sh CAVEATS
-Only simple, uncompressed 8-bit per pixel BMPv3 bitmap files (also known as Windows 3.x bitmap files) are supported.
+Only simple, uncompressed 8-bit per pixel BMPv3 bitmap files (also known as
+Windows 3.x bitmap files) are supported.
+.Pp
+If your input file is rejected after having been modified by an external tool,
+Netpbm can be used to revert it to a compatible format:
+.Pp
+.Dl $ bmptoppm input.bmp | ppmtobmp -windows -bpp 8 > compatible-output.bmp
