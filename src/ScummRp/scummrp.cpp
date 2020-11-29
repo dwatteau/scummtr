@@ -117,8 +117,7 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 			if (processedBlocks.find(filename) == processedBlocks.end())
 				ScummRp::_explore(*blockPtr, action);
 			else
-				ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was explored.",
-											filename.c_str()));
+				ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was explored.", filename.c_str()));
 		}
 		else
 			switch (blockPtr->getTag())
@@ -133,8 +132,7 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 					ScummRp::_explore(*lecf, action);
 				}
 				else
-					ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was explored.",
-												filename.c_str()));
+					ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was explored.", filename.c_str()));
 				break;
 			default:
 				if (ScummRp::_filterTag && blockPtr->getTag() != ScummRp::_filterTag)
@@ -160,8 +158,7 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 					}
 				}
 				else
-					ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was %s.", filename.c_str(),
-												action == ScummRp::ACT_IMPORT ? "replaced" : "dumped"));
+					ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was %s.", filename.c_str(), action == ScummRp::ACT_IMPORT ? "replaced" : "dumped"));
 			}
 	}
 }
@@ -236,35 +233,25 @@ int ScummRp::_findGameDef(const char *shortName)
 TreeBlock *ScummRp::_newIndex(const char *path)
 {
 	if (ScummRp::_game.version <= 1)
-		return new OldIndexFileV1(path, ScummRp::_fileOptions,
-								  ScummRp::_backupSystem, -1, ScummRp::_game.indexXorKey);
+		return new OldIndexFileV1(path, ScummRp::_fileOptions, ScummRp::_backupSystem, -1, ScummRp::_game.indexXorKey);
 	else if (ScummRp::_game.version <= 2)
-		return new OldIndexFileV2(path, ScummRp::_fileOptions,
-								  ScummRp::_backupSystem, -1, ScummRp::_game.indexXorKey);
-	else if (ScummRp::_game.version <= 3
-			 && ScummRp::_game.blockFormat ==  BFMT_SIZEONLY)
-		return new OldIndexFileV3(path, ScummRp::_fileOptions,
-								  ScummRp::_backupSystem, -1, ScummRp::_game.indexXorKey);
+		return new OldIndexFileV2(path, ScummRp::_fileOptions, ScummRp::_backupSystem, -1, ScummRp::_game.indexXorKey);
+	else if (ScummRp::_game.version <= 3 && ScummRp::_game.blockFormat ==  BFMT_SIZEONLY)
+		return new OldIndexFileV3(path, ScummRp::_fileOptions, ScummRp::_backupSystem, -1, ScummRp::_game.indexXorKey);
 	else
-		return new IndexFile(path, ScummRp::_fileOptions,
-							 ScummRp::_backupSystem, -1, ScummRp::_game.indexXorKey);
+		return new IndexFile(path, ScummRp::_fileOptions, ScummRp::_backupSystem, -1, ScummRp::_game.indexXorKey);
 }
 
 LFLFile *ScummRp::_newLFL(const char *path, int id)
 {
 	if (ScummRp::_game.version <= 1)
-		return new OldLFLFileV1(path, ScummRp::_fileOptions, ScummRp::_backupSystem,
-								id, ScummRp::_game.dataXorKey);
+		return new OldLFLFileV1(path, ScummRp::_fileOptions, ScummRp::_backupSystem, id, ScummRp::_game.dataXorKey);
 	else if (ScummRp::_game.version <= 2)
-		return new OldLFLFileV2(path, ScummRp::_fileOptions, ScummRp::_backupSystem,
-								id, ScummRp::_game.dataXorKey);
-	else if (ScummRp::_game.version <= 3
-			 && ScummRp::_game.blockFormat ==  BFMT_SIZEONLY)
-		return new OldLFLFileV3(path, ScummRp::_fileOptions, ScummRp::_backupSystem,
-								id, ScummRp::_game.dataXorKey);
+		return new OldLFLFileV2(path, ScummRp::_fileOptions, ScummRp::_backupSystem, id, ScummRp::_game.dataXorKey);
+	else if (ScummRp::_game.version <= 3 && ScummRp::_game.blockFormat ==  BFMT_SIZEONLY)
+		return new OldLFLFileV3(path, ScummRp::_fileOptions, ScummRp::_backupSystem, id, ScummRp::_game.dataXorKey);
 	else
-		return new LFLFile(path, ScummRp::_fileOptions, ScummRp::_backupSystem,
-						   id, ScummRp::_game.dataXorKey);
+		return new LFLFile(path, ScummRp::_fileOptions, ScummRp::_backupSystem, id, ScummRp::_game.dataXorKey);
 }
 
 void ScummRp::_prepareTmpIndex()
@@ -357,8 +344,7 @@ void ScummRp::_processGameFilesV4567()
 		sprintf(dataFileName, ScummRp::_game.dataFileName, i);
 		dataPath += '/';
 		dataPath += dataFileName;
-		disk = new BlocksFile(dataPath.c_str(), ScummRp::_fileOptions,
-							  ScummRp::_backupSystem, i, MKTAG4('D','I','S','K'), ScummRp::_game.dataXorKey);
+		disk = new BlocksFile(dataPath.c_str(), ScummRp::_fileOptions, ScummRp::_backupSystem, i, MKTAG4('D','I','S','K'), ScummRp::_game.dataXorKey);
 		if (ScummRp::_options & ScummRp::OPT_IMPORT)
 			ScummRp::_explore(*disk, ScummRp::ACT_IMPORT);
 		else
@@ -536,11 +522,8 @@ void ScummRp::_getOptions(int argc, const char **argv, const ScummRp::Parameter 
 
 bool ScummRp::_invalidOptions()
 {
-	static const uint32 exclusive[] = { ScummRp::OPT_IMPORT | ScummRp::OPT_EXPORT,
-										0 };
-	static const uint32 mandatory[] = { ScummRp::OPT_IMPORT | ScummRp::OPT_EXPORT,
-										ScummRp::OPT_GAME_FILES,
-										0 };
+	static const uint32 exclusive[] = { ScummRp::OPT_IMPORT | ScummRp::OPT_EXPORT, 0 };
+	static const uint32 mandatory[] = { ScummRp::OPT_IMPORT | ScummRp::OPT_EXPORT, ScummRp::OPT_GAME_FILES, 0 };
 	int i;
 
 	for (i = 0; mandatory[i] != 0; ++i)

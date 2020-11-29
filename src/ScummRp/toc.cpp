@@ -83,8 +83,7 @@ void TableOfContent::merge(const TableOfContent &t)
 		else if (t._accessed[_toc[i].roomId])
 		{
 			if (_accessed[_toc[i].roomId] && _toc[i].offset != t._toc[i].offset)
-				throw TableOfContent::Error(xsprintf("LFLF %i differently indexed from one file to another",
-													 _toc[i].roomId));
+				throw TableOfContent::Error(xsprintf("LFLF %i differently indexed from one file to another", _toc[i].roomId));
 			_toc[i].offset = t._toc[i].offset;
 			a[_toc[i].roomId] = true;
 		}

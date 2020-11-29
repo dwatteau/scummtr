@@ -736,8 +736,7 @@ FilePart &FilePart::read(char *s, std::streamsize n)
 	if (pos < 0 || n < 0)
 		throw std::logic_error(xsprintf("FilePart::read: %s", _file->_path));
 	if (pos + n > _size)
-		throw File::UnexpectedEOF(xsprintf("Unexpected EOF in: %s <0x%X, 0x%X>",
-										   _file->_path, _offset, _size));
+		throw File::UnexpectedEOF(xsprintf("Unexpected EOF in: %s <0x%X, 0x%X>", _file->_path, _offset, _size));
 	_file->read(s, n);
 	if (_xorKey != 0)
 		FilePart::_xorBuffer(s, _xorKey, n);

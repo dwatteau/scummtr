@@ -260,15 +260,11 @@ void Script::parse()
 	}
 	catch (File::UnexpectedEOF &)
 	{
-		throw Script::ParseError(xsprintf("Unexpected end of script at 0x%X in %s",
-										  _file->fullOffset() + _file->tellg(std::ios::beg),
-										  _file->name().c_str()));
+		throw Script::ParseError(xsprintf("Unexpected end of script at 0x%X in %s", _file->fullOffset() + _file->tellg(std::ios::beg), _file->name().c_str()));
 	}
 	catch (Script::ParseError &e)
 	{
-		throw Script::ParseError(xsprintf("Script error at 0x%X in %s (%s)",
-										  _file->fullOffset() + _file->tellg(std::ios::beg),
-										  _file->name().c_str(), e.what()));
+		throw Script::ParseError(xsprintf("Script error at 0x%X in %s (%s)", _file->fullOffset() + _file->tellg(std::ios::beg), _file->name().c_str(), e.what()));
 	}
 }
 
@@ -333,8 +329,7 @@ void Script::_eatArgList()
 	while ((b = _getByte()) != 0xFF)
 	{
 		if (i++ >= 16)
-			throw Script::ParseError(xsprintf("Arg list too long at 0x%X in %s",
-											  _file->fullOffset(), _file->name().c_str()));
+			throw Script::ParseError(xsprintf("Arg list too long at 0x%X in %s", _file->fullOffset(), _file->name().c_str()));
 		_eatWordOrVar(b & 0x80);
 	}
 }
@@ -1950,14 +1945,16 @@ void Script::_opv345(int r)
 	case 0x93: // actorSet
 	case 0xD3: // actorSet
 		{
-			static const byte convertTable[0x20] = { 0x1E, 0x01, 0x00, 0x00,
-													 0x02, 0x03, 0x04, 0x05,
-													 0x06, 0x07, 0x08, 0x09,
-													 0x0A, 0x0B, 0x0C, 0x0D,
-													 0x0E, 0x0F, 0x10, 0x11,
-													 0x1E, 0x1E, 0x1E, 0x1E, // 0x1E means error
-													 0x1E, 0x1E, 0x1E, 0x1E,
-													 0x1E, 0x1E, 0x1E, 0x1E };
+			static const byte convertTable[0x20] = {
+				0x1E, 0x01, 0x00, 0x00,
+				0x02, 0x03, 0x04, 0x05,
+				0x06, 0x07, 0x08, 0x09,
+				0x0A, 0x0B, 0x0C, 0x0D,
+				0x0E, 0x0F, 0x10, 0x11,
+				0x1E, 0x1E, 0x1E, 0x1E, // 0x1E means error
+				0x1E, 0x1E, 0x1E, 0x1E,
+				0x1E, 0x1E, 0x1E, 0x1E
+			};
 			int32 actor, l;
 
 			actor = _eatByteOrVar(opcode & 0x80);

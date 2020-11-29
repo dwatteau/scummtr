@@ -34,9 +34,7 @@
 #include <string>
 #include <stdexcept>
 
-// FIXME remove the warning 4505 of VC7 (my fault or MS'?)
-// FIXME RoomPack should be a TreeBlock, but GCC prevents me from making a diamond
-// because of a missing feature :/
+// FIXME RoomPack should be a TreeBlock
 
 // Rp
 class Block;

@@ -416,7 +416,6 @@ int32 OldObjectCodeBlock::_findScriptOffset()
 	return ObjectCodeBlock::_tFindScriptOffset<uint16, 0x0D>();
 }
 
-// the bugs in gcc forced me to remove my template class
 template <int I> void OldObjectCodeBlock::_exportName(Text &output, bool pad)
 {
 	std::string s;

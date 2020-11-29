@@ -248,8 +248,7 @@ int TreeBlock::_findIdInBlock(TreeBlock &block)
 					subblock._file->getLE16(w);
 					return w;
 				}
-			throw Block::InvalidDataFromGame("Cannot find IMHD block in OBIM block",
-											 block._file->name(), block._file->fullOffset());
+			throw Block::InvalidDataFromGame("Cannot find IMHD block in OBIM block", block._file->name(), block._file->fullOffset());
 		}
 	case MKTAG4('O','B','C','D'):
 		{
@@ -266,8 +265,7 @@ int TreeBlock::_findIdInBlock(TreeBlock &block)
 					subblock._file->getLE16(w);
 					return w;
 				}
-			throw Block::InvalidDataFromGame("Cannot find CDHD block in OBCD block",
-											 block._file->name(), block._file->fullOffset());
+			throw Block::InvalidDataFromGame("Cannot find CDHD block in OBCD block", block._file->name(), block._file->fullOffset());
 		}
 	case MKTAG2('O','I'):
 	case MKTAG2('O','C'):
@@ -320,11 +318,9 @@ void TreeBlock::_makeSubblock(TreeBlock &subblock, BlockFormat blockFormat, int3
 	_file->seekg(_nextSubblockOffset, std::ios::beg);
 	Block::_readHeader(subblock._blockFormat, *_file, size, subblock._tag);
 	if (size < 0 || size + _nextSubblockOffset > _file->size())
-		throw Block::InvalidDataFromGame(xsprintf("Block too big: 0x%X", size),
-										 _file->name(), _nextSubblockOffset + _file->fullOffset());
+		throw Block::InvalidDataFromGame(xsprintf("Block too big: 0x%X", size), _file->name(), _nextSubblockOffset + _file->fullOffset());
 	if (size < (int32)headerSize)
-		throw Block::InvalidDataFromGame(xsprintf("Block too short: 0x%X", size),
-										 _file->name(), _nextSubblockOffset + _file->fullOffset());
+		throw Block::InvalidDataFromGame(xsprintf("Block too short: 0x%X", size), _file->name(), _nextSubblockOffset + _file->fullOffset());
 	subblock._file = new FilePart(*_file, _nextSubblockOffset, size);
 }
 
@@ -660,8 +656,7 @@ RoomPack::~RoomPack()
 {
 }
 
-int RoomPack::_findNextLFLFRootBlock(byte roomId, int32 currentOffset, int32 roomSize,
-									 const TableOfContent *&toc, int &id)
+int RoomPack::_findNextLFLFRootBlock(byte roomId, int32 currentOffset, int32 roomSize, const TableOfContent *&toc, int &id)
 {
 	int i;
 	int blockId;
@@ -827,10 +822,7 @@ TreeBlock *LFLFile::_nextLFLSubblock()
 	TreeBlock *subblock;
 
 	subblock = 0;
-	_nextSubblockOffset = RoomPack::_findNextLFLFRootBlock((byte)_id,
-														   _nextSubblockOffset - _headerSize,
-														   _file->size() - _headerSize,
-														   toc, id);
+	_nextSubblockOffset = RoomPack::_findNextLFLFRootBlock((byte)_id, _nextSubblockOffset - _headerSize, _file->size() - _headerSize, toc, id);
 	_checkDupOffset((byte)_id, _nextSubblockOffset);
 	_nextSubblockOffset += _headerSize;
 	try
@@ -925,10 +917,7 @@ TreeBlock *LFLFPack::nextBlock()
 	TreeBlock *subblock;
 
 	subblock = 0;
-	_nextSubblockOffset = RoomPack::_findNextLFLFRootBlock((byte)_id,
-														   _nextSubblockOffset - _headerSize,
-														   _file->size() - _headerSize,
-														   toc, id);
+	_nextSubblockOffset = RoomPack::_findNextLFLFRootBlock((byte)_id, _nextSubblockOffset - _headerSize, _file->size() - _headerSize, toc, id);
 	_checkDupOffset((byte)_id, _nextSubblockOffset);
 	_nextSubblockOffset += _headerSize;
 	try
@@ -1037,8 +1026,7 @@ void LECFPack::_init()
 			_loff.load(*block._file);
 			return;
 		}
-	throw TreeBlock::InvalidDataFromGame("Cannot find LOFF or FO block in LECF pack",
-										 _file->name(), _file->fullOffset());
+	throw TreeBlock::InvalidDataFromGame("Cannot find LOFF or FO block in LECF pack", _file->name(), _file->fullOffset());
 }
 
 int LECFPack::_findSubblockId(TreeBlock &subblock) const
@@ -1184,8 +1172,7 @@ bool OldIndexFile::nextBlock(TreeBlock &subblock)
 		size = sizeof (byte) + b * (sizeof (uint16) + sizeof (byte));
 	}
 	if (size + _nextSubblockOffset > _file->size())
-		throw Block::InvalidDataFromGame(xsprintf("Block too big: 0x%X", size),
-										 _file->name(), _nextSubblockOffset + _file->fullOffset());
+		throw Block::InvalidDataFromGame(xsprintf("Block too big: 0x%X", size), _file->name(), _nextSubblockOffset + _file->fullOffset());
 	subblock._file = new FilePart(*_file, _nextSubblockOffset, size);
 	_nextSubblockOffset += subblock._file->size();
 	_adopt(subblock);
@@ -1247,8 +1234,7 @@ bool OldIndexFileV1::nextBlock(TreeBlock &subblock)
 		throw std::logic_error("OldIndexFileV1::nextBlock: V1 game is neither Zak nor MM");
 	}
 	if (size + _nextSubblockOffset > _file->size())
-		throw Block::InvalidDataFromGame(xsprintf("Block too big: 0x%X", size),
-										 _file->name(), _file->fullOffset() + _nextSubblockOffset);
+		throw Block::InvalidDataFromGame(xsprintf("Block too big: 0x%X", size), _file->name(), _file->fullOffset() + _nextSubblockOffset);
 	subblock._file = new FilePart(*_file, _nextSubblockOffset, size);
 	_nextSubblockOffset += subblock._file->size();
 	_adopt(subblock);
@@ -1330,8 +1316,7 @@ void OldLFLFile::_moveLFLFRootBlockInToc(byte roomId, int32 minOffset, int32 n) 
 			{
 				(*ScummRp::tocs[i])[blockId].offset += n;
 				if ((*ScummRp::tocs[i])[blockId].offset >= 0xFFFF)
-					throw RoomPack::BadOffset(xsprintf("Offset too far: 0x%X in %.2i.LFL",
-													   (*ScummRp::tocs[i])[blockId].offset, roomId));
+					throw RoomPack::BadOffset(xsprintf("Offset too far: 0x%X in %.2i.LFL", (*ScummRp::tocs[i])[blockId].offset, roomId));
 			}
 	}
 }
@@ -1360,8 +1345,7 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 	o = _nextSubblockOffset;
 	while (true)
 	{
-		_nextSubblockOffset = RoomPack::_findNextLFLFRootBlock((byte)_id, _nextSubblockOffset,
-															   _file->size(), toc, id);
+		_nextSubblockOffset = RoomPack::_findNextLFLFRootBlock((byte)_id, _nextSubblockOffset, _file->size(), toc, id);
 		if (_nextSubblockOffset >= _file->size() - 4)
 		{
 			if (o < _nextSubblockOffset)
@@ -1969,8 +1953,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 					v.push_back(oiInfo[k].num);
 				}
 		if (v.size() == 0)
-			throw Block::InvalidDataFromGame(xsprintf("Bad %s offset", Block::tagToStr(_tags(BT_OI))),
-											 _file->name(), _file->fullOffset());
+			throw Block::InvalidDataFromGame(xsprintf("Bad %s offset", Block::tagToStr(_tags(BT_OI))), _file->name(), _file->fullOffset());
 		if (v.size() > 1)
 			_findMostLikelyOIId(v);
 		for (k = i; k < j; ++k)
@@ -2004,8 +1987,7 @@ void OldRoom::_defCheckOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd)
 		_file->seekg(ocOffset[i], std::ios::beg);
 		_file->getLE16(w);
 		if ((int32)(w + ocOffset[i]) != end)
-			throw Block::InvalidDataFromGame(xsprintf("Bad %s offset or size", Block::tagToStr(_tags(BT_OC))),
-											 _file->name(), _file->fullOffset());
+			throw Block::InvalidDataFromGame(xsprintf("Bad %s offset or size", Block::tagToStr(_tags(BT_OC))), _file->name(), _file->fullOffset());
 	}
 }
 
@@ -2038,8 +2020,7 @@ void OldRoom::_calcSizes(std::vector<int32> &sizes, const std::vector<uint16> &o
 		copy(offsets.begin(), offsets.end(), orderedOffsets.begin());
 		sort(orderedOffsets.begin(), orderedOffsets.end());
 		if (orderedOffsets.back() > end)
-			throw Block::InvalidDataFromGame(xsprintf("Bad offset in room %i", _parent->_id),
-											 _file->name(), _file->fullOffset());
+			throw Block::InvalidDataFromGame(xsprintf("Bad offset in room %i", _parent->_id), _file->name(), _file->fullOffset());
 		for (i = 0; i < (int)n; ++i)
 		{
 			pos = find(orderedOffsets.begin(), orderedOffsets.end(), offsets[i]);
@@ -2104,8 +2085,7 @@ void OldRoom::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 				 || (subblock._tag & 0xFFFFFF00) == (MKTAG4('S','L','v','#') & 0xFFFFFF00))
 		{
 			if (subblock._file->size() & 0xFFFFFF00)
-				throw InvalidDataFromDump(xsprintf("%s blocks must be smaller than 256 bytes",
-												   tagToStr(subblock._tag)));
+				throw InvalidDataFromDump(xsprintf("%s blocks must be smaller than 256 bytes", tagToStr(subblock._tag)));
 			if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('S','L','v','#') & 0xFFFFFF00))
 				_file->seekp(_oSLSize(), std::ios::beg);
 			else // ((subblock._tag & 0xFFFFFF00) == (MKTAG4('N','L','v','#') & 0xFFFFFF00))
@@ -2135,8 +2115,7 @@ void OldRoom::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
  * OldRoomV1
  */
 
-const uint32 OldRoomV1::TAGS[] = { 0, MKTAG4('H','D','v','1'), MKTAG4('B','X','v','1'), MKTAG4('B','M','v','1'), MKTAG4('O','I','v','1'), MKTAG4('N','L','v','1'),
-								   MKTAG4('S','L','v','1'), MKTAG4('O','C','v','1'), MKTAG4('E','X','v','1'), MKTAG4('E','N','v','1'), 0 };
+const uint32 OldRoomV1::TAGS[] = { 0, MKTAG4('H','D','v','1'), MKTAG4('B','X','v','1'), MKTAG4('B','M','v','1'), MKTAG4('O','I','v','1'), MKTAG4('N','L','v','1'), MKTAG4('S','L','v','1'), MKTAG4('O','C','v','1'), MKTAG4('E','X','v','1'), MKTAG4('E','N','v','1'), 0 };
 
 const uint32 OldRoomV1::BMTAGS[] = { MKTAG4('B','1','v','1'), MKTAG4('B','2','v','1'), MKTAG4('B','3','v','1'), MKTAG4('B','4','v','1'), MKTAG4('B','5','v','1'), 0 };
 
@@ -2188,15 +2167,13 @@ void OldRoomV1::_checkOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd)
 		_file->seekg(ocOffset[i], std::ios::beg);
 		_file->getLE16(w);
 		if (w + ocOffset[i] != ocOffset[i + 1])
-			throw Block::InvalidDataFromGame(xsprintf("Bad %s offset or size", Block::tagToStr(_tags(BT_OC))),
-											 _file->name(), _file->fullOffset());
+			throw Block::InvalidDataFromGame(xsprintf("Bad %s offset or size", Block::tagToStr(_tags(BT_OC))), _file->name(), _file->fullOffset());
 	}
 	// last block
 	_file->seekg(ocOffset.back(), std::ios::beg);
 	_file->getLE16(w);
 	if (w + ocOffset[i] > ocEnd) // <- difference with V2/V3. junk is allowed at the end.
-		throw Block::InvalidDataFromGame(xsprintf("Bad %s offset or size", Block::tagToStr(_tags(BT_OC))),
-										 _file->name(), _file->fullOffset());
+		throw Block::InvalidDataFromGame(xsprintf("Bad %s offset or size", Block::tagToStr(_tags(BT_OC))), _file->name(), _file->fullOffset());
 }
 
 void OldRoomV1::_setBXOffset(uint16 o)
@@ -2268,8 +2245,7 @@ uint16 OldRoomV1::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
  * OldRoomV2
  */
 
-const uint32 OldRoomV2::TAGS[] = { 0, MKTAG4('H','D','v','2'), MKTAG4('B','X','v','2'), MKTAG4('B','M','v','2'), MKTAG4('O','I','v','2'), MKTAG4('N','L','v','2'),
-								   MKTAG4('S','L','v','2'), MKTAG4('O','C','v','2'), MKTAG4('E','X','v','2'), MKTAG4('E','N','v','2'), 0 };
+const uint32 OldRoomV2::TAGS[] = { 0, MKTAG4('H','D','v','2'), MKTAG4('B','X','v','2'), MKTAG4('B','M','v','2'), MKTAG4('O','I','v','2'), MKTAG4('N','L','v','2'), MKTAG4('S','L','v','2'), MKTAG4('O','C','v','2'), MKTAG4('E','X','v','2'), MKTAG4('E','N','v','2'), 0 };
 
 const uint32 OldRoomV2::BMTAGS[] = { MKTAG4('I','M','v','2'), MKTAG4('M','A','v','2'), 0 };
 
@@ -2421,8 +2397,7 @@ uint16 OldRoomV2::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
  * OldRoomV3
  */
 
-const uint32 OldRoomV3::TAGS[] = { 0, MKTAG4('H','D','v','3'), MKTAG4('B','X','v','3'), MKTAG4('B','M','v','3'), MKTAG4('O','I','v','3'), MKTAG4('N','L','v','3'),
-								   MKTAG4('S','L','v','3'), MKTAG4('O','C','v','3'), MKTAG4('E','X','v','3'), MKTAG4('E','N','v','3'), MKTAG4('L','S','v','3'), 0 };
+const uint32 OldRoomV3::TAGS[] = { 0, MKTAG4('H','D','v','3'), MKTAG4('B','X','v','3'), MKTAG4('B','M','v','3'), MKTAG4('O','I','v','3'), MKTAG4('N','L','v','3'), MKTAG4('S','L','v','3'), MKTAG4('O','C','v','3'), MKTAG4('E','X','v','3'), MKTAG4('E','N','v','3'), MKTAG4('L','S','v','3'), 0 };
 
 const uint32 OldRoomV3::BMTAGS[] = { MKTAG4('I','M','v','3'), MKTAG4('M','A','v','3'), 0 };
 

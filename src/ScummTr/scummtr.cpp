@@ -243,8 +243,7 @@ void ScummTr::_processGameFilesV4567()
 			sprintf(dataFileName, ScummRp::_game.dataFileName, i);
 			dataPath += '/';
 			dataPath += dataFileName;
-			disk = new BlocksFile(dataPath.c_str(), ScummRp::_fileOptions,
-								  ScummRp::_backupSystem, i, MKTAG4('D','I','S','K'), ScummRp::_game.dataXorKey);
+			disk = new BlocksFile(dataPath.c_str(), ScummRp::_fileOptions, ScummRp::_backupSystem, i, MKTAG4('D','I','S','K'), ScummRp::_game.dataXorKey);
 			if (ScummRp::_options & ScummRp::OPT_IMPORT)
 				ScummTr::_explore(*disk, ScummRp::ACT_IMPORT, text);
 			else
@@ -483,11 +482,8 @@ void ScummTr::_getOptions(int argc, const char **argv, const ScummRp::Parameter 
 
 bool ScummTr::_invalidOptions()
 {
-	static const uint32 exclusive[] = { ScummRp::OPT_IMPORT | ScummRp::OPT_EXPORT,
-										0 };
-	static const uint32 mandatory[] = { ScummRp::OPT_IMPORT | ScummRp::OPT_EXPORT,
-										ScummRp::OPT_GAME_FILES,
-										0 };
+	static const uint32 exclusive[] = { ScummRp::OPT_IMPORT | ScummRp::OPT_EXPORT, 0 };
+	static const uint32 mandatory[] = { ScummRp::OPT_IMPORT | ScummRp::OPT_EXPORT, ScummRp::OPT_GAME_FILES, 0 };
 	int i;
 
 	for (i = 0; mandatory[i] != 0; ++i)
