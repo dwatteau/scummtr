@@ -224,41 +224,42 @@ static int roundTo4(int i)
 static void saveBmp(const char *path)
 {
 	std::ofstream file(path, std::ios::binary | std::ios::out | std::ios::trunc);
-	unsigned int dw;
+	unsigned int udw;
+	int sdw;
 	unsigned short w;
 	unsigned char *buf;
 
 	if (!file.is_open())
 		throw std::runtime_error("Cannot open BMP file");
 	file.write("BM", 2);
-	dw = 0x436 + roundTo4(glWidth) * glHeight;
-	file.write((char *)&dw, 4);
-	dw = 0;
-	file.write((char *)&dw, 4);
-	dw = 0x436;
-	file.write((char *)&dw, 4);
-	dw = 0x28;
-	file.write((char *)&dw, 4);
-	dw = glWidth;
-	file.write((char *)&dw, 4);
-	dw = glHeight;
-	file.write((char *)&dw, 4);
+	udw = 0x436 + roundTo4(glWidth) * glHeight;
+	file.write((char *)&udw, 4);
+	udw = 0;
+	file.write((char *)&udw, 4);
+	udw = 0x436;
+	file.write((char *)&udw, 4);
+	udw = 0x28;
+	file.write((char *)&udw, 4);
+	sdw = glWidth;
+	file.write((char *)&sdw, 4);
+	sdw = glHeight;
+	file.write((char *)&sdw, 4);
 	w = 1;
 	file.write((char *)&w, 2);
 	w = 8;
 	file.write((char *)&w, 2);
-	dw = 0;
-	file.write((char *)&dw, 4);
-	dw = roundTo4(glWidth) * glHeight;
-	file.write((char *)&dw, 4);
-	dw = 0;
-	file.write((char *)&dw, 4);
-	dw = 0;
-	file.write((char *)&dw, 4);
-	dw = 256;
-	file.write((char *)&dw, 4);
-	dw = 256;
-	file.write((char *)&dw, 4);
+	udw = 0;
+	file.write((char *)&udw, 4);
+	udw = roundTo4(glWidth) * glHeight;
+	file.write((char *)&udw, 4);
+	sdw = 0;
+	file.write((char *)&sdw, 4);
+	sdw = 0;
+	file.write((char *)&sdw, 4);
+	udw = 256;
+	file.write((char *)&udw, 4);
+	udw = 256;
+	file.write((char *)&udw, 4);
 	file.write((char *)glPalette, 0x400);
 	buf = new unsigned char[roundTo4(glWidth) * glHeight];
 	memset(buf, 0, roundTo4(glWidth) * glHeight);
@@ -270,10 +271,11 @@ static void saveBmp(const char *path)
 static void loadBmp(const char *path)
 {
 	std::ifstream file(path, std::ios::binary | std::ios::in);
-	unsigned int dw;
+	unsigned int udw;
+	int sdw;
 	unsigned short w;
 	unsigned char *buf;
-	int off;
+	unsigned int off;
 
 	if (!file.is_open())
 		throw std::runtime_error("Cannot open BMP file");
@@ -284,17 +286,24 @@ static void loadBmp(const char *path)
 	file.read((char *)&off, 4);
 	if (off < 0x36)
 		throw std::runtime_error("This is not a valid BMP file");
-	file.read((char *)&dw, 4);
-	if (dw != 0x28)
-		throw std::runtime_error("This is not a BMPv3 file");
-	file.read((char *)&dw, 4);
-	glWidth = dw;
-	file.read((char *)&dw, 4);
-	glHeight = dw;
-	file.seekg(2, std::ios::cur);
+	file.read((char *)&udw, 4);
+	if (udw != 0x28)
+		throw std::runtime_error(xsprintf("This is not a BMPv3 file: version 0x%x was found", udw));
+	file.read((char *)&sdw, 4);
+	glWidth = sdw;
+	file.read((char *)&sdw, 4);
+	glHeight = sdw;
+	if (glWidth <= 0 || glHeight <= 0)
+		throw std::runtime_error(xsprintf("Unsupported \"%i\" per \"%i\" width/height", glWidth, glHeight));
+	file.read((char *)&w, 2);
+	if (w != 1)
+		throw std::runtime_error(xsprintf("This is not a single-plane BMP file: %hu planes found", w));
 	file.read((char *)&w, 2);
 	if (w != 8)
-		throw std::runtime_error("This is not an 8bpp BMP file");
+		throw std::runtime_error(xsprintf("This is not an 8bpp BMP file: %hubpp found", w));
+	file.read((char *)&udw, 4);
+	if (udw != 0)
+		throw std::runtime_error(xsprintf("This BMP file must be uncompressed, but \"%u\" compression was found", udw));
 	file.seekg(off, std::ios::beg);
 	buf = new unsigned char[roundTo4(glWidth) * glHeight];
 	glFontBitmap = new unsigned char[glWidth * glHeight];
