@@ -97,70 +97,58 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 			case MKTAG4('E','N','v','1'):
 			case MKTAG4('E','X','v','1'):
 			case MKTAG4('L','S','v','3'):
-				{
-					if (action == ScummRp::ACT_IMPORT)
-						ScriptBlock(*blockPtr).importText(text);
-					else if (action == ScummRp::ACT_EXPORT)
-						ScriptBlock(*blockPtr).exportText(text, ScummTr::_exportWithPadding);
-					else if (action == ScummTr::ACT_RSCNAMELIMITS)
-						ScriptBlock(*blockPtr).getRscNameLimits();
-				}
+				if (action == ScummRp::ACT_IMPORT)
+					ScriptBlock(*blockPtr).importText(text);
+				else if (action == ScummRp::ACT_EXPORT)
+					ScriptBlock(*blockPtr).exportText(text, ScummTr::_exportWithPadding);
+				else if (action == ScummTr::ACT_RSCNAMELIMITS)
+					ScriptBlock(*blockPtr).getRscNameLimits();
 				break;
 			case MKTAG4('L','S','C','R'):
 			case MKTAG2('L','S'):
-				{
-					if (action == ScummRp::ACT_IMPORT)
-						ScriptBlock(*blockPtr, (ScummRp::_game.version == 7) ? 2 : 1).importText(text);
-					else if (action == ScummRp::ACT_EXPORT)
-						ScriptBlock(*blockPtr, (ScummRp::_game.version == 7) ? 2 : 1).exportText(text, ScummTr::_exportWithPadding);
-					else if (action == ScummTr::ACT_RSCNAMELIMITS)
-						ScriptBlock(*blockPtr, (ScummRp::_game.version == 7) ? 2 : 1).getRscNameLimits();
-				}
+				if (action == ScummRp::ACT_IMPORT)
+					ScriptBlock(*blockPtr, (ScummRp::_game.version == 7) ? 2 : 1).importText(text);
+				else if (action == ScummRp::ACT_EXPORT)
+					ScriptBlock(*blockPtr, (ScummRp::_game.version == 7) ? 2 : 1).exportText(text, ScummTr::_exportWithPadding);
+				else if (action == ScummTr::ACT_RSCNAMELIMITS)
+					ScriptBlock(*blockPtr, (ScummRp::_game.version == 7) ? 2 : 1).getRscNameLimits();
 				break;
 			case MKTAG4('O','B','C','D'):
 				ScummTr::_explore(*blockPtr, action, text);
 				break;
 			case MKTAG4('O','B','N','A'):
-				{
-					if (action == ScummRp::ACT_IMPORT)
-						ObjectNameBlock(*blockPtr).importText(text);
-					else if (action == ScummRp::ACT_EXPORT)
-						ObjectNameBlock(*blockPtr).exportText(text, ScummTr::_exportWithPadding);
-					else if (action == ScummTr::ACT_RSCNAMELIMITS)
-						ObjectNameBlock(*blockPtr).getRscNameLimits();
-				}
+				if (action == ScummRp::ACT_IMPORT)
+					ObjectNameBlock(*blockPtr).importText(text);
+				else if (action == ScummRp::ACT_EXPORT)
+					ObjectNameBlock(*blockPtr).exportText(text, ScummTr::_exportWithPadding);
+				else if (action == ScummTr::ACT_RSCNAMELIMITS)
+					ObjectNameBlock(*blockPtr).getRscNameLimits();
 				break;
 			case MKTAG4('V','E','R','B'):
-				{
-					if (action == ScummRp::ACT_IMPORT)
-						ObjectCodeBlock(*blockPtr).importText(text);
-					else if (action == ScummRp::ACT_EXPORT)
-						ObjectCodeBlock(*blockPtr).exportText(text, ScummTr::_exportWithPadding);
-					else if (action == ScummTr::ACT_RSCNAMELIMITS)
-						ObjectCodeBlock(*blockPtr).getRscNameLimits();
-				}
+				if (action == ScummRp::ACT_IMPORT)
+					ObjectCodeBlock(*blockPtr).importText(text);
+				else if (action == ScummRp::ACT_EXPORT)
+					ObjectCodeBlock(*blockPtr).exportText(text, ScummTr::_exportWithPadding);
+				else if (action == ScummTr::ACT_RSCNAMELIMITS)
+					ObjectCodeBlock(*blockPtr).getRscNameLimits();
 				break;
 			case MKTAG2('O','C'):
 			case MKTAG4('O','C','v','3'):
-				{
-					if (action == ScummRp::ACT_IMPORT)
-						OldObjectCodeBlock(*blockPtr).importText(text);
-					else if (action == ScummRp::ACT_EXPORT)
-						OldObjectCodeBlock(*blockPtr).exportText(text, ScummTr::_exportWithPadding);
-					else if (action == ScummTr::ACT_RSCNAMELIMITS)
-						OldObjectCodeBlock(*blockPtr).getRscNameLimits();
-				}
+				if (action == ScummRp::ACT_IMPORT)
+					OldObjectCodeBlock(*blockPtr).importText(text);
+				else if (action == ScummRp::ACT_EXPORT)
+					OldObjectCodeBlock(*blockPtr).exportText(text, ScummTr::_exportWithPadding);
+				else if (action == ScummTr::ACT_RSCNAMELIMITS)
+					OldObjectCodeBlock(*blockPtr).getRscNameLimits();
 				break;
 			case MKTAG4('O','C','v','2'):
 			case MKTAG4('O','C','v','1'):
-				{
-					if (action == ScummRp::ACT_IMPORT)
-						OldObjectCodeBlockV1(*blockPtr).importText(text);
-					else if (action == ScummRp::ACT_EXPORT)
-						OldObjectCodeBlockV1(*blockPtr).exportText(text, ScummTr::_exportWithPadding);
-					else if (action == ScummTr::ACT_RSCNAMELIMITS)
-						OldObjectCodeBlockV1(*blockPtr).getRscNameLimits();
-				}
+				if (action == ScummRp::ACT_IMPORT)
+					OldObjectCodeBlockV1(*blockPtr).importText(text);
+				else if (action == ScummRp::ACT_EXPORT)
+					OldObjectCodeBlockV1(*blockPtr).exportText(text, ScummTr::_exportWithPadding);
+				else if (action == ScummTr::ACT_RSCNAMELIMITS)
+					OldObjectCodeBlockV1(*blockPtr).getRscNameLimits();
 				break;
 			}
 	}

@@ -231,43 +231,36 @@ int TreeBlock::_findIdInBlock(TreeBlock &block)
 {
 	byte b;
 	uint16 w;
+	TreeBlock subblock;
 
 	switch (block._tag)
 	{
 	case MKTAG4('O','B','I','M'):
-		{
-			TreeBlock subblock;
-
-			block.firstBlock();
-			while (block.nextBlock(subblock))
-				if (subblock._tag == MKTAG4('I','M','H','D'))
-				{
-					if (ScummRp::game.version < 7)
-						subblock._file->seekg(subblock._headerSize, std::ios::beg);
-					else
-						subblock._file->seekg(subblock._headerSize + 4, std::ios::beg);
-					subblock._file->getLE16(w);
-					return w;
-				}
-			throw Block::InvalidDataFromGame("Cannot find IMHD block in OBIM block", block._file->name(), block._file->fullOffset());
-		}
+		block.firstBlock();
+		while (block.nextBlock(subblock))
+			if (subblock._tag == MKTAG4('I','M','H','D'))
+			{
+				if (ScummRp::game.version < 7)
+					subblock._file->seekg(subblock._headerSize, std::ios::beg);
+				else
+					subblock._file->seekg(subblock._headerSize + 4, std::ios::beg);
+				subblock._file->getLE16(w);
+				return w;
+			}
+		throw Block::InvalidDataFromGame("Cannot find IMHD block in OBIM block", block._file->name(), block._file->fullOffset());
 	case MKTAG4('O','B','C','D'):
-		{
-			TreeBlock subblock;
-
-			block.firstBlock();
-			while (block.nextBlock(subblock))
-				if (subblock._tag == MKTAG4('C','D','H','D'))
-				{
-					if (ScummRp::game.version < 7)
-						subblock._file->seekg(subblock._headerSize, std::ios::beg);
-					else
-						subblock._file->seekg(subblock._headerSize + 4, std::ios::beg);
-					subblock._file->getLE16(w);
-					return w;
-				}
-			throw Block::InvalidDataFromGame("Cannot find CDHD block in OBCD block", block._file->name(), block._file->fullOffset());
-		}
+		block.firstBlock();
+		while (block.nextBlock(subblock))
+			if (subblock._tag == MKTAG4('C','D','H','D'))
+			{
+				if (ScummRp::game.version < 7)
+					subblock._file->seekg(subblock._headerSize, std::ios::beg);
+				else
+					subblock._file->seekg(subblock._headerSize + 4, std::ios::beg);
+				subblock._file->getLE16(w);
+				return w;
+			}
+		throw Block::InvalidDataFromGame("Cannot find CDHD block in OBCD block", block._file->name(), block._file->fullOffset());
 	case MKTAG2('O','I'):
 	case MKTAG2('O','C'):
 	case MKTAG4('O','C','v','1'):
