@@ -200,10 +200,10 @@ protected:
 	virtual void _moveBwd(std::streamoff offset, std::streamsize n);
 	virtual void _setSize(std::streamsize newSize);
 public:
-	virtual FilePart *operator->() { return &_part; };
-	virtual FilePart &operator*() { return _part; };
-	virtual const FilePart *operator->() const { return &_part; };
-	virtual const FilePart &operator*() const { return _part; };
+	virtual FilePart *operator->() { return &_part; }
+	virtual FilePart &operator*() { return _part; }
+	virtual const FilePart *operator->() const { return &_part; }
+	virtual const FilePart &operator*() const { return _part; }
 	virtual void truncate(std::streamsize newSize);
 	virtual std::streamsize size() const;
 	virtual File &seekg(std::streamoff off, std::ios::seekdir dir);
@@ -327,7 +327,7 @@ public:
 	{
 		if (!this->is_open())
 			return;
-		if (_tmpSize < this->_size)
+		if (_tmpSize < this->_size) {
 			if (_tmpSize - _shift < _srcFile.size())
 			{
 				this->seekp(_tmpSize, std::ios::beg);
@@ -340,6 +340,7 @@ public:
 				_srcFile.close();
 				throw typename SeqFile::Error("SeqFile::close: Wrong size");
 			}
+		}
 		T::close();
 		_srcFile.close();
 	}

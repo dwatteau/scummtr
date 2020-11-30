@@ -662,11 +662,12 @@ void Text::addLine(std::string s, Text::LineType lineType, int op)
 	_file.seekp(0, std::ios::end);
 	if (_header)
 		_file.write(info());
-	if (_opcode)
+	if (_opcode) {
 		if (op >= 0)
 			_file.write(xsprintf("(%.2X)", op));
 		else
 			_file.write(xsprintf("(__)"));
+	}
 	if (_escaped)
 		_writeEsc(s, lineType);
 	else

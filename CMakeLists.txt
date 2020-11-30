@@ -23,7 +23,7 @@ if (MSVC)
     endif()
 else()
     add_compile_options(-Wall -pedantic -Wpointer-arith -Wcast-qual -Wcast-align -Wshadow -Wuninitialized -Wundef -Wmultichar -Wwrite-strings -Wctor-dtor-privacy)
-    add_compile_options(-Wno-non-virtual-dtor -Wno-conversion -Wno-parentheses -Wno-overloaded-virtual -Wno-format)
+    add_compile_options(-Wno-non-virtual-dtor -Wno-conversion -Wno-overloaded-virtual -Wno-old-style-cast -Wno-format)
 
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         add_compile_options(-fcheck-new)

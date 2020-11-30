@@ -703,7 +703,7 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 	for (i = 0; ScummRp::tocs[i] != 0; ++i)
 	{
 		j = ScummRp::tocs[i]->count(roomId, offset);
-		if (j == 2 && ScummRp::tocs[i]->getType() == TableOfContent::TOCT_SCRP)
+		if (j == 2 && ScummRp::tocs[i]->getType() == TableOfContent::TOCT_SCRP) {
 			// Hack for Sam & Max CD English
 			if (roomId == 1 && ScummRp::tocs[i]->getSize() == 122
 				&& (*ScummRp::tocs[i])[8].offset == (*ScummRp::tocs[i])[9].offset
@@ -739,6 +739,7 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 				j = 1;
 				ScummRpIO::info(INF_DETAIL, "Removed SC_0051 from index (duplicate of SC_0052)");
 			}
+		}
 		n += j;
 		if (n > 1)
 			throw RoomPack::BadOffset(xsprintf("Duplicate offset in index: 0x%X in room %i", offset, roomId));
