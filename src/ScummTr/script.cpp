@@ -675,10 +675,8 @@ void Script::_opv67()
 			break;
 		case 184:
 			throw Script::ParseError("roomOps case 184");
-			break;
 		case 185:
 			throw Script::ParseError("roomOps case 185");
-			break;
 		case 186:
 		case 187:
 		case 213:
@@ -981,7 +979,6 @@ void Script::_opv67()
 	case 0xE0: // unknownE0
 		_getByte();
 		throw Script::ParseError(xsprintf("unknown%.2X", opcode));
-		break;
 	case 0xE1: // unknownE1
 		if (ScummRp::game.id != GID_DIG)
 			throw Script::ParseError(xsprintf("unknown%.2X", opcode));
@@ -993,7 +990,6 @@ void Script::_opv67()
 		break;
 	case 0xE4: // unknownE4
 		throw Script::ParseError(xsprintf("unknown%.2X", opcode));
-		break;
 	case 0xEA: // unknownEA
 		switch (_getByte())
 		{
@@ -1005,10 +1001,8 @@ void Script::_opv67()
 			break;
 		default:
 			throw Script::ParseError(xsprintf("unknown%.2X default case", opcode));
-			break;
 		}
 		throw Script::ParseError(xsprintf("unknown%.2X", opcode));
-		break;
 	case 0xEC: // getActorLayer
 		break;
 	case 0xED: // getObjectNewDir
@@ -1017,7 +1011,6 @@ void Script::_opv67()
 		_getByte();
 		_eatString(Text::LT_PLAIN, mainOpcode); // what type of string exactly?
 		throw Script::ParseError(xsprintf("Unknown%.2X", opcode));
-		break;
 	default:
 		throw Script::ParseError(xsprintf("Unknown opcode 0x%.2X", opcode));
 	}
@@ -1187,6 +1180,7 @@ void Script::_opv12()
 	case 0x14: // print
 	case 0x94: // print
 		_eatByteOrVar(opcode & 0x80);
+		// fallthrough
 	case 0xD8: // printEgo
 		_eatString(Text::LT_OLDMSG, mainOpcode);
 		break;
@@ -1875,10 +1869,8 @@ void Script::_opv345(int r)
 			break;
 		case 0x20:
 			throw Script::ParseError("resourceRoutines case 0x20");
-			break;
 		case 0x21:
 			throw Script::ParseError("resourceRoutines case 0x21");
-			break;
 		case 0x23:
 			if (ScummRp::game.id == GID_INDY3)
 				throw Script::ParseError("resourceRoutines case 0x23");
@@ -2022,7 +2014,6 @@ void Script::_opv345(int r)
 				case 0x0F:
 					_eatArgList();
 					throw Script::ParseError("actorSet case 0x0F");
-					break;
 				case 0x10:
 					_eatByteOrVar(opcode & 0x80);
 					break;
@@ -2061,6 +2052,7 @@ void Script::_opv345(int r)
 	case 0x14: // print
 	case 0x94: // print
 		_eatByteOrVar(opcode & 0x80);
+		// fallthrough
 	case 0xD8: // printEgo
 		while ((opcode = _getByte()) != 0xFF)
 		{
@@ -2864,7 +2856,6 @@ void Script::_opv345(int r)
 						_getByte();
 					}
 					throw Script::ParseError("verbOps case 0x15");
-					break;
 				case 0x16:
 					_eatWordOrVar(opcode & 0x80);
 					_eatByteOrVar(opcode & 0x40);
