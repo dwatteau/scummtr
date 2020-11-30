@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __SCUMMTR_HPP_
-#define __SCUMMTR_HPP_
+#ifndef SCUMMTR_SCUMMTR_HPP
+#define SCUMMTR_SCUMMTR_HPP
 
 #include "scummrp.hpp"
 #include "block.hpp"
@@ -77,4 +77,4 @@ private:
 	ScummTr();
 };
 
-#endif // !__SCUMMTR_HPP_
+#endif

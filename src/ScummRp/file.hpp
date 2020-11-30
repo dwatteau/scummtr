@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __FILE_HPP_
-#define __FILE_HPP_
+#ifndef SCUMMRP_FILE_HPP
+#define SCUMMRP_FILE_HPP
 
 #include "backup.hpp"
 #include "types.hpp"
@@ -489,4 +489,4 @@ private: // Not copiable
 	SeqFile &operator=(const SeqFile &);
 };
 
-#endif // !__FILE_HPP_
+#endif

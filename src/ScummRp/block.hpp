@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __BLOCK_HPP_
-#define __BLOCK_HPP_
+#ifndef SCUMMRP_BLOCK_HPP
+#define SCUMMRP_BLOCK_HPP
 
 #include "toc.hpp"
 #include "file.hpp"
@@ -949,4 +949,4 @@ private: // Not copiable
 typedef BlockPtr<TreeBlock> TreeBlockPtr;
 typedef BlockPtr<GlobalTocBlock> GlobalTocBlockPtr;
 
-#endif // !__BLOCK_HPP_
+#endif

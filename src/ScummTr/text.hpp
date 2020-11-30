@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __TEXT_HPP_
-#define __TEXT_HPP_
+#ifndef SCUMMTR_TEXT_HPP
+#define SCUMMTR_TEXT_HPP
 
 #include "file.hpp"
 
@@ -126,4 +126,4 @@ private:
 	Text &operator=(const Text &);
 };
 
-#endif // !__TEXT_HPP_
+#endif

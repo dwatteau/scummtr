@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __TOC_HPP_
-#define __TOC_HPP_
+#ifndef SCUMMRP_TOC_HPP
+#define SCUMMRP_TOC_HPP
 
 #include "file.hpp"
 #include "rptypes.hpp"
@@ -170,4 +170,4 @@ private: // Not copiable
 	RoomIndex &operator=(const RoomIndex &);
 };
 
-#endif // !__TOC_HPP_
+#endif

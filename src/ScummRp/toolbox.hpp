@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __TOOLBOX_HPP__
-#define __TOOLBOX_HPP__
+#ifndef SCUMMRP_TOOLBOX_HPP
+#define SCUMMRP_TOOLBOX_HPP
 
 #if !defined(__GNUC__) && !defined(__clang__)
 #  define  __attribute__(x)  /* NOTHING */
@@ -38,4 +38,4 @@ void xremove(const char *path);
 void xrename(const char *oldname, const char *newname);
 int xmkdir(const char *path);
 
-#endif // !__TOOLBOX_HPP__
+#endif

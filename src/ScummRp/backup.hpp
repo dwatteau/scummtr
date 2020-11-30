@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __BACKUP_HPP_
-#define __BACKUP_HPP_
+#ifndef SCUMMRP_BACKUP_HPP
+#define SCUMMRP_BACKUP_HPP
 
 #include <string>
 #include <list>
@@ -47,4 +47,4 @@ private:
 	BackUp &operator=(const BackUp &);
 };
 
-#endif // !__BACKUP_HPP_
+#endif

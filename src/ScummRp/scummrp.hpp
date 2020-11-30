@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __SCUMMRP_HPP_
-#define __SCUMMRP_HPP_
+#ifndef SCUMMRP_SCUMMRP_HPP
+#define SCUMMRP_SCUMMRP_HPP
 
 #include "block.hpp"
 #include "toc.hpp"
@@ -115,4 +115,4 @@ private:
 	ScummRp();
 };
 
-#endif // !__SCUMMRP_HPP_
+#endif

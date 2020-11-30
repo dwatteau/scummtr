@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __SCRIPT_HPP_
-#define __SCRIPT_HPP_
+#ifndef SCUMMTR_SCRIPT_HPP
+#define SCUMMTR_SCRIPT_HPP
 
 #include "text.hpp"
 #include "file.hpp"
@@ -123,4 +123,4 @@ private:
 	Script &operator=(const Script &);
 };
 
-#endif // !__SCRIPT_HPP_
+#endif

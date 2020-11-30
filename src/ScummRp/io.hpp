@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __IO_HPP_
-#define __IO_HPP_
+#ifndef SCUMMRP_IO_HPP
+#define SCUMMRP_IO_HPP
 
 #include "types.hpp"
 #include "toolbox.hpp"
@@ -43,4 +43,4 @@ public:
 	static void setInfoSlots(uint32 infoSlots);
 };
 
-#endif // !__IO_HPP_
+#endif

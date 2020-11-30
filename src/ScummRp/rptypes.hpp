@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __RPTYPES_HPP_
-#define __RPTYPES_HPP_
+#ifndef SCUMMRP_RPTYPES_HPP
+#define SCUMMRP_RPTYPES_HPP
 
 enum BlockFormat { BFMT_NULL = 0, BFMT_NOHEADER, BFMT_SIZEONLY,
 				   BFMT_SHORTTAG, BFMT_LONGTAG, BFMT_LONGTAG_ALTSIZE };
@@ -58,4 +58,4 @@ struct GameDefinition
 	int features;
 };
 
-#endif // !__RPTYPES_HPP_
+#endif

@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __TRBLOCK_HPP_
-#define __TRBLOCK_HPP_
+#ifndef SCUMMTR_TRBLOCK_HPP
+#define SCUMMTR_TRBLOCK_HPP
 
 #include "text.hpp"
 #include "script.hpp"
@@ -184,4 +184,4 @@ public: // TreeBlock part still copiable
 	virtual OldObjectCodeBlockV1 &operator=(const TreeBlock &block);
 };
 
-#endif // !__TRBLOCK_HPP_
+#endif

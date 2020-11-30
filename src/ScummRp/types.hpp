@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef __TYPES_HPP__
-#define __TYPES_HPP__
+#ifndef SCUMMRP_TYPES_HPP
+#define SCUMMRP_TYPES_HPP
 
 #ifdef _MSC_VER
 typedef unsigned __int8 byte;
@@ -48,4 +48,4 @@ typedef int int32;
 #define MKTAG2(a,b)	((uint16)((b) | ((a) << 8)))
 #define MKTAG4(a,b,c,d)	((uint32)((d) | ((c) << 8) | ((b) << 16) | ((a) << 24)))
 
-#endif // !__TYPES_HPP__
+#endif
