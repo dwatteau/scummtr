@@ -24,12 +24,13 @@
  * were never released.
  */
 
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-#include <stdexcept>
+#include <cstdarg>
+#include <cstdio>
+#include <cstring>
+
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 #include <string>
 
 #define MKTAG2(a,b)	((unsigned short)((b) | ((a) << 8)))

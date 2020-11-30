@@ -27,10 +27,11 @@
 #include "rptypes.hpp"
 #include "toolbox.hpp"
 
-#include <stdio.h>
-#include <string.h>
-#include <iostream>
+#include <cstdio>
+#include <cstring>
+
 #include <algorithm>
+#include <iostream>
 
 /*
  * Block

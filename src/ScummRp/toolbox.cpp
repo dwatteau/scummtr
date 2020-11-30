@@ -23,13 +23,13 @@
 
 #include "toolbox.hpp"
 
-#include <stdio.h>
-#include <string.h>
-#include <stdarg.h>
+#include <cstdarg>
+#include <cstdio>
+#include <cstring>
 
 #include <iostream>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 #if defined (_WIN32)
 # include <direct.h>

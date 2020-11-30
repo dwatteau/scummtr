@@ -24,7 +24,7 @@
 #include "toc.hpp"
 #include "toolbox.hpp"
 
-#include <string.h>
+#include <cstring>
 
 /*
  * TableOfContent

@@ -25,9 +25,10 @@
 #include "io.hpp"
 #include "toolbox.hpp"
 
-#include <string.h>
-#include <string>
+#include <cstring>
+
 #include <algorithm>
+#include <string>
 
 /*
  * File

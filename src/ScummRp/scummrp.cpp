@@ -27,10 +27,11 @@
 #include "io.hpp"
 #include "toolbox.hpp"
 
-#include <iostream>
+#include <cstring>
+
 #include <iomanip>
+#include <iostream>
 #include <set>
-#include <string.h>
 
 /*
  * ScummRp
