@@ -17,6 +17,7 @@ _deps
 *.exe
 *.ncb
 *.o
+*.obj
 *.suo
 # CMake build stuff
 build/
