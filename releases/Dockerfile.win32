@@ -1,0 +1,13 @@
+# Win32 build, with best-effort support for Windows XP.
+
+FROM debian:9.13-slim
+
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends cmake make mingw-w64 \
+	&& rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /scummtr/project /scummtr/build /scummtr/output
+WORKDIR /scummtr
+
+CMD cd /scummtr/build \
+	&& cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_C_COMPILER=i686-w64-mingw32-gcc -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++ -DCMAKE_C_FLAGS="-DWINVER=0x0501 -D__WIN32_WINNT=0x0501" -DCMAKE_CXX_FLAGS="-DWINVER=0x0501 -D__WIN32_WINNT=0x0501" -DCMAKE_EXE_LINKER_FLAGS="-static-libgcc -static-libstdc++ -static" /scummtr/project && make && cp -pR . /scummtr/output/win32
