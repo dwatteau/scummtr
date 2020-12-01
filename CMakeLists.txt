@@ -11,6 +11,8 @@ set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+include(CheckCXXCompilerFlag)
+
 include (TestBigEndian)
 TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
 
@@ -22,13 +24,23 @@ if (MSVC)
         add_definitions(/DSCUMMTR_USE_BIG_ENDIAN)
     endif()
 else()
+    # GCC 2.95 compatible warnings we always want
     add_compile_options(-Wall -pedantic -Wpointer-arith -Wcast-qual -Wcast-align -Wshadow -Wuninitialized -Wundef -Wmultichar -Wwrite-strings -Wctor-dtor-privacy -Wredundant-decls -Wmissing-declarations -Wunused)
+    # GCC 2.95 compatible warnings we don't want (yet)
     add_compile_options(-Wno-non-virtual-dtor -Wno-conversion -Wno-overloaded-virtual -Wno-old-style-cast -Wno-format)
 
+    # Flags which are compiler-specific, or only meaningful with a particular compiler
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         add_compile_options(-fcheck-new)
     elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
         add_compile_options(-Wshadow -Widiomatic-parentheses)
+    endif()
+
+    # Warnings requiring a recent compiler. Do a single test, it's not critical
+    set(SCUMMTR_MODERN_WARNING_FLAGS "-Winit-self;-Wtype-limits;-Wignored-qualifiers")
+    CHECK_CXX_COMPILER_FLAG("${SCUMMTR_MODERN_WARNING_FLAGS}" COMPILER_SUPPORTS_MODERN_WARNING_FLAGS)
+    if(COMPILER_SUPPORTS_MODERN_WARNING_FLAGS)
+        add_compile_options("${SCUMMTR_MODERN_WARNING_FLAGS}")
     endif()
 
     if(IS_BIG_ENDIAN)
