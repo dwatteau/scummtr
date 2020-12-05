@@ -450,7 +450,7 @@ void Text::_unEsc(std::string &s, Text::LineType t) const
 			else
 			{
 				byte a, b, c;
-				uint n, base;
+				unsigned int n, base;
 
 				if (s[i] == 'x')
 				{
@@ -472,7 +472,7 @@ void Text::_unEsc(std::string &s, Text::LineType t) const
 					c = (byte)(s[++i] - '0');
 					n = a * 100 + b * 10 + c;
 				}
-				if ((uint)n >= 0x100 || a >= base || b >= base || c >= base)
+				if ((unsigned int)n >= 0x100 || a >= base || b >= base || c >= base)
 					throw Text::Error(xsprintf("Bad escaping in line %i", _lineCount));
 				s[j++] = (char)n;
 			}

@@ -846,7 +846,7 @@ class LeafBlock : public TreeBlock
 	{
 		throw TreeBlock::ForbiddenMethod("LeafBlock::_findSubblockId: shouldn't be here");
 	}
-	virtual void _readSubblockHeader(TreeBlock &, BlockFormat, uint)
+	virtual void _readSubblockHeader(TreeBlock &, BlockFormat, unsigned int)
 	{
 		throw TreeBlock::ForbiddenMethod("LeafBlock::_readSubblockHeader: shouldn't be here");
 	}
