@@ -339,6 +339,8 @@ static void saveFont(const char *path)
 
 	if (glHeight < maxHeight * numChars || glWidth < maxWidth || (glWidth != maxWidth && version == 1)) // (1)
 		throw std::runtime_error("Wrong resolution");
+	if (maxHeight == 0)
+		throw std::runtime_error("maxHeight can't be equal to zero");
 
 	if (glWidth > maxWidth)
 		maxWidth = glWidth;
