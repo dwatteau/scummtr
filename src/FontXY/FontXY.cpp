@@ -22,6 +22,8 @@
  * Note: the last "official" binary was built on: 2006-02-19 16:25:03.
  */
 
+#include "common/types.hpp"
+
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -50,16 +52,16 @@ int main(int argc, char **argv)
 		// Seek after the header
 		fChar.seekg(8 + 0x17);
 
-		short snNumChars; // <= 0x100
-		fChar.read((char *)&snNumChars, sizeof snNumChars);
+		int16 snNumChars; // <= 0x100
+		fChar.read((char *)&snNumChars, 2);
 		int nNumChars = snNumChars;
 		if (nNumChars > 0x100 || nNumChars <= 0) { std::cerr << "Error" << std::endl; return 1; }
 
 		for (int i = 0; i < nNumChars; ++i)
 		{
-			unsigned int uOffset;
+			uint32 uOffset;
 			fChar.seekg(8 + 0x19 + i * 4);
-			fChar.read((char *)&uOffset, sizeof uOffset);
+			fChar.read((char *)&uOffset, 4);
 
 			if (uOffset == 0)
 			{
@@ -69,16 +71,16 @@ int main(int argc, char **argv)
 			else
 			{
 				int nLeft, nTop;
-				signed char byLeft, byTop;
+				int8 byLeft, byTop;
 				fTxt >> nLeft;
 				fTxt.getline(szLine, sizeof szLine, ';');
 				fTxt >> nTop;
 				fTxt.getline(szLine, sizeof szLine, '\n');
-				byLeft = (signed char)nLeft;
-				byTop = (signed char)nTop;
+				byLeft = (int8)nLeft;
+				byTop = (int8)nTop;
 				fChar.seekp(8 + 0x15 + uOffset + 2);
-				fChar.write((char *)&byLeft, sizeof byLeft);
-				fChar.write((char *)&byTop, sizeof byTop);
+				fChar.write((char *)&byLeft, 1);
+				fChar.write((char *)&byTop, 1);
 			}
 		}
 	}
@@ -90,16 +92,16 @@ int main(int argc, char **argv)
 		// Seek after the header
 		fChar.seekg(8 + 0x17);
 
-		short snNumChars; // <= 0x100
-		fChar.read((char *)&snNumChars, sizeof snNumChars);
+		int16 snNumChars; // <= 0x100
+		fChar.read((char *)&snNumChars, 2);
 		int nNumChars = snNumChars;
 		if (nNumChars > 0x100 || nNumChars <= 0) { std::cerr << "Error" << std::endl; return 1; }
 
 		for (int i = 0; i < nNumChars; ++i)
 		{
-			unsigned int uOffset;
+			uint32 uOffset;
 			fChar.seekg(8 + 0x19 + i * 4);
-			fChar.read((char *)&uOffset, sizeof uOffset);
+			fChar.read((char *)&uOffset, 4);
 
 			// Just add an empty line
 			if (uOffset == 0)
@@ -110,10 +112,10 @@ int main(int argc, char **argv)
 			else
 			{
 				fChar.seekg(8 + 0x15 + uOffset + 2);
-				signed char byLeft;
-				signed char byTop;
-				fChar.read((char *)&byLeft, sizeof byLeft);
-				fChar.read((char *)&byTop, sizeof byTop);
+				int8 byLeft;
+				int8 byTop;
+				fChar.read((char *)&byLeft, 1);
+				fChar.read((char *)&byTop, 1);
 				fTxt << (int)byLeft << ";" << (int)byTop << std::endl;
 			}
 		}
