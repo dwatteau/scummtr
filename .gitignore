@@ -2,9 +2,13 @@
 *~
 .\#*
 \#*\#
+*.bak
+*.orig
 *.*.swp
 # OS cruft
+._*
 .DS_Store
+.fseventsd
 .Spotlight-V100
 Thumbs.db
 .Trashes
@@ -19,6 +23,7 @@ _deps
 *.o
 *.obj
 *.suo
+tags
 # CMake build stuff
 build/
 *.cmake
@@ -26,9 +31,9 @@ CMakeCache.txt
 CMakeFiles/
 CMakeScripts
 compile_commands.json
-Makefile
 Testing
 # Test files. Take care of the .txt case...
+*.0*
 *.bat
 *.bmp
 CHAR_????
@@ -37,6 +42,7 @@ CHAR_????
 *-new
 *-tmp
 *~~*tmp*
+*.tmp
 *.txt
 !CMakeLists.txt
 XY.txt
