@@ -31,7 +31,7 @@
 #include <stdexcept>
 #include <string>
 
-#if defined (_WIN32)
+#if defined(_WIN32)
 # include <direct.h>
 # define mkdir(path, mode) _mkdir(path)
 #else /* assume Unix */

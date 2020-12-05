@@ -24,10 +24,10 @@
 
 #include <algorithm>
 #include <fstream>
+#include <iostream>
+#include <list>
 #include <string>
 #include <vector>
-#include <list>
-#include <iostream>
 
 int main(int argc, char **argv)
 {
@@ -36,27 +36,27 @@ int main(int argc, char **argv)
 		std::cout << "Usage: FontXY {i|o} <CHAR file>\n\nExamples:\tFontXY o CHAR_0002\n\t\tFontXY i CHAR_0003" << std::endl;
 		return 0;
 	}
-	bool	bImport = (argv[1][0] | 0x20) == 'i';
-	char	*pszChar = argv[2];
-	char	szTxt[] = "XY.txt"; // TODO: param
+	bool bImport = (argv[1][0] | 0x20) == 'i';
+	char *pszChar = argv[2];
+	char szTxt[] = "XY.txt"; // TODO: param
 
 	if (bImport)
 	{
-		char		szLine[1024];
-		std::fstream	fChar(pszChar, std::fstream::in | std::fstream::out | std::fstream::binary);
-		std::ifstream	fTxt(szTxt, std::ifstream::in);
+		char szLine[1024];
+		std::fstream fChar(pszChar, std::fstream::in | std::fstream::out | std::fstream::binary);
+		std::ifstream fTxt(szTxt, std::ifstream::in);
 
 		// Seek after the header
 		fChar.seekg(8 + 0x17);
 
-		short	snNumChars; // <= 0x100
+		short snNumChars; // <= 0x100
 		fChar.read((char *)&snNumChars, sizeof snNumChars);
-		int		nNumChars = snNumChars;
+		int nNumChars = snNumChars;
 		if (nNumChars > 0x100 || nNumChars <= 0) { std::cerr << "Error" << std::endl; return 1; }
 
 		for (int i = 0; i < nNumChars; ++i)
 		{
-			unsigned int	uOffset;
+			unsigned int uOffset;
 			fChar.seekg(8 + 0x19 + i * 4);
 			fChar.read((char *)&uOffset, sizeof uOffset);
 
@@ -67,8 +67,8 @@ int main(int argc, char **argv)
 			// Read the "x,y" line and update the CHAR file
 			else
 			{
-				int			nLeft, nTop;
-				signed char	byLeft, byTop;
+				int nLeft, nTop;
+				signed char byLeft, byTop;
 				fTxt >> nLeft;
 				fTxt.getline(szLine, sizeof szLine, ';');
 				fTxt >> nTop;
@@ -83,20 +83,20 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		std::ifstream	fChar(pszChar, std::ifstream::in | std::ifstream::binary);
-		std::ofstream	fTxt(szTxt, std::ofstream::out | std::ofstream::trunc);
+		std::ifstream fChar(pszChar, std::ifstream::in | std::ifstream::binary);
+		std::ofstream fTxt(szTxt, std::ofstream::out | std::ofstream::trunc);
 
 		// Seek after the header
 		fChar.seekg(8 + 0x17);
 
-		short	snNumChars; // <= 0x100
+		short snNumChars; // <= 0x100
 		fChar.read((char *)&snNumChars, sizeof snNumChars);
-		int		nNumChars = snNumChars;
+		int nNumChars = snNumChars;
 		if (nNumChars > 0x100 || nNumChars <= 0) { std::cerr << "Error" << std::endl; return 1; }
 
 		for (int i = 0; i < nNumChars; ++i)
 		{
-			unsigned int	uOffset;
+			unsigned int uOffset;
 			fChar.seekg(8 + 0x19 + i * 4);
 			fChar.read((char *)&uOffset, sizeof uOffset);
 
@@ -109,8 +109,8 @@ int main(int argc, char **argv)
 			else
 			{
 				fChar.seekg(8 + 0x15 + uOffset + 2);
-				signed char	byLeft;
-				signed char	byTop;
+				signed char byLeft;
+				signed char byTop;
 				fChar.read((char *)&byLeft, sizeof byLeft);
 				fChar.read((char *)&byTop, sizeof byTop);
 				fTxt << (int)byLeft << ";" << (int)byTop << std::endl;

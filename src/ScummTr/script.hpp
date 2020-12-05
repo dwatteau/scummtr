@@ -28,9 +28,9 @@
 #include "file.hpp"
 #include "toolbox.hpp"
 
-#include <string>
-#include <stdexcept>
 #include <list>
+#include <stdexcept>
+#include <string>
 
 #ifndef SCUMMTR_LAST_2005_CHANGE
 // note: this was enabled in the last official release from 2003, but after

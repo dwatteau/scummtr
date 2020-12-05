@@ -30,9 +30,9 @@
 #include "rptypes.hpp"
 #include "backup.hpp"
 
-#include <vector>
-#include <string>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 // FIXME RoomPack should be a TreeBlock
 

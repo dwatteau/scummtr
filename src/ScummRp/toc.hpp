@@ -28,8 +28,8 @@
 #include "rptypes.hpp"
 #include "types.hpp"
 
-#include <string>
 #include <stdexcept>
+#include <string>
 
 /*
  * TableOfContent

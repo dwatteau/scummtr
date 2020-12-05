@@ -29,10 +29,10 @@
 #include "toolbox.hpp"
 
 #include <fstream>
-#include <list>
-#include <string>
-#include <stdexcept>
 #include <iostream>
+#include <list>
+#include <stdexcept>
+#include <string>
 
 class File;
 class RAMFile;
@@ -265,7 +265,7 @@ class RAMFile : public File
 {
 protected:
 	byte *_mem;
-    bool _out;
+	bool _out;
 	std::streamsize _capacity;
 protected:
 	virtual void _zap();

@@ -101,7 +101,7 @@ void TableOfContent::_zap()
 
 bool TableOfContent::_validItem(int id) const
 {
-	return _toc[id].offset > 0 && _toc[id].roomId != 0xFF;	
+	return _toc[id].offset > 0 && _toc[id].roomId != 0xFF;
 }
 
 bool TableOfContent::_idInRange(int id) const

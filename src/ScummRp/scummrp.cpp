@@ -37,9 +37,9 @@
  * ScummRp
  */
 
-const char *const ScummRp::NAME    = "ScummRp";
+const char *const ScummRp::NAME = "ScummRp";
 const char *const ScummRp::VERSION = "0.2";
-const char *const ScummRp::AUTHOR  = "Thomas Combeleran";
+const char *const ScummRp::AUTHOR = "Thomas Combeleran";
 
 const GameDefinition &ScummRp::game = ScummRp::_game;
 TableOfContent *const *const &ScummRp::tocs = ScummRp::_tocs;
@@ -237,7 +237,7 @@ TreeBlock *ScummRp::_newIndex(const char *path)
 		return new OldIndexFileV1(path, ScummRp::_fileOptions, ScummRp::_backupSystem, -1, ScummRp::_game.indexXorKey);
 	else if (ScummRp::_game.version <= 2)
 		return new OldIndexFileV2(path, ScummRp::_fileOptions, ScummRp::_backupSystem, -1, ScummRp::_game.indexXorKey);
-	else if (ScummRp::_game.version <= 3 && ScummRp::_game.blockFormat ==  BFMT_SIZEONLY)
+	else if (ScummRp::_game.version <= 3 && ScummRp::_game.blockFormat == BFMT_SIZEONLY)
 		return new OldIndexFileV3(path, ScummRp::_fileOptions, ScummRp::_backupSystem, -1, ScummRp::_game.indexXorKey);
 	else
 		return new IndexFile(path, ScummRp::_fileOptions, ScummRp::_backupSystem, -1, ScummRp::_game.indexXorKey);
@@ -249,7 +249,7 @@ LFLFile *ScummRp::_newLFL(const char *path, int id)
 		return new OldLFLFileV1(path, ScummRp::_fileOptions, ScummRp::_backupSystem, id, ScummRp::_game.dataXorKey);
 	else if (ScummRp::_game.version <= 2)
 		return new OldLFLFileV2(path, ScummRp::_fileOptions, ScummRp::_backupSystem, id, ScummRp::_game.dataXorKey);
-	else if (ScummRp::_game.version <= 3 && ScummRp::_game.blockFormat ==  BFMT_SIZEONLY)
+	else if (ScummRp::_game.version <= 3 && ScummRp::_game.blockFormat == BFMT_SIZEONLY)
 		return new OldLFLFileV3(path, ScummRp::_fileOptions, ScummRp::_backupSystem, id, ScummRp::_game.dataXorKey);
 	else
 		return new LFLFile(path, ScummRp::_fileOptions, ScummRp::_backupSystem, id, ScummRp::_game.dataXorKey);
@@ -420,7 +420,7 @@ void ScummRp::_queueParam(char *pendingParams, char c)
 
 bool ScummRp::_readOption(const char *arg, char *pendingParams)
 {
-	int	i;
+	int i;
 	char c;
 
 	i = 0;
@@ -512,8 +512,7 @@ void ScummRp::_getOptions(int argc, const char **argv, const ScummRp::Parameter 
 						params[k].value[params[k].maxSize - 1] = 0;
 #ifdef _WIN32
 						if (params[k].isPath)
-							for (char *p = strchr(params[k].value, '\\'); p != 0;
-								 p = strchr(params[k].value, '\\'))
+							for (char *p = strchr(params[k].value, '\\'); p != 0; p = strchr(params[k].value, '\\'))
 								*p++ = '/';
 #endif // _WIN32
 					}

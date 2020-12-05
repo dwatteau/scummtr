@@ -24,8 +24,8 @@
 #ifndef SCUMMRP_BACKUP_HPP
 #define SCUMMRP_BACKUP_HPP
 
-#include <string>
 #include <list>
+#include <string>
 
 class BackUp
 {

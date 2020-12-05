@@ -36,9 +36,9 @@
  * ScummTr
  */
 
-const char *const ScummTr::NAME    = "ScummTr";
+const char *const ScummTr::NAME = "ScummTr";
 const char *const ScummTr::VERSION = "0.4";
-const char *const ScummTr::AUTHOR  = "Thomas Combeleran";
+const char *const ScummTr::AUTHOR = "Thomas Combeleran";
 
 const ScummRp::Parameter ScummTr::_trParameters[] = {
 	{ 'g', ScummRp::_paramGameId, sizeof ScummRp::_paramGameId, false },
@@ -361,7 +361,7 @@ int ScummTr::main(int argc, const char **argv)
 
 bool ScummTr::_readOption(const char *arg, char *pendingParams)
 {
-	int	i;
+	int i;
 	char c;
 
 	i = 0;
@@ -459,8 +459,7 @@ void ScummTr::_getOptions(int argc, const char **argv, const ScummRp::Parameter 
 						params[k].value[params[k].maxSize - 1] = 0;
 #ifdef _WIN32
 						if (params[k].isPath)
-							for (char *p = strchr(params[k].value, '\\'); p != 0;
-								 p = strchr(params[k].value, '\\'))
+							for (char *p = strchr(params[k].value, '\\'); p != 0; p = strchr(params[k].value, '\\'))
 								*p++ = '/';
 #endif // _WIN32
 					}
