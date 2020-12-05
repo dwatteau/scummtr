@@ -24,7 +24,8 @@
 #ifndef SCUMMRP_IO_HPP
 #define SCUMMRP_IO_HPP
 
-#include "types.hpp"
+#include "common/types.hpp"
+
 #include "toolbox.hpp"
 
 class ScummRpIO

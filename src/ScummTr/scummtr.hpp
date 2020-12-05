@@ -24,11 +24,12 @@
 #ifndef SCUMMTR_SCUMMTR_HPP
 #define SCUMMTR_SCUMMTR_HPP
 
+#include "common/types.hpp"
+
 #include "scummrp.hpp"
 #include "block.hpp"
 #include "text.hpp"
 #include "rptypes.hpp"
-#include "types.hpp"
 
 #include <vector>
 

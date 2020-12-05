@@ -24,9 +24,10 @@
 #ifndef SCUMMRP_TOC_HPP
 #define SCUMMRP_TOC_HPP
 
+#include "common/types.hpp"
+
 #include "file.hpp"
 #include "rptypes.hpp"
-#include "types.hpp"
 
 #include <stdexcept>
 #include <string>

@@ -24,8 +24,9 @@
 #ifndef SCUMMRP_FILE_HPP
 #define SCUMMRP_FILE_HPP
 
+#include "common/types.hpp"
+
 #include "backup.hpp"
-#include "types.hpp"
 #include "toolbox.hpp"
 
 #include <fstream>

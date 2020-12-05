@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef SCUMMRP_TYPES_HPP
-#define SCUMMRP_TYPES_HPP
+#ifndef SCUMMTR_COMMON_TYPES_HPP
+#define SCUMMTR_COMMON_TYPES_HPP
 
 #include <climits>
 

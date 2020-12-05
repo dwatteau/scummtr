@@ -24,9 +24,10 @@
 #ifndef SCUMMRP_BLOCK_HPP
 #define SCUMMRP_BLOCK_HPP
 
+#include "common/types.hpp"
+
 #include "toc.hpp"
 #include "file.hpp"
-#include "types.hpp"
 #include "rptypes.hpp"
 #include "backup.hpp"
 
