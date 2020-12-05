@@ -5,7 +5,7 @@ FROM centos:6.10
 
 # CentOS 6 is EOLd, so we need to use Vault mirrors
 RUN sed -i -e 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf \
-	&& sed -i -r -e '/^mirrorlist=/d' -e 's|^#baseurl=http://mirror\.centos\.org/centos/\$releasever/(.*)|baseurl=http://vault.centos.org/6.10/\1|g' /etc/yum.repos.d/*.repo \
+	&& sed -i -E -e '/^mirrorlist=/d' -e 's|^#baseurl=http://mirror\.centos\.org/centos/\$releasever/(.*)|baseurl=http://vault.centos.org/6.10/\1|g' /etc/yum.repos.d/*.repo \
 	&& rm -f /etc/yum.repos.d/CentOS-Vault.repo
 
 RUN rpm --import http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6 \
