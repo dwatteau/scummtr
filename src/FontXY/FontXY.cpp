@@ -33,13 +33,13 @@
 
 int main(int argc, char **argv)
 {
-	if (argc != 3 || argv[1][0] == 0 || argv[1][1] != 0 || ((argv[1][0] | 0x20) != 'i' && (argv[1][0] | 0x20) != 'o'))
+	if (argc != 3 || argv[1][0] == 0 || argv[1][1] != 0 || (argv[1][0] != 'i' && argv[1][0] != 'o'))
 	{
 		std::cout << "FontXY 0.1 by Thomas Combeleran\n" << std::endl;
 		std::cout << "Usage: FontXY {i|o} <CHAR file>\n\nExamples:\tFontXY o CHAR_0002\n\t\tFontXY i CHAR_0003" << std::endl;
 		return 0;
 	}
-	bool bImport = (argv[1][0] | 0x20) == 'i';
+	bool bImport = argv[1][0] == 'i';
 	char *pszChar = argv[2];
 	char szTxt[] = "XY.txt"; // TODO: param
 

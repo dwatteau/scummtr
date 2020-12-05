@@ -325,7 +325,7 @@ int ScummTr::main(int argc, const char **argv)
 	}
 	ScummTr::_paddedRsc = 0;
 	for (i = 0; ScummTr::_paramPaddedRsc[i] != 0; ++i)
-		switch (ScummTr::_paramPaddedRsc[i] | 0x20)
+		switch (ScummTr::_paramPaddedRsc[i])
 		{
 		case 'a':
 			ScummTr::_paddedRsc |= 1 << ScummTr::RSCT_ACTOR;
