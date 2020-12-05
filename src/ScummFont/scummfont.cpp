@@ -146,7 +146,7 @@ static void getFontInfo(int32 &baseOffset, std::ifstream &file, int &version, in
 
 	version = file.get();
 	if (version != 1 && version != 3)
-		throw std::runtime_error(xsprintf("Unsupported version: %i", version));
+		throw std::runtime_error(xsprintf("Unsupported scumm font version: %i", version));
 
 	if (version == 1)
 	{
