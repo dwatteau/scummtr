@@ -24,6 +24,12 @@
 #ifndef SCUMMRP_TYPES_HPP
 #define SCUMMRP_TYPES_HPP
 
+#include <climits>
+
+#if CHAR_BIT != 8 || UCHAR_MAX != 0xff || USHRT_MAX != 0xffff || UINT_MAX != 0xffffffffU
+#  error "The types provided by your compiler are not supported"
+#endif
+
 #ifdef _MSC_VER
 typedef unsigned __int8 byte;
 typedef unsigned __int8 uint8;
