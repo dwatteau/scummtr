@@ -168,10 +168,10 @@ Text::Text(const char *path, int flags, Text::Charset charset) :
 		throw File::IOError(xsprintf("Cannot open %s", path));
 
 	for (int i = 0; i < 256; ++i)
-		_tesrahc[i] = (char)(byte)i;
+		_finalCharset[i] = (char)(byte)i;
 
 	for (int i = 0; i < 256; ++i)
-		_tesrahc[(byte)_charset[i]] = (char)(byte)i;
+		_finalCharset[(byte)_charset[i]] = (char)(byte)i;
 }
 
 Text::~Text()
@@ -456,7 +456,7 @@ void Text::_unEsc(std::string &s, Text::LineType t) const
 	{
 		if (s[i] != '\\')
 		{
-			s[j++] = _tesrahc[(byte)s[i]];
+			s[j++] = _finalCharset[(byte)s[i]];
 		}
 		else
 		{

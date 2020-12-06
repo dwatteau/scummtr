@@ -90,7 +90,7 @@ private:
 	bool _hex;
 	bool _opcode;
 	const char *const _charset;
-	char _tesrahc[256];
+	char _finalCharset[256];
 private:
 	static void _checkMsg(const std::string &s, int l);
 	static void _checkRsc(const std::string &s, int l);
