@@ -453,14 +453,20 @@ void Text::_unEsc(std::string &s, Text::LineType t) const
 
 	size = (int)s.size();
 	for (j = i = 0; i < size; ++i)
+	{
 		if (s[i] != '\\')
+		{
 			s[j++] = _tesrahc[(byte)s[i]];
+		}
 		else
+		{
 			if (i + 1 >= size || (i + 3 >= size && s[i + 1] != '\\'))
 				throw Text::Error(xsprintf("Truncated escaping in line %i", _lineCount));
 
 			if (s[++i] == '\\')
+			{
 				s[j++] = '\\';
+			}
 			else
 			{
 				byte a, b, c;
@@ -492,6 +498,8 @@ void Text::_unEsc(std::string &s, Text::LineType t) const
 
 				s[j++] = (char)n;
 			}
+		}
+	}
 
 	s.resize(j);
 
@@ -613,17 +621,21 @@ void Text::_spaceCharToBit(std::string &s) const
 
 	last = (int)s.size() - 1;
 	for (j = i = 0; i < last; ++i)
+	{
 		if ((byte)s[i] & 0x80)
 			throw Text::Error(xsprintf("char > 0x80 in line %i", _lineCount));
 
 		if (s[i + 1] == ' ' && !(s[i] > 3 && s[i] < 8))
+		{
 			s[j++] = (char)((byte)s[i++] | 0x80);
+		}
 		else
 		{
 			s[j++] = s[i];
 			if (s[i] < 8 && s[i] > 3 && i + 1 < last)
 				s[j++] = s[++i];
 		}
+	}
 
 	if (i < (int)s.size())
 		s[j++] = s[i];
