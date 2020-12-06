@@ -52,8 +52,10 @@ std::string BackUp::backup(const char *f, bool createCopy)
 
 	if (File::isReadOnly(f))
 		throw File::IOError(xsprintf("Cannot open %s", f));
+
 	bak = _backupPath(f);
 	if (createCopy)
+	{
 		try
 		{
 			File::copy(f, bak.c_str(), true);
@@ -62,16 +64,19 @@ std::string BackUp::backup(const char *f, bool createCopy)
 		{
 			throw File::IOError(xsprintf("Couldn't create backup file: %s", bak.c_str()));
 		}
-	else
-		if (File::exists(bak.c_str()))
-			throw File::AlreadyExists(xsprintf("%s already exists", bak.c_str()));
+	}
+	else if (File::exists(bak.c_str()))
+		throw File::AlreadyExists(xsprintf("%s already exists", bak.c_str()));
+
 	_files.push_back(std::string(f));
+
 	return bak;
 }
 
 void BackUp::cancelChanges()
 {
-	for (std::list<std::string>::iterator i = _files.begin(); i !=_files.end(); ++i)
+	for (std::list<std::string>::iterator i = _files.begin(); i != _files.end(); ++i)
+	{
 		try
 		{
 			xremove(_backupPath(i->c_str()).c_str());
@@ -80,12 +85,14 @@ void BackUp::cancelChanges()
 		{
 			ScummRpIO::warning(e.what());
 		}
+	}
 	_files.clear();
 }
 
 void BackUp::applyChanges()
 {
 	for (std::list<std::string>::iterator i = _files.begin(); i != _files.end(); ++i)
+	{
 		try
 		{
 			xremove(i->c_str());
@@ -95,5 +102,6 @@ void BackUp::applyChanges()
 		{
 			ScummRpIO::warning(e.what());
 		}
+	}
 	_files.clear();
 }

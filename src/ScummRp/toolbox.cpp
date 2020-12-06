@@ -120,7 +120,7 @@ int xmkdir(const char *path)
 		ret = mkdir(tmpPath, 0755);
 	}
 
-	delete []tmpPath;
+	delete[] tmpPath;
 
 	return ret;
 }

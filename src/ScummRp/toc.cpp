@@ -95,7 +95,7 @@ void TableOfContent::_zap()
 {
 	memset(_iterator, 0, sizeof _iterator);
 	memset(_accessed, 0, sizeof _accessed);
-	delete []_toc;
+	delete[] _toc;
 	_toc = nullptr;
 	_size = 0;
 }

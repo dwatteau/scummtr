@@ -1110,6 +1110,7 @@ bool RoomBlock::nextBlock(TreeBlock &subblock)
 	if (TreeBlock::nextBlock(subblock))
 	{
 		if (TreeBlock::_findIdInBlock(subblock) != -1)
+		{
 			try // try catch for ScummTr
 			{
 				_uniqueId(subblock._tag, subblock._id);
@@ -1118,6 +1119,7 @@ bool RoomBlock::nextBlock(TreeBlock &subblock)
 			{
 				ScummRpIO::warning(e.what());
 			}
+		}
 		return true;
 	}
 

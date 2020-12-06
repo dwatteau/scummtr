@@ -70,7 +70,7 @@ File::~File()
 void File::_zap()
 {
 	_size = 0;
-	delete []_path;
+	delete[] _path;
 	_path = nullptr;
 	_mode = (std::ios::openmode)0;
 	_seekedg = false;
@@ -506,7 +506,6 @@ void File::_moveBwd(std::streamoff offset, std::streamsize n)
 	seekg(getPos, std::ios::beg);
 }
 
-
 void File::move(std::streamoff offset, std::streamsize n)
 {
 	if (offset == 0 || n == 0)
@@ -744,8 +743,10 @@ FilePart &FilePart::read(std::string &s, std::streamsize n)
 		s.resize(0);
 		s.append(buffer, n);
 	}
-	catch (...) { delete []buffer; throw; }
-	delete []buffer;
+	catch (...) { delete[] buffer; throw; }
+
+	delete[] buffer;
+
 	return *this;
 }
 
@@ -804,9 +805,10 @@ FilePart &FilePart::write(const char *s, std::streamsize n)
 			FilePart::_xorBuffer(xored, _xorKey, n);
 			_file->write(xored, n);
 		}
-		catch (...) { delete []xored; throw; }
-		delete []xored;
+		catch (...) { delete[] xored; throw; }
+		delete[] xored;
 	}
+
 	return *this;
 }
 
@@ -1099,13 +1101,13 @@ void RAMFile::_reallocAtLeast(std::streamsize sz)
 	buffer = new byte[_capacity];
 	if (_mem != nullptr)
 		memcpy(buffer, _mem, oldCapacity);
-	delete []_mem;
+	delete[] _mem;
 	_mem = buffer;
 }
 
 void RAMFile::_zapRAM()
 {
-	delete []_mem;
+	delete[] _mem;
 	_mem = nullptr;
 	_gpos = 0;
 	_ppos = 0;

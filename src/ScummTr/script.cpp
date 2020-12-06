@@ -918,7 +918,7 @@ void Script::_opv67()
 		case 202:
 		case 203:
 		case 204:
-			break;;
+			break;
 		default:
 			throw Script::ParseError("dim");
 		}
