@@ -35,7 +35,8 @@
 #include <stdexcept>
 #include <string>
 
-static byte glPalette[0x400] = {
+static byte glPalette[0x400] =
+{
 	0xFF, 0x00, 0xFF, 0, 0xFF, 0xFF, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0xFF, 0x00, 0,
 	0x00, 0x00, 0xFF, 0, 0x00, 0xFF, 0xFF, 0, 0x00, 0x7F, 0x7F, 0, 0x7F, 0x00, 0x00, 0,
 	0x00, 0x7F, 0x00, 0, 0x00, 0x00, 0x7F, 0, 0x7F, 0x7F, 0x00, 0, 0x7F, 0x00, 0xFF, 0,
@@ -99,7 +100,8 @@ static byte glPalette[0x400] = {
 	0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0,
 	0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0,
 	0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x10, 0x00, 0,
-	0xFF, 0xBF, 0xFF, 0, 0xFF, 0xDF, 0xFF, 0, 0x00, 0x00, 0x00, 0, 0xDF, 0x00, 0xDF, 0 };
+	0xFF, 0xBF, 0xFF, 0, 0xFF, 0xDF, 0xFF, 0, 0x00, 0x00, 0x00, 0, 0xDF, 0x00, 0xDF, 0
+};
 static byte *glFontBitmap = nullptr;
 static int32 glWidth = 0;
 static int32 glHeight = 0;
@@ -112,6 +114,7 @@ static const char *xsprintf(const char *format, ...)
 	va_start(va, format);
 	vsprintf(errorMessage, format, va);
 	va_end(va);
+
 	return errorMessage;
 }
 
@@ -126,6 +129,7 @@ static int usage()
 	std::cout << "  i: Import bitmap.bmp into font (result written in font-new)" << std::endl;
 	std::cout << std::endl;
 	std::cout << "\"font\" is either a CHAR block extracted with scummrp, or an LFL file" << std::endl;
+
 	return 0;
 }
 
@@ -215,6 +219,7 @@ static const char *tmpPath(const char *path)
 	static std::string s(path);
 
 	s += "-new";
+
 	return s.c_str();
 }
 
@@ -222,6 +227,7 @@ static int roundTo4(int i)
 {
 	if ((i & 3) != 0)
 		return i + 4 - (i & 3);
+
 	return i;
 }
 
@@ -235,36 +241,52 @@ static void saveBmp(const char *path)
 
 	if (!file.is_open())
 		throw std::runtime_error("Cannot open BMP file");
+
 	file.write("BM", 2);
+
 	udw = 0x436 + roundTo4(glWidth) * glHeight;
 	file.write((char *)&udw, 4);
+
 	udw = 0;
 	file.write((char *)&udw, 4);
+
 	udw = 0x436;
 	file.write((char *)&udw, 4);
+
 	udw = 0x28;
 	file.write((char *)&udw, 4);
+
 	sdw = glWidth;
 	file.write((char *)&sdw, 4);
 	sdw = glHeight;
 	file.write((char *)&sdw, 4);
+
 	w = 1;
 	file.write((char *)&w, 2);
+
 	w = 8;
 	file.write((char *)&w, 2);
+
 	udw = 0;
 	file.write((char *)&udw, 4);
+
 	udw = roundTo4(glWidth) * glHeight;
 	file.write((char *)&udw, 4);
+
 	sdw = 0;
 	file.write((char *)&sdw, 4);
+
 	sdw = 0;
 	file.write((char *)&sdw, 4);
+
 	udw = 256;
 	file.write((char *)&udw, 4);
+
 	udw = 256;
 	file.write((char *)&udw, 4);
+
 	file.write((char *)glPalette, 0x400);
+
 	buf = new byte[roundTo4(glWidth) * glHeight];
 	memset(buf, 0, roundTo4(glWidth) * glHeight);
 	for (int i = 0; i < glHeight; ++i)
@@ -506,7 +528,9 @@ static void loadFont(const char *path)
 
 	if (!file.is_open())
 		throw std::runtime_error("Cannot open font file");
+
 	getFontInfo(baseOffset, file, version, bpp, maxHeight, maxWidth, bytesPerChar, numChars);
+
 	delete[] glFontBitmap;
 	glFontBitmap = nullptr;
 #ifdef SCUMMFONT_256

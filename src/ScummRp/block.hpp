@@ -335,7 +335,8 @@ private: // Not copiable
 class BlocksFile : public TreeBlock
 {
 public:
-	enum {
+	enum
+	{
 		BFOPT_NULL     = 0,
 		BFOPT_AUTO     = 1 << 0,
 		BFOPT_SEQFILE  = 1 << 1,
@@ -636,9 +637,21 @@ public: // TreeBlock part still copiable
 class OldRoom : public RoomBlock
 {
 protected:
-	enum BlockType { BT_NULL = 0, BT_HD = 1, BT_BX = 2, BT_BM = 3, BT_OI = 4,
-					 BT_NL = 5, BT_SL = 6, BT_OC = 7, BT_EX = 8, BT_EN = 9,
-					 BT_LS = 10, BT_END = 11 };
+	enum BlockType
+	{
+		BT_NULL = 0,
+		BT_HD = 1,
+		BT_BX = 2,
+		BT_BM = 3,
+		BT_OI = 4,
+		BT_NL = 5,
+		BT_SL = 6,
+		BT_OC = 7,
+		BT_EX = 8,
+		BT_EN = 9,
+		BT_LS = 10,
+		BT_END = 11
+	};
 	struct OIInfo // needed for _getOIInfo (cannot be local because it's used in a template)
 	{
 		int num;
@@ -939,7 +952,8 @@ public:
 	bool operator==(Block *p) const { return _ptr == p; }
 public:
 	BlockPtr<T>() : _ptr(nullptr) { }
-	~BlockPtr<T>() {
+	~BlockPtr<T>()
+	{
 		::delete _ptr;
 	}
 private: // Not copiable

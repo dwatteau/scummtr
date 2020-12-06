@@ -41,8 +41,21 @@ class TableOfContent
 public:
 	static const int INVALID_ID = -1;
 public:
-	struct TocElement { byte roomId; int32 offset; };
-	enum Type { TOCT_NULL = 0, TOCT_LFLF, TOCT_ROOM, TOCT_SCRP, TOCT_SOUN, TOCT_COST, TOCT_CHAR };
+	struct TocElement
+	{
+		byte roomId;
+		int32 offset;
+	};
+	enum Type
+	{
+		TOCT_NULL = 0,
+		TOCT_LFLF,
+		TOCT_ROOM,
+		TOCT_SCRP,
+		TOCT_SOUN,
+		TOCT_COST,
+		TOCT_CHAR
+	};
 public:
 	class Error : public std::runtime_error
 	{

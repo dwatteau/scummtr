@@ -40,14 +40,16 @@ const char *const ScummTr::NAME = "ScummTr";
 const char *const ScummTr::VERSION = "0.4";
 const char *const ScummTr::AUTHOR = "Thomas Combeleran";
 
-const ScummRp::Parameter ScummTr::_trParameters[] = {
+const ScummRp::Parameter ScummTr::_trParameters[] =
+{
 	{ 'g', ScummRp::_paramGameId, sizeof ScummRp::_paramGameId, false },
 	{ 'f', ScummTr::_paramTextFile, sizeof ScummTr::_paramTextFile, true },
 	{ 'l', ScummTr::_paramLanguage, sizeof ScummTr::_paramLanguage, false },
 	{ 'p', ScummRp::_paramGameDir, sizeof ScummRp::_paramGameDir, true },
 	{ 'a', ScummTr::_paramPaddedRsc, sizeof ScummTr::_paramPaddedRsc, false },
 	{ 'A', ScummTr::_paramPaddedRsc, sizeof ScummTr::_paramPaddedRsc, false },
-	{ 0, nullptr, 0 } };
+	{ 0, nullptr, 0 }
+};
 
 char ScummTr::_paramTextFile[512] = "./text";
 char ScummTr::_paramLanguage[3] = "en";
@@ -256,26 +258,27 @@ void ScummTr::_processGameFilesV4567()
 
 Text::Charset ScummTr::_selectCharset()
 {
-	if (ScummRp::_game.version <= 2)
-	{
-		if (strcmp(ScummTr::_paramLanguage, "en") == 0)
-			return Text::CHS_V1EN;
-		if (strcmp(ScummTr::_paramLanguage, "de") == 0)
-			return Text::CHS_V1DE;
-		if (strcmp(ScummTr::_paramLanguage, "it") == 0)
-			return Text::CHS_V1IT;
-		if (strcmp(ScummTr::_paramLanguage, "fr") == 0)
-			return Text::CHS_V1FR;
-		ScummRpIO::warning(xsprintf("Unknown language code %s", ScummTr::_paramLanguage));
-		return Text::CHS_NULL;
-	}
-	return Text::CHS_V3ANSI;
+	if (ScummRp::_game.version > 2)
+		return Text::CHS_V3ANSI;
+
+	if (strcmp(ScummTr::_paramLanguage, "en") == 0)
+		return Text::CHS_V1EN;
+	if (strcmp(ScummTr::_paramLanguage, "de") == 0)
+		return Text::CHS_V1DE;
+	if (strcmp(ScummTr::_paramLanguage, "it") == 0)
+		return Text::CHS_V1IT;
+	if (strcmp(ScummTr::_paramLanguage, "fr") == 0)
+		return Text::CHS_V1FR;
+
+	ScummRpIO::warning(xsprintf("Unknown language code %s", ScummTr::_paramLanguage));
+	return Text::CHS_NULL;
 }
 
 void ScummTr::setRscNameMaxLengh(ScummTr::RscType t, int32 id, int32 l)
 {
 	if (((1 << t) & ScummTr::_paddedRsc) == 0)
 		return;
+
 	if (id < 0)
 	{
 		if (ScummTr::_maxPadding && ScummTr::_rscNameLimits.anyRsc[t] < l)
@@ -294,13 +297,11 @@ int32 ScummTr::getRscNameMaxLengh(ScummTr::RscType t, int32 id)
 {
 	if (((1 << t) & ScummTr::_paddedRsc) == 0)
 		return 0;
-	if (id < 0)
+
+	if (id < 0 || ScummTr::_rscNameLimits.anyRsc[t] >= ScummTr::_rscNameLimits.rsc[t][id])
 		return ScummTr::_rscNameLimits.anyRsc[t];
-	else
-		if (ScummTr::_rscNameLimits.anyRsc[t] < ScummTr::_rscNameLimits.rsc[t][id])
-			return ScummTr::_rscNameLimits.rsc[t][id];
-		else
-			return ScummTr::_rscNameLimits.anyRsc[t];
+
+	return ScummTr::_rscNameLimits.rsc[t][id];
 }
 
 int ScummTr::main(int argc, const char **argv)
@@ -311,16 +312,19 @@ int ScummTr::main(int argc, const char **argv)
 	ScummRpIO::setInfoSlots(ScummRp::_infoSlots);
 	ScummRpIO::info(INF_GLOBAL, xsprintf("%s %s by %s", ScummTr::NAME, ScummTr::VERSION, ScummTr::AUTHOR));
 	ScummRpIO::info(INF_GLOBAL, "");
+
 	if (ScummRp::_options & ScummRp::OPT_LIST)
 	{
 		ScummTr::_listGames();
 		return 0;
 	}
+
 	if (ScummTr::_invalidOptions())
 	{
 		ScummTr::_usage();
 		return 0;
 	}
+
 	ScummTr::_paddedRsc = 0;
 	for (int i = 0; ScummTr::_paramPaddedRsc[i] != '\0'; ++i)
 		switch (ScummTr::_paramPaddedRsc[i])
@@ -335,12 +339,14 @@ int ScummTr::main(int argc, const char **argv)
 			ScummTr::_paddedRsc |= 1 << ScummTr::RSCT_VERB;
 			break;
 		}
+
 	g = ScummRp::_findGameDef(ScummRp::_paramGameId);
 	if (g == -1)
 	{
 		ScummRp::_listGames();
 		return 0;
 	}
+
 	ScummRp::_game = ScummRp::_gameDef[g];
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
 		ScummRp::_fileOptions |= BlocksFile::BFOPT_BACKUP;
@@ -349,11 +355,14 @@ int ScummTr::main(int argc, const char **argv)
 		ScummRp::_fileOptions |= BlocksFile::BFOPT_READONLY;
 		ScummTr::_textOptions |= Text::TXT_OUT;
 	}
+
 	if (ScummRp::_game.version < 4)
 		ScummTr::_processGameFilesV123();
 	else
 		ScummTr::_processGameFilesV4567();
+
 	ScummRp::_backupSystem.applyChanges();
+
 	return 0;
 }
 
@@ -436,6 +445,7 @@ bool ScummTr::_readOption(const char *arg, char *pendingParams)
 				ScummRp::_queueParam(pendingParams, c);
 				break;
 			}
+
 	return true;
 }
 
@@ -458,7 +468,7 @@ void ScummTr::_getOptions(int argc, const char **argv, const ScummRp::Parameter 
 						if (params[k].isPath)
 							for (char *p = strchr(params[k].value, '\\'); p != 0; p = strchr(params[k].value, '\\'))
 								*p++ = '/';
-#endif // _WIN32
+#endif
 					}
 					break;
 				}

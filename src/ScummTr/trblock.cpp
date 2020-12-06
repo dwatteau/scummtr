@@ -101,6 +101,7 @@ ScriptBlock &ScriptBlock::operator=(const TreeBlock &block)
 	delete _script;
 	_script = nullptr;
 	TextBlock::operator=(block);
+
 	return *this;
 }
 
@@ -112,6 +113,7 @@ void ScriptBlock::importText(Text &input)
 	if (_script == nullptr)
 		_script = new Script(*_file, _headerSize, _file->size() - _headerSize);
 	input.setInfo(_lflfId(), _tag, _ownId());
+
 	try
 	{
 		_script->importText(input);
@@ -130,6 +132,7 @@ void ScriptBlock::exportText(Text &output, bool pad)
 {
 	if (_script == nullptr)
 		_script = new Script(*_file, _headerSize, _file->size() - _headerSize);
+
 	output.setInfo(_lflfId(), _tag, _ownId());
 	try
 	{
@@ -145,6 +148,7 @@ void ScriptBlock::getRscNameLimits()
 {
 	if (_script == nullptr)
 		_script = new Script(*_file, _headerSize, _file->size() - _headerSize);
+
 	try
 	{
 		_script->getRscNameLimits();
@@ -175,6 +179,7 @@ ObjectNameBlock::ObjectNameBlock(const TreeBlock &block) :
 ObjectNameBlock &ObjectNameBlock::operator=(const TreeBlock &block)
 {
 	TextBlock::operator=(block);
+
 	return *this;
 }
 
@@ -251,6 +256,7 @@ ObjectCodeBlock &ObjectCodeBlock::operator=(const TreeBlock &block)
 	delete _script;
 	_script = nullptr;
 	TextBlock::operator=(block);
+
 	return *this;
 }
 
@@ -278,6 +284,7 @@ template <class T, int I> void ObjectCodeBlock::_tUpdateVerbs(const std::list<in
 		_file->seekp(1, std::ios::cur);
 		if (((uint32)(*i + scriptOffset) >> (sizeof (T) * 8)) != 0)
 			throw ObjectCodeBlock::Error(xsprintf("Line too long (line %i)", n));
+
 		o = (T)(*i + scriptOffset);
 		_file->putLE(o);
 	}
@@ -297,6 +304,7 @@ template <class T, int I> int32 ObjectCodeBlock::_tFindScriptOffset()
 		if ((int32)o < min)
 			min = (int32)o;
 	}
+
 	return min;
 }
 
@@ -322,6 +330,7 @@ void ObjectCodeBlock::_importText(Text &input, int32 oldSize, int32 scriptOffset
 	_listVerbs(verbs, scriptOffset);
 	if (_script == nullptr)
 		_script = new Script(*_file, scriptOffset, _file->size() - scriptOffset);
+
 	input.setInfo(_lflfId(), _tag, _ownId());
 	try
 	{
@@ -333,9 +342,12 @@ void ObjectCodeBlock::_importText(Text &input, int32 oldSize, int32 scriptOffset
 	{
 		ScummRpIO::error(xsprintf("%s %s", e.what(), input.info()));
 	}
+
 	_updateVerbs(verbs, scriptOffset, input.lineNumber());
+
 	_file->seekp(0, std::ios::beg);
 	Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag);
+
 	if (_parent != nullptr)
 		_parent->_subblockUpdated(*this, _file->size() - oldSize);
 }
@@ -352,6 +364,7 @@ void ObjectCodeBlock::exportText(Text &output, bool pad)
 	o = _findScriptOffset();
 	if (_script == nullptr)
 		_script = new Script(*_file, o, _file->size() - o);
+
 	output.setInfo(_lflfId(), _tag, _ownId());
 	try
 	{
@@ -370,6 +383,7 @@ void ObjectCodeBlock::getRscNameLimits()
 	o = _findScriptOffset();
 	if (_script == nullptr)
 		_script = new Script(*_file, o, _file->size() - o);
+
 	try
 	{
 		_script->getRscNameLimits();
@@ -450,11 +464,13 @@ template <int I> void OldObjectCodeBlock::_importName(Text &input, int32 &script
 	_file->seekg(o, std::ios::beg);
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 		;
+
 	size = _file->tellg(std::ios::beg) - o;
 	if (size > 1) // Ignore empty lines
 	{
 		if (!input.nextLine(s, Text::LT_RSC))
 			throw File::UnexpectedEOF("Not enough lines in imported text");
+
 		f = new FilePart(*_file, o, size);
 		f->resize((int32)s.size() + 1);
 		f->seekp(0, std::ios::beg);

@@ -38,8 +38,16 @@
 class ScummTr : public ScummRp
 {
 public:
-	enum { ACT_RSCNAMELIMITS = 0x100 };
-	enum RscType { RSCT_ACTOR = 0, RSCT_OBJECT = 1, RSCT_VERB = 2 };
+	enum
+	{
+		ACT_RSCNAMELIMITS = 0x100
+	};
+	enum RscType
+	{
+		RSCT_ACTOR = 0,
+		RSCT_OBJECT = 1,
+		RSCT_VERB = 2
+	};
 protected:
 	static const GameDefinition _gameDef[];
 public:

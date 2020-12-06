@@ -313,13 +313,16 @@ public:
 	virtual void open(const char *filename, BackUp &backupSystem)
 	{
 		T::open(backupSystem.backup(filename, false).c_str(), std::ios::binary | std::ios::in | std::ios::out | std::ios::trunc);
+
 		if (!File::isReadOnly(filename))
 			_srcFile.open(filename, std::ios::binary | std::ios::in);
+
 		if (this->is_open() != _srcFile.is_open())
 		{
 			T::close();
 			_srcFile.close();
 		}
+
 		_shift = 0;
 		_tmpSize = 0;
 		this->_setSize(_srcFile.size());
@@ -328,7 +331,9 @@ public:
 	{
 		if (!this->is_open())
 			return;
-		if (_tmpSize < this->_size) {
+
+		if (_tmpSize < this->_size)
+		{
 			if (_tmpSize - _shift < _srcFile.size())
 			{
 				this->seekp(_tmpSize, std::ios::beg);
@@ -356,6 +361,7 @@ public:
 		gpos = this->tellg(std::ios::beg);
 		if (gpos + n > this->_size)
 			throw File::UnexpectedEOF(xsprintf("Unexpected EOF in: %s", this->_path));
+
 		if (gpos + n > _tmpSize)
 		{
 			ppos = this->tellp(std::ios::beg);
@@ -409,9 +415,11 @@ public:
 			return;
 		ppos = this->tellp(std::ios::beg);
 		if (offset > 0)
+		{
 			if (ppos == _tmpSize && _tmpSize >= _srcFile.size() + _shift)
 				return;
-			else if (_tmpSize > ppos)
+
+			if (_tmpSize > ppos)
 				T::move(offset, _tmpSize - ppos);
 			else
 			{
@@ -422,10 +430,13 @@ public:
 				}
 				_tmpSize += offset;
 			}
+		}
 		else
+		{
 			if (-offset > ppos)
 				throw std::out_of_range("SeqFile::_moveEnd: Tried moving data past beginning of file");
-			else if (_tmpSize < ppos + offset)
+
+			if (_tmpSize < ppos + offset)
 			{
 				this->seekg(ppos + offset, std::ios::beg);
 				read(&c, 0);
@@ -437,6 +448,7 @@ public:
 			}
 			else
 				_tmpSize = ppos + offset;
+		}
 		this->_setSize(oldSize + offset);
 		_shift += offset;
 		this->seekp(ppos, std::ios::beg);

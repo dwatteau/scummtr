@@ -75,15 +75,19 @@ void TableOfContent::merge(const TableOfContent &t)
 
 	memcpy(a, _accessed, sizeof a);
 	for (int i = 0; i < _size; ++i)
+	{
 		if (_toc[i].roomId != t._toc[i].roomId)
 			throw std::logic_error("TableOfContent::merge: different roomIds");
-		else if (t._accessed[_toc[i].roomId])
+
+		if (t._accessed[_toc[i].roomId])
 		{
 			if (_accessed[_toc[i].roomId] && _toc[i].offset != t._toc[i].offset)
 				throw TableOfContent::Error(xsprintf("LFLF %i differently indexed from one file to another", _toc[i].roomId));
+
 			_toc[i].offset = t._toc[i].offset;
 			a[_toc[i].roomId] = true;
 		}
+	}
 	memcpy(_accessed, a, sizeof a);
 }
 
@@ -110,6 +114,7 @@ bool TableOfContent::_validId(int id) const
 {
 	if (!_idInRange(id))
 		return false;
+
 	return _validItem(id);
 }
 
@@ -122,6 +127,7 @@ TableOfContent::TocElement &TableOfContent::operator[](int id)
 {
 	if (!_idInRange(id))
 		throw TableOfContent::InvalidId(xsprintf("TableOfContent::operator[]: Invalid Id: %i", id));
+
 	return _toc[id];
 }
 
@@ -129,6 +135,7 @@ TableOfContent::TocElement TableOfContent::operator[](int id) const
 {
 	if (!_idInRange(id))
 		throw TableOfContent::InvalidId(xsprintf("TableOfContent::operator[]: Invalid Id: %i", id));
+
 	return _toc[id];
 }
 
@@ -160,10 +167,11 @@ void TableOfContent::firstId(byte roomId)
 
 bool TableOfContent::nextId(int &id, byte roomId)
 {
-	while (_idInRange(_iterator[roomId])
-		   && (_toc[_iterator[roomId]].roomId != roomId || !_validItem(_iterator[roomId])))
+	while (_idInRange(_iterator[roomId]) && (_toc[_iterator[roomId]].roomId != roomId || !_validItem(_iterator[roomId])))
 		++_iterator[roomId];
+
 	id = _validId(_iterator[roomId]) ? _iterator[roomId]++ : TableOfContent::INVALID_ID;
+
 	return id != TableOfContent::INVALID_ID;
 }
 
@@ -177,8 +185,10 @@ void TableOfContent::_load16Sep32(FilePart &file)
 		file.getLE16(w);
 		_size = (int)w;
 		_toc = new TocElement[_size];
+
 		for (int i = 0; i < _size; ++i)
 			file.getByte(_toc[i].roomId);
+
 		for (int i = 0; i < _size; ++i)
 			file.getLE32(_toc[i].offset);
 	}
@@ -188,8 +198,10 @@ void TableOfContent::_load16Sep32(FilePart &file)
 void TableOfContent::_save16Sep32(FilePart &file) const
 {
 	file.putLE16((uint16)_size);
+
 	for (int i = 0; i < _size; ++i)
 		file.putByte(_toc[i].roomId);
+
 	for (int i = 0; i < _size; ++i)
 		file.putLE32(_toc[i].offset);
 }
@@ -210,8 +222,10 @@ void TableOfContent::_load8Sep16(FilePart &file, int size)
 		else
 			_size = size;
 		_toc = new TocElement[_size];
+
 		for (int i = 0; i < _size; ++i)
 			file.getByte(_toc[i].roomId);
+
 		for (int i = 0; i < _size; ++i)
 		{
 			file.getLE16(w);
@@ -225,8 +239,10 @@ void TableOfContent::_save8Sep16(FilePart &file, bool fixedSize) const
 {
 	if (!fixedSize)
 		file.putByte((byte)_size);
+
 	for (int i = 0; i < _size; ++i)
 		file.putByte(_toc[i].roomId);
+
 	for (int i = 0; i < _size; ++i)
 		file.putLE16((uint16)_toc[i].offset);
 }
@@ -382,6 +398,7 @@ void GlobalRoomIndex::merge(const TableOfContent &t)
 		{
 			if (_accessed[i] && _toc[i].offset != t[i].offset)
 				throw TableOfContent::Error(xsprintf("LFLF %i differently indexed from one file to another", i));
+
 			_toc[i].offset = t[i].offset;
 			_accessed[i] = true;
 		}
@@ -406,8 +423,10 @@ bool GlobalRoomIndex::nextId(int &id, byte roomId)
 {
 	if (!_first)
 		return false;
+
 	_first = false;
 	id = roomId;
+
 	return true;
 }
 
@@ -415,6 +434,7 @@ TableOfContent::TocElement &GlobalRoomIndex::operator[](int id)
 {
 	if (id >= _size)
 		throw GlobalRoomIndex::IndexTooShort("Room index too short");
+
 	return TableOfContent::operator[](id);
 }
 
@@ -422,14 +442,17 @@ TableOfContent::TocElement GlobalRoomIndex::operator[](int id) const
 {
 	if (id >= _size)
 		throw GlobalRoomIndex::IndexTooShort("Room index too short");
+
 	return TableOfContent::operator[](id);
 }
 
 void GlobalRoomIndex::load(FilePart &file, GlobalTocFormat format, int size)
 {
 	TableOfContent::load(file, format, size);
+
 	if (_size > 256)
 		throw GlobalRoomIndex::Error("RoomIndex too big (> 256)");
+
 	// hack for V1
 	if (size > 0) // means V1
 		for (int i = 0; i < _size; ++i)

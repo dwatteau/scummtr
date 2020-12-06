@@ -44,7 +44,8 @@ const char *const ScummRp::AUTHOR = "Thomas Combeleran";
 const GameDefinition &ScummRp::game = ScummRp::_game;
 TableOfContent *const *const &ScummRp::tocs = ScummRp::_tocs;
 
-const ScummRp::Parameter ScummRp::_rpParameters[] = {
+const ScummRp::Parameter ScummRp::_rpParameters[] =
+{
 	{ 'g', ScummRp::_paramGameId, sizeof ScummRp::_paramGameId, false },
 	{ 'd', ScummRp::_paramDumpingDir, sizeof ScummRp::_paramDumpingDir, true },
 	{ 'p', ScummRp::_paramGameDir, sizeof ScummRp::_paramGameDir, true },
@@ -126,41 +127,40 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 			{
 			case MKTAG4('L','E','C','F'):
 			case MKTAG2('L','E'):
-				if (processedBlocks.find(filename) == processedBlocks.end())
+				if (processedBlocks.find(filename) != processedBlocks.end())
+					ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was explored.", filename.c_str()));
+
 				{
 					TreeBlockPtr lecf;
 
 					lecf = new LECFPack(*blockPtr);
 					ScummRp::_explore(*lecf, action);
 				}
-				else
-					ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was explored.", filename.c_str()));
 				break;
 			default:
 				if (ScummRp::_filterTag && blockPtr->getTag() != ScummRp::_filterTag)
 					break;
-				if (processedBlocks.find(filename) == processedBlocks.end())
+
+				if (processedBlocks.find(filename) != processedBlocks.end())
+					ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was %s.", filename.c_str(), action == ScummRp::ACT_IMPORT ? "replaced" : "dumped"));
+
+				if (action == ScummRp::ACT_IMPORT)
 				{
-					if (action == ScummRp::ACT_IMPORT)
+					path += filename;
+					if (File::exists(path.c_str()))
 					{
-						path += filename;
-						if (File::exists(path.c_str()))
-						{
-							blockPtr->update(path.c_str());
-							processedBlocks.insert(filename);
-						}
-					}
-					else if (action == ScummRp::ACT_EXPORT)
-					{
-						if (path.size() > 0)
-							xmkdir(path.c_str());
-						path += filename;
-						blockPtr->dump(path.c_str());
+						blockPtr->update(path.c_str());
 						processedBlocks.insert(filename);
 					}
 				}
-				else
-					ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was %s.", filename.c_str(), action == ScummRp::ACT_IMPORT ? "replaced" : "dumped"));
+				else if (action == ScummRp::ACT_EXPORT)
+				{
+					if (path.size() > 0)
+						xmkdir(path.c_str());
+					path += filename;
+					blockPtr->dump(path.c_str());
+					processedBlocks.insert(filename);
+				}
 			}
 	}
 }
@@ -508,7 +508,7 @@ void ScummRp::_getOptions(int argc, const char **argv, const ScummRp::Parameter 
 						if (params[k].isPath)
 							for (char *p = strchr(params[k].value, '\\'); p != 0; p = strchr(params[k].value, '\\'))
 								*p++ = '/';
-#endif // _WIN32
+#endif
 					}
 					break;
 				}
@@ -558,7 +558,8 @@ void ScummRp::_listGames()
  * Game definitions
  */
 
-const GameDefinition ScummRp::_gameDef[] = {
+const GameDefinition ScummRp::_gameDef[] =
+{
 	// Old LFL format
 	{ "maniacv1", "Maniac Mansion", "00.LFL", "%.2u.LFL", GID_MANIAC,
 	  1, 0xFF, 0xFF, GTCFMT_8SEP16, BFMT_SIZEONLY, 4, GF_OLD_BUNDLE },
@@ -633,19 +634,22 @@ ScummRp::TOCSet ScummRp::_mainTocSet;
 ScummRp::TOCSet ScummRp::_tmpTocSet;
 ScummRp::TOCSet ScummRp::_updTocSet;
 
-TableOfContent *const ScummRp::_mainTocs[] = {
+TableOfContent *const ScummRp::_mainTocs[] =
+{
 	&ScummRp::_mainTocSet.roomToc, &ScummRp::_mainTocSet.scrpToc,
 	&ScummRp::_mainTocSet.sounToc, &ScummRp::_mainTocSet.costToc,
 	&ScummRp::_mainTocSet.charToc,
 	nullptr
 };
-TableOfContent *const ScummRp::_tmpTocs[] = {
+TableOfContent *const ScummRp::_tmpTocs[] =
+{
 	&ScummRp::_tmpTocSet.roomToc, &ScummRp::_tmpTocSet.scrpToc,
 	&ScummRp::_tmpTocSet.sounToc, &ScummRp::_tmpTocSet.costToc,
 	&ScummRp::_tmpTocSet.charToc,
 	nullptr
 };
-TableOfContent *const ScummRp::_updTocs[] = {
+TableOfContent *const ScummRp::_updTocs[] =
+{
 	&ScummRp::_updTocSet.roomToc, &ScummRp::_updTocSet.scrpToc,
 	&ScummRp::_updTocSet.sounToc, &ScummRp::_updTocSet.costToc,
 	&ScummRp::_updTocSet.charToc,

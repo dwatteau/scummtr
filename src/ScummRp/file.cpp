@@ -180,7 +180,9 @@ bool File::exists(const char *path)
 	f.open(path, std::ios::in | std::ios::binary);
 	if (!f.is_open())
 		return false;
+
 	f.close();
+
 	return true;
 }
 
@@ -208,6 +210,7 @@ std::streamsize File::fileSize(const char *path)
 
 	if (!f.is_open())
 		return 0;
+
 	return f.size();
 }
 
@@ -218,7 +221,9 @@ bool File::isReadOnly(const char *path)
 	f.open(path, std::ios::in | std::ios::out | std::ios::binary);
 	if (!f.is_open())
 		return true;
+
 	f.close();
+
 	return false;
 }
 
@@ -228,6 +233,7 @@ void File::copy(const char *src, const char *dest, bool failIfExists)
 
 	if (failIfExists && File::exists(dest))
 		throw File::AlreadyExists(xsprintf("%s already exists", dest));
+
 	fSrc.open(src, std::ios::in | std::ios::binary);
 	fDest.open(dest, std::ios::out | std::ios::binary | std::ios::trunc);
 	fDest.write(fSrc, fSrc.size());
@@ -351,12 +357,15 @@ File &File::getline(std::string &s, char delim)
 		_seekedg = false;
 		_file.seekg(_gpos, std::ios::beg);
 	}
+
 	std::getline(_file, s, delim);
 	if (_file.fail())
 		throw File::IOError(xsprintf("File::getline: %s", _path));
+
 	_gpos += (std::streamoff)s.size();
 	if (_gpos != _size)
 		++_gpos;
+
 	return *this;
 }
 
@@ -364,17 +373,22 @@ File &File::read(char *s, std::streamsize n)
 {
 	if (n == 0)
 		return *this;
+
 	if (_seekedg)
 	{
 		_seekedg = false;
 		_file.seekg(_gpos, std::ios::beg);
 	}
+
 	if (_gpos + n > _size)
 		throw File::UnexpectedEOF(xsprintf("Unexpected EOF in: %s", _path));
+
 	_file.read(s, n);
 	if (_file.fail())
 		throw File::IOError(xsprintf("File::read: %s", _path));
+
 	_gpos += n;
+
 	return *this;
 }
 
@@ -383,17 +397,22 @@ File &File::write(const char *s, std::streamsize n)
 {
 	if (n <= 0)
 		throw File::IOError(xsprintf("File::write: n <= 0 in: %s", _path));
+
 	if (_seekedp)
 	{
 		_seekedp = false;
 		_file.seekp(_ppos, std::ios::beg);
 	}
+
 	if (_ppos + n > _size)
 		_setSize(_ppos + n);
+
 	_file.write(s, n);
 	if (_file.fail())
 		throw File::IOError(xsprintf("File::write: %s", _path));
+
 	_ppos += n;
+
 	return *this;
 }
 
@@ -464,6 +483,7 @@ void File::_moveBwd(std::streamoff offset, std::streamsize n)
 	putPos = tellp(std::ios::beg);
 	if (offset > putPos)
 		throw std::out_of_range("File::_moveBwd: Tried moving data past beginning of file");
+
 	chunkSize = File::CHUNK_SIZE;
 	getPos = tellg(std::ios::beg);
 	endPos = putPos + n;
@@ -478,8 +498,10 @@ void File::_moveBwd(std::streamoff offset, std::streamsize n)
 		write(chunk, chunkSize);
 		cpyPos += chunkSize;
 	}
+
 	if (getPos >= putPos && getPos < endPos)
 		getPos -= offset;
+
 	seekp(putPos, std::ios::beg);
 	seekg(getPos, std::ios::beg);
 }
@@ -489,6 +511,7 @@ void File::move(std::streamoff offset, std::streamsize n)
 {
 	if (offset == 0 || n == 0)
 		return;
+
 	if (offset > 0)
 		_moveFwd(offset, n);
 	else
@@ -502,6 +525,7 @@ void File::moveEnd(std::streamoff offset)
 	putPos = tellp(std::ios::beg);
 	if (putPos > _size)
 		throw File::UnexpectedEOF(xsprintf("Unexpected EOF in: %s", _path));
+
 	move(offset, _size - putPos);
 	if (offset < 0)
 		_setSize(_size + offset);
@@ -511,6 +535,7 @@ void File::truncate(std::streamsize newSize)
 {
 	if (newSize > _size || newSize < 0)
 		throw std::out_of_range("File::truncate: New size is larger");
+
 	_setSize(newSize);
 }
 
@@ -537,6 +562,7 @@ FilePart::FilePart(FilePart &parent, std::streamoff o, std::streamsize s) :
 {
 	if (_offset + _size > parent._offset + parent._size)
 		throw FilePart::Error("FilePart::FilePart: Size too big");
+
 	_parent->_children.push_back(this);
 }
 
@@ -556,10 +582,10 @@ FilePart::FilePart(const FilePart &f) :
 	_file(f._file), _offset(f._offset), _size(f._size),
 	_parent(nullptr), _xorKey(f._xorKey), _children()
 {
-	if (f._parent != nullptr)
-		f._parent->_adopt(*this);
-	else
+	if (f._parent == nullptr)
 		throw FilePart::Error("FilePart::FilePart: only 1 root per File is allowed");
+
+	f._parent->_adopt(*this);
 }
 
 FilePart &FilePart::operator=(const FilePart &f)
@@ -568,17 +594,21 @@ FilePart &FilePart::operator=(const FilePart &f)
 	{
 		for (std::list<FilePart *>::iterator i = _children.begin(); i != _children.end(); ++i)
 			(*i)->_parent = nullptr;
+
 		throw FilePart::Error("FilePart destroyed before its children");
 	}
+
 	_file = f._file;
 	_offset = f._offset;
 	_size = f._size;
 	_parent = nullptr;
 	_xorKey = f._xorKey;
-	if (f._parent != nullptr)
-		f._parent->_adopt(*this);
-	else
+
+	if (f._parent == nullptr)
 		throw FilePart::Error("FilePart::FilePart: only 1 root per File is allowed");
+
+	f._parent->_adopt(*this);
+
 	return *this;
 }
 
@@ -604,12 +634,15 @@ void FilePart::_zap()
 	{
 		for (std::list<FilePart *>::iterator i = _children.begin(); i != _children.end(); ++i)
 			(*i)->_parent = nullptr;
+
 		throw FilePart::Error("FilePart destroyed before its children");
 	}
+
 	if (_parent != nullptr)
 		_leaveParent();
 	else
 		_file = nullptr;
+
 	_offset = 0;
 	_size = 0;
 	_xorKey = 0;
@@ -703,6 +736,7 @@ FilePart &FilePart::read(std::string &s, std::streamsize n)
 	buffer = nullptr;
 	if (n < 0)
 		throw std::logic_error(xsprintf("FilePart::read: %s", _file->_path));
+
 	try
 	{
 		buffer = new char[n];
@@ -719,6 +753,7 @@ FilePart &FilePart::write(const std::string &s)
 {
 	if (s.size() > 0)
 		write(s.data(), (std::streamsize)s.size());
+
 	return *this;
 }
 
@@ -730,11 +765,14 @@ FilePart &FilePart::read(char *s, std::streamsize n)
 	pos = tellg(std::ios::beg);
 	if (pos < 0 || n < 0)
 		throw std::logic_error(xsprintf("FilePart::read: %s", _file->_path));
+
 	if (pos + n > _size)
 		throw File::UnexpectedEOF(xsprintf("Unexpected EOF in: %s <0x%X, 0x%X>", _file->_path, _offset, _size));
+
 	_file->read(s, n);
 	if (_xorKey != 0)
 		FilePart::_xorBuffer(s, _xorKey, n);
+
 	return *this;
 }
 
@@ -746,11 +784,13 @@ FilePart &FilePart::write(const char *s, std::streamsize n)
 	pos = tellp(std::ios::beg);
 	if (pos < 0 || n < 0)
 		throw std::logic_error(xsprintf("FilePart::write: %s", _file->_path));
+
 	if (pos + n > _size)
 	{
 		resize(pos + n);
 		seekp(pos, std::ios::beg);
 	}
+
 	if (_xorKey == 0)
 		_file->write(s, n);
 	else
@@ -793,6 +833,7 @@ std::string FilePart::name() const
 
 	for (i = (int)strlen(_file->_path) - 1; i >= 0 && _file->_path[i] != '/'; --i)
 		;
+
 	return std::string(_file->_path + ++i);
 }
 
@@ -805,6 +846,7 @@ std::streamoff FilePart::offset() const
 {
 	if (_parent != nullptr)
 		return _offset - _parent->_offset;
+
 	return _offset;
 }
 
@@ -827,6 +869,7 @@ void FilePart::resize(std::streamsize newSize)
 
 	if (newSize == oldSize)
 		return;
+
 	_file->_part._move(_offset + _size, newSize - _size);
 	if (oldSize == 0)
 	{

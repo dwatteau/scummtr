@@ -151,11 +151,13 @@ void Script::exportText(Text &output, bool pad)
 void Script::getRscNameLimits()
 {
 	_gettingRscNameLimits = true;
+
 	try
 	{
 		parse();
 	}
 	catch (...) { _gettingRscNameLimits = false; throw; }
+
 	_gettingRscNameLimits = false;
 }
 
@@ -181,6 +183,7 @@ void Script::_checkJumps()
 	_file->seekg(0, std::ios::beg);
 	count = 0;
 	n = (int)_jump.size();
+
 	_log = false;
 	try
 	{
@@ -223,6 +226,7 @@ void Script::_checkJumps()
 	}
 	catch (Script::ParseError &) { _log = true; throw; }
 	_log = true;
+
 	if (count < n)
 		throw Script::ParseError("Bad jump(s)");
 }
@@ -233,6 +237,7 @@ void Script::parse()
 	_text.resize(0);
 	_jump.resize(0);
 	_file->seekg(0, std::ios::beg);
+
 	try
 	{
 		if (ScummRp::game.version <= 2)
@@ -276,6 +281,7 @@ byte Script::_getByte()
 	byte b;
 
 	_file->getByte(b);
+
 	return b;
 }
 
@@ -285,6 +291,7 @@ byte Script::_peekByte()
 
 	_file->getByte(b);
 	_file->seekg(-1, std::ios::cur);
+
 	return b;
 }
 
@@ -293,6 +300,7 @@ uint16 Script::_getWord()
 	uint16 w;
 
 	_file->getLE16(w);
+
 	return w;
 }
 
@@ -300,7 +308,9 @@ int32 Script::_eatByteOrVar(byte flag)
 {
 	if (flag == 0)
 		return _getByte();
+
 	_eatVar();
+
 	return -1;
 }
 
@@ -308,7 +318,9 @@ int32 Script::_eatWordOrVar(byte flag)
 {
 	if (flag == 0)
 		return _getWord();
+
 	_eatVar();
+
 	return -1;
 }
 
@@ -333,6 +345,7 @@ void Script::_eatArgList()
 	{
 		if (i++ >= 16)
 			throw Script::ParseError(xsprintf("Arg list too long at 0x%X in %s", _file->fullOffset(), _file->name().c_str()));
+
 		_eatWordOrVar(b & 0x80);
 	}
 }
@@ -356,6 +369,7 @@ int32 Script::_eatString(Text::LineType stringType, byte opcode)
 	length = Text::getLineLength(_file, stringType);
 	if (length > 0 && _log) // Skip empty lines
 		_text.push_back(StringRef(start, length + 1, stringType, opcode));
+
 	return _log ? length : 0;
 }
 
@@ -1940,7 +1954,8 @@ void Script::_opv345(int r)
 	case 0x93: // actorSet
 	case 0xD3: // actorSet
 		{
-			static const byte convertTable[0x20] = {
+			static const byte convertTable[0x20] =
+			{
 				0x1E, 0x01, 0x00, 0x00,
 				0x02, 0x03, 0x04, 0x05,
 				0x06, 0x07, 0x08, 0x09,

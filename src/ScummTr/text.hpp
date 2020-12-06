@@ -37,7 +37,8 @@
 class Text
 {
 public:
-	enum Charset {
+	enum Charset
+	{
 		CHS_NULL   = 0,
 		CHS_V3ANSI = 1,
 		CHS_V1EN   = 2,
@@ -45,7 +46,8 @@ public:
 		CHS_V1IT   = 4,
 		CHS_V1FR   = 5
 	};
-	enum {
+	enum
+	{
 		TXT_NULL       = 0,
 		TXT_BINARY     = 1 << 0,
 		TXT_HEXA       = 1 << 1,
@@ -55,7 +57,13 @@ public:
 		TXT_OPCODE     = 1 << 5,
 		TXT_USECHARSET = 1 << 6
 	};
-	enum LineType { LT_PLAIN, LT_RSC, LT_MSG, LT_OLDMSG };
+	enum LineType
+	{
+		LT_PLAIN,
+		LT_RSC,
+		LT_MSG,
+		LT_OLDMSG
+	};
 	class Error : public std::runtime_error
 	{
 	public:

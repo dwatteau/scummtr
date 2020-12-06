@@ -34,16 +34,25 @@
 class ScummRp
 {
 protected:
-	struct Parameter { char c; char *value; int maxSize; int isPath; };
-	enum { OPT_NULL        = 0,
-		   OPT_EXPORT      = 1 << 0,
-		   OPT_IMPORT      = 1 << 1,
-		   OPT_LIST        = 1 << 2,
-		   OPT_SINGLE_FILE = 1 << 3,
-		   OPT_GAME_FILES  = 1 << 4,
-		   OPT_RAMFILES    = 1 << 5,
-		   OPT_TAG         = 1 << 6,
-		   OPT_INVALID     = 1 << 7 };
+	struct Parameter
+	{
+		char c;
+		char *value;
+		int maxSize;
+		int isPath;
+	};
+	enum
+	{
+		OPT_NULL        = 0,
+		OPT_EXPORT      = 1 << 0,
+		OPT_IMPORT      = 1 << 1,
+		OPT_LIST        = 1 << 2,
+		OPT_SINGLE_FILE = 1 << 3,
+		OPT_GAME_FILES  = 1 << 4,
+		OPT_RAMFILES    = 1 << 5,
+		OPT_TAG         = 1 << 6,
+		OPT_INVALID     = 1 << 7
+	};
 	struct TOCSet
 	{
 	public:
@@ -61,7 +70,14 @@ protected:
 		{
 		}
 	};
-	enum { ACT_NULL = 0, ACT_IMPORT, ACT_EXPORT, ACT_SAVE, ACT_LOAD };
+	enum
+	{
+		ACT_NULL = 0,
+		ACT_IMPORT,
+		ACT_EXPORT,
+		ACT_SAVE,
+		ACT_LOAD
+	};
 protected:
 	static const GameDefinition _gameDef[];
 public:

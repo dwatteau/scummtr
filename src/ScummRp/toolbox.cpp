@@ -70,6 +70,7 @@ char *xstrdup(const char *src)
 	size = strlen(src) + 1;
 	dest = new char[size];
 	memcpy(dest, src, size);
+
 	return dest;
 }
 
@@ -77,7 +78,8 @@ void xremove(const char *path)
 {
 	if (remove(path))
 	{
-		std::string what("Cannot remove "); what += path;
+		std::string what("Cannot remove ");
+		what += path;
 		throw std::runtime_error(what);
 	}
 }
@@ -86,7 +88,10 @@ void xrename(const char *oldname, const char *newname)
 {
 	if (rename(oldname, newname))
 	{
-		std::string what("Cannot rename "); what += oldname; what += " to "; what += newname;
+		std::string what("Cannot rename ");
+		what += oldname;
+		what += " to ";
+		what += newname;
 		throw std::runtime_error(what);
 	}
 }
@@ -114,6 +119,8 @@ int xmkdir(const char *path)
 	{
 		ret = mkdir(tmpPath, 0755);
 	}
+
 	delete []tmpPath;
+
 	return ret;
 }

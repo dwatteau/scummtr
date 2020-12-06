@@ -56,6 +56,7 @@ Block &Block::operator=(const Block &block)
 	_tag = block._tag;
 	_id = block._id;
 	_file = block._file;
+
 	return *this;
 }
 
@@ -72,6 +73,7 @@ int32 Block::getSize() const
 {
 	if (_file == nullptr)
 		return 0;
+
 	return _file->size();
 }
 
@@ -121,6 +123,7 @@ const char *Block::_fileName() const
 		sprintf(fileName, "%s_%.4i", Block::tagToStr(_tag), _id);
 	else
 		strcpy(fileName, Block::tagToStr(_tag));
+
 	return fileName;
 }
 
@@ -220,6 +223,7 @@ TreeBlock &TreeBlock::operator=(const TreeBlock &block)
 	_childrenCount = 0;
 	if (_parent)
 		++_parent->_childrenCount;
+
 	return *this;
 }
 
@@ -288,6 +292,7 @@ void TreeBlock::_leaveParent()
 {
 	if (_childrenCount > 0)
 		throw std::logic_error("TreeBlock::_leaveParent: Block has children");
+
 	if (_parent)
 	{
 		--_parent->_childrenCount;
@@ -311,23 +316,28 @@ void TreeBlock::_makeSubblock(TreeBlock &subblock, BlockFormat blockFormat, int3
 	subblock._headerSize = headerSize;
 	_file->seekg(_nextSubblockOffset, std::ios::beg);
 	Block::_readHeader(subblock._blockFormat, *_file, size, subblock._tag);
+
 	if (size < 0 || size + _nextSubblockOffset > _file->size())
 		throw Block::InvalidDataFromGame(xsprintf("Block too big: 0x%X", size), _file->name(), _nextSubblockOffset + _file->fullOffset());
 	if (size < (int32)headerSize)
 		throw Block::InvalidDataFromGame(xsprintf("Block too short: 0x%X", size), _file->name(), _nextSubblockOffset + _file->fullOffset());
+
 	subblock._file = new FilePart(*_file, _nextSubblockOffset, size);
 }
 
 bool TreeBlock::_readNextSubblock(TreeBlock &subblock)
 {
 	subblock._leaveParent();
+
 	if (_nextSubblockOffset == _file->size())
 		return false;
 	if (_nextSubblockOffset > _file->size())
 		throw Block::InvalidBlock("TreeBlock::_readNextSubblock: Out of bounds");
+
 	_makeSubblock(subblock, ScummRp::game.blockFormat, ScummRp::game.blockHeaderSize);
 	subblock._id = _findSubblockId(subblock);
 	_nextSubblockOffset += subblock._file->size();
+
 	return true;
 }
 
@@ -344,10 +354,13 @@ bool TreeBlock::nextBlock(TreeBlock &subblock)
 		ScummRpIO::warning(xsprintf("Bad data was found and ignored at 0x%X in %s", e.offset(), e.file().c_str()));
 		return false;
 	}
+
 	if (!r)
 		return false;
+
 	_adopt(subblock);
 	subblock._init();
+
 	return true;
 }
 
@@ -361,6 +374,7 @@ template <class T> T *TreeBlock::_nextBlock()
 		subblock = new T();
 		if (nextBlock(*subblock))
 			return subblock;
+
 		delete subblock;
 		return nullptr;
 	}
@@ -381,8 +395,10 @@ void TreeBlock::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 {
 	if (_parent != nullptr)
 		_parent->_subblockUpdated(*this, sizeDiff);
+
 	if (sizeDiff == 0)
 		return;
+
 	_file->seekp(0, std::ios::beg);
 	Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag);
 	if (_nextSubblockOffset > subblock._file->offset())
@@ -412,6 +428,7 @@ void TreeBlock::dump(const char *path)
 		ScummRpIO::warning(xsprintf("Cannot open %s", path));
 		return;
 	}
+
 	ScummRpIO::info(INF_LISTING, xsprintf("Exporting %s", path));
 	_file->seekg(0, std::ios::beg);
 	output.write(*_file, _file->size());
@@ -430,6 +447,7 @@ void TreeBlock::update(const char *path)
 	input.open(path, std::ios::binary | std::ios::in);
 	if (!input.is_open())
 		return;
+
 	newSize = input.size();
 	sizeDiff = newSize - _file->size();
 	if (newSize < _headerSize)
@@ -695,7 +713,8 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 	for (int i = 0; ScummRp::tocs[i] != nullptr; ++i)
 	{
 		int j = ScummRp::tocs[i]->count(roomId, offset);
-		if (j == 2 && ScummRp::tocs[i]->getType() == TableOfContent::TOCT_SCRP) {
+		if (j == 2 && ScummRp::tocs[i]->getType() == TableOfContent::TOCT_SCRP)
+		{
 			// Hack for Sam & Max CD English
 			if (roomId == 1 && ScummRp::tocs[i]->getSize() == 122
 				&& (*ScummRp::tocs[i])[8].offset == (*ScummRp::tocs[i])[9].offset
@@ -936,6 +955,7 @@ void LFLFPack::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 	TreeBlock::_subblockUpdated(subblock, sizeDiff);
 	if (sizeDiff == 0)
 		return;
+
 	minOffset = (int32)(subblock._file->offset() + subblock._file->size() - sizeDiff - _headerSize);
 	RoomPack::_eraseOffsetsInRange((byte)_id, subblock._file->offset() + 1 - _headerSize, minOffset);
 	_moveLFLFRootBlockInToc((byte)_id, minOffset, sizeDiff);
@@ -965,6 +985,7 @@ LECFPack &LECFPack::operator=(const TreeBlock &block)
 	TreeBlock::operator=(block);
 	_firstBlockOffset = 0;
 	_init();
+
 	return *this;
 }
 
@@ -981,19 +1002,23 @@ bool LECFPack::nextBlock(TreeBlock &subblock)
 
 	if (_nextSubblockOffset == 0)
 		throw TreeBlock::InvalidBlock("LECFPack::nextBlock: Index not loaded yet");
+
 	nextOffset = _file->size();
 	if (_tag == MKTAG4('L','E','C','F'))
 	{
 		nextOffset += ScummRp::game.blockHeaderSize;
 		_nextSubblockOffset += ScummRp::game.blockHeaderSize;
 	}
+
 	_loff.firstId();
 	while (_loff.nextId(roomId))
 		if ((int32)_loff[roomId] >= _nextSubblockOffset && (int32)_loff[roomId] < nextOffset)
 			nextOffset = _loff[roomId];
+
 	if (_tag == MKTAG4('L','E','C','F'))
 		nextOffset -= ScummRp::game.blockHeaderSize;
 	_nextSubblockOffset = nextOffset;
+
 	return TreeBlock::nextBlock(subblock);
 }
 
@@ -1007,15 +1032,15 @@ void LECFPack::_init()
 	TreeBlock block;
 
 	TreeBlock::firstBlock();
-	if (TreeBlock::nextBlock(block))
-		if (block._tag == MKTAG4('L','O','F','F') || block._tag == MKTAG2('F','O'))
-		{
-			_LOFFOffset = _headerSize + block._headerSize;
-			_firstBlockOffset = block._file->size();
-			block._file->seekg(block._headerSize, std::ios::beg);
-			_loff.load(*block._file);
-			return;
-		}
+	if (TreeBlock::nextBlock(block) && (block._tag == MKTAG4('L','O','F','F') || block._tag == MKTAG2('F','O')))
+	{
+		_LOFFOffset = _headerSize + block._headerSize;
+		_firstBlockOffset = block._file->size();
+		block._file->seekg(block._headerSize, std::ios::beg);
+		_loff.load(*block._file);
+		return;
+	}
+
 	throw TreeBlock::InvalidDataFromGame("Cannot find LOFF or FO block in LECF pack", _file->name(), _file->fullOffset());
 }
 
@@ -1040,6 +1065,7 @@ void LECFPack::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 	TreeBlock::_subblockUpdated(subblock, sizeDiff);
 	if (sizeDiff == 0)
 		return;
+
 	minOffset = (int32)(subblock._file->offset() + subblock._file->size() - sizeDiff);
 	_loff.firstId();
 	while (_loff.nextId(roomId))
@@ -1094,6 +1120,7 @@ bool RoomBlock::nextBlock(TreeBlock &subblock)
 			}
 		return true;
 	}
+
 	return false;
 }
 
@@ -1142,8 +1169,10 @@ bool OldIndexFile::nextBlock(TreeBlock &subblock)
 	subblock._leaveParent();
 	if (_tags(_pos) == 0)
 		return false;
+
 	if (_nextSubblockOffset >= _file->size())
 		throw Block::InvalidDataFromGame("Incomplete index file", _file->name(), _file->fullOffset());
+
 	subblock._blockFormat = BFMT_NOHEADER;
 	subblock._headerSize = 0;
 	subblock._tag = _tags(_pos);
@@ -1163,11 +1192,13 @@ bool OldIndexFile::nextBlock(TreeBlock &subblock)
 	}
 	if (size + _nextSubblockOffset > _file->size())
 		throw Block::InvalidDataFromGame(xsprintf("Block too big: 0x%X", size), _file->name(), _nextSubblockOffset + _file->fullOffset());
+
 	subblock._file = new FilePart(*_file, _nextSubblockOffset, size);
 	_nextSubblockOffset += subblock._file->size();
 	_adopt(subblock);
 	subblock._init();
 	++_pos;
+
 	return true;
 }
 
@@ -1205,13 +1236,16 @@ bool OldIndexFileV1::nextBlock(TreeBlock &subblock)
 	subblock._leaveParent();
 	if (_tags(_pos) == 0)
 		return false;
+
 	if (_nextSubblockOffset >= _file->size())
 		throw Block::InvalidDataFromGame("Incomplete index file", _file->name(), _file->fullOffset());
+
 	subblock._blockFormat = BFMT_NOHEADER;
 	subblock._headerSize = 0;
 	subblock._tag = _tags(_pos);
 	subblock._id = -1;
 	subblock._nextSubblockOffset = 0;
+
 	switch (ScummRp::game.id)
 	{
 	case GID_MANIAC:
@@ -1223,13 +1257,16 @@ bool OldIndexFileV1::nextBlock(TreeBlock &subblock)
 	default:
 		throw std::logic_error("OldIndexFileV1::nextBlock: V1 game is neither Zak nor MM");
 	}
+
 	if (size + _nextSubblockOffset > _file->size())
 		throw Block::InvalidDataFromGame(xsprintf("Block too big: 0x%X", size), _file->name(), _file->fullOffset() + _nextSubblockOffset);
+
 	subblock._file = new FilePart(*_file, _nextSubblockOffset, size);
 	_nextSubblockOffset += subblock._file->size();
 	_adopt(subblock);
 	subblock._init();
 	++_pos;
+
 	return true;
 }
 
@@ -1330,6 +1367,7 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 	toc = nullptr;
 	gap = false;
 	o = _nextSubblockOffset;
+
 	while (true)
 	{
 		_nextSubblockOffset = RoomPack::_findNextLFLFRootBlock((byte)_id, _nextSubblockOffset, _file->size(), toc, id);
@@ -1351,6 +1389,7 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 	}
 	if (gap)
 		ScummRpIO::warning(xsprintf("Gap at 0x%X in %.2i.LFL", o, _id));
+
 	_checkDupOffset((byte)_id, _nextSubblockOffset);
 	switch (toc->getType())
 	{
@@ -1369,10 +1408,12 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 	default:
 		throw std::logic_error("OldLFLFile::nextBlock: Unknown TOC type");
 	}
+
 	if (!TreeBlock::nextBlock(subblock))
 		return false;
 	if (toc->getType() != TableOfContent::TOCT_ROOM)
 		subblock._id = id;
+
 	return true;
 }
 
@@ -1494,6 +1535,7 @@ OldRoom &OldRoom::operator=(const TreeBlock &block)
 	_oLSTOC = 0;
 	_lsSize.resize(0);
 	_updated = false;
+
 	return *this;
 }
 
@@ -1504,6 +1546,7 @@ bool OldRoom::_nextSubblockType()
 		++_type;
 		_pos = 0;
 		_nextSubblockOffset = 0;
+
 		switch (_type)
 		{
 		case BT_HD:
@@ -1533,6 +1576,7 @@ bool OldRoom::_nextSubblockType()
 			return false;
 		}
 	} while (_pos >= _n);
+
 	return true;
 }
 
@@ -1578,6 +1622,7 @@ TreeBlock *OldRoom::nextBlock()
 	while (_pos >= _n)
 		if (!_nextSubblockType())
 			break;
+
 	try
 	{
 		switch (_type)
@@ -1714,11 +1759,13 @@ void OldRoom::_getSizes()
 	_file->getByte(nlSize);
 	_file->seekg(_oSLSize(), std::ios::beg);
 	_file->getByte(slSize);
+
 	// -- LS --
 	_getLSOffsets(lsOffsets, objNbr, nlSize, slSize);
 	if (lsOffsets.size() > 0)
 		enEnd = *min_element(lsOffsets.begin(), lsOffsets.end());
 	_calcSizes(_lsSize, lsOffsets, _file->size());
+
 	// -- EN --
 	_file->seekg(_ooEN(), std::ios::beg);
 	_file->getLE16(w);
@@ -1729,6 +1776,7 @@ void OldRoom::_getSizes()
 	}
 	else
 		_enSize = 0;
+
 	// -- EX --
 	_file->seekg(_ooEX(), std::ios::beg);
 	_file->getLE16(w);
@@ -1739,12 +1787,15 @@ void OldRoom::_getSizes()
 	}
 	else
 		_exSize = 0;
+
 	// -- BM (1) --
 	_getBMOffsets(bmOffsets);
 	if (bmOffsets.size() == 0)
 		throw std::logic_error("OldRoom::_getSizes: no BM offsets");
+
 	bmLastOffset = *max_element(bmOffsets.begin(), bmOffsets.end());
 	bxEnd = *min_element(bmOffsets.begin(), bmOffsets.end());
+
 	// -- OI, OC --
 	if (objNbr > 0)
 	{
@@ -1768,13 +1819,17 @@ void OldRoom::_getSizes()
 			bmEnd = oiOffsets[i];
 		_checkOCSizes(ocOffsets, ocEnd);
 	}
+
 	// -- BM (2) --
 	_calcSizes(_bmSize, bmOffsets, bmEnd);
+
 	// -- BX --
 	_bxSize = bxEnd - _getBXOffset();
+
 	// check sizes
 	if (_bxSize < 0 || _exSize < 0 || _enSize < 0)
 		throw Block::InvalidDataFromGame("Bad offset in room", _file->name(), _file->fullOffset());
+
 	_updated = false;
 }
 
@@ -1787,7 +1842,8 @@ void OldRoom::_findMostLikelyOIId(std::vector<int> &candidates) const
 		int candidates[8];
 		int candidatesIds[8];
 		int best;
-	} static const pref[] = {
+	} static const pref[] =
+	{
 		// Maniac Mansion, PC (enhanced), English
 		{ 15, 2, { 6, 8 }, { 395, 547 }, 0 }, // room 45
 		// Zak McKracken, PC (enhanced), English
@@ -1835,7 +1891,8 @@ void OldRoom::_findMostLikelyOIId(std::vector<int> &candidates) const
 		{ 32, 2, { 4, 11 }, { 171, 178 }, 1 }, // room 04
 		{ 9, 2, { 2, 3 }, { 697, 698 }, 1 },   // room 47
 		//
-		{ 0, 0, { 0 }, { 0 }, 0 } };
+		{ 0, 0, { 0 }, { 0 }, 0 }
+	};
 	std::string msg;
 	int i, j;
 
@@ -1853,11 +1910,8 @@ void OldRoom::_findMostLikelyOIId(std::vector<int> &candidates) const
 				break;
 			}
 		}
-	msg = xsprintf("%s_%.4i might actually be %s_%.4i",
-				   Block::tagToStr(_tags(BT_OI)),
-				   _oiId[candidates[0]],
-				   Block::tagToStr(_tags(BT_OI)),
-				   _oiId[candidates[1]]);
+
+	msg = xsprintf("%s_%.4i might actually be %s_%.4i", Block::tagToStr(_tags(BT_OI)), _oiId[candidates[0]], Block::tagToStr(_tags(BT_OI)), _oiId[candidates[1]]);
 	for (i = 2; i < (int)candidates.size(); ++i)
 		msg += xsprintf(" or %s_%.4i", Block::tagToStr(_tags(BT_OI)), _oiId[candidates[i]]);
 	if (pref[i].oiNbr != 0)
@@ -1884,6 +1938,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 	_oiSize.resize(n);
 	oiInfo.reserve(n);
 	firstOCOffset = *min_element(ocOffset.begin(), ocOffset.end());
+
 	for (i = 0; i < n; ++i)
 	{
 		uint16 width, height;
@@ -1897,6 +1952,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 		_file->seekg(ocOffset[i] + _oOCHeight(), std::ios::beg);
 		_file->getByte(b);
 		height = b & 0xF8;
+
 		if (oiOffset[i] >= firstOCOffset || oiOffset[i] <= bmLastOffset) // (1)
 			oiOffset[i] = 0;
 		else
@@ -1907,12 +1963,15 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 				oiInfo.push_back(OldRoom::OIInfo(i, oiOffset[i], w - 1));
 		}
 	}
+
 	oiInfo.push_back(OldRoom::OIInfo(-1, firstOCOffset, 0)); // (2)
 	sort(oiInfo.begin(), oiInfo.end());
+
 	for (i = j = 0; i < (int)oiInfo.size() - 1; i = j)
 	{
 		for (j = i + 1; oiInfo[j].offset == oiInfo[i].offset; ++j) // always ends thanks to (1) & (2)
 			;
+
 		v.resize(0);
 		v.reserve(j - i);
 		for (k = i; k < j; ++k)
@@ -1939,20 +1998,25 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 					oiInfo[k].size = 0x3C2;
 					v.push_back(oiInfo[k].num);
 				}
+
 		if (v.size() == 0)
 			throw Block::InvalidDataFromGame(xsprintf("Bad %s offset", Block::tagToStr(_tags(BT_OI))), _file->name(), _file->fullOffset());
+
 		if (v.size() > 1)
 			_findMostLikelyOIId(v);
+
 		for (k = i; k < j; ++k)
 			if (oiInfo[k].num != v[0])
 				oiOffset[oiInfo[k].num] = 0;
 	}
+
 	for (i = 0; i < n; ++i)
 		if (oiOffset[i] == 0)
 		{
 			_oiId[i] = -1;
 			_oiSize[i] = 0;
 		}
+
 	for (i = 0; i < (int)oiInfo.size() - 1; ++i)
 		if (oiOffset[oiInfo[i].num] != 0)
 			_oiSize[oiInfo[i].num] = oiInfo[i].size;
@@ -2003,8 +2067,10 @@ void OldRoom::_calcSizes(std::vector<int32> &sizes, const std::vector<uint16> &o
 		orderedOffsets.resize(n);
 		copy(offsets.begin(), offsets.end(), orderedOffsets.begin());
 		sort(orderedOffsets.begin(), orderedOffsets.end());
+
 		if (orderedOffsets.back() > end)
 			throw Block::InvalidDataFromGame(xsprintf("Bad offset in room %i", _parent->_id), _file->name(), _file->fullOffset());
+
 		for (int i = 0; i < (int)n; ++i)
 		{
 			pos = find(orderedOffsets.begin(), orderedOffsets.end(), offsets[i]);
@@ -2058,15 +2124,16 @@ void OldRoom::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 		minOffset = subblock._file->offset() + subblock._file->size() - sizeDiff;
 		if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('H','D','v','#') & 0xFFFFFF00)) // TODO _tagToType(): 'HDv1' -> BT_HD
 			throw InvalidDataFromDump(xsprintf("%s blocks must always be 4 bytes long", tagToStr(subblock._tag)));
-		else if ((oiBlockPtr = dynamic_cast<OldOIBlock *> (&subblock)) != nullptr)
+
+		if ((oiBlockPtr = dynamic_cast<OldOIBlock *> (&subblock)) != nullptr)
 			_oiSize[oiBlockPtr->_num] = subblock._file->size();
 		else if ((lsBlockPtr = dynamic_cast<OldLSBlock *> (&subblock)) != nullptr)
 			_lsSize[lsBlockPtr->_num] = subblock._file->size();
-		else if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('N','L','v','#') & 0xFFFFFF00)
-				 || (subblock._tag & 0xFFFFFF00) == (MKTAG4('S','L','v','#') & 0xFFFFFF00))
+		else if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('N','L','v','#') & 0xFFFFFF00) || (subblock._tag & 0xFFFFFF00) == (MKTAG4('S','L','v','#') & 0xFFFFFF00))
 		{
 			if (subblock._file->size() & 0xFFFFFF00)
 				throw InvalidDataFromDump(xsprintf("%s blocks must be smaller than 256 bytes", tagToStr(subblock._tag)));
+
 			if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('S','L','v','#') & 0xFFFFFF00))
 				_file->seekp(_oSLSize(), std::ios::beg);
 			else // ((subblock._tag & 0xFFFFFF00) == (MKTAG4('N','L','v','#') & 0xFFFFFF00))
@@ -2083,10 +2150,13 @@ void OldRoom::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 		}
 		_updateOffset(_ooEX(), minOffset, sizeDiff, subblock._tag);
 		_updateOffset(_ooEN(), minOffset, sizeDiff, subblock._tag);
+
 		for (int i = 0; i < _bmNbr(); ++i)
 			_updateOffset(_ooBM() + i * 2, minOffset, sizeDiff, subblock._tag);
+
 		for (int i = 0; i < (int)_oiSize.size() * 2; ++i)
 			_updateOffset(_oObjTOC() + 2 * i, minOffset, sizeDiff, subblock._tag);
+
 		for (int i = 0; i < (int)_lsSize.size(); ++i)
 			_updateOffset(_oLSTOC + 3 * i + 1, minOffset, sizeDiff, subblock._tag);
 	}
