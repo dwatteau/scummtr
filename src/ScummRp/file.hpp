@@ -242,20 +242,20 @@ class FilePartHandle : public FileHandle
 private:
 	FilePart *_ptr;
 public:
-	void del() { ::delete _ptr; _ptr = 0; }
+	void del() { ::delete _ptr; _ptr = nullptr; }
 	virtual FilePart *operator->() { return _ptr; }
 	virtual const FilePart *operator->() const { return _ptr; }
 	virtual FilePart &operator*() { return *_ptr; }
 	virtual const FilePart &operator*() const { return *_ptr; }
-	FilePartHandle &operator=(FilePart *p) { if (_ptr != 0) del(); _ptr = p; return *this; }
+	FilePartHandle &operator=(FilePart *p) { if (_ptr != nullptr) del(); _ptr = p; return *this; }
 	bool operator!=(const FilePart *p) const { return _ptr != p; }
 	bool operator==(const FilePart *p) const { return _ptr == p; }
 public:
 	explicit FilePartHandle(FilePart *p) : _ptr(p) { }
-	FilePartHandle() : _ptr(0) { }
-	explicit FilePartHandle(const FilePartHandle &f) : _ptr(f._ptr != 0 ? new FilePart(*f._ptr) : 0) { }
+	FilePartHandle() : _ptr(nullptr) { }
+	explicit FilePartHandle(const FilePartHandle &f) : _ptr(f._ptr != nullptr ? new FilePart(*f._ptr) : nullptr) { }
 	virtual ~FilePartHandle() { ::delete _ptr; }
-	FilePartHandle &operator=(const FilePartHandle &f) { _ptr = f._ptr != 0 ? new FilePart(*f._ptr) : 0; return *this; }
+	FilePartHandle &operator=(const FilePartHandle &f) { _ptr = f._ptr != nullptr ? new FilePart(*f._ptr) : nullptr; return *this; }
 };
 
 /*

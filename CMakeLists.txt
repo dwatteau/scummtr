@@ -37,7 +37,7 @@ else()
     endif()
 
     # Warnings requiring a recent compiler. Do a single test, it's not critical
-    set(SCUMMTR_MODERN_WARNING_FLAGS "-Winit-self;-Wtype-limits;-Wignored-qualifiers")
+    set(SCUMMTR_MODERN_WARNING_FLAGS "-Winit-self;-Wtype-limits;-Wignored-qualifiers") # -Wzero-as-null-pointer-constant for C++11
     CHECK_CXX_COMPILER_FLAG("${SCUMMTR_MODERN_WARNING_FLAGS}" COMPILER_SUPPORTS_MODERN_WARNING_FLAGS)
     if(COMPILER_SUPPORTS_MODERN_WARNING_FLAGS)
         add_compile_options("${SCUMMTR_MODERN_WARNING_FLAGS}")

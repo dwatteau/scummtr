@@ -32,7 +32,7 @@
  */
 
 Script::Script() :
-	_file(0), _text(), _jump(), _spot(),
+	_file(nullptr), _text(), _jump(), _spot(),
 	_log(true), _gettingRscNameLimits(false), _usingRscNameLimits(false)
 
 {

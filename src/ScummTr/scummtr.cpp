@@ -47,7 +47,7 @@ const ScummRp::Parameter ScummTr::_trParameters[] = {
 	{ 'p', ScummRp::_paramGameDir, sizeof ScummRp::_paramGameDir, true },
 	{ 'a', ScummTr::_paramPaddedRsc, sizeof ScummTr::_paramPaddedRsc, false },
 	{ 'A', ScummTr::_paramPaddedRsc, sizeof ScummTr::_paramPaddedRsc, false },
-	{ 0, 0, 0 } };
+	{ 0, nullptr, 0 } };
 
 char ScummTr::_paramTextFile[512] = "./text";
 char ScummTr::_paramLanguage[3] = "en";
@@ -65,7 +65,7 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 	TreeBlockPtr blockPtr;
 
 	tree.firstBlock();
-	while ((blockPtr = tree.nextBlock()) != 0)
+	while ((blockPtr = tree.nextBlock()) != nullptr)
 	{
 		if (blockPtr.is<LFLFPack>() || blockPtr.is<RoomBlock>())
 			ScummTr::_explore(*blockPtr, action, text);

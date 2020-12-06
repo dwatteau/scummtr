@@ -918,27 +918,27 @@ template <class T> class BlockPtr
 private:
 	T *_ptr;
 public:
-	void del() { ::delete _ptr; _ptr = 0; }
+	void del() { ::delete _ptr; _ptr = nullptr; }
 	T *operator->() const { return _ptr; }
 	T &operator*() { return *_ptr; }
 	const T &operator*() const { return *_ptr; }
-	BlockPtr<T> &operator=(T *p) { if (_ptr != 0) del(); _ptr = p; return *this; }
+	BlockPtr<T> &operator=(T *p) { if (_ptr != nullptr) del(); _ptr = p; return *this; }
 	BlockPtr<T> &operator=(Block *p)
 	{
-		if (_ptr != 0)
+		if (_ptr != nullptr)
 			del();
-		if (p == 0)
-			_ptr = 0;
+		if (p == nullptr)
+			_ptr = nullptr;
 		else
-			if ((_ptr = dynamic_cast<T *> (p)) == 0)
+			if ((_ptr = dynamic_cast<T *> (p)) == nullptr)
 				throw std::logic_error("BlockPtr::operator=: Impossible cast");
 		return *this;
 	}
-	template <class T2> bool is() const { return dynamic_cast<T2 *> (_ptr) != 0; }
+	template <class T2> bool is() const { return dynamic_cast<T2 *> (_ptr) != nullptr; }
 	bool operator!=(Block *p) const { return _ptr != p; }
 	bool operator==(Block *p) const { return _ptr == p; }
 public:
-	BlockPtr<T>() : _ptr(0) { }
+	BlockPtr<T>() : _ptr(nullptr) { }
 	~BlockPtr<T>() {
 		::delete _ptr;
 	}

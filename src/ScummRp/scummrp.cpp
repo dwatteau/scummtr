@@ -49,7 +49,8 @@ const ScummRp::Parameter ScummRp::_rpParameters[] = {
 	{ 'd', ScummRp::_paramDumpingDir, sizeof ScummRp::_paramDumpingDir, true },
 	{ 'p', ScummRp::_paramGameDir, sizeof ScummRp::_paramGameDir, true },
 	{ 't', ScummRp::_paramTag, sizeof ScummRp::_paramTag, false },
-	{ 0, 0, 0 } };
+	{ 0, nullptr, 0 }
+};
 
 char ScummRp::_paramGameId[16] = "";
 char ScummRp::_paramGameDir[512] = ".";
@@ -64,7 +65,7 @@ char ScummRp::_paramTag[5] = "";
 // 	std::string path, filename;
 
 // 	tree.firstBlock();
-// 	while ((blockPtr = tree.nextBlock()) != 0)
+// 	while ((blockPtr = tree.nextBlock()) != nullptr)
 // 		if (blockPtr.is<LFLFPack>() || blockPtr.is<RoomBlock>())
 // 			ScummRp::_explore<A>(*blockPtr);
 // 		else
@@ -109,7 +110,7 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 	std::string path, filename;
 
 	tree.firstBlock();
-	while ((blockPtr = tree.nextBlock()) != 0)
+	while ((blockPtr = tree.nextBlock()) != nullptr)
 	{
 		path = ScummRp::_paramDumpingDir;
 		blockPtr->makePath(path, filename);
@@ -169,7 +170,7 @@ template <int A> void ScummRp::_exploreIndex(TreeBlock &index)
 	GlobalTocBlockPtr tocBlockPtr;
 
 	index.firstBlock();
-	while ((tocBlockPtr = index.nextBlock()) != 0)
+	while ((tocBlockPtr = index.nextBlock()) != nullptr)
 		switch (tocBlockPtr->getTag())
 		{
 		case MKTAG4('D','R','O','O'):
@@ -223,7 +224,7 @@ template <int A> void ScummRp::_exploreIndex(TreeBlock &index)
 
 int ScummRp::_findGameDef(const char *shortName)
 {
-	for (int i = 0; ScummRp::_gameDef[i].shortName != 0; ++i)
+	for (int i = 0; ScummRp::_gameDef[i].shortName != nullptr; ++i)
 		if (strcmp(ScummRp::_gameDef[i].shortName, shortName) == 0)
 			return i;
 
@@ -256,7 +257,7 @@ LFLFile *ScummRp::_newLFL(const char *path, int id)
 
 void ScummRp::_prepareTmpIndex()
 {
-	for (int i = 0; ScummRp::_mainTocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::_mainTocs[i] != nullptr; ++i)
 	{
 		*ScummRp::_updTocs[i] = *ScummRp::_mainTocs[i];
 		*ScummRp::_tmpTocs[i] = *ScummRp::_mainTocs[i];
@@ -266,7 +267,7 @@ void ScummRp::_prepareTmpIndex()
 
 void ScummRp::_mergeTmpIndex()
 {
-	for (int i = 0; ScummRp::_mainTocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::_mainTocs[i] != nullptr; ++i)
 	{
 		ScummRp::_updTocs[i]->merge(*ScummRp::_tmpTocs[i]);
 		*ScummRp::_tmpTocs[i] = *ScummRp::_mainTocs[i];
@@ -275,7 +276,7 @@ void ScummRp::_mergeTmpIndex()
 
 void ScummRp::_updateMainIndex()
 {
-	for (int i = 0; ScummRp::_mainTocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::_mainTocs[i] != nullptr; ++i)
 		ScummRp::_mainTocs[i]->merge(*ScummRp::_updTocs[i]);
 
 	ScummRp::_tocs = ScummRp::_mainTocs;
@@ -540,7 +541,7 @@ void ScummRp::_listGames()
 	std::cout << "------------|-------------------------------------"
 		"---------------|-------------" << std::endl;
 
-	for (int i = 0; ScummRp::_gameDef[i].shortName != 0; ++i)
+	for (int i = 0; ScummRp::_gameDef[i].shortName != nullptr; ++i)
 	{
 		l1 = strlen(ScummRp::_gameDef[i].shortName);
 		l2 = strlen(ScummRp::_gameDef[i].name);
@@ -613,13 +614,13 @@ const GameDefinition ScummRp::_gameDef[] = {
 // 	{ "comi", "The Curse of Monkey Island", "COMI.LA0", "COMI.LA%u", GID_CMI,
 // 	  8, 0x00, 0x00, FNFMT_GAME_LA0, GTCFMT_16SEP32, BFMT_LONGTAG, 8, GF_NULL },
 	//
-	{ 0, 0, 0, 0, GID_NULL, 0, 0, 0, GTCFMT_NULL, BFMT_NULL, 0, GF_NULL } };
+	{ nullptr, nullptr, nullptr, nullptr, GID_NULL, 0, 0, 0, GTCFMT_NULL, BFMT_NULL, 0, GF_NULL } };
 
 /*
  *
  */
 
-GameDefinition ScummRp::_game = { 0, 0, 0, 0, GID_NULL, 0, 0, 0, GTCFMT_NULL, BFMT_NULL, 0, GF_NULL };
+GameDefinition ScummRp::_game = { nullptr, nullptr, nullptr, nullptr, GID_NULL, 0, 0, 0, GTCFMT_NULL, BFMT_NULL, 0, GF_NULL };
 
 int ScummRp::_fileOptions = BlocksFile::BFOPT_AUTO;
 int ScummRp::_options = ScummRp::OPT_NULL;
@@ -636,14 +637,17 @@ TableOfContent *const ScummRp::_mainTocs[] = {
 	&ScummRp::_mainTocSet.roomToc, &ScummRp::_mainTocSet.scrpToc,
 	&ScummRp::_mainTocSet.sounToc, &ScummRp::_mainTocSet.costToc,
 	&ScummRp::_mainTocSet.charToc,
-	0 };
+	nullptr
+};
 TableOfContent *const ScummRp::_tmpTocs[] = {
 	&ScummRp::_tmpTocSet.roomToc, &ScummRp::_tmpTocSet.scrpToc,
 	&ScummRp::_tmpTocSet.sounToc, &ScummRp::_tmpTocSet.costToc,
 	&ScummRp::_tmpTocSet.charToc,
-	0 };
+	nullptr
+};
 TableOfContent *const ScummRp::_updTocs[] = {
 	&ScummRp::_updTocSet.roomToc, &ScummRp::_updTocSet.scrpToc,
 	&ScummRp::_updTocSet.sounToc, &ScummRp::_updTocSet.costToc,
 	&ScummRp::_updTocSet.charToc,
-	0 };
+	nullptr
+};

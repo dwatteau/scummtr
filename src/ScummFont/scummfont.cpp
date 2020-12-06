@@ -100,7 +100,7 @@ static byte glPalette[0x400] = {
 	0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0,
 	0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x10, 0x00, 0,
 	0xFF, 0xBF, 0xFF, 0, 0xFF, 0xDF, 0xFF, 0, 0x00, 0x00, 0x00, 0, 0xDF, 0x00, 0xDF, 0 };
-static byte *glFontBitmap = 0;
+static byte *glFontBitmap = nullptr;
 static int32 glWidth = 0;
 static int32 glHeight = 0;
 
@@ -508,7 +508,7 @@ static void loadFont(const char *path)
 		throw std::runtime_error("Cannot open font file");
 	getFontInfo(baseOffset, file, version, bpp, maxHeight, maxWidth, bytesPerChar, numChars);
 	delete[] glFontBitmap;
-	glFontBitmap = 0;
+	glFontBitmap = nullptr;
 #ifdef SCUMMFONT_256
 	glFontBitmap = new byte[128 * 128];
 	memset(glFontBitmap, 0, 128 * 128);

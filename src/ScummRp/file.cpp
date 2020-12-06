@@ -37,13 +37,13 @@
 const char *const File::TMP_SUFFIX = "~~tmp%.2X";
 
 File::File() :
-	_file(), _gpos(0), _ppos(0), _path(0), _size(0),
+	_file(), _gpos(0), _ppos(0), _path(nullptr), _size(0),
 	_part(), _mode((std::ios::openmode)0), _seekedg(false), _seekedp(false)
 {
 }
 
 File::File(const char *filename, std::ios::openmode mode) :
-	_file(filename, mode), _gpos(0), _ppos(0), _path(0), _size(0),
+	_file(filename, mode), _gpos(0), _ppos(0), _path(nullptr), _size(0),
 	_part(), _mode((std::ios::openmode)0), _seekedg(false), _seekedp(false)
 {
 	// The destructor won't be called if the constructor has failed.
@@ -71,7 +71,7 @@ void File::_zap()
 {
 	_size = 0;
 	delete []_path;
-	_path = 0;
+	_path = nullptr;
 	_mode = (std::ios::openmode)0;
 	_seekedg = false;
 	_seekedp = false;
@@ -519,8 +519,8 @@ void File::truncate(std::streamsize newSize)
  */
 
 FilePart::FilePart() :
-	_file(0), _offset(0), _size(0),
-	_parent(0), _xorKey(0), _children()
+	_file(nullptr), _offset(0), _size(0),
+	_parent(nullptr), _xorKey(0), _children()
 {
 }
 
@@ -554,9 +554,9 @@ FilePart::~FilePart()
 
 FilePart::FilePart(const FilePart &f) :
 	_file(f._file), _offset(f._offset), _size(f._size),
-	_parent(0), _xorKey(f._xorKey), _children()
+	_parent(nullptr), _xorKey(f._xorKey), _children()
 {
-	if (f._parent != 0)
+	if (f._parent != nullptr)
 		f._parent->_adopt(*this);
 	else
 		throw FilePart::Error("FilePart::FilePart: only 1 root per File is allowed");
@@ -567,15 +567,15 @@ FilePart &FilePart::operator=(const FilePart &f)
 	if (_children.size() > 0)
 	{
 		for (std::list<FilePart *>::iterator i = _children.begin(); i != _children.end(); ++i)
-			(*i)->_parent = 0;
+			(*i)->_parent = nullptr;
 		throw FilePart::Error("FilePart destroyed before its children");
 	}
 	_file = f._file;
 	_offset = f._offset;
 	_size = f._size;
-	_parent = 0;
+	_parent = nullptr;
 	_xorKey = f._xorKey;
-	if (f._parent != 0)
+	if (f._parent != nullptr)
 		f._parent->_adopt(*this);
 	else
 		throw FilePart::Error("FilePart::FilePart: only 1 root per File is allowed");
@@ -584,10 +584,10 @@ FilePart &FilePart::operator=(const FilePart &f)
 
 void FilePart::_leaveParent()
 {
-	if (_parent != 0)
+	if (_parent != nullptr)
 	{
 		_parent->_children.remove(this);
-		_parent = 0;
+		_parent = nullptr;
 	}
 }
 
@@ -603,13 +603,13 @@ void FilePart::_zap()
 	if (_children.size() > 0)
 	{
 		for (std::list<FilePart *>::iterator i = _children.begin(); i != _children.end(); ++i)
-			(*i)->_parent = 0;
+			(*i)->_parent = nullptr;
 		throw FilePart::Error("FilePart destroyed before its children");
 	}
-	if (_parent != 0)
+	if (_parent != nullptr)
 		_leaveParent();
 	else
-		_file = 0;
+		_file = nullptr;
 	_offset = 0;
 	_size = 0;
 	_xorKey = 0;
@@ -700,7 +700,7 @@ FilePart &FilePart::read(std::string &s, std::streamsize n)
 {
 	char *buffer;
 
-	buffer = 0;
+	buffer = nullptr;
 	if (n < 0)
 		throw std::logic_error(xsprintf("FilePart::read: %s", _file->_path));
 	try
@@ -755,7 +755,7 @@ FilePart &FilePart::write(const char *s, std::streamsize n)
 		_file->write(s, n);
 	else
 	{
-		char *xored = 0;
+		char *xored = nullptr;
 
 		try
 		{
@@ -803,7 +803,7 @@ std::streamsize FilePart::size() const
 
 std::streamoff FilePart::offset() const
 {
-	if (_parent != 0)
+	if (_parent != nullptr)
 		return _offset - _parent->_offset;
 	return _offset;
 }
@@ -1008,12 +1008,12 @@ void FilePart::putBE32(int32 i)
  */
 
 RAMFile::RAMFile() :
-	File(), _mem(0), _out(false), _capacity(0)
+	File(), _mem(nullptr), _out(false), _capacity(0)
 {
 }
 
 RAMFile::RAMFile(const char *filename, std::ios::openmode mode) :
-	File(filename, mode), _mem(0), _out(false), _capacity(0)
+	File(filename, mode), _mem(nullptr), _out(false), _capacity(0)
 {
 	// The destructor won't be called if the constructor has failed.
 	try { _load(); } catch (...) { _zap(); throw; }
@@ -1038,7 +1038,7 @@ void RAMFile::_load()
 
 void RAMFile::_save()
 {
-	if (_mem != 0 && _out)
+	if (_mem != nullptr && _out)
 	{
 		seekp(0, std::ios::beg);
 		File::seekp(0, std::ios::beg);
@@ -1054,7 +1054,7 @@ void RAMFile::_reallocAtLeast(std::streamsize sz)
 	oldCapacity = _capacity;
 	_capacity = (sz / File::CHUNK_SIZE + 1) * File::CHUNK_SIZE;
 	buffer = new byte[_capacity];
-	if (_mem != 0)
+	if (_mem != nullptr)
 		memcpy(buffer, _mem, oldCapacity);
 	delete []_mem;
 	_mem = buffer;
@@ -1063,7 +1063,7 @@ void RAMFile::_reallocAtLeast(std::streamsize sz)
 void RAMFile::_zapRAM()
 {
 	delete []_mem;
-	_mem = 0;
+	_mem = nullptr;
 	_gpos = 0;
 	_ppos = 0;
 	_out = false;

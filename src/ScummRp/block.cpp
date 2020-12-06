@@ -39,7 +39,7 @@
 
 Block::Block() :
 	_blockFormat(BFMT_NULL), _headerSize(0),
-	_tag(0), _id(-1), _file(0)
+	_tag(0), _id(-1), _file(nullptr)
 {
 }
 
@@ -70,7 +70,7 @@ int32 Block::getHeaderSize() const
 
 int32 Block::getSize() const
 {
-	if (_file == 0)
+	if (_file == nullptr)
 		return 0;
 	return _file->size();
 }
@@ -188,7 +188,7 @@ void Block::_writeHeader(BlockFormat format, FilePart &file, int32 size, uint32 
  */
 
 TreeBlock::TreeBlock() :
-	Block(), _version(0), _parent(0), _parentVersion(0),
+	Block(), _version(0), _parent(nullptr), _parentVersion(0),
 	_nextSubblockOffset(0), _childrenCount(0)
 {
 }
@@ -205,7 +205,7 @@ TreeBlock::TreeBlock(const TreeBlock &block) :
 	Block(block), _version(block._version), _parent(block._parent), _parentVersion(block._parentVersion),
 	_nextSubblockOffset(block._nextSubblockOffset), _childrenCount(0)
 {
-	if (_parent != 0)
+	if (_parent != nullptr)
 		++_parent->_childrenCount;
 }
 
@@ -291,7 +291,7 @@ void TreeBlock::_leaveParent()
 	if (_parent)
 	{
 		--_parent->_childrenCount;
-		_parent = 0;
+		_parent = nullptr;
 	}
 }
 
@@ -355,14 +355,14 @@ template <class T> T *TreeBlock::_nextBlock()
 {
 	T *subblock;
 
-	subblock = 0;
+	subblock = nullptr;
 	try
 	{
 		subblock = new T();
 		if (nextBlock(*subblock))
 			return subblock;
 		delete subblock;
-		return 0;
+		return nullptr;
 	}
 	catch (...) { delete subblock; throw; }
 }
@@ -379,7 +379,7 @@ void TreeBlock::firstBlock()
 
 void TreeBlock::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 {
-	if (_parent != 0)
+	if (_parent != nullptr)
 		_parent->_subblockUpdated(*this, sizeDiff);
 	if (sizeDiff == 0)
 		return;
@@ -392,7 +392,7 @@ void TreeBlock::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 
 void TreeBlock::makePath(std::string &dir, std::string &name) const
 {
-	if (_parent != 0)
+	if (_parent != nullptr)
 	{
 		_parent->makePath(dir, name);
 		dir += name;
@@ -444,7 +444,7 @@ void TreeBlock::update(const char *path)
 		_file->write(input, newSize);
 		_file->seekp(0, std::ios::beg);
 		Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag); // Ignore the imported header
-		if (_parent != 0)
+		if (_parent != nullptr)
 			_parent->_subblockUpdated(*this, sizeDiff);
 		id = TreeBlock::_findIdInBlock(*this);
 		if (id != _id && id != -1)
@@ -547,7 +547,7 @@ BlocksFile::BlocksFile(const char *path, int opts, BackUp &bak, int id, uint32 t
 BlocksFile::BlocksFile(const char *path, int opts, int id, uint32 tag, byte xorKey) :
 	TreeBlock(), _ownFile(), _ownRAMFile(), _ownSeqFile(), _ownSeqRAMFile()
 {
-	_init(path, opts, 0, id, tag, xorKey);
+	_init(path, opts, nullptr, id, tag, xorKey);
 }
 
 void BlocksFile::_init(const char *path, int opts, BackUp *bak, int id, uint32 tag, byte xorKey)
@@ -584,7 +584,7 @@ void BlocksFile::_init(const char *path, int opts, BackUp *bak, int id, uint32 t
 	else
 	{
 		f = (opts & BlocksFile::BFOPT_RAM) ? &_ownRAMFile : &_ownFile;
-		if (bak != 0 && (opts & BlocksFile::BFOPT_BACKUP))
+		if (bak != nullptr && (opts & BlocksFile::BFOPT_BACKUP))
 			if (opts & BlocksFile::BFOPT_SEQFILE)
 				if (opts & BlocksFile::BFOPT_RAM)
 				{
@@ -655,9 +655,9 @@ int RoomPack::_findNextLFLFRootBlock(byte roomId, int32 currentOffset, int32 roo
 	int blockId;
 	int32 nextOffset, offset;
 
-	toc = 0;
+	toc = nullptr;
 	nextOffset = roomSize;
-	for (int i = 0; ScummRp::tocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::tocs[i] != nullptr; ++i)
 	{
 		ScummRp::tocs[i]->firstId(roomId);
 		while (ScummRp::tocs[i]->nextId(blockId, roomId))
@@ -678,7 +678,7 @@ void RoomPack::_moveLFLFRootBlockInToc(byte roomId, int32 minOffset, int32 n) co
 {
 	int blockId;
 
-	for (int i = 0; ScummRp::tocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::tocs[i] != nullptr; ++i)
 	{
 		ScummRp::tocs[i]->firstId(roomId);
 		while (ScummRp::tocs[i]->nextId(blockId, roomId))
@@ -692,7 +692,7 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 	int n;
 
 	n = 0;
-	for (int i = 0; ScummRp::tocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::tocs[i] != nullptr; ++i)
 	{
 		int j = ScummRp::tocs[i]->count(roomId, offset);
 		if (j == 2 && ScummRp::tocs[i]->getType() == TableOfContent::TOCT_SCRP) {
@@ -742,7 +742,7 @@ void RoomPack::_eraseOffsetsInRange(byte roomId, int32 start, int32 end)
 {
 	int blockId;
 
-	for (int i = 0; ScummRp::tocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::tocs[i] != nullptr; ++i)
 	{
 		ScummRp::tocs[i]->firstId(roomId);
 		while (ScummRp::tocs[i]->nextId(blockId, roomId))
@@ -813,23 +813,23 @@ TreeBlock *LFLFile::_nextLFLSubblock()
 	int id;
 	TreeBlock *subblock;
 
-	subblock = 0;
+	subblock = nullptr;
 	_nextSubblockOffset = RoomPack::_findNextLFLFRootBlock((byte)_id, _nextSubblockOffset - _headerSize, _file->size() - _headerSize, toc, id);
 	_checkDupOffset((byte)_id, _nextSubblockOffset);
 	_nextSubblockOffset += _headerSize;
 	try
 	{
-		if (dynamic_cast<const GlobalRoomIndex *> (toc) == 0)
+		if (dynamic_cast<const GlobalRoomIndex *> (toc) == nullptr)
 			subblock = new TreeBlock;
 		else
 			subblock = new T;
 		if (!nextBlock(*subblock))
 		{
 			delete subblock;
-			subblock = 0;
-			return 0;
+			subblock = nullptr;
+			return nullptr;
 		}
-		if (dynamic_cast<const GlobalRoomIndex *> (toc) == 0)
+		if (dynamic_cast<const GlobalRoomIndex *> (toc) == nullptr)
 			subblock->_id = id;
 	}
 	catch (...) { delete subblock; throw; }
@@ -890,7 +890,7 @@ void LFLFPack::_init()
 	// LF blocks have 1 word for the room number (6 + 2 = 8 bytes)
 	// LFLF blocks have a normal 8 bytes header
 	_headerSize = 8;
-	for (int i = 0; ScummRp::tocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::tocs[i] != nullptr; ++i)
 		ScummRp::tocs[i]->accessing((byte)_id);
 	RoomPack::_eraseOffsetsInRange((byte)_id, _file->size(), 0xFFFFFFFF);
 }
@@ -906,23 +906,23 @@ TreeBlock *LFLFPack::nextBlock()
 	int id;
 	TreeBlock *subblock;
 
-	subblock = 0;
+	subblock = nullptr;
 	_nextSubblockOffset = RoomPack::_findNextLFLFRootBlock((byte)_id, _nextSubblockOffset - _headerSize, _file->size() - _headerSize, toc, id);
 	_checkDupOffset((byte)_id, _nextSubblockOffset);
 	_nextSubblockOffset += _headerSize;
 	try
 	{
-		if (dynamic_cast<const GlobalRoomIndex *> (toc) == 0)
+		if (dynamic_cast<const GlobalRoomIndex *> (toc) == nullptr)
 			subblock = new TreeBlock;
 		else
 			subblock = new RoomBlock;
 		if (!TreeBlock::nextBlock(*subblock))
 		{
 			delete subblock;
-			subblock = 0;
-			return 0;
+			subblock = nullptr;
+			return nullptr;
 		}
-		if (dynamic_cast<const GlobalRoomIndex *> (toc) == 0)
+		if (dynamic_cast<const GlobalRoomIndex *> (toc) == nullptr)
 			subblock->_id = id;
 	}
 	catch (...) { delete subblock; throw; }
@@ -1297,7 +1297,7 @@ void OldLFLFile::_moveLFLFRootBlockInToc(byte roomId, int32 minOffset, int32 n) 
 {
 	int blockId;
 
-	for (int i = 0; ScummRp::tocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::tocs[i] != nullptr; ++i)
 	{
 		ScummRp::tocs[i]->firstId(roomId);
 		while (ScummRp::tocs[i]->nextId(blockId, roomId))
@@ -1327,7 +1327,7 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 	int id;
 	bool gap;
 
-	toc = 0;
+	toc = nullptr;
 	gap = false;
 	o = _nextSubblockOffset;
 	while (true)
@@ -1574,7 +1574,7 @@ TreeBlock *OldRoom::nextBlock()
 	uint16 w;
 	byte b;
 
-	subblock = 0;
+	subblock = nullptr;
 	while (_pos >= _n)
 		if (!_nextSubblockType())
 			break;
@@ -1598,7 +1598,7 @@ TreeBlock *OldRoom::nextBlock()
 					ScummRpIO::setQuiet(false);
 				}
 				catch (std::exception &) { ScummRpIO::setQuiet(false); throw; }
-			return 0;
+			return nullptr;
 		case BT_HD:
 			subblock = new LeafBlock();
 			_prepareBlockO(*subblock, _headerSize, 4, _type);
@@ -2058,9 +2058,9 @@ void OldRoom::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 		minOffset = subblock._file->offset() + subblock._file->size() - sizeDiff;
 		if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('H','D','v','#') & 0xFFFFFF00)) // TODO _tagToType(): 'HDv1' -> BT_HD
 			throw InvalidDataFromDump(xsprintf("%s blocks must always be 4 bytes long", tagToStr(subblock._tag)));
-		else if ((oiBlockPtr = dynamic_cast<OldOIBlock *> (&subblock)) != 0)
+		else if ((oiBlockPtr = dynamic_cast<OldOIBlock *> (&subblock)) != nullptr)
 			_oiSize[oiBlockPtr->_num] = subblock._file->size();
-		else if ((lsBlockPtr = dynamic_cast<OldLSBlock *> (&subblock)) != 0)
+		else if ((lsBlockPtr = dynamic_cast<OldLSBlock *> (&subblock)) != nullptr)
 			_lsSize[lsBlockPtr->_num] = subblock._file->size();
 		else if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('N','L','v','#') & 0xFFFFFF00)
 				 || (subblock._tag & 0xFFFFFF00) == (MKTAG4('S','L','v','#') & 0xFFFFFF00))

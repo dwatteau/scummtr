@@ -54,11 +54,13 @@ int TextBlock::_lflfId() const
 {
 	const TreeBlock *block;
 
-	for (block = _parent; block != 0; block = block->_parent)
-		if (dynamic_cast<const RoomPack *> (block) != 0)
+	for (block = _parent; block != nullptr; block = block->_parent)
+		if (dynamic_cast<const RoomPack *> (block) != nullptr)
 			break;
-	if (block != 0)
+
+	if (block != nullptr)
 		return block->_id;
+
 	return -1;
 }
 
@@ -66,9 +68,10 @@ int TextBlock::_ownId() const
 {
 	const TreeBlock *block;
 
-	for (block = this; block != 0; block = block->_parent)
+	for (block = this; block != nullptr; block = block->_parent)
 		if (block->_id != -1)
 			return block->_id;
+
 	return -1;
 }
 
@@ -77,7 +80,7 @@ int TextBlock::_ownId() const
  */
 
 ScriptBlock::ScriptBlock(int32 subHeaderSize) :
-	TextBlock(), _script(0)
+	TextBlock(), _script(nullptr)
 {
 	_headerSize += subHeaderSize;
 }
@@ -88,7 +91,7 @@ ScriptBlock::~ScriptBlock()
 }
 
 ScriptBlock::ScriptBlock(const TreeBlock &block, int32 subHeaderSize) :
-	TextBlock(block), _script(0)
+	TextBlock(block), _script(nullptr)
 {
 	_headerSize += subHeaderSize;
 }
@@ -96,7 +99,7 @@ ScriptBlock::ScriptBlock(const TreeBlock &block, int32 subHeaderSize) :
 ScriptBlock &ScriptBlock::operator=(const TreeBlock &block)
 {
 	delete _script;
-	_script = 0;
+	_script = nullptr;
 	TextBlock::operator=(block);
 	return *this;
 }
@@ -106,7 +109,7 @@ void ScriptBlock::importText(Text &input)
 	int32 oldSize;
 
 	oldSize = _file->size();
-	if (_script == 0)
+	if (_script == nullptr)
 		_script = new Script(*_file, _headerSize, _file->size() - _headerSize);
 	input.setInfo(_lflfId(), _tag, _ownId());
 	try
@@ -114,7 +117,7 @@ void ScriptBlock::importText(Text &input)
 		_script->importText(input);
 		_file->seekp(0, std::ios::beg);
 		Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag);
-		if (_parent != 0)
+		if (_parent != nullptr)
 			_parent->_subblockUpdated(*this, _file->size() - oldSize);
 	}
 	catch (Script::ParseError &e)
@@ -125,7 +128,7 @@ void ScriptBlock::importText(Text &input)
 
 void ScriptBlock::exportText(Text &output, bool pad)
 {
-	if (_script == 0)
+	if (_script == nullptr)
 		_script = new Script(*_file, _headerSize, _file->size() - _headerSize);
 	output.setInfo(_lflfId(), _tag, _ownId());
 	try
@@ -140,7 +143,7 @@ void ScriptBlock::exportText(Text &output, bool pad)
 
 void ScriptBlock::getRscNameLimits()
 {
-	if (_script == 0)
+	if (_script == nullptr)
 		_script = new Script(*_file, _headerSize, _file->size() - _headerSize);
 	try
 	{
@@ -192,7 +195,7 @@ void ObjectNameBlock::importText(Text &input)
 			_file->resize((int32)s.size() + _headerSize);
 		_file->seekp(0, std::ios::beg);
 		Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag);
-		if (_parent != 0)
+		if (_parent != nullptr)
 			_parent->_subblockUpdated(*this, _file->size() - oldSize);
 	}
 }
@@ -229,7 +232,7 @@ void ObjectNameBlock::getRscNameLimits()
  */
 
 ObjectCodeBlock::ObjectCodeBlock() :
-	TextBlock(), _script(0)
+	TextBlock(), _script(nullptr)
 {
 }
 
@@ -239,14 +242,14 @@ ObjectCodeBlock::~ObjectCodeBlock()
 }
 
 ObjectCodeBlock::ObjectCodeBlock(const TreeBlock &block) :
-	TextBlock(block), _script(0)
+	TextBlock(block), _script(nullptr)
 {
 }
 
 ObjectCodeBlock &ObjectCodeBlock::operator=(const TreeBlock &block)
 {
 	delete _script;
-	_script = 0;
+	_script = nullptr;
 	TextBlock::operator=(block);
 	return *this;
 }
@@ -317,7 +320,7 @@ void ObjectCodeBlock::_importText(Text &input, int32 oldSize, int32 scriptOffset
 	std::list<int32> verbs;
 
 	_listVerbs(verbs, scriptOffset);
-	if (_script == 0)
+	if (_script == nullptr)
 		_script = new Script(*_file, scriptOffset, _file->size() - scriptOffset);
 	input.setInfo(_lflfId(), _tag, _ownId());
 	try
@@ -333,7 +336,7 @@ void ObjectCodeBlock::_importText(Text &input, int32 oldSize, int32 scriptOffset
 	_updateVerbs(verbs, scriptOffset, input.lineNumber());
 	_file->seekp(0, std::ios::beg);
 	Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag);
-	if (_parent != 0)
+	if (_parent != nullptr)
 		_parent->_subblockUpdated(*this, _file->size() - oldSize);
 }
 
@@ -347,7 +350,7 @@ void ObjectCodeBlock::exportText(Text &output, bool pad)
 	int32 o;
 
 	o = _findScriptOffset();
-	if (_script == 0)
+	if (_script == nullptr)
 		_script = new Script(*_file, o, _file->size() - o);
 	output.setInfo(_lflfId(), _tag, _ownId());
 	try
@@ -365,7 +368,7 @@ void ObjectCodeBlock::getRscNameLimits()
 	int32 o;
 
 	o = _findScriptOffset();
-	if (_script == 0)
+	if (_script == nullptr)
 		_script = new Script(*_file, o, _file->size() - o);
 	try
 	{

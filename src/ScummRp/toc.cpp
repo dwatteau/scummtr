@@ -31,7 +31,7 @@
  */
 
 TableOfContent::TableOfContent(TableOfContent::Type t) :
-	_toc(0), _size(0), _type(t)
+	_toc(nullptr), _size(0), _type(t)
 {
 	_zap();
 }
@@ -92,7 +92,7 @@ void TableOfContent::_zap()
 	memset(_iterator, 0, sizeof _iterator);
 	memset(_accessed, 0, sizeof _accessed);
 	delete []_toc;
-	_toc = 0;
+	_toc = nullptr;
 	_size = 0;
 }
 
