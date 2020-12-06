@@ -97,14 +97,14 @@ const char *Block::tagToStr(uint32 tag)
 		strTag[currentStr][1] = (char)((tag >> 16) & 0xFF);
 		strTag[currentStr][2] = (char)((tag >> 8) & 0xFF);
 		strTag[currentStr][3] = (char)(tag & 0xFF);
-		strTag[currentStr][4] = 0;
+		strTag[currentStr][4] = '\0';
 	}
 	else
 	{
 		strTag[currentStr][0] = (char)(tag >> 8);
 		strTag[currentStr][1] = (char)(tag & 0xFF);
-		strTag[currentStr][2] = 0;
-		if (strTag[currentStr][0] == 0) // FIXME hack for Loom Talkie
+		strTag[currentStr][2] = '\0';
+		if (strTag[currentStr][0] == '\0') // FIXME hack for Loom Talkie
 		{
 			strTag[currentStr][0] = '_';
 			strTag[currentStr][1] = '_';
@@ -652,13 +652,12 @@ RoomPack::~RoomPack()
 
 int RoomPack::_findNextLFLFRootBlock(byte roomId, int32 currentOffset, int32 roomSize, const TableOfContent *&toc, int &id)
 {
-	int i;
 	int blockId;
 	int32 nextOffset, offset;
 
 	toc = 0;
 	nextOffset = roomSize;
-	for (i = 0; ScummRp::tocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::tocs[i] != 0; ++i)
 	{
 		ScummRp::tocs[i]->firstId(roomId);
 		while (ScummRp::tocs[i]->nextId(blockId, roomId))
@@ -677,10 +676,9 @@ int RoomPack::_findNextLFLFRootBlock(byte roomId, int32 currentOffset, int32 roo
 
 void RoomPack::_moveLFLFRootBlockInToc(byte roomId, int32 minOffset, int32 n) const
 {
-	int i;
 	int blockId;
 
-	for (i = 0; ScummRp::tocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::tocs[i] != 0; ++i)
 	{
 		ScummRp::tocs[i]->firstId(roomId);
 		while (ScummRp::tocs[i]->nextId(blockId, roomId))
@@ -691,12 +689,12 @@ void RoomPack::_moveLFLFRootBlockInToc(byte roomId, int32 minOffset, int32 n) co
 
 void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 {
-	int i, n, j;
+	int n;
 
 	n = 0;
-	for (i = 0; ScummRp::tocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::tocs[i] != 0; ++i)
 	{
-		j = ScummRp::tocs[i]->count(roomId, offset);
+		int j = ScummRp::tocs[i]->count(roomId, offset);
 		if (j == 2 && ScummRp::tocs[i]->getType() == TableOfContent::TOCT_SCRP) {
 			// Hack for Sam & Max CD English
 			if (roomId == 1 && ScummRp::tocs[i]->getSize() == 122
@@ -742,10 +740,9 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 
 void RoomPack::_eraseOffsetsInRange(byte roomId, int32 start, int32 end)
 {
-	int i;
 	int blockId;
 
-	for (i = 0; ScummRp::tocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::tocs[i] != 0; ++i)
 	{
 		ScummRp::tocs[i]->firstId(roomId);
 		while (ScummRp::tocs[i]->nextId(blockId, roomId))
@@ -890,12 +887,10 @@ LFLFPack &LFLFPack::operator=(const TreeBlock &block)
 
 void LFLFPack::_init()
 {
-	int i;
-
 	// LF blocks have 1 word for the room number (6 + 2 = 8 bytes)
 	// LFLF blocks have a normal 8 bytes header
 	_headerSize = 8;
-	for (i = 0; ScummRp::tocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::tocs[i] != 0; ++i)
 		ScummRp::tocs[i]->accessing((byte)_id);
 	RoomPack::_eraseOffsetsInRange((byte)_id, _file->size(), 0xFFFFFFFF);
 }
@@ -1300,10 +1295,9 @@ OldLFLFile::~OldLFLFile()
 
 void OldLFLFile::_moveLFLFRootBlockInToc(byte roomId, int32 minOffset, int32 n) const
 {
-	int i;
 	int blockId;
 
-	for (i = 0; ScummRp::tocs[i] != 0; ++i)
+	for (int i = 0; ScummRp::tocs[i] != 0; ++i)
 	{
 		ScummRp::tocs[i]->firstId(roomId);
 		while (ScummRp::tocs[i]->nextId(blockId, roomId))
@@ -1318,11 +1312,9 @@ void OldLFLFile::_moveLFLFRootBlockInToc(byte roomId, int32 minOffset, int32 n) 
 
 void OldLFLFile::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 {
-	int i;
-
 	LFLFile::_subblockUpdated(subblock, sizeDiff);
 	if (sizeDiff != 0)
-		for (i = 0; i < (int)_blocks.size(); ++i)
+		for (int i = 0; i < (int)_blocks.size(); ++i)
 			_blocks[i] += sizeDiff;
 }
 
@@ -1710,7 +1702,6 @@ TreeBlock *OldRoom::nextBlock()
 // The order of blocks is always the same: BX, BM, OI[], OC[], EX, EN, LS[]
 void OldRoom::_getSizes()
 {
-	int i;
 	byte objNbr, nlSize, slSize;
 	uint16 w, bmLastOffset;
 	int32 bxEnd, bmEnd, ocEnd, exEnd, enEnd;
@@ -1757,6 +1748,8 @@ void OldRoom::_getSizes()
 	// -- OI, OC --
 	if (objNbr > 0)
 	{
+		int i;
+
 		oiOffsets.resize(objNbr);
 		ocOffsets.resize(objNbr);
 		_file->seekg(_oObjTOC(), std::ios::beg);
@@ -1844,16 +1837,15 @@ void OldRoom::_findMostLikelyOIId(std::vector<int> &candidates) const
 		//
 		{ 0, 0, { 0 }, { 0 }, 0 } };
 	std::string msg;
-	int i, j, k;
+	int i, j;
 
 	for (i = 0; pref[i].oiNbr != 0; ++i)
-		if (pref[i].oiNbr == (int)_oiId.size()
-			&& pref[i].candidatesNbr == (int)candidates.size())
+		if (pref[i].oiNbr == (int)_oiId.size() && pref[i].candidatesNbr == (int)candidates.size())
 		{
 			for (j = 0; j < pref[i].candidatesNbr; ++j)
-				if (pref[i].candidates[j] != candidates[j]
-					|| _oiId[pref[i].candidates[j]] != pref[i].candidatesIds[j])
+				if (pref[i].candidates[j] != candidates[j] || _oiId[pref[i].candidates[j]] != pref[i].candidatesIds[j])
 					break;
+
 			if (j == pref[i].candidatesNbr)
 			{
 				candidates[pref[i].best] = pref[i].candidates[0];
@@ -1866,8 +1858,8 @@ void OldRoom::_findMostLikelyOIId(std::vector<int> &candidates) const
 				   _oiId[candidates[0]],
 				   Block::tagToStr(_tags(BT_OI)),
 				   _oiId[candidates[1]]);
-	for (k = 2; k < (int)candidates.size(); ++k)
-		msg += xsprintf(" or %s_%.4i", Block::tagToStr(_tags(BT_OI)), _oiId[candidates[k]]);
+	for (i = 2; i < (int)candidates.size(); ++i)
+		msg += xsprintf(" or %s_%.4i", Block::tagToStr(_tags(BT_OI)), _oiId[candidates[i]]);
 	if (pref[i].oiNbr != 0)
 	{
 		msg += " (unlikely)";
@@ -1968,13 +1960,12 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 
 void OldRoom::_defCheckOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd)
 {
-	int i;
 	uint16 w;
 	int lastObj, objNbr;
 
 	objNbr = (int)ocOffset.size();
 	lastObj = objNbr - 1;
-	for (i = 0; i < objNbr; ++i)
+	for (int i = 0; i < objNbr; ++i)
 	{
 		int32 end;
 
@@ -1989,11 +1980,10 @@ void OldRoom::_defCheckOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd)
 void OldRoom::_getBMOffsets(std::vector<uint16> &bmOffset)
 {
 	uint16 w;
-	int i;
 
 	bmOffset.resize(_bmNbr());
 	_file->seekg(_ooBM(), std::ios::beg);
-	for (i = 0; i < _bmNbr(); ++i)
+	for (int i = 0; i < _bmNbr(); ++i)
 	{
 		_file->getLE16(w);
 		bmOffset[i] = w;
@@ -2002,7 +1992,6 @@ void OldRoom::_getBMOffsets(std::vector<uint16> &bmOffset)
 
 void OldRoom::_calcSizes(std::vector<int32> &sizes, const std::vector<uint16> &offsets, int32 end)
 {
-	int i;
 	std::vector<uint16> orderedOffsets;
 	size_t n;
 	std::vector<uint16>::iterator pos;
@@ -2016,7 +2005,7 @@ void OldRoom::_calcSizes(std::vector<int32> &sizes, const std::vector<uint16> &o
 		sort(orderedOffsets.begin(), orderedOffsets.end());
 		if (orderedOffsets.back() > end)
 			throw Block::InvalidDataFromGame(xsprintf("Bad offset in room %i", _parent->_id), _file->name(), _file->fullOffset());
-		for (i = 0; i < (int)n; ++i)
+		for (int i = 0; i < (int)n; ++i)
 		{
 			pos = find(orderedOffsets.begin(), orderedOffsets.end(), offsets[i]);
 			if (i < (int)n - 1)
@@ -2044,11 +2033,9 @@ void OldRoom::_updateOffset(int32 offsetToOffset, int32 minOffset, int32 shift, 
 
 void OldRoom::_cleanup()
 {
-	int i;
-
 	// Erase bad OI offsets
 	// _findMostLikelyOIId has to be perfect before using this
-	for (i = 0; i < (int)_oiSize.size(); ++i)
+	for (int i = 0; i < (int)_oiSize.size(); ++i)
 		if (_oiId[i] == -1)
 		{
 			_file->seekp(_oObjTOC() + 2 * i, std::ios::beg);
@@ -2058,7 +2045,6 @@ void OldRoom::_cleanup()
 
 void OldRoom::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 {
-	int i;
 	uint16 w;
 	int32 minOffset;
 	OldOIBlock *oiBlockPtr;
@@ -2097,11 +2083,11 @@ void OldRoom::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 		}
 		_updateOffset(_ooEX(), minOffset, sizeDiff, subblock._tag);
 		_updateOffset(_ooEN(), minOffset, sizeDiff, subblock._tag);
-		for (i = 0; i < _bmNbr(); ++i)
+		for (int i = 0; i < _bmNbr(); ++i)
 			_updateOffset(_ooBM() + i * 2, minOffset, sizeDiff, subblock._tag);
-		for (i = 0; i < (int)_oiSize.size() * 2; ++i)
+		for (int i = 0; i < (int)_oiSize.size() * 2; ++i)
 			_updateOffset(_oObjTOC() + 2 * i, minOffset, sizeDiff, subblock._tag);
-		for (i = 0; i < (int)_lsSize.size(); ++i)
+		for (int i = 0; i < (int)_lsSize.size(); ++i)
 			_updateOffset(_oLSTOC + 3 * i + 1, minOffset, sizeDiff, subblock._tag);
 	}
 }

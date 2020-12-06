@@ -156,7 +156,6 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 
 void ScummTr::_processGameFilesV123()
 {
-	int i;
 	char dataFileName[32];
 	std::string indexPath(ScummRp::_paramGameDir);
 	TreeBlockPtr index;
@@ -170,7 +169,7 @@ void ScummTr::_processGameFilesV123()
 	{
 		Text text(ScummTr::_paramTextFile, ScummTr::_textOptions, charset);
 
-		for (i = 1; i < 98; ++i)
+		for (int i = 1; i < 98; ++i)
 		{
 			std::string dataPath(ScummRp::_paramGameDir);
 			TreeBlockPtr room;
@@ -206,7 +205,6 @@ void ScummTr::_processGameFilesV123()
 
 void ScummTr::_processGameFilesV4567()
 {
-	int i;
 	char dataFileName[32];
 	std::string indexPath(ScummRp::_paramGameDir);
 	TreeBlockPtr index;
@@ -223,7 +221,7 @@ void ScummTr::_processGameFilesV4567()
 	{
 		Text text(ScummTr::_paramTextFile, ScummTr::_textOptions, charset);
 
-		for (i = 1; i < numberOfDisks; ++i)
+		for (int i = 1; i < numberOfDisks; ++i)
 		{
 			std::string dataPath(ScummRp::_paramGameDir);
 			TreeBlockPtr disk;
@@ -307,7 +305,7 @@ int32 ScummTr::getRscNameMaxLengh(ScummTr::RscType t, int32 id)
 
 int ScummTr::main(int argc, const char **argv)
 {
-	int g, i;
+	int g;
 
 	ScummTr::_getOptions(argc, argv, ScummTr::_trParameters);
 	ScummRpIO::setInfoSlots(ScummRp::_infoSlots);
@@ -324,7 +322,7 @@ int ScummTr::main(int argc, const char **argv)
 		return 0;
 	}
 	ScummTr::_paddedRsc = 0;
-	for (i = 0; ScummTr::_paramPaddedRsc[i] != 0; ++i)
+	for (int i = 0; ScummTr::_paramPaddedRsc[i] != '\0'; ++i)
 		switch (ScummTr::_paramPaddedRsc[i])
 		{
 		case 'a':
@@ -366,7 +364,7 @@ bool ScummTr::_readOption(const char *arg, char *pendingParams)
 
 	i = 0;
 	if (arg[i++] == '-')
-		while ((c = arg[i++]) != 0)
+		while ((c = arg[i++]) != '\0')
 			switch (c)
 			{
 			case '-':
@@ -444,19 +442,18 @@ bool ScummTr::_readOption(const char *arg, char *pendingParams)
 void ScummTr::_getOptions(int argc, const char **argv, const ScummRp::Parameter *params)
 {
 	char pendingParams[MAX_PARAMS + 1];
-	int i, j, k;
 
-	pendingParams[0] = 0;
-	for (i = 1; i < argc && argv[i] && ScummTr::_readOption(argv[i], pendingParams); ++i)
-		for (j = 0; pendingParams[j] != 0; pendingParams[j++] = 0)
-			for (k = 0; params[k].c != 0; ++k)
+	pendingParams[0] = '\0';
+	for (int i = 1; i < argc && argv[i] && ScummTr::_readOption(argv[i], pendingParams); ++i)
+		for (int j = 0; pendingParams[j] != '\0'; pendingParams[j++] = '\0')
+			for (int k = 0; params[k].c != '\0'; ++k)
 				if (params[k].c == pendingParams[j])
 				{
 					++i;
 					if (i < argc && argv[i])
 					{
 						strncpy(params[k].value, argv[i], params[k].maxSize - 1);
-						params[k].value[params[k].maxSize - 1] = 0;
+						params[k].value[params[k].maxSize - 1] = '\0';
 #ifdef _WIN32
 						if (params[k].isPath)
 							for (char *p = strchr(params[k].value, '\\'); p != 0; p = strchr(params[k].value, '\\'))
@@ -471,14 +468,15 @@ bool ScummTr::_invalidOptions()
 {
 	static const uint32 exclusive[] = { ScummRp::OPT_IMPORT | ScummRp::OPT_EXPORT, 0 };
 	static const uint32 mandatory[] = { ScummRp::OPT_IMPORT | ScummRp::OPT_EXPORT, ScummRp::OPT_GAME_FILES, 0 };
-	int i;
 
-	for (i = 0; mandatory[i] != 0; ++i)
+	for (int i = 0; mandatory[i] != 0; ++i)
 		if (!(ScummRp::_options & mandatory[i]))
 			return true;
-	for (i = 0; exclusive[i] != 0; ++i)
+
+	for (int i = 0; exclusive[i] != 0; ++i)
 		if ((ScummRp::_options & exclusive[i]) == exclusive[i])
 			return true;
+
 	return false;
 }
 

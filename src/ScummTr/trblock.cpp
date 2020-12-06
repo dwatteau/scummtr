@@ -268,10 +268,9 @@ template <class T, int I> void ObjectCodeBlock::_tListVerbs(std::list<int32> &l,
 template <class T, int I> void ObjectCodeBlock::_tUpdateVerbs(const std::list<int32> &l, int32 scriptOffset, int n)
 {
 	T o;
-	std::list<int32>::const_iterator i;
 
 	_file->seekp(I + _headerSize, std::ios::beg);
-	for (i = l.begin(); i != l.end(); ++i)
+	for (std::list<int32>::const_iterator i = l.begin(); i != l.end(); ++i)
 	{
 		_file->seekp(1, std::ios::cur);
 		if (((uint32)(*i + scriptOffset) >> (sizeof (T) * 8)) != 0)
@@ -441,7 +440,6 @@ template <int I> void OldObjectCodeBlock::_importName(Text &input, int32 &script
 	FilePartHandle f;
 	byte b, o;
 	std::list<int32> verbs;
-	std::list<int32>::iterator i;
 	int32 size, sizeDiff;
 
 	_file->seekg(I + _headerSize, std::ios::beg);
@@ -464,7 +462,7 @@ template <int I> void OldObjectCodeBlock::_importName(Text &input, int32 &script
 		if (sizeDiff != 0)
 		{
 			_listVerbs(verbs, scriptOffset);
-			for (i = verbs.begin(); i != verbs.end(); ++i)
+			for (std::list<int32>::iterator i = verbs.begin(); i != verbs.end(); ++i)
 				*i += sizeDiff;
 			_updateVerbs(verbs, scriptOffset, input.lineNumber());
 		}

@@ -71,10 +71,7 @@ std::string BackUp::backup(const char *f, bool createCopy)
 
 void BackUp::cancelChanges()
 {
-	std::list<std::string>::iterator i;
-	std::string bak;
-
-	for (i = _files.begin(); i !=_files.end(); ++i)
+	for (std::list<std::string>::iterator i = _files.begin(); i !=_files.end(); ++i)
 		try
 		{
 			xremove(_backupPath(i->c_str()).c_str());
@@ -88,10 +85,7 @@ void BackUp::cancelChanges()
 
 void BackUp::applyChanges()
 {
-	std::list<std::string>::iterator i;
-	std::string bak;
-
-	for (i = _files.begin(); i != _files.end(); ++i)
+	for (std::list<std::string>::iterator i = _files.begin(); i != _files.end(); ++i)
 		try
 		{
 			xremove(i->c_str());

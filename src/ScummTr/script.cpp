@@ -50,19 +50,21 @@ Script::~Script()
 
 void Script::_updateJumps(int32 offset, int32 diff, int lineNumber)
 {
-	std::list<JumpRef>::iterator i;
 	int32 val;
 
-	for (i = _jump.begin(); i != _jump.end(); ++i)
+	for (std::list<JumpRef>::iterator i = _jump.begin(); i != _jump.end(); ++i)
 	{
 		if (i->target >= offset)
 			i->target += diff;
+
 		if (i->offset >= offset)
 			i->offset += diff;
+
 		if (i->target > i->offset + 2)
 			val = i->target - i->offset - 2;
 		else
 			val = i->offset + 2 - i->target;
+
 		if ((uint32)val >= 0x8000)
 			throw Script::Error(xsprintf("Line too long (jump too far) (line %i)", lineNumber));
 	}
@@ -70,10 +72,9 @@ void Script::_updateJumps(int32 offset, int32 diff, int lineNumber)
 
 void Script::_writeJumps(std::string &buffer)
 {
-	std::list<JumpRef>::iterator i;
 	int32 val;
 
-	for (i = _jump.begin(); i != _jump.end(); ++i)
+	for (std::list<JumpRef>::iterator i = _jump.begin(); i != _jump.end(); ++i)
 	{
 		val = i->target - i->offset - 2;
 		buffer[i->offset] = (char)(byte)(val & 0xFF);
@@ -83,20 +84,21 @@ void Script::_writeJumps(std::string &buffer)
 
 void Script::importText(Text &input)
 {
-	std::list<StringRef>::iterator i;
-	std::list<int32>::iterator j;
 	int32 lengthDiff, totalDiff, lastEnd, minOffset;
 	std::string buffer, s, t;
 
 	parse();
+
 	if (_text.size() == 0)
 		return;
+
 	totalDiff = 0;
 	lastEnd = 0;
-	for (i = _text.begin(); i != _text.end(); ++i)
+	for (std::list<StringRef>::iterator i = _text.begin(); i != _text.end(); ++i)
 	{
 		if (!input.nextLine(s, i->type))
 			throw Script::Error("Not enough lines in imported text");
+
 		lengthDiff = (int32)s.size() + 1 - i->length;
 		_file->seekg(lastEnd, std::ios::beg);
 		_file->read(t, i->offset - lastEnd);
@@ -109,7 +111,8 @@ void Script::importText(Text &input)
 		i->length += lengthDiff;
 		totalDiff += lengthDiff;
 		_updateJumps(minOffset, lengthDiff, input.lineNumber());
-		for (j = _spot.begin(); j != _spot.end(); ++j)
+
+		for (std::list<int32>::iterator j = _spot.begin(); j != _spot.end(); ++j)
 			if (*j >= minOffset)
 				*j += lengthDiff;
 	}
@@ -125,7 +128,6 @@ void Script::importText(Text &input)
 
 void Script::exportText(Text &output, bool pad)
 {
-	std::list<StringRef>::iterator i;
 	std::string s;
 
 	_usingRscNameLimits = pad;
@@ -135,7 +137,8 @@ void Script::exportText(Text &output, bool pad)
 	}
 	catch (...) { _usingRscNameLimits = false; throw; }
 	_usingRscNameLimits = false;
-	for (i = _text.begin(); i != _text.end(); ++i)
+
+	for (std::list<StringRef>::iterator i = _text.begin(); i != _text.end(); ++i)
 	{
 		_file->seekg(i->offset, std::ios::beg);
 		_file->read(s, i->length - 1);

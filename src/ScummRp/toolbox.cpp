@@ -93,7 +93,6 @@ void xrename(const char *oldname, const char *newname)
 
 int xmkdir(const char *path)
 {
-	int i;
 	char *tmpPath;
 	int ret;
 	char prevChar;
@@ -101,11 +100,11 @@ int xmkdir(const char *path)
 	ret = -1;
 	tmpPath = xstrdup(path);
 	prevChar = 0;
-	for (i = 0; tmpPath[i]; ++i)
+	for (int i = 0; tmpPath[i] != '\0'; ++i)
 	{
 		if (tmpPath[i] == '/' && i > 0 && prevChar != '/')
 		{
-			tmpPath[i] = 0;
+			tmpPath[i] = '\0';
 			ret = mkdir(tmpPath, 0755);
 			tmpPath[i] = '/';
 		}

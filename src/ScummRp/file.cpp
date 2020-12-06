@@ -122,10 +122,9 @@ void File::_onOpen(const char *filename, std::ios::openmode mode)
 
 std::string File::_tmpPath(const char *srcPath)
 {
-	int i;
 	std::string tmpPath;
 
-	for (i = 0; i < 256; ++i)
+	for (int i = 0; i < 256; ++i)
 	{
 		tmpPath = srcPath;
 		tmpPath += xsprintf(File::TMP_SUFFIX, i);
@@ -165,12 +164,11 @@ void File::_truncateAndClose()
 
 void File::_setSize(std::streamsize newSize)
 {
-	std::list<FilePart *>::iterator i;
-
 	if (newSize < _size)
-		for (i = _part._children.begin(); i != _part._children.end(); ++i)
+		for (std::list<FilePart *>::iterator i = _part._children.begin(); i != _part._children.end(); ++i)
 			if ((*i)->_offset + (*i)->_size > _part._offset + newSize)
 				throw FilePart::Error("File::_setSize: Children too big");
+
 	_size = newSize;
 	_part._size = _size;
 }
@@ -568,9 +566,7 @@ FilePart &FilePart::operator=(const FilePart &f)
 {
 	if (_children.size() > 0)
 	{
-		std::list<FilePart *>::iterator i;
-
-		for (i = _children.begin(); i != _children.end(); ++i)
+		for (std::list<FilePart *>::iterator i = _children.begin(); i != _children.end(); ++i)
 			(*i)->_parent = 0;
 		throw FilePart::Error("FilePart destroyed before its children");
 	}
@@ -606,9 +602,7 @@ void FilePart::_zap()
 {
 	if (_children.size() > 0)
 	{
-		std::list<FilePart *>::iterator i;
-
-		for (i = _children.begin(); i != _children.end(); ++i)
+		for (std::list<FilePart *>::iterator i = _children.begin(); i != _children.end(); ++i)
 			(*i)->_parent = 0;
 		throw FilePart::Error("FilePart destroyed before its children");
 	}
@@ -695,11 +689,11 @@ bool FilePart::eof()
 
 void FilePart::_xorBuffer(char *buffer, byte xorKey, std::streamsize n)
 {
-	std::streamsize i;
+	if (xorKey == 0)
+		return;
 
-	if (xorKey)
-		for (i = 0; i < n; i++)
-			buffer[i] ^= xorKey;
+	for (std::streamsize i = 0; i < n; i++)
+		buffer[i] ^= xorKey;
 }
 
 FilePart &FilePart::read(std::string &s, std::streamsize n)
@@ -821,16 +815,16 @@ std::streamoff FilePart::fullOffset() const
 
 void FilePart::resize(std::streamsize newSize)
 {
-	std::list<FilePart *>::iterator i;
 	std::streamsize oldSize;
 	std::streamoff oldOffset;
 
 	oldSize = _size;
 	oldOffset = _offset;
 	if (newSize < oldSize)
-		for (i = _children.begin(); i != _children.end(); ++i)
+		for (std::list<FilePart *>::iterator i = _children.begin(); i != _children.end(); ++i)
 			if ((*i)->_offset + (*i)->_size > _offset + newSize)
 				throw FilePart::Error("FilePart::resize: Children too big");
+
 	if (newSize == oldSize)
 		return;
 	_file->_part._move(_offset + _size, newSize - _size);
@@ -843,10 +837,9 @@ void FilePart::resize(std::streamsize newSize)
 
 void FilePart::_shiftFrame(std::streamoff start, std::streamoff shift)
 {
-	std::list<FilePart *>::iterator i;
-
 	if (_offset + _size < start)
 		return;
+
 	if (_offset >= start)
 		_offset += shift;
 	else
@@ -855,21 +848,22 @@ void FilePart::_shiftFrame(std::streamoff start, std::streamoff shift)
 		if (_size < 0)
 			throw FilePart::Error("FilePart::_shiftFrame: Implosion");
 	}
-	for (i = _children.begin(); i != _children.end(); ++i)
+
+	for (std::list<FilePart *>::iterator i = _children.begin(); i != _children.end(); ++i)
 		(*i)->_shiftFrame(start, shift);
 }
 
 void FilePart::_move(std::streamoff start, std::streamoff shift)
 {
-	std::list<FilePart *>::iterator i;
-
 	if (shift > 0)
 	{
 		_file->seekp(start, std::ios::beg);
 		_file->moveEnd(shift);
 	}
-	for (i = _children.begin(); i != _children.end(); ++i)
+
+	for (std::list<FilePart *>::iterator i = _children.begin(); i != _children.end(); ++i)
 		(*i)->_shiftFrame(start, shift);
+
 	if (shift < 0)
 	{
 		_file->seekp(start, std::ios::beg);
@@ -1085,8 +1079,10 @@ void RAMFile::_zap()
 void RAMFile::open(const char *filename, std::ios::openmode mode)
 {
 	File::open(filename, mode);
+
 	if (is_open())
 		_load();
+
 	_out = (mode & std::ios::out) != 0;
 }
 
@@ -1094,6 +1090,7 @@ void RAMFile::close()
 {
 	if (is_open())
 		_save();
+
 	File::close();
 	_zap();
 }
@@ -1107,12 +1104,15 @@ File &RAMFile::getline(std::string &s, char delim)
 	for (i = _gpos; i < _size; ++i)
 		if (_mem[i] == delim)
 			break;
+
 	i -= _gpos;
 	s.resize(i);
 	mem = (char *)_mem + _gpos;
 	_gpos = i + _gpos == _size ? _size : _gpos + i + 1;
+
 	while (--i >= 0)
 		s[i] = mem[i];
+
 	return *this;
 }
 
@@ -1120,12 +1120,16 @@ File &RAMFile::read(char *s, std::streamsize n)
 {
 	if (n == 0)
 		return *this;
+
 	if ((std::streamsize)_gpos + n > _size)
 		throw File::UnexpectedEOF(xsprintf("Unexpected EOF in: %s", _path));
+
 	if (_gpos < 0 || n < 0)
 		throw File::IOError(xsprintf("RAMFile::read: %s", _path));
+
 	memcpy(s, _mem + _gpos, n);
 	_gpos += n;
+
 	return *this;
 }
 
@@ -1134,11 +1138,14 @@ File &RAMFile::write(const char *s, std::streamsize n)
 {
 	if (_ppos < 0 || n <= 0 || !_out)
 		throw File::IOError(xsprintf("RAMFile::write: %s", _path));
+
 	if (_capacity < (std::streamsize)_ppos + n)
 		_reallocAtLeast((std::streamsize)_ppos + n);
+
 	memcpy(_mem + _ppos, s, n);
 	_ppos += n;
 	if (_size < _ppos)
 		_setSize(_ppos);
+
 	return *this;
 }

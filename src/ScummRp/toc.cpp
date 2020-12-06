@@ -43,12 +43,10 @@ TableOfContent::~TableOfContent()
 
 TableOfContent &TableOfContent::operator=(const TableOfContent &t)
 {
-	int i;
-
 	_zap();
 	_size = t._size;
 	_toc = new TocElement[_size];
-	for (i = 0; i < _size; ++i)
+	for (int i = 0; i < _size; ++i)
 	{
 		_toc[i].roomId = t._toc[i].roomId;
 		_toc[i].offset = t._toc[i].offset;
@@ -73,11 +71,10 @@ bool TableOfContent::accessed(byte roomId) const
 
 void TableOfContent::merge(const TableOfContent &t)
 {
-	int i;
 	bool a[256];
 
 	memcpy(a, _accessed, sizeof a);
-	for (i = 0; i < _size; ++i)
+	for (int i = 0; i < _size; ++i)
 		if (_toc[i].roomId != t._toc[i].roomId)
 			throw std::logic_error("TableOfContent::merge: different roomIds");
 		else if (t._accessed[_toc[i].roomId])
@@ -137,22 +134,22 @@ TableOfContent::TocElement TableOfContent::operator[](int id) const
 
 int TableOfContent::count(byte roomId, int32 offset) const
 {
-	int i, j;
+	int total;
 
-	j = 0;
-	for (i = 1; i < _size; ++i)
+	total = 0;
+	for (int i = 1; i < _size; ++i)
 		if (_toc[i].offset == offset && _toc[i].roomId == roomId)
-			++j;
-	return j;
+			++total;
+
+	return total;
 }
 
 int TableOfContent::findId(byte roomId, int32 offset) const
 {
-	int i;
-
-	for (i = 1; i < _size; ++i)
+	for (int i = 1; i < _size; ++i)
 		if (_toc[i].offset == offset && _toc[i].roomId == roomId)
 			return i;
+
 	throw TableOfContent::InvalidElement(xsprintf("TableOfContent::findId: Cannot find element (%u)", offset));
 }
 
@@ -172,7 +169,6 @@ bool TableOfContent::nextId(int &id, byte roomId)
 
 void TableOfContent::_load16Sep32(FilePart &file)
 {
-	int i;
 	uint16 w;
 
 	_zap();
@@ -181,9 +177,9 @@ void TableOfContent::_load16Sep32(FilePart &file)
 		file.getLE16(w);
 		_size = (int)w;
 		_toc = new TocElement[_size];
-		for (i = 0; i < _size; ++i)
+		for (int i = 0; i < _size; ++i)
 			file.getByte(_toc[i].roomId);
-		for (i = 0; i < _size; ++i)
+		for (int i = 0; i < _size; ++i)
 			file.getLE32(_toc[i].offset);
 	}
 	catch (...) { _zap(); throw; }
@@ -191,18 +187,15 @@ void TableOfContent::_load16Sep32(FilePart &file)
 
 void TableOfContent::_save16Sep32(FilePart &file) const
 {
-	int i;
-
 	file.putLE16((uint16)_size);
-	for (i = 0; i < _size; ++i)
+	for (int i = 0; i < _size; ++i)
 		file.putByte(_toc[i].roomId);
-	for (i = 0; i < _size; ++i)
+	for (int i = 0; i < _size; ++i)
 		file.putLE32(_toc[i].offset);
 }
 
 void TableOfContent::_load8Sep16(FilePart &file, int size)
 {
-	int i;
 	byte b;
 	uint16 w;
 
@@ -217,9 +210,9 @@ void TableOfContent::_load8Sep16(FilePart &file, int size)
 		else
 			_size = size;
 		_toc = new TocElement[_size];
-		for (i = 0; i < _size; ++i)
+		for (int i = 0; i < _size; ++i)
 			file.getByte(_toc[i].roomId);
-		for (i = 0; i < _size; ++i)
+		for (int i = 0; i < _size; ++i)
 		{
 			file.getLE16(w);
 			_toc[i].offset = (w == 0xFFFF) ? -1 : (int32)w;
@@ -230,19 +223,16 @@ void TableOfContent::_load8Sep16(FilePart &file, int size)
 
 void TableOfContent::_save8Sep16(FilePart &file, bool fixedSize) const
 {
-	int i;
-
 	if (!fixedSize)
 		file.putByte((byte)_size);
-	for (i = 0; i < _size; ++i)
+	for (int i = 0; i < _size; ++i)
 		file.putByte(_toc[i].roomId);
-	for (i = 0; i < _size; ++i)
+	for (int i = 0; i < _size; ++i)
 		file.putLE16((uint16)_toc[i].offset);
 }
 
 void TableOfContent::_load8Mix32(FilePart &file)
 {
-	int i;
 	byte b;
 
 	_zap();
@@ -251,7 +241,7 @@ void TableOfContent::_load8Mix32(FilePart &file)
 		file.getByte(b);
 		_size = (int)b;
 		_toc = new TocElement[_size];
-		for (i = 0; i < _size; ++i)
+		for (int i = 0; i < _size; ++i)
 		{
 			file.getByte(_toc[i].roomId);
 			file.getLE32(_toc[i].offset);
@@ -262,10 +252,8 @@ void TableOfContent::_load8Mix32(FilePart &file)
 
 void TableOfContent::_save8Mix32(FilePart &file) const
 {
-	int i;
-
 	file.putByte((byte)_size);
-	for (i = 0; i < _size; ++i)
+	for (int i = 0; i < _size; ++i)
 	{
 		file.putByte(_toc[i].roomId);
 		file.putLE32(_toc[i].offset);
@@ -274,7 +262,6 @@ void TableOfContent::_save8Mix32(FilePart &file) const
 
 void TableOfContent::_load16Mix32(FilePart &file)
 {
-	int i;
 	uint16 w;
 
 	_zap();
@@ -283,7 +270,7 @@ void TableOfContent::_load16Mix32(FilePart &file)
 		file.getLE16(w);
 		_size = (int)w;
 		_toc = new TocElement[_size];
-		for (i = 0; i < _size; ++i)
+		for (int i = 0; i < _size; ++i)
 		{
 			file.getByte(_toc[i].roomId);
 			file.getLE32(_toc[i].offset);
@@ -294,10 +281,8 @@ void TableOfContent::_load16Mix32(FilePart &file)
 
 void TableOfContent::_save16Mix32(FilePart &file) const
 {
-	int i;
-
 	file.putLE16((uint16)_size);
-	for (i = 0; i < _size; ++i)
+	for (int i = 0; i < _size; ++i)
 	{
 		file.putByte(_toc[i].roomId);
 		file.putLE32(_toc[i].offset);
@@ -392,9 +377,7 @@ void GlobalRoomIndex::_zap()
 
 void GlobalRoomIndex::merge(const TableOfContent &t)
 {
-	int i;
-
-	for (i = 0; i < _size; ++i)
+	for (int i = 0; i < _size; ++i)
 		if (t.accessed((byte)i))
 		{
 			if (_accessed[i] && _toc[i].offset != t[i].offset)
@@ -462,12 +445,13 @@ void GlobalRoomIndex::save(FilePart &file, GlobalTocFormat format, bool fixedSiz
 
 int GlobalRoomIndex::numberOfDisks() const
 {
-	int max, i;
+	int max;
 
 	max = 0;
-	for (i = 0; i < _size; ++i)
+	for (int i = 0; i < _size; ++i)
 		if (_toc[i].roomId > max)
 			max = _toc[i].roomId;
+
 	return ++max;
 }
 
@@ -487,11 +471,10 @@ RoomIndex::~RoomIndex()
 
 byte RoomIndex::findId(int32 offset) const
 {
-	int i;
-
-	for (i = 0; i < _toc.getSize(); ++i)
+	for (int i = 0; i < _toc.getSize(); ++i)
 		if (_toc[i].offset == offset)
 			return _toc[i].roomId;
+
 	throw TableOfContent::InvalidElement(xsprintf("RoomIndex::findId: Cannot find element (%u)", offset));
 }
 
@@ -499,16 +482,16 @@ int32 &RoomIndex::operator[](byte roomId)
 {
 	if (_map[roomId] != -1)
 		return _toc[_map[roomId]].offset;
+
 	throw TableOfContent::InvalidId(xsprintf("RoomIndex::operator[]: Invalid Id: %i", roomId));
 }
 
 void RoomIndex::load(FilePart &file)
 {
-	int i;
-
 	memset(_map, -1, sizeof _map);
 	_toc.load(file, GTCFMT_8MIX32);
-	for (i = 0; i < _toc.getSize(); ++i)
+
+	for (int i = 0; i < _toc.getSize(); ++i)
 		_map[_toc[i].roomId] = i;
 }
 
@@ -526,6 +509,7 @@ bool RoomIndex::nextId(byte &roomId)
 {
 	if (_iterator >= _toc.getSize())
 		return false;
+
 	roomId = _toc[_iterator++].roomId;
 	return true;
 }
