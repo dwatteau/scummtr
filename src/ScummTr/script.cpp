@@ -1560,6 +1560,20 @@ void Script::_opv12()
 		_eatWordOrVar(opcode & 0x80);
 		break;
 	case 0x62: // stopScript
+		// Some versions of MANIAC-V2 miss a call to printEgo (0xD8) after calling
+		// stopScript in 07.LFL. Work around this.
+		if (ScummRp::game.version == 2 && ScummRp::game.id == GID_MANIAC && _file->name() == "07.LFL" && _file->fullOffset() == 0x2351)
+		{
+			byte b;
+			b = _eatByteOrVar(opcode & 0x80);
+			if (b == 0x00 && _peekByte() != 0xD8)
+			{
+				opcode = mainOpcode = 0xD8;
+				_eatString(Text::LT_OLDMSG, mainOpcode);
+			}
+			break;
+		}
+		// fallthrough
 	case 0xE2: // stopScript
 		_eatByteOrVar(opcode & 0x80);
 		break;
