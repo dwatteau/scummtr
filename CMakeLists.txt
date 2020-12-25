@@ -5,7 +5,7 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build type" FORCE)
 endif()
 
-project ("ScummTR" C CXX)
+project ("ScummTR" CXX)
 
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -13,16 +13,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(CheckCXXCompilerFlag)
 
-include (TestBigEndian)
-TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
-
 if (MSVC)
     # /wd4996?
     add_compile_options(/wd4244 /wd4267 /wd26451 /wd26495)
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN)
-    if(IS_BIG_ENDIAN)
-        add_definitions(/DSCUMMTR_USE_BIG_ENDIAN)
-    endif()
 else()
     # GCC 2.95 compatible warnings we always want
     add_compile_options(-Wall -pedantic -Wpointer-arith -Wcast-qual -Wcast-align -Wshadow -Wuninitialized -Wundef -Wmultichar -Wwrite-strings -Wctor-dtor-privacy -Wredundant-decls -Wmissing-declarations -Wunused)
@@ -54,10 +48,6 @@ else()
                 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now")
             endif()
         endif()
-    endif()
-
-    if(IS_BIG_ENDIAN)
-        add_definitions(-DSCUMMTR_USE_BIG_ENDIAN)
     endif()
 
     if (WIN32)

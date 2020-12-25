@@ -920,25 +920,41 @@ void FilePart::_move(std::streamoff start, std::streamoff shift)
 template <bool B, class T> T FilePart::get(T &i)
 {
 	read((char *)&i, sizeof i);
-#ifdef SCUMMTR_USE_BIG_ENDIAN
-	if (!B && sizeof (T) > 1)
-		FilePart::_reverse(i);
-#else
-	if (B && sizeof (T) > 1)
-		FilePart::_reverse(i);
-#endif
+
+	if (sizeof (T) > 1)
+	{
+		if (cpu_is_little_endian())
+		{
+			if (B)
+				FilePart::_reverse(i);
+		}
+		else
+		{
+			if (!B)
+				FilePart::_reverse(i);
+
+		}
+	}
+
 	return i;
 }
 
 template <bool B, class T> void FilePart::put(T i)
 {
-#ifdef SCUMMTR_USE_BIG_ENDIAN
-	if (!B && sizeof (T) > 1)
-		FilePart::_reverse(i);
-#else
-	if (B && sizeof (T) > 1)
-		FilePart::_reverse(i);
-#endif
+	if (sizeof (T) > 1)
+	{
+		if (cpu_is_little_endian())
+		{
+			if (B)
+				FilePart::_reverse(i);
+		}
+		else
+		{
+			if (!B)
+				FilePart::_reverse(i);
+		}
+	}
+
 	write((const char *)&i, sizeof i);
 }
 

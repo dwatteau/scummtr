@@ -56,4 +56,18 @@ typedef int int32;
 #  define nullptr       0
 #endif
 
+// note: assuming that your compiler optimizes this to a constant expression
+static inline bool cpu_is_little_endian()
+{
+	union
+	{
+		byte c[4];
+		uint32 i;
+	} u;
+
+	u.i = 0x12345678;
+
+	return u.c[0] == 0x78;
+}
+
 #endif
