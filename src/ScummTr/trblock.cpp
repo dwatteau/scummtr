@@ -260,7 +260,8 @@ ObjectCodeBlock &ObjectCodeBlock::operator=(const TreeBlock &block)
 	return *this;
 }
 
-template <class T, int I> void ObjectCodeBlock::_tListVerbs(std::list<int32> &l, int32 scriptOffset)
+template <class T, int I>
+void ObjectCodeBlock::_tListVerbs(std::list<int32> &l, int32 scriptOffset)
 {
 	T o;
 	byte b;
@@ -274,7 +275,8 @@ template <class T, int I> void ObjectCodeBlock::_tListVerbs(std::list<int32> &l,
 	}
 }
 
-template <class T, int I> void ObjectCodeBlock::_tUpdateVerbs(const std::list<int32> &l, int32 scriptOffset, int n)
+template <class T, int I>
+void ObjectCodeBlock::_tUpdateVerbs(const std::list<int32> &l, int32 scriptOffset, int n)
 {
 	T o;
 
@@ -290,7 +292,8 @@ template <class T, int I> void ObjectCodeBlock::_tUpdateVerbs(const std::list<in
 	}
 }
 
-template <class T, int I> int32 ObjectCodeBlock::_tFindScriptOffset()
+template <class T, int I>
+int32 ObjectCodeBlock::_tFindScriptOffset()
 {
 	int32 min;
 	T o;
@@ -432,7 +435,8 @@ int32 OldObjectCodeBlock::_findScriptOffset()
 	return ObjectCodeBlock::_tFindScriptOffset<uint16, 0x0D>();
 }
 
-template <int I> void OldObjectCodeBlock::_exportName(Text &output, bool pad)
+template <int I>
+void OldObjectCodeBlock::_exportName(Text &output, bool pad)
 {
 	std::string s;
 	byte b;
@@ -451,7 +455,8 @@ template <int I> void OldObjectCodeBlock::_exportName(Text &output, bool pad)
 	output.addLine(s, Text::LT_RSC);
 }
 
-template <int I> void OldObjectCodeBlock::_importName(Text &input, int32 &scriptOffset)
+template <int I>
+void OldObjectCodeBlock::_importName(Text &input, int32 &scriptOffset)
 {
 	std::string s;
 	FilePartHandle f;

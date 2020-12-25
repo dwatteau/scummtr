@@ -165,7 +165,8 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 	}
 }
 
-template <int A> void ScummRp::_exploreIndex(TreeBlock &index)
+template <int A>
+void ScummRp::_exploreIndex(TreeBlock &index)
 {
 	GlobalTocBlockPtr tocBlockPtr;
 

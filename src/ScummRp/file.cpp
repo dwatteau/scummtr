@@ -917,7 +917,8 @@ void FilePart::_move(std::streamoff start, std::streamoff shift)
 }
 
 // not sure those two templates are the only things to modify for a BE µp.
-template <bool B, class T> T FilePart::get(T &i)
+template <bool B, class T>
+T FilePart::get(T &i)
 {
 	read((char *)&i, sizeof i);
 
@@ -939,7 +940,8 @@ template <bool B, class T> T FilePart::get(T &i)
 	return i;
 }
 
-template <bool B, class T> void FilePart::put(T i)
+template <bool B, class T>
+void FilePart::put(T i)
 {
 	if (sizeof (T) > 1)
 	{

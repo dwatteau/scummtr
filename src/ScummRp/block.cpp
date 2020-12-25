@@ -364,7 +364,8 @@ bool TreeBlock::nextBlock(TreeBlock &subblock)
 	return true;
 }
 
-template <class T> T *TreeBlock::_nextBlock()
+template <class T>
+T *TreeBlock::_nextBlock()
 {
 	T *subblock;
 
