@@ -47,13 +47,13 @@ void ScummRpIO::info(int slots, const char *msg)
 void ScummRpIO::crash(const char *msg)
 {
 	std::cerr << "CRASH: " << msg << std::endl;
-	abort();
+	std::abort();
 }
 
 void ScummRpIO::fatal(const char *msg)
 {
 	std::cerr << "ERROR: " << msg << std::endl;
-	exit(1);
+	std::exit(1);
 }
 
 void ScummRpIO::error(const char *msg)
