@@ -133,6 +133,14 @@ static int usage()
 	return 0;
 }
 
+static void fail_on_big_endian_systems()
+{
+	if (!cpu_is_little_endian())
+	{
+		throw std::runtime_error("ScummFont is currently only compatible with little-endian systems");
+	}
+}
+
 static void getFontInfo(int32 &baseOffset, std::ifstream &file, int &version, int &bpp, int &maxHeight, int &maxWidth, int &bytesPerChar, int16 &numChars)
 {
 	int32 tag;
@@ -619,11 +627,13 @@ int main(int argc, char **argv) try
 		return usage();
 	if (argv[1][0] == 'i')
 	{
+		fail_on_big_endian_systems();
 		loadBmp(argv[3]);
 		saveFont(argv[2]);
 	}
 	else if (argv[1][0] == 'o')
 	{
+		fail_on_big_endian_systems();
 		loadFont(argv[2]);
 		saveBmp(argv[3]);
 	}

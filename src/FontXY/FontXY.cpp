@@ -39,6 +39,13 @@ int main(int argc, char **argv)
 		std::cout << "Usage: FontXY {i|o} <CHAR file>\n\nExamples:\tFontXY o CHAR_0002\n\t\tFontXY i CHAR_0003" << std::endl;
 		return 0;
 	}
+
+	if (!cpu_is_little_endian())
+	{
+		std::cerr << "ERROR: FontXY is currently only compatible with little-endian systems" << std::endl;
+		return 1;
+	}
+
 	bool bImport = argv[1][0] == 'i';
 	char *pszChar = argv[2];
 	char szTxt[] = "XY.txt"; // TODO: param
