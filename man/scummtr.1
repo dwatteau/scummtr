@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 18 2020 $
+.Dd $Mdocdate: December 27 2020 $
 .Dt SCUMMTR 1
 .Os
 .Sh NAME
@@ -79,8 +79,9 @@ Without
 .Fl c ,
 non-ASCII characters will be handled as escape sequences.
 .Pp
-Note that each game variant only supported its own internal subset of
-the ISO-8859-1 (or Windows-1252) encoding.
+Note that SCUMM games only supported their own internal variants of
+ISO-8859-1, which differ from the official ISO-8859-1 or Windows-1252
+tables.
 .It Fl f Ar file
 The translation file to be used for the import or export.
 .It Fl g Ar gameid
@@ -148,9 +149,10 @@ otherwise you will have import errors.
 .Pp
 Since each game and each variant of each game had its own list of
 accepted characters, it is not possible to know if a character
-will be properly displayed without testing it in the game.
+is available without testing it in the game.
 See also
-.Xr scummfont 1 .
+.Xr scummfont 1
+in order to visualize or modify the included font tables.
 .Pp
 Unicode files are not supported, and non-Roman languages need
 some extra work for convenient use.

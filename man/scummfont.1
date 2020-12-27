@@ -1,4 +1,4 @@
-.Dd $Mdocdate: November 19 2020 $
+.Dd $Mdocdate: December 27 2020 $
 .Dt SCUMMFONT 1
 .Os
 .Sh NAME
@@ -40,7 +40,15 @@ can either be a
 .Dq CHAR_*
 block extracted by
 .Xr scummrp 1 ,
-or an LFL file.
+or an LFL file containing a font resource.
+.Pp
+Generated bitmap files contain every character available in the selected font.
+Characters are sorted in the ascending order of the font table; that is, the
+19th displayed character is always accessible in a
+.Xr scummtr 1
+translation file by using the
+.Dq \e019
+decimal sequence.
 .Sh HISTORY
 The
 .Nm
