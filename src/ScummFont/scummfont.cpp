@@ -222,13 +222,13 @@ static void getFontInfo(int32 &baseOffset, std::ifstream &file, int &version, in
 		throw std::runtime_error("Your font is strange...");
 }
 
-static const char *tmpPath(const char *path)
+static std::string tmpPath(const char *path)
 {
 	static std::string s(path);
 
 	s += "-new";
 
-	return s.c_str();
+	return s;
 }
 
 static int roundTo4(int i)
@@ -380,7 +380,8 @@ static void saveFont(const char *path)
 		newNumChars = (version == 1) ? 0xFF : 0x100;
 
 	{
-		std::ofstream tmpFile(tmpPath(path), std::ios::binary | std::ios::out | std::ios::trunc);
+		std::string tmpfilepath = tmpPath(path);
+		std::ofstream tmpFile(tmpfilepath.c_str(), std::ios::binary | std::ios::out | std::ios::trunc);
 		char buffer[0x440];
 
 		if (!tmpFile.is_open())
@@ -524,6 +525,9 @@ static void saveFont(const char *path)
 			numChars = newNumChars;
 			tmpFile.write((char *)&numChars, 2);
 		}
+
+		std::cout << "Output file has been written to " << tmpfilepath << std::endl;
+		std::cout << "Don't forget to replace your original file with the new version" << std::endl;
 	}
 }
 
