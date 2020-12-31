@@ -1377,7 +1377,7 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 		if (_nextSubblockOffset >= _file->size() - 4)
 		{
 			if (o < _nextSubblockOffset)
-				ScummRpIO::info(INF_DETAIL, xsprintf("%.2i.LFL should actually end at 0x%X", _id, o));
+				ScummRpIO::warning(xsprintf("%.2i.LFL should actually end at 0x%X", _id, o));
 			return false;
 		}
 		if (o < _nextSubblockOffset)
