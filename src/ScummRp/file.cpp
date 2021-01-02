@@ -202,14 +202,13 @@ void File::_copyDataFromFileToFile(T1 &f1, T2 &f2, std::streamsize n)
 	std::streamsize written, chunkSize;
 
 	chunkSize = File::CHUNK_SIZE;
-	written = 0;
-	while (written < n)
+	for (written = 0; written < n; written += chunkSize)
 	{
 		if (chunkSize > n - written)
 			chunkSize = n - written;
+
 		f2.read(chunk, chunkSize);
 		f1.write(chunk, chunkSize);
-		written += chunkSize;
 	}
 }
 

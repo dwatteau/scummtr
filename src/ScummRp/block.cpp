@@ -850,9 +850,8 @@ TreeBlock *LFLFile::_nextLFLSubblock()
 {
 	const TableOfContent *toc;
 	int id;
-	TreeBlock *subblock;
+	TreeBlock *subblock = nullptr;
 
-	subblock = nullptr;
 	_nextSubblockOffset = RoomPack::_findNextLFLFRootBlock((byte)_id, _nextSubblockOffset - _headerSize, _file->size() - _headerSize, toc, id);
 	_checkDupOffset((byte)_id, _nextSubblockOffset);
 	_nextSubblockOffset += _headerSize;
@@ -951,9 +950,8 @@ TreeBlock *LFLFPack::nextBlock()
 {
 	const TableOfContent *toc;
 	int id;
-	TreeBlock *subblock;
+	TreeBlock *subblock = nullptr;
 
-	subblock = nullptr;
 	_nextSubblockOffset = RoomPack::_findNextLFLFRootBlock((byte)_id, _nextSubblockOffset - _headerSize, _file->size() - _headerSize, toc, id);
 	_checkDupOffset((byte)_id, _nextSubblockOffset);
 	_nextSubblockOffset += _headerSize;
@@ -1390,9 +1388,12 @@ void OldLFLFile::_moveLFLFRootBlockInToc(byte roomId, int32 minOffset, int32 n) 
 void OldLFLFile::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 {
 	LFLFile::_subblockUpdated(subblock, sizeDiff);
-	if (sizeDiff != 0)
-		for (int i = 0; i < (int)_blocks.size(); ++i)
-			_blocks[i] += sizeDiff;
+
+	if (sizeDiff == 0)
+		return;
+
+	for (int i = 0; i < (int)_blocks.size(); ++i)
+		_blocks[i] += sizeDiff;
 }
 
 bool OldLFLFile::nextBlock(TreeBlock &subblock)
@@ -1872,10 +1873,8 @@ void OldRoom::_getSizes()
 
 		for (i = 0; i < objNbr && oiOffsets[i] == 0; ++i)
 			;
-		if (i == objNbr)
-			bmEnd = ocOffsets[0];
-		else
-			bmEnd = oiOffsets[i];
+		bmEnd = (i == objNbr) ? ocOffsets[0] : oiOffsets[i];
+
 		_checkOCSizes(ocOffsets, ocEnd);
 	}
 
@@ -1992,7 +1991,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 	uint16 firstOCOffset, w;
 	std::vector<OldRoom::OIInfo> oiInfo;
 	std::vector<int> v;
-	int n, i, j, k;
+	int n;
 	bool ambiguousSize;
 
 	n = (int)oiOffset.size();
@@ -2001,7 +2000,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 	oiInfo.reserve(n);
 	firstOCOffset = *min_element(ocOffset.begin(), ocOffset.end());
 
-	for (i = 0; i < n; ++i)
+	for (int i = 0; i < n; ++i)
 	{
 		uint16 width, height;
 
@@ -2033,14 +2032,14 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 	oiInfo.push_back(OldRoom::OIInfo(-1, firstOCOffset, 0)); // (2)
 	std::sort(oiInfo.begin(), oiInfo.end());
 
-	for (i = j = 0; i < (int)oiInfo.size() - 1; i = j)
+	for (int i = 0, j = 0; i < (int)oiInfo.size() - 1; i = j)
 	{
 		for (j = i + 1; oiInfo[j].offset == oiInfo[i].offset; ++j) // always ends thanks to (1) & (2)
 			;
 
 		v.resize(0);
 		v.reserve(j - i);
-		for (k = i; k < j; ++k)
+		for (int k = i; k < j; ++k)
 		{
 			if (oiInfo[k].offset + oiInfo[k].size == oiInfo[j].offset)
 			{
@@ -2077,12 +2076,12 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 		if (v.size() > 1)
 			_findMostLikelyOIId(v);
 
-		for (k = i; k < j; ++k)
+		for (int k = i; k < j; ++k)
 			if (oiInfo[k].num != v[0])
 				oiOffset[oiInfo[k].num] = 0;
 	}
 
-	for (i = 0; i < n; ++i)
+	for (int i = 0; i < n; ++i)
 	{
 		if (oiOffset[i] == 0)
 		{
@@ -2091,7 +2090,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 		}
 	}
 
-	for (i = 0; i < (int)oiInfo.size() - 1; ++i)
+	for (int i = 0; i < (int)oiInfo.size() - 1; ++i)
 		if (oiOffset[oiInfo[i].num] != 0)
 			_oiSize[oiInfo[i].num] = oiInfo[i].size;
 }
@@ -2107,7 +2106,7 @@ void OldRoom::_defCheckOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd)
 	{
 		int32 end;
 
-		end = i < lastObj ? ocOffset[i + 1] : ocEnd;
+		end = (i < lastObj) ? ocOffset[i + 1] : ocEnd;
 		_file->seekg(ocOffset[i], std::ios::beg);
 		_file->getLE16(w);
 
@@ -2132,8 +2131,8 @@ void OldRoom::_getBMOffsets(std::vector<uint16> &bmOffset)
 void OldRoom::_calcSizes(std::vector<int32> &sizes, const std::vector<uint16> &offsets, int32 end)
 {
 	std::vector<uint16> orderedOffsets;
-	size_t n;
 	std::vector<uint16>::iterator pos;
+	size_t n;
 
 	n = offsets.size();
 	sizes.resize(n);
@@ -2460,8 +2459,8 @@ uint16 OldRoomV2::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 		ambiguous = false;
 
 		_file->seekg(offset, std::ios::beg);
-		x = 0;
-		y = 0;
+
+		x = y = 0;
 		while (x < width)
 		{
 			_file->getByte(color);
@@ -2497,8 +2496,8 @@ uint16 OldRoomV2::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 				}
 			}
 		}
-		x = 0;
-		y = 0;
+
+		x = y = 0;
 		while (x < width)
 		{
 			_file->getByte(color);
@@ -2647,8 +2646,8 @@ uint16 OldRoomV3::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 
 		_file->seekg(w - sizeof w, std::ios::cur);
 		maskOffset = _file->tellg(std::ios::beg);
-		x = 0;
-		y = 0;
+
+		x = y = 0;
 		while (x < width)
 		{
 			_file->seekg(maskOffset + (x / 8) * 2, std::ios::beg);
@@ -2693,7 +2692,8 @@ uint16 OldRoomV3::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 			y = 0;
 			x += 8;
 		}
-		return end > 0 ? (uint16)(end - offset) : (uint16)((int32)_file->tellg(std::ios::beg) - offset);
+
+		return (end > 0) ? (uint16)(end - offset) : (uint16)((int32)_file->tellg(std::ios::beg) - offset);
 	}
 	catch (File::UnexpectedEOF &)
 	{

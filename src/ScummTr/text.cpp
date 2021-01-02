@@ -282,8 +282,8 @@ void Text::_writeEscRsc(const std::string &s)
 {
 	int size, countdown;
 
-	size = (int)s.size();
 	countdown = 0;
+	size = (int)s.size();
 	for (int i = 0; i < size; ++i)
 	{
 		if (countdown > 0)
@@ -307,8 +307,8 @@ void Text::_writeEscOldMsg(const std::string &s)
 {
 	int size, countdown;
 
-	size = (int)s.size();
 	countdown = 0;
+	size = (int)s.size();
 	for (int i = 0; i < size; ++i)
 	{
 		if (countdown > 0)
@@ -333,9 +333,9 @@ void Text::_writeEscMsg(const std::string &s)
 	bool func;
 	int size, countdown;
 
-	size = (int)s.size();
-	countdown = 0;
 	func = false;
+	countdown = 0;
+	size = (int)s.size();
 	for (int i = 0; i < size; ++i)
 	{
 		if (countdown > 0)
@@ -390,9 +390,9 @@ void Text::_checkMsg(const std::string &s, int l)
 	int size, countdown;
 	bool func;
 
-	size = (int)s.size();
-	countdown = 0;
 	func = false;
+	countdown = 0;
+	size = (int)s.size();
 	for (int i = 0; i < size; ++i)
 	{
 		if (countdown > 0)
@@ -422,8 +422,8 @@ void Text::_checkRsc(const std::string &s, int l)
 {
 	int size, countdown;
 
-	size = (int)s.size();
 	countdown = 0;
+	size = (int)s.size();
 	for (int i = 0; i < size; ++i)
 	{
 		if (countdown > 0)
@@ -442,8 +442,8 @@ void Text::_checkOldMsg(const std::string &s, int l)
 {
 	int size, countdown;
 
-	size = (int)s.size();
 	countdown = 0;
+	size = (int)s.size();
 	for (int i = 0; i < size; ++i)
 	{
 		if (countdown > 0)
