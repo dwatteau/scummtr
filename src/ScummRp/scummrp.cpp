@@ -516,7 +516,7 @@ void ScummRp::_usage()
 	std::cout << " -q         " << "Quiet" << std::endl;
 	std::cout << std::endl;
 	std::cout << "Example:" << std::endl;
-	std::cout << "ScummRp -gp monkey2 ./mi2 -id ./dumps/mi2" << std::endl;
+	std::cout << "scummrp -gp monkey2 ./mi2 -id ./dumps/mi2" << std::endl;
 }
 
 void ScummRp::_getOptions(int argc, const char **argv, const ScummRp::Parameter *params)
