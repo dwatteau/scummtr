@@ -110,15 +110,19 @@ void ScriptBlock::importText(Text &input)
 	int32 oldSize;
 
 	oldSize = _file->size();
+
 	if (_script == nullptr)
 		_script = new Script(*_file, _headerSize, _file->size() - _headerSize);
+
 	input.setInfo(_lflfId(), _tag, _ownId());
 
 	try
 	{
 		_script->importText(input);
+
 		_file->seekp(0, std::ios::beg);
 		Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag);
+
 		if (_parent != nullptr)
 			_parent->_subblockUpdated(*this, _file->size() - oldSize);
 	}
@@ -193,13 +197,18 @@ void ObjectNameBlock::importText(Text &input)
 	{
 		if (!input.nextLine(s, Text::LT_RSC))
 			throw File::UnexpectedEOF("Not enough lines in imported text");
+
 		_file->seekp(_headerSize, std::ios::beg);
+
 		s += '\0';
 		_file->write(s);
+
 		if (oldSize > (int32)s.size() + _headerSize)
 			_file->resize((int32)s.size() + _headerSize);
+
 		_file->seekp(0, std::ios::beg);
 		Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag);
+
 		if (_parent != nullptr)
 			_parent->_subblockUpdated(*this, _file->size() - oldSize);
 	}
@@ -211,12 +220,17 @@ void ObjectNameBlock::exportText(Text &output, bool pad)
 	byte b;
 
 	s.reserve(32);
+
 	_file->seekg(_headerSize, std::ios::beg);
+
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 		s += (char)b;
+
 	output.setInfo(_lflfId(), _tag, _ownId());
+
 	if (pad && s.size() > 0 && ScummTr::getRscNameMaxLengh(ScummTr::RSCT_OBJECT, _id) > (int32)s.size())
 		s.resize(ScummTr::getRscNameMaxLengh(ScummTr::RSCT_OBJECT, _id), '@');
+
 	output.addLine(s, Text::LT_RSC);
 }
 
@@ -226,9 +240,11 @@ void ObjectNameBlock::getRscNameLimits()
 	byte b;
 
 	_file->seekg(_headerSize, std::ios::beg);
+
 	i = 0;
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 		++i;
+
 	ScummTr::setRscNameMaxLengh(ScummTr::RSCT_OBJECT, _id, i);
 }
 
@@ -268,6 +284,7 @@ void ObjectCodeBlock::_tListVerbs(std::list<int32> &l, int32 scriptOffset)
 
 	l.resize(0);
 	_file->seekg(I + _headerSize, std::ios::beg);
+
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 	{
 		(*_file).getLE(o);
@@ -281,6 +298,7 @@ void ObjectCodeBlock::_tUpdateVerbs(const std::list<int32> &l, int32 scriptOffse
 	T o;
 
 	_file->seekp(I + _headerSize, std::ios::beg);
+
 	for (std::list<int32>::const_iterator i = l.begin(); i != l.end(); ++i)
 	{
 		_file->seekp(1, std::ios::cur);
@@ -300,6 +318,7 @@ int32 ObjectCodeBlock::_tFindScriptOffset()
 	byte b;
 
 	_file->seekg(I + _headerSize, std::ios::beg);
+
 	min = _file->size();
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 	{
@@ -444,14 +463,19 @@ void OldObjectCodeBlock::_exportName(Text &output, bool pad)
 
 	tag = ((_tag & 0xFFFF0000) != 0) ? (_tag & 0xFF00FFFF) | ('N' << 16) : (_tag & 0x0000FF00) | 'N';
 	output.setInfo(_lflfId(), tag, _ownId());
+
 	s.reserve(32);
+
 	_file->seekg(I + _headerSize, std::ios::beg);
 	_file->getByte(b);
+
 	_file->seekg(b, std::ios::beg);
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 		s += (char)b;
+
 	if (pad && s.size() > 0 && ScummTr::getRscNameMaxLengh(ScummTr::RSCT_OBJECT, _id) > (int32)s.size())
 		s.resize(ScummTr::getRscNameMaxLengh(ScummTr::RSCT_OBJECT, _id), '@');
+
 	output.addLine(s, Text::LT_RSC);
 }
 
@@ -466,6 +490,7 @@ void OldObjectCodeBlock::_importName(Text &input, int32 &scriptOffset)
 
 	_file->seekg(I + _headerSize, std::ios::beg);
 	_file->getByte(o);
+
 	_file->seekg(o, std::ios::beg);
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 		;
@@ -477,17 +502,22 @@ void OldObjectCodeBlock::_importName(Text &input, int32 &scriptOffset)
 			throw File::UnexpectedEOF("Not enough lines in imported text");
 
 		f = new FilePart(*_file, o, size);
+
 		f->resize((int32)s.size() + 1);
 		f->seekp(0, std::ios::beg);
+
 		f->write(s);
 		f->putByte((byte)0);
+
 		sizeDiff = f->size() - size;
 		scriptOffset += sizeDiff;
 		if (sizeDiff != 0)
 		{
 			_listVerbs(verbs, scriptOffset);
+
 			for (std::list<int32>::iterator i = verbs.begin(); i != verbs.end(); ++i)
 				*i += sizeDiff;
+
 			_updateVerbs(verbs, scriptOffset, input.lineNumber());
 		}
 	}
@@ -499,13 +529,16 @@ void OldObjectCodeBlock::importText(Text &input)
 
 	oldSize = _file->size();
 	scriptOffset = _findScriptOffset();
+
 	OldObjectCodeBlock::_importName<0x0C>(input, scriptOffset);
+
 	_importText(input, oldSize, scriptOffset);
 }
 
 void OldObjectCodeBlock::exportText(Text &output, bool pad)
 {
 	OldObjectCodeBlock::_exportName<0x0C>(output, pad);
+
 	ObjectCodeBlock::exportText(output, pad);
 }
 
@@ -516,11 +549,14 @@ void OldObjectCodeBlock::getRscNameLimits()
 
 	_file->seekg(0x0C + _headerSize, std::ios::beg);
 	_file->getByte(b);
+
 	_file->seekg(b, std::ios::beg);
 	i = 0;
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 		++i;
+
 	ScummTr::setRscNameMaxLengh(ScummTr::RSCT_OBJECT, _id, i);
+
 	ObjectCodeBlock::getRscNameLimits();
 }
 
@@ -569,13 +605,16 @@ void OldObjectCodeBlockV1::importText(Text &input)
 
 	oldSize = _file->size();
 	scriptOffset = _findScriptOffset();
+
 	OldObjectCodeBlock::_importName<0x0A>(input, scriptOffset);
+
 	_importText(input, oldSize, scriptOffset);
 }
 
 void OldObjectCodeBlockV1::exportText(Text &output, bool pad)
 {
 	OldObjectCodeBlock::_exportName<0x0A>(output, pad);
+
 	ObjectCodeBlock::exportText(output, pad);
 }
 
@@ -586,10 +625,13 @@ void OldObjectCodeBlockV1::getRscNameLimits()
 
 	_file->seekg(0x0A + _headerSize, std::ios::beg);
 	_file->getByte(b);
+
 	_file->seekg(b, std::ios::beg);
 	i = 0;
 	for (_file->getByte(b); b != 0; _file->getByte(b))
 		++i;
+
 	ScummTr::setRscNameMaxLengh(ScummTr::RSCT_OBJECT, _id, i);
+
 	ObjectCodeBlock::getRscNameLimits();
 }

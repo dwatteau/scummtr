@@ -44,6 +44,7 @@ TableOfContent::~TableOfContent()
 TableOfContent &TableOfContent::operator=(const TableOfContent &t)
 {
 	_zap();
+
 	_size = t._size;
 	_toc = new TocElement[_size];
 	for (int i = 0; i < _size; ++i)
@@ -51,6 +52,7 @@ TableOfContent &TableOfContent::operator=(const TableOfContent &t)
 		_toc[i].roomId = t._toc[i].roomId;
 		_toc[i].offset = t._toc[i].offset;
 	}
+
 	return *this;
 }
 
@@ -220,7 +222,9 @@ void TableOfContent::_load8Sep16(FilePart &file, int size)
 			_size = (int)b;
 		}
 		else
+		{
 			_size = size;
+		}
 		_toc = new TocElement[_size];
 
 		for (int i = 0; i < _size; ++i)
@@ -256,6 +260,7 @@ void TableOfContent::_load8Mix32(FilePart &file)
 	{
 		file.getByte(b);
 		_size = (int)b;
+
 		_toc = new TocElement[_size];
 		for (int i = 0; i < _size; ++i)
 		{
@@ -269,6 +274,7 @@ void TableOfContent::_load8Mix32(FilePart &file)
 void TableOfContent::_save8Mix32(FilePart &file) const
 {
 	file.putByte((byte)_size);
+
 	for (int i = 0; i < _size; ++i)
 	{
 		file.putByte(_toc[i].roomId);
@@ -285,6 +291,7 @@ void TableOfContent::_load16Mix32(FilePart &file)
 	{
 		file.getLE16(w);
 		_size = (int)w;
+
 		_toc = new TocElement[_size];
 		for (int i = 0; i < _size; ++i)
 		{
@@ -298,6 +305,7 @@ void TableOfContent::_load16Mix32(FilePart &file)
 void TableOfContent::_save16Mix32(FilePart &file) const
 {
 	file.putLE16((uint16)_size);
+
 	for (int i = 0; i < _size; ++i)
 	{
 		file.putByte(_toc[i].roomId);
@@ -394,6 +402,7 @@ void GlobalRoomIndex::_zap()
 void GlobalRoomIndex::merge(const TableOfContent &t)
 {
 	for (int i = 0; i < _size; ++i)
+	{
 		if (t.accessed((byte)i))
 		{
 			if (_accessed[i] && _toc[i].offset != t[i].offset)
@@ -402,6 +411,7 @@ void GlobalRoomIndex::merge(const TableOfContent &t)
 			_toc[i].offset = t[i].offset;
 			_accessed[i] = true;
 		}
+	}
 }
 
 int GlobalRoomIndex::count(byte, int32) const

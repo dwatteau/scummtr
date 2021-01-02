@@ -370,8 +370,11 @@ public:
 			File::write(_srcFile, gpos + n - _tmpSize);
 			this->seekp(ppos, std::ios::beg);
 		}
+
 		this->seekg(gpos, std::ios::beg);
+
 		T::read(s, n);
+
 		return *this;
 	}
 	virtual File &write(const char *s, std::streamsize n)
@@ -381,6 +384,7 @@ public:
 		ppos = this->tellp(std::ios::beg);
 		if (ppos + n > this->_size)
 			this->_setSize(ppos + n);
+
 		if (ppos > _tmpSize)
 		{
 			this->seekp(_tmpSize, std::ios::beg);
@@ -392,12 +396,17 @@ public:
 				_tmpSize = ppos;
 			}
 			else
+			{
 				File::write(_srcFile, ppos - _tmpSize);
+			}
 		}
 		if (ppos + n > _tmpSize)
 			_tmpSize = ppos + n;
+
 		this->seekp(ppos, std::ios::beg);
+
 		T::write(s, n);
+
 		return *this;
 	}
 	virtual void move(std::streamoff, std::streamsize)
@@ -411,8 +420,10 @@ public:
 		char c;
 
 		oldSize = this->_size;
+
 		if (offset == 0)
 			return;
+
 		ppos = this->tellp(std::ios::beg);
 		if (offset > 0)
 		{
@@ -420,7 +431,9 @@ public:
 				return;
 
 			if (_tmpSize > ppos)
+			{
 				T::move(offset, _tmpSize - ppos);
+			}
 			else
 			{
 				if (_tmpSize < ppos)
@@ -447,7 +460,9 @@ public:
 				_tmpSize += offset;
 			}
 			else
+			{
 				_tmpSize = ppos + offset;
+			}
 		}
 		this->_setSize(oldSize + offset);
 		_shift += offset;

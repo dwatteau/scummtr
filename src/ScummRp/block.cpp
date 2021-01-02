@@ -112,6 +112,7 @@ const char *Block::tagToStr(uint32 tag)
 			strTag[currentStr][1] = '_';
 		}
 	}
+
 	return strTag[currentStr];
 }
 
@@ -242,6 +243,7 @@ int TreeBlock::_findIdInBlock(TreeBlock &block)
 	case MKTAG4('O','B','I','M'):
 		block.firstBlock();
 		while (block.nextBlock(subblock))
+		{
 			if (subblock._tag == MKTAG4('I','M','H','D'))
 			{
 				if (ScummRp::game.version < 7)
@@ -251,10 +253,12 @@ int TreeBlock::_findIdInBlock(TreeBlock &block)
 				subblock._file->getLE16(w);
 				return w;
 			}
+		}
 		throw Block::InvalidDataFromGame("Cannot find IMHD block in OBIM block", block._file->name(), block._file->fullOffset());
 	case MKTAG4('O','B','C','D'):
 		block.firstBlock();
 		while (block.nextBlock(subblock))
+		{
 			if (subblock._tag == MKTAG4('C','D','H','D'))
 			{
 				if (ScummRp::game.version < 7)
@@ -264,6 +268,7 @@ int TreeBlock::_findIdInBlock(TreeBlock &block)
 				subblock._file->getLE16(w);
 				return w;
 			}
+		}
 		throw Block::InvalidDataFromGame("Cannot find CDHD block in OBCD block", block._file->name(), block._file->fullOffset());
 	case MKTAG2('O','I'):
 	case MKTAG2('O','C'):
@@ -583,6 +588,7 @@ void BlocksFile::_init(const char *path, int opts, BackUp *bak, int id, uint32 t
 		else
 			opts |= BlocksFile::BFOPT_RAM;
 	}
+
 	// force BFOPT_SEQFILE for 10+ MB files (exponential time otherwise!)
 	// FIXME this is only for programs like ScummRp & ScummTr
 	if (size > 0xA00000 && ((opts & BlocksFile::BFOPT_RAM) || !(opts & BlocksFile::BFOPT_SEQFILE)))
@@ -591,6 +597,7 @@ void BlocksFile::_init(const char *path, int opts, BackUp *bak, int id, uint32 t
 		opts &= ~BlocksFile::BFOPT_RAM;
 		ScummRpIO::info(INF_GLOBAL, "File too big, forced -O and disabled -m");
 	}
+
 	_blockFormat = BFMT_NOHEADER;
 	_headerSize = 0;
 	_id = id;
@@ -604,7 +611,9 @@ void BlocksFile::_init(const char *path, int opts, BackUp *bak, int id, uint32 t
 	{
 		f = (opts & BlocksFile::BFOPT_RAM) ? &_ownRAMFile : &_ownFile;
 		if (bak != nullptr && (opts & BlocksFile::BFOPT_BACKUP))
+		{
 			if (opts & BlocksFile::BFOPT_SEQFILE)
+			{
 				if (opts & BlocksFile::BFOPT_RAM)
 				{
 					_ownSeqRAMFile.open(path, *bak);
@@ -615,13 +624,21 @@ void BlocksFile::_init(const char *path, int opts, BackUp *bak, int id, uint32 t
 					_ownSeqFile.open(path, *bak);
 					f = &_ownSeqFile;
 				}
+			}
 			else
+			{
 				f->open(bak->backup(path).c_str(), std::ios::binary | std::ios::out | std::ios::in);
+			}
+		}
 		else
+		{
 			f->open(path, std::ios::binary | std::ios::out | std::ios::in);
+		}
 	}
+
 	if (!f->is_open())
 		throw std::runtime_error(xsprintf("Cannot open %s", path));
+
 	_file = new FilePart(*f);
 	_file->setXORKey(xorKey);
 }
@@ -648,6 +665,7 @@ void Room::_uniqueId(uint32 tag, int32 id)
 {
 	if (std::find(_uIdsSoFar.begin(), _uIdsSoFar.end(), Room::IdAndTag(id, tag)) != _uIdsSoFar.end())
 		throw Room::IdNotUnique(xsprintf("%s #%i is not unique", Block::tagToStr(tag), id));
+
 	_uIdsSoFar.push_back(Room::IdAndTag(id, tag));
 }
 
@@ -690,6 +708,7 @@ int RoomPack::_findNextLFLFRootBlock(byte roomId, int32 currentOffset, int32 roo
 			}
 		}
 	}
+
 	return nextOffset;
 }
 
@@ -843,16 +862,19 @@ TreeBlock *LFLFile::_nextLFLSubblock()
 			subblock = new TreeBlock;
 		else
 			subblock = new T;
+
 		if (!nextBlock(*subblock))
 		{
 			delete subblock;
 			subblock = nullptr;
 			return nullptr;
 		}
+
 		if (dynamic_cast<const GlobalRoomIndex *> (toc) == nullptr)
 			subblock->_id = id;
 	}
 	catch (...) { delete subblock; throw; }
+
 	return subblock;
 }
 
@@ -873,6 +895,7 @@ void LFLFile::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 	TreeBlock::_subblockUpdated(subblock, sizeDiff);
 	if (sizeDiff == 0)
 		return;
+
 	minOffset = (int32)(subblock._file->offset() - _headerSize + subblock._file->size() - sizeDiff);
 	// invalid offsets have to be erased, because the shift could make them "valid" and hide the real valid blocks
 	RoomPack::_eraseOffsetsInRange((byte)_id, subblock._file->offset() + 1 - _headerSize, minOffset);
@@ -901,7 +924,9 @@ LFLFPack::~LFLFPack()
 LFLFPack &LFLFPack::operator=(const TreeBlock &block)
 {
 	TreeBlock::operator=(block);
+
 	_init();
+
 	return *this;
 }
 
@@ -910,8 +935,10 @@ void LFLFPack::_init()
 	// LF blocks have 1 word for the room number (6 + 2 = 8 bytes)
 	// LFLF blocks have a normal 8 bytes header
 	_headerSize = 8;
+
 	for (int i = 0; ScummRp::tocs[i] != nullptr; ++i)
 		ScummRp::tocs[i]->accessing((byte)_id);
+
 	RoomPack::_eraseOffsetsInRange((byte)_id, _file->size(), 0xFFFFFFFF);
 }
 
@@ -936,16 +963,19 @@ TreeBlock *LFLFPack::nextBlock()
 			subblock = new TreeBlock;
 		else
 			subblock = new RoomBlock;
+
 		if (!TreeBlock::nextBlock(*subblock))
 		{
 			delete subblock;
 			subblock = nullptr;
 			return nullptr;
 		}
+
 		if (dynamic_cast<const GlobalRoomIndex *> (toc) == nullptr)
 			subblock->_id = id;
 	}
 	catch (...) { delete subblock; throw; }
+
 	return subblock;
 }
 
@@ -984,6 +1014,7 @@ LECFPack::LECFPack(const TreeBlock &block) :
 LECFPack &LECFPack::operator=(const TreeBlock &block)
 {
 	TreeBlock::operator=(block);
+
 	_firstBlockOffset = 0;
 	_init();
 
@@ -1069,9 +1100,11 @@ void LECFPack::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 
 	minOffset = (int32)(subblock._file->offset() + subblock._file->size() - sizeDiff);
 	_loff.firstId();
+
 	while (_loff.nextId(roomId))
 		if (_loff[roomId] >= minOffset)
 			_loff[roomId] += sizeDiff;
+
 	_file->seekp(_LOFFOffset, std::ios::beg);
 	_loff.save(*_file);
 }
@@ -1181,6 +1214,7 @@ bool OldIndexFile::nextBlock(TreeBlock &subblock)
 	subblock._tag = _tags(_pos);
 	subblock._id = -1;
 	subblock._nextSubblockOffset = 0;
+
 	if (_pos == 0) // Object flags (different format)
 	{
 		_file->seekg(_nextSubblockOffset, std::ios::beg);
@@ -1193,6 +1227,7 @@ bool OldIndexFile::nextBlock(TreeBlock &subblock)
 		_file->getByte(b);
 		size = sizeof (byte) + b * (sizeof (uint16) + sizeof (byte));
 	}
+
 	if (size + _nextSubblockOffset > _file->size())
 		throw Block::InvalidDataFromGame(xsprintf("Block too big: 0x%X", size), _file->name(), _nextSubblockOffset + _file->fullOffset());
 
@@ -1341,12 +1376,14 @@ void OldLFLFile::_moveLFLFRootBlockInToc(byte roomId, int32 minOffset, int32 n) 
 	{
 		ScummRp::tocs[i]->firstId(roomId);
 		while (ScummRp::tocs[i]->nextId(blockId, roomId))
+		{
 			if ((int32)(*ScummRp::tocs[i])[blockId].offset >= minOffset)
 			{
 				(*ScummRp::tocs[i])[blockId].offset += n;
 				if ((*ScummRp::tocs[i])[blockId].offset >= 0xFFFF)
 					throw RoomPack::BadOffset(xsprintf("Offset too far: 0x%X in %.2i.LFL", (*ScummRp::tocs[i])[blockId].offset, roomId));
 			}
+		}
 	}
 }
 
@@ -1380,14 +1417,18 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 				ScummRpIO::warning(xsprintf("%.2i.LFL should actually end at 0x%X", _id, o));
 			return false;
 		}
+
 		if (o < _nextSubblockOffset)
 			gap = true;
+
 		_file->seekg(_nextSubblockOffset, std::ios::beg);
 		_file->getLE16(w);
 		_file->getByte(b);
+
 		// TODO Hack for Indy3 Mac. In 76.LFL SO_27 (0x4CA8) has a wrong size and hides 4 sounds.
 		if (w >= 4 && b == 0 && w + _nextSubblockOffset <= _file->size())
 			break;
+
 		++_nextSubblockOffset;
 	}
 	if (gap)
@@ -1414,6 +1455,7 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 
 	if (!TreeBlock::nextBlock(subblock))
 		return false;
+
 	if (toc->getType() != TableOfContent::TOCT_ROOM)
 		subblock._id = id;
 
@@ -1526,6 +1568,7 @@ OldRoom::~OldRoom()
 OldRoom &OldRoom::operator=(const TreeBlock &block)
 {
 	TreeBlock::operator=(block);
+
 	_type = BT_NULL;
 	_pos = 0;
 	_n = 0;
@@ -1610,6 +1653,7 @@ void OldRoom::_prepareBlockOO(TreeBlock &subblock, int32 offsetToOffset, int32 s
 
 	_file->seekg(offsetToOffset, std::ios::beg);
 	_file->getLE16(w);
+
 	_prepareBlockO(subblock, w, size, type);
 }
 
@@ -1639,6 +1683,7 @@ TreeBlock *OldRoom::nextBlock()
 			// It cannot be done from _subblockUpdated() because OI blocks depend on
 			// OC blocks and vice versa.
 			if (_updated)
+			{
 				try
 				{
 					ScummRpIO::setQuiet(true);
@@ -1646,6 +1691,7 @@ TreeBlock *OldRoom::nextBlock()
 					ScummRpIO::setQuiet(false);
 				}
 				catch (std::exception &) { ScummRpIO::setQuiet(false); throw; }
+			}
 			return nullptr;
 		case BT_HD:
 			subblock = new LeafBlock();
@@ -1702,6 +1748,7 @@ TreeBlock *OldRoom::nextBlock()
 				++_pos;
 				return nextBlock();
 			}
+
 			subblock = new LeafBlock();
 			_prepareBlockOO(*subblock, _ooEX(), _exSize, _type);
 			break;
@@ -1711,6 +1758,7 @@ TreeBlock *OldRoom::nextBlock()
 				++_pos;
 				return nextBlock();
 			}
+
 			subblock = new LeafBlock();
 			_prepareBlockOO(*subblock, _ooEN(), _enSize, _type);
 			break;
@@ -1727,11 +1775,14 @@ TreeBlock *OldRoom::nextBlock()
 		default:
 			throw Block::InvalidBlock("OldRoom::nextBlock: Invalid subblock type");
 		}
+
 		++_pos;
 		_nextSubblockOffset = subblock->_file->offset() + subblock->_file->size();
 		_adopt(*subblock);
 		subblock->_init();
+
 		if (TreeBlock::_findIdInBlock(*subblock) != -1)
+		{
 			try
 			{
 				_uniqueId(subblock->_tag, subblock->_id);
@@ -1740,6 +1791,7 @@ TreeBlock *OldRoom::nextBlock()
 			{
 				ScummRpIO::warning(e.what());
 			}
+		}
 		return subblock;
 	}
 	catch (...) { delete subblock; throw; }
@@ -1807,13 +1859,17 @@ void OldRoom::_getSizes()
 		oiOffsets.resize(objNbr);
 		ocOffsets.resize(objNbr);
 		_file->seekg(_oObjTOC(), std::ios::beg);
+
 		for (i = 0; i < objNbr; ++i)
 			_file->getLE16(oiOffsets[i]);
+
 		for (i = 0; i < objNbr; ++i)
 			_file->getLE16(ocOffsets[i]);
+
 		_getOIInfo(bmLastOffset, oiOffsets, ocOffsets);
 		std::sort(oiOffsets.begin(), oiOffsets.end());
 		std::sort(ocOffsets.begin(), ocOffsets.end());
+
 		for (i = 0; i < objNbr && oiOffsets[i] == 0; ++i)
 			;
 		if (i == objNbr)
@@ -1917,13 +1973,16 @@ void OldRoom::_findMostLikelyOIId(std::vector<int> &candidates) const
 	msg = xsprintf("%s_%.4i might actually be %s_%.4i", Block::tagToStr(_tags(BT_OI)), _oiId[candidates[0]], Block::tagToStr(_tags(BT_OI)), _oiId[candidates[1]]);
 	for (i = 2; i < (int)candidates.size(); ++i)
 		msg += xsprintf(" or %s_%.4i", Block::tagToStr(_tags(BT_OI)), _oiId[candidates[i]]);
+
 	if (pref[i].oiNbr != 0)
 	{
 		msg += " (unlikely)";
 		ScummRpIO::info(INF_DETAIL, msg.c_str());
 	}
 	else
+	{
 		ScummRpIO::warning(msg.c_str());
+	}
 }
 
 // oiOffset.size() == ocOffset.size() && oiOffset.size() > 0
@@ -1949,15 +2008,19 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 		_file->seekg(ocOffset[i] + _oOCId(), std::ios::beg);
 		_file->getLE16(w);
 		_oiId[i] = w;
+
 		_file->seekg(ocOffset[i] + _oOCWidth(), std::ios::beg);
 		_file->getByte(b);
 		width = b << 3;
+
 		_file->seekg(ocOffset[i] + _oOCHeight(), std::ios::beg);
 		_file->getByte(b);
 		height = b & 0xF8;
 
 		if (oiOffset[i] >= firstOCOffset || oiOffset[i] <= bmLastOffset) // (1)
+		{
 			oiOffset[i] = 0;
+		}
 		else
 		{
 			w = _getOISize(width, height, oiOffset[i], ambiguousSize);
@@ -1978,9 +2041,13 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 		v.resize(0);
 		v.reserve(j - i);
 		for (k = i; k < j; ++k)
+		{
 			if (oiInfo[k].offset + oiInfo[k].size == oiInfo[j].offset)
+			{
 				v.push_back(oiInfo[k].num);
+			}
 			else
+			{
 				// FIXME Hack for zakv2 which has two bad OI blocks in room 35.
 				// Could it be because the OI decoder from scumm16 is not perfect?
 				if (ScummRp::game.id == GID_ZAK && ScummRp::game.version == 2
@@ -2001,6 +2068,8 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 					oiInfo[k].size = 0x3C2;
 					v.push_back(oiInfo[k].num);
 				}
+			}
+		}
 
 		if (v.size() == 0)
 			throw Block::InvalidDataFromGame(xsprintf("Bad %s offset", Block::tagToStr(_tags(BT_OI))), _file->name(), _file->fullOffset());
@@ -2014,11 +2083,13 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 	}
 
 	for (i = 0; i < n; ++i)
+	{
 		if (oiOffset[i] == 0)
 		{
 			_oiId[i] = -1;
 			_oiSize[i] = 0;
 		}
+	}
 
 	for (i = 0; i < (int)oiInfo.size() - 1; ++i)
 		if (oiOffset[oiInfo[i].num] != 0)
@@ -2039,6 +2110,7 @@ void OldRoom::_defCheckOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd)
 		end = i < lastObj ? ocOffset[i + 1] : ocEnd;
 		_file->seekg(ocOffset[i], std::ios::beg);
 		_file->getLE16(w);
+
 		if ((int32)(w + ocOffset[i]) != end)
 			throw Block::InvalidDataFromGame(xsprintf("Bad %s offset or size", Block::tagToStr(_tags(BT_OC))), _file->name(), _file->fullOffset());
 	}
@@ -2095,6 +2167,7 @@ void OldRoom::_updateOffset(int32 offsetToOffset, int32 minOffset, int32 shift, 
 	{
 		if ((offset + shift) & 0xFFFF0000)
 			throw InvalidDataFromDump(xsprintf("%s block too big", tagToStr(subblockTag)));
+
 		_file->seekp(offsetToOffset, std::ios::beg);
 		_file->putLE16((uint16)(offset + shift));
 	}
@@ -2105,11 +2178,13 @@ void OldRoom::_cleanup()
 	// Erase bad OI offsets
 	// _findMostLikelyOIId has to be perfect before using this
 	for (int i = 0; i < (int)_oiSize.size(); ++i)
+	{
 		if (_oiId[i] == -1)
 		{
 			_file->seekp(_oObjTOC() + 2 * i, std::ios::beg);
 			_file->putLE16((uint16)0);
 		}
+	}
 }
 
 void OldRoom::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
@@ -2191,7 +2266,9 @@ OldRoomV1::~OldRoomV1()
 OldRoomV1 &OldRoomV1::operator=(const TreeBlock &block)
 {
 	OldRoom::operator=(block);
+
 	_init();
+
 	return *this;
 }
 
@@ -2223,6 +2300,7 @@ void OldRoomV1::_checkOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd)
 		if (w + ocOffset[i] != ocOffset[i + 1])
 			throw Block::InvalidDataFromGame(xsprintf("Bad %s offset or size", Block::tagToStr(_tags(BT_OC))), _file->name(), _file->fullOffset());
 	}
+
 	// last block
 	_file->seekg(ocOffset.back(), std::ios::beg);
 	_file->getLE16(w);
@@ -2242,6 +2320,7 @@ uint16 OldRoomV1::_getBXOffset()
 
 	_file->seekg(_ooBX(), std::ios::beg);
 	_file->getByte(b);
+
 	return (uint16)b;
 }
 
@@ -2260,10 +2339,13 @@ uint16 OldRoomV1::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 	try
 	{
 		ambiguous = false;
+
 		_file->seekg(offset, std::ios::beg);
 		size = (width >> 3) * (height >> 3) * 3;
+
 		for (z = 0; z < 4; ++z)
 			_file->getByte(common[z]);
+
 		x = 0;
 		while (x < size)
 		{
@@ -2281,12 +2363,15 @@ uint16 OldRoomV1::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 				x += color + 1;
 			}
 			else
+			{
 				for (z = 0; z <= color; ++z)
 				{
 					_file->getByte(b);
 					++x;
 				}
+			}
 		}
+
 		return (uint16)((int32)_file->tellg(std::ios::beg) - offset);
 	}
 	catch (File::UnexpectedEOF &)
@@ -2321,7 +2406,9 @@ OldRoomV2::~OldRoomV2()
 OldRoomV2 &OldRoomV2::operator=(const TreeBlock &block)
 {
 	OldRoom::operator=(block);
+
 	_init();
+
 	return *this;
 }
 
@@ -2354,6 +2441,7 @@ uint16 OldRoomV2::_getBXOffset()
 
 	_file->seekg(_ooBX(), std::ios::beg);
 	_file->getByte(b);
+
 	return (uint16)b;
 }
 
@@ -2370,6 +2458,7 @@ uint16 OldRoomV2::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 	try
 	{
 		ambiguous = false;
+
 		_file->seekg(offset, std::ios::beg);
 		x = 0;
 		y = 0;
@@ -2381,12 +2470,15 @@ uint16 OldRoomV2::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 				run = color & 0x7F;
 				if (run == 0)
 					_file->getByte(run);
+
 				for (z = 0; z < run; ++z)
+				{
 					if (++y >= height)
 					{
 						y = 0;
 						++x;
 					}
+				}
 			}
 			else
 			{
@@ -2394,12 +2486,15 @@ uint16 OldRoomV2::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 				color = color & 0x0F;
 				if (run == 0)
 					_file->getByte(run);
+
 				for (z = 0; z < run; ++z)
+				{
 					if (++y >= height)
 					{
 						y = 0;
 						++x;
 					}
+				}
 			}
 		}
 		x = 0;
@@ -2412,13 +2507,18 @@ uint16 OldRoomV2::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 				run = color & 0x7F;
 				if (run == 0)
 					_file->getByte(run);
+
 				_file->getByte(color);
+
 				for (z = 0; z < run; ++z)
+				{
 					if (++y == height)
 					{
 						y = 0;
 						x += 8;
 					}
+				}
+
 				// FIXME OI masks finished by 0x82 are 1 byte too short. Why?
 				if (x == width && run == 0x02)
 					ambiguous = true;
@@ -2428,6 +2528,7 @@ uint16 OldRoomV2::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 				run = color;
 				if (run == 0)
 					_file->getByte(run);
+
 				for (z = 0; z < run; ++z)
 				{
 					_file->getByte(color);
@@ -2439,6 +2540,7 @@ uint16 OldRoomV2::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 				}
 			}
 		}
+
 		return (uint16)((int32)_file->tellg(std::ios::beg) - offset);
 	}
 	catch (File::UnexpectedEOF &)
@@ -2473,7 +2575,9 @@ OldRoomV3::~OldRoomV3()
 OldRoomV3 &OldRoomV3::operator=(const TreeBlock &block)
 {
 	OldRoom::operator=(block);
+
 	_init();
+
 	return *this;
 }
 
@@ -2506,6 +2610,7 @@ uint16 OldRoomV3::_getBXOffset()
 
 	_file->seekg(_ooBX(), std::ios::beg);
 	_file->getLE16(w);
+
 	return w;
 }
 
@@ -2516,6 +2621,7 @@ void OldRoomV3::_getLSOffsets(std::vector<uint16> &lsOffset, byte objNbr, byte n
 
 	_oLSTOC = _oObjTOC() + objNbr * 4 + nlSize + slSize;
 	_file->seekg(_oLSTOC, std::ios::beg);
+
 	for (_file->getByte(lsId); lsId != 0; _file->getByte(lsId))
 	{
 		_file->getLE16(w);
@@ -2534,9 +2640,11 @@ uint16 OldRoomV3::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 	try
 	{
 		ambiguous = false;
+
 		end = 0;
 		_file->seekg(offset, std::ios::beg);
 		_file->getLE16(w);
+
 		_file->seekg(w - sizeof w, std::ios::cur);
 		maskOffset = _file->tellg(std::ios::beg);
 		x = 0;
@@ -2558,9 +2666,11 @@ uint16 OldRoomV3::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 						if (run == 0)
 							_file->getByte(run);
 						_file->getByte(color);
+
 						y += run;
 						if (y > height)
 							return 0;
+
 						// FIXME OI masks finished by 0x82 can be 1 byte too short. Why?
 						if (y == height && run == 0x02)
 							ambiguous = true;
@@ -2570,6 +2680,7 @@ uint16 OldRoomV3::_getOISize(uint16 width, uint16 height, uint16 offset, bool &a
 						run = color;
 						if (run == 0)
 							_file->getByte(run);
+
 						for (z = 0; z < run; ++z)
 						{
 							_file->getByte(color);

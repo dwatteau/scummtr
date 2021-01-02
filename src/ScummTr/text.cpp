@@ -285,6 +285,7 @@ void Text::_writeEscRsc(const std::string &s)
 	size = (int)s.size();
 	countdown = 0;
 	for (int i = 0; i < size; ++i)
+	{
 		if (countdown > 0)
 		{
 			_writeEscChar((byte)s[i]);
@@ -296,7 +297,10 @@ void Text::_writeEscRsc(const std::string &s)
 			countdown = 3;
 		}
 		else
+		{
 			_writeChar((byte)s[i]);
+		}
+	}
 }
 
 void Text::_writeEscOldMsg(const std::string &s)
@@ -306,6 +310,7 @@ void Text::_writeEscOldMsg(const std::string &s)
 	size = (int)s.size();
 	countdown = 0;
 	for (int i = 0; i < size; ++i)
+	{
 		if (countdown > 0)
 		{
 			_writeEscChar((byte)s[i]);
@@ -317,7 +322,10 @@ void Text::_writeEscOldMsg(const std::string &s)
 			countdown = 1;
 		}
 		else
+		{
 			_writeChar((byte)s[i]);
+		}
+	}
 }
 
 void Text::_writeEscMsg(const std::string &s)
@@ -329,6 +337,7 @@ void Text::_writeEscMsg(const std::string &s)
 	countdown = 0;
 	func = false;
 	for (int i = 0; i < size; ++i)
+	{
 		if (countdown > 0)
 		{
 			_writeEscChar((byte)s[i]);
@@ -346,7 +355,10 @@ void Text::_writeEscMsg(const std::string &s)
 			func = true;
 		}
 		else
+		{
 			_writeChar((byte)s[i]);
+		}
+	}
 }
 
 void Text::_writeEsc(const std::string &s, Text::LineType t)
@@ -382,17 +394,25 @@ void Text::_checkMsg(const std::string &s, int l)
 	countdown = 0;
 	func = false;
 	for (int i = 0; i < size; ++i)
+	{
 		if (countdown > 0)
+		{
 			--countdown;
+		}
 		else if (func)
 		{
 			countdown = Text::funcLen((byte)s[i]);
 			func = false;
 		}
 		else if ((byte)s[i] == 0xFF || (byte)s[i] == 0xFE)
+		{
 			func = true;
+		}
 		else if (s[i] == '\0')
+		{
 			throw Text::Error(xsprintf("NULL char in line %i", l));
+		}
+	}
 
 	if (countdown > 0 || func)
 		throw Text::Error(xsprintf("Truncated function in line %i", l));
@@ -405,12 +425,14 @@ void Text::_checkRsc(const std::string &s, int l)
 	size = (int)s.size();
 	countdown = 0;
 	for (int i = 0; i < size; ++i)
+	{
 		if (countdown > 0)
 			--countdown;
 		else if ((byte)s[i] == 0xFF)
 			countdown = 3;
 		else if (s[i] == '\0')
 			throw Text::Error(xsprintf("NULL char in line %i", l));
+	}
 
 	if (countdown > 0)
 		throw Text::Error(xsprintf("Truncated function in line %i", l));
@@ -475,21 +497,27 @@ void Text::_unEsc(std::string &s, Text::LineType t) const
 				if (s[i] == 'x')
 				{
 					base = 0x10;
+
 					a = 0;
+
 					b = (byte)((s[++i] | 0x20) - '0');
-					c = (byte)((s[++i] | 0x20) - '0');
 					if (b > 9)
 						b -= 'a' - '9' - 1;
+
+					c = (byte)((s[++i] | 0x20) - '0');
 					if (c > 9)
 						c -= 'a' - '9' - 1;
+
 					n = b * 0x10 + c;
 				}
 				else
 				{
 					base = 10;
+
 					a = (byte)(s[i] - '0');
 					b = (byte)(s[++i] - '0');
 					c = (byte)(s[++i] - '0');
+
 					n = a * 100 + b * 10 + c;
 				}
 
@@ -570,11 +598,13 @@ int Text::getLengthMsg(FileHandle &f)
 
 	start = f->tellg(std::ios::beg);
 	while (!f->eof() && f->getByte(b) != 0)
+	{
 		if (b == 0xFF || b == 0xFE)
 		{
 			i = Text::funcLen(f->getByte(b));
 			f->seekg(i, std::ios::cur);
 		}
+	}
 
 	return f->tellg(std::ios::beg) - start - 1;
 }
@@ -611,6 +641,7 @@ void Text::_getBinaryLine(std::string &s, Text::LineType lineType)
 		l = Text::getLengthPlain(_file);
 		break;
 	}
+
 	_file->read(s, l);
 }
 
@@ -651,6 +682,7 @@ void Text::_spaceBitToChar(std::string &s) const
 	size = (int)s.size();
 	s2.reserve(2 * size);
 	for (int i = 0; i < size; ++i)
+	{
 		if ((byte)s[i] & 0x80)
 		{
 			s2 += s[i] & 0x7F;
@@ -662,6 +694,8 @@ void Text::_spaceBitToChar(std::string &s) const
 			if (s[i] < 8 && s[i] > 3 && i + 1 < size)
 				s2 += s[++i];
 		}
+	}
+
 	s = s2;
 }
 
@@ -682,13 +716,16 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 		_unEsc(s, lineType);
 	}
 	else
+	{
 		_getBinaryLine(s, lineType);
+	}
 
 	if (s.size() == 0)
 		throw Text::Error(xsprintf("Empty lines are forbidden (line %i)", _lineCount));
 
 	if (lineType == Text::LT_OLDMSG)
 		Text::_spaceCharToBit(s);
+
 	++_lineCount;
 	_cur = _file.tellg(std::ios::beg);
 
@@ -716,7 +753,9 @@ void Text::addLine(std::string s, Text::LineType lineType, int op)
 	}
 
 	if (_escaped)
+	{
 		_writeEsc(s, lineType);
+	}
 	else
 	{
 		_file.write(s);

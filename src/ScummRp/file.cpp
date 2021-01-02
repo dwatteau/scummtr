@@ -86,20 +86,26 @@ std::streamsize File::_getStreamSize()
 	{
 		pos = _file.tellg();
 		_file.seekg(0, std::ios::beg);
+
 		start = _file.tellg();
 		_file.seekg(0, std::ios::end);
+
 		end = _file.tellg();
 		_file.seekg(pos);
+
 		return (std::streamsize)(end - start);
 	}
 	else
 	{
 		pos = _file.tellp();
 		_file.seekp(0, std::ios::beg);
+
 		start = _file.tellp();
 		_file.seekp(0, std::ios::end);
+
 		end = _file.tellp();
 		_file.seekp(pos);
+
 		return (std::streamsize)(end - start);
 	}
 }
@@ -108,6 +114,7 @@ void File::_onOpen(const char *filename, std::ios::openmode mode)
 {
 	if (!(mode & (std::ios::in | std::ios::out)))
 		throw std::logic_error("File::_onOpen: !(mode & (std::ios::in | std::ios::out))");
+
 	_gpos = 0;
 	_ppos = 0;
 	_mode = mode;
@@ -128,9 +135,11 @@ std::string File::_tmpPath(const char *srcPath)
 	{
 		tmpPath = srcPath;
 		tmpPath += xsprintf(File::TMP_SUFFIX, i);
+
 		if (!File::exists(tmpPath.c_str()))
 			return tmpPath;
 	}
+
 	throw File::AlreadyExists(xsprintf("Cannot find a free name for a temporary copy of %s", srcPath));
 }
 
@@ -236,7 +245,9 @@ void File::copy(const char *src, const char *dest, bool failIfExists)
 
 	fSrc.open(src, std::ios::in | std::ios::binary);
 	fDest.open(dest, std::ios::out | std::ios::binary | std::ios::trunc);
+
 	fDest.write(fSrc, fSrc.size());
+
 	fDest.close();
 	fSrc.close();
 }
@@ -282,7 +293,9 @@ File &File::seekg(std::streamoff off, std::ios::seekdir dir)
 	default:
 		throw std::logic_error("File::seekg: invalid seekdir");
 	}
+
 	_seekedg = true;
+
 	return *this;
 }
 
@@ -302,7 +315,9 @@ File &File::seekp(std::streamoff off, std::ios::seekdir dir)
 	default:
 		throw std::logic_error("File::seekp: invalid seekdir");
 	}
+
 	_seekedp = true;
+
 	return *this;
 }
 
@@ -341,6 +356,7 @@ char File::get()
 	char c;
 
 	read(&c, sizeof c);
+
 	return c;
 }
 
@@ -419,18 +435,21 @@ File &File::write(const char *s, std::streamsize n)
 File &File::write(const std::string &s)
 {
 	write(s.c_str(), (std::streamsize)s.size());
+
 	return *this;
 }
 
 File &File::write(File &f, std::streamsize n)
 {
 	File::_copyDataFromFileToFile<File, File>(*this, f, n);
+
 	return *this;
 }
 
 File &File::write(FilePart &f, std::streamsize n)
 {
 	File::_copyDataFromFileToFile<File, FilePart>(*this, f, n);
+
 	return *this;
 }
 
@@ -468,8 +487,10 @@ void File::_moveFwd(std::streamoff offset, std::streamsize n)
 		seekp(cpyPos + offset, std::ios::beg);
 		write(chunk, chunkSize);
 	} while (cpyPos != putPos);
+
 	if (getPos >= putPos && getPos < endPos)
 		getPos += offset;
+
 	seekp(putPos, std::ios::beg);
 	seekg(getPos, std::ios::beg);
 }
@@ -666,8 +687,12 @@ FilePart &FilePart::seekg(std::streamoff off, std::ios::seekdir dir)
 		off += _size;
 	}
 	else if (dir == std::ios::beg)
+	{
 		off += _offset;
+	}
+
 	_file->seekg(off, dir);
+
 	return *this;
 }
 
@@ -679,8 +704,12 @@ FilePart &FilePart::seekp(std::streamoff off, std::ios::seekdir dir)
 		off += _size;
 	}
 	else if (dir == std::ios::beg)
+	{
 		off += _offset;
+	}
+
 	_file->seekp(off, dir);
+
 	return *this;
 }
 
@@ -793,7 +822,9 @@ FilePart &FilePart::write(const char *s, std::streamsize n)
 	}
 
 	if (_xorKey == 0)
+	{
 		_file->write(s, n);
+	}
 	else
 	{
 		char *xored = nullptr;
@@ -815,12 +846,14 @@ FilePart &FilePart::write(const char *s, std::streamsize n)
 FilePart &FilePart::write(File &f, std::streamsize n)
 {
 	File::_copyDataFromFileToFile<FilePart, File>(*this, f, n);
+
 	return *this;
 }
 
 FilePart &FilePart::write(FilePart &f, std::streamsize n)
 {
 	File::_copyDataFromFileToFile<FilePart, FilePart>(*this, f, n);
+
 	return *this;
 }
 
@@ -886,7 +919,9 @@ void FilePart::_shiftFrame(std::streamoff start, std::streamoff shift)
 		return;
 
 	if (_offset >= start)
+	{
 		_offset += shift;
+	}
 	else
 	{
 		_size += shift;
@@ -916,7 +951,6 @@ void FilePart::_move(std::streamoff start, std::streamoff shift)
 	}
 }
 
-// not sure those two templates are the only things to modify for a BE µp.
 template <bool B, class T>
 T FilePart::get(T &i)
 {
@@ -1087,14 +1121,17 @@ RAMFile::~RAMFile()
 {
 	if (is_open())
 		_save();
+
 	_zapRAM();
 }
 
 void RAMFile::_load()
 {
 	_zapRAM();
+
 	_reallocAtLeast(_size);
 	seekg(0, std::ios::beg);
+
 	File::seekg(0, std::ios::beg);
 	File::read((char *)_mem, _size);
 }
@@ -1117,8 +1154,10 @@ void RAMFile::_reallocAtLeast(std::streamsize sz)
 	oldCapacity = _capacity;
 	_capacity = (sz / File::CHUNK_SIZE + 1) * File::CHUNK_SIZE;
 	buffer = new byte[_capacity];
+
 	if (_mem != nullptr)
 		memcpy(buffer, _mem, oldCapacity);
+
 	delete[] _mem;
 	_mem = buffer;
 }

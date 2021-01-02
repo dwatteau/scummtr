@@ -43,6 +43,7 @@ std::string BackUp::_backupPath(const char *f)
 	std::string bak(f);
 
 	bak += BackUp::SUFFIX;
+
 	return bak;
 }
 

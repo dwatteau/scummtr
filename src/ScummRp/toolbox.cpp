@@ -59,6 +59,7 @@ const char *xsprintf(const char *format, ...)
 	vsprintf(errorMessage[currentStr], format, va); // FIXME unsafe sprintf
 #endif
 	va_end(va);
+
 	return errorMessage[currentStr];
 }
 

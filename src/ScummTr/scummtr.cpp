@@ -70,8 +70,11 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 	while ((blockPtr = tree.nextBlock()) != nullptr)
 	{
 		if (blockPtr.is<LFLFPack>() || blockPtr.is<RoomBlock>())
+		{
 			ScummTr::_explore(*blockPtr, action, text);
+		}
 		else
+		{
 			switch (blockPtr->getTag())
 			{
 			case MKTAG4('L','E','C','F'):
@@ -153,6 +156,7 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 					OldObjectCodeBlockV1(*blockPtr).getRscNameLimits();
 				break;
 			}
+		}
 	}
 }
 
@@ -183,7 +187,9 @@ void ScummTr::_processGameFilesV123()
 			{
 				room = ScummRp::_newLFL(dataPath.c_str(), i);
 				if (ScummRp::_options & ScummRp::OPT_IMPORT)
+				{
 					ScummTr::_explore(*room, ScummRp::ACT_IMPORT, text);
+				}
 				else
 				{
 					if (ScummTr::_exportWithPadding)
@@ -197,6 +203,7 @@ void ScummTr::_processGameFilesV123()
 			}
 		}
 	}
+
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
 	{
 		ScummRpIO::setQuiet(true);
@@ -233,7 +240,9 @@ void ScummTr::_processGameFilesV4567()
 			dataPath += dataFileName;
 			disk = new BlocksFile(dataPath.c_str(), ScummRp::_fileOptions, ScummRp::_backupSystem, i, MKTAG4('D','I','S','K'), ScummRp::_game.dataXorKey);
 			if (ScummRp::_options & ScummRp::OPT_IMPORT)
+			{
 				ScummTr::_explore(*disk, ScummRp::ACT_IMPORT, text);
+			}
 			else
 			{
 				if (ScummTr::_exportWithPadding)
@@ -248,6 +257,7 @@ void ScummTr::_processGameFilesV4567()
 		}
 	}
 	ScummRp::_updateMainIndex();
+
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
 	{
 		ScummRpIO::setQuiet(true);
@@ -271,6 +281,7 @@ Text::Charset ScummTr::_selectCharset()
 		return Text::CHS_V1FR;
 
 	ScummRpIO::warning(xsprintf("Unknown language code %s", ScummTr::_paramLanguage));
+
 	return Text::CHS_NULL;
 }
 
@@ -288,6 +299,7 @@ void ScummTr::setRscNameMaxLengh(ScummTr::RscType t, int32 id, int32 l)
 	{
 		if ((int32)ScummTr::_rscNameLimits.rsc[t].size() <= id)
 			ScummTr::_rscNameLimits.rsc[t].resize(id + 1, 0);
+
 		if (ScummTr::_rscNameLimits.rsc[t][id] < l)
 			ScummTr::_rscNameLimits.rsc[t][id] = l;
 	}
@@ -327,6 +339,7 @@ int ScummTr::main(int argc, const char **argv)
 
 	ScummTr::_paddedRsc = 0;
 	for (int i = 0; ScummTr::_paramPaddedRsc[i] != '\0'; ++i)
+	{
 		switch (ScummTr::_paramPaddedRsc[i])
 		{
 		case 'a':
@@ -339,6 +352,7 @@ int ScummTr::main(int argc, const char **argv)
 			ScummTr::_paddedRsc |= 1 << ScummTr::RSCT_VERB;
 			break;
 		}
+	}
 
 	g = ScummRp::_findGameDef(ScummRp::_paramGameId);
 	if (g == -1)
@@ -349,7 +363,9 @@ int ScummTr::main(int argc, const char **argv)
 
 	ScummRp::_game = ScummRp::_gameDef[g];
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
+	{
 		ScummRp::_fileOptions |= BlocksFile::BFOPT_BACKUP;
+	}
 	else
 	{
 		ScummRp::_fileOptions |= BlocksFile::BFOPT_READONLY;

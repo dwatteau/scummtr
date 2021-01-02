@@ -115,6 +115,7 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 	{
 		path = ScummRp::_paramDumpingDir;
 		blockPtr->makePath(path, filename);
+
 		if (blockPtr.is<LFLFPack>() || blockPtr.is<RoomBlock>())
 		{
 			if (processedBlocks.find(filename) == processedBlocks.end())
@@ -123,6 +124,7 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 				ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was explored.", filename.c_str()));
 		}
 		else
+		{
 			switch (blockPtr->getTag())
 			{
 			case MKTAG4('L','E','C','F'):
@@ -157,11 +159,13 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 				{
 					if (path.size() > 0)
 						xmkdir(path.c_str());
+
 					path += filename;
 					blockPtr->dump(path.c_str());
 					processedBlocks.insert(filename);
 				}
 			}
+		}
 	}
 }
 
@@ -172,6 +176,7 @@ void ScummRp::_exploreIndex(TreeBlock &index)
 
 	index.firstBlock();
 	while ((tocBlockPtr = index.nextBlock()) != nullptr)
+	{
 		switch (tocBlockPtr->getTag())
 		{
 		case MKTAG4('D','R','O','O'):
@@ -221,6 +226,7 @@ void ScummRp::_exploreIndex(TreeBlock &index)
 				tocBlockPtr->exportToc(ScummRp::_mainTocSet.charToc);
 			break;
 		}
+	}
 }
 
 int ScummRp::_findGameDef(const char *shortName)
@@ -291,8 +297,10 @@ void ScummRp::_processGameFilesV123()
 
 	indexPath += '/';
 	indexPath += ScummRp::_game.indexFileName;
+
 	index = ScummRp::_newIndex(indexPath.c_str());
 	ScummRp::_exploreIndex<ScummRp::ACT_LOAD>(*index);
+
 	for (int i = 1; i < 98; ++i)
 	{
 		std::string dataPath(ScummRp::_paramGameDir);
@@ -301,6 +309,7 @@ void ScummRp::_processGameFilesV123()
 		sprintf(dataFileName, ScummRp::_game.dataFileName, i);
 		dataPath += '/';
 		dataPath += dataFileName;
+
 		if (File::exists(dataPath.c_str()))
 		{
 			room = ScummRp::_newLFL(dataPath.c_str(), i);
@@ -310,6 +319,7 @@ void ScummRp::_processGameFilesV123()
 				ScummRp::_explore(*room, ScummRp::ACT_EXPORT);
 		}
 	}
+
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
 	{
 		ScummRpIO::setQuiet(true);
@@ -327,8 +337,10 @@ void ScummRp::_processGameFilesV4567()
 
 	indexPath += '/';
 	indexPath += ScummRp::_game.indexFileName;
+
 	index = ScummRp::_newIndex(indexPath.c_str());
 	ScummRp::_exploreIndex<ScummRp::ACT_LOAD>(*index);
+
 	numberOfDisks = ScummRp::_mainTocSet.roomToc.numberOfDisks();
 	ScummRp::_prepareTmpIndex();
 	for (int i = 1; i < numberOfDisks; ++i)
@@ -346,7 +358,9 @@ void ScummRp::_processGameFilesV4567()
 			ScummRp::_explore(*disk, ScummRp::ACT_EXPORT);
 		ScummRp::_mergeTmpIndex();
 	}
+
 	ScummRp::_updateMainIndex();
+
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
 	{
 		ScummRpIO::setQuiet(true);
@@ -363,39 +377,49 @@ int ScummRp::main(int argc, const char **argv)
 	ScummRpIO::setInfoSlots(ScummRp::_infoSlots);
 	ScummRpIO::info(INF_GLOBAL, xsprintf("%s %s by %s", ScummRp::NAME, ScummRp::VERSION, ScummRp::AUTHOR));
 	ScummRpIO::info(INF_GLOBAL, "");
+
 	if (ScummRp::_options & ScummRp::OPT_LIST)
 	{
 		ScummRp::_listGames();
 		return 0;
 	}
+
 	if (ScummRp::_invalidOptions())
 	{
 		ScummRp::_usage();
 		return 0;
 	}
+
 	g = ScummRp::_findGameDef(ScummRp::_paramGameId);
 	if (g == -1)
 	{
 		ScummRp::_listGames();
 		return 0;
 	}
+
 	ScummRp::_filterTag = 0;
 	for (int i = 0; ScummRp::_paramTag[i] != '\0'; ++i)
 		ScummRp::_filterTag = (ScummRp::_filterTag << 8) | ScummRp::_paramTag[i];
+
 	ScummRp::_game = ScummRp::_gameDef[g];
+
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
 		ScummRp::_fileOptions |= BlocksFile::BFOPT_BACKUP;
 	else
 		ScummRp::_fileOptions |= BlocksFile::BFOPT_READONLY;
+
 	if (ScummRp::_game.version <= 4)
 		ScummRp::_fileOptions &= ~BlocksFile::BFOPT_SEQFILE;
 	if (ScummRp::_game.version >= 7)
 		ScummRp::_fileOptions |= BlocksFile::BFOPT_SEQFILE;
+
 	if (ScummRp::_game.version < 4)
 		ScummRp::_processGameFilesV123();
 	else
 		ScummRp::_processGameFilesV4567();
+
 	ScummRp::_backupSystem.applyChanges();
+
 	return 0;
 }
 
@@ -421,7 +445,9 @@ bool ScummRp::_readOption(const char *arg, char *pendingParams)
 
 	i = 0;
 	if (arg[i++] == '-')
+	{
 		while ((c = arg[i++]) != '\0')
+		{
 			switch (c)
 			{
 			case '-':
@@ -465,6 +491,9 @@ bool ScummRp::_readOption(const char *arg, char *pendingParams)
 				ScummRp::_queueParam(pendingParams, c);
 				break;
 			}
+		}
+	}
+
 	return true;
 }
 

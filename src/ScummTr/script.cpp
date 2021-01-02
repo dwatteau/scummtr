@@ -102,27 +102,33 @@ void Script::importText(Text &input)
 		lengthDiff = (int32)s.size() + 1 - i->length;
 		_file->seekg(lastEnd, std::ios::beg);
 		_file->read(t, i->offset - lastEnd);
+
 		buffer.append(t);
 		buffer.append(s);
 		buffer += '\0';
+
 		lastEnd = i->offset + i->length;
 		minOffset = lastEnd + totalDiff;
 		i->offset += totalDiff;
 		i->length += lengthDiff;
 		totalDiff += lengthDiff;
+
 		_updateJumps(minOffset, lengthDiff, input.lineNumber());
 
 		for (std::list<int32>::iterator j = _spot.begin(); j != _spot.end(); ++j)
 			if (*j >= minOffset)
 				*j += lengthDiff;
 	}
+
 	_file->seekg(lastEnd, std::ios::beg);
 	_file->read(t, _file->size() - lastEnd);
 	buffer.append(t);
+
 	_writeJumps(buffer);
 	if ((int32)buffer.size() < _file->size())
 		_file->resize((int32)buffer.size());
 	_file->seekp(0, std::ios::beg);
+
 	_file->write(buffer);
 }
 
@@ -142,8 +148,10 @@ void Script::exportText(Text &output, bool pad)
 	{
 		_file->seekg(i->offset, std::ios::beg);
 		_file->read(s, i->length - 1);
+
 		if (pad && i->padding > i->length - 1)
 			s.resize(i->padding, '@');
+
 		output.addLine(s, i->type, i->opcode);
 	}
 }
@@ -188,6 +196,7 @@ void Script::_checkJumps()
 	try
 	{
 		if (ScummRp::game.version <= 2)
+		{
 #ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE
 			while ((pos = _file->tellg(std::ios::end)) < 0 && count < n)
 #else
@@ -199,7 +208,9 @@ void Script::_checkJumps()
 						++count;
 				_opv12();
 			}
+		}
 		else if (ScummRp::game.version <= 5)
+		{
 #ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE
 			while ((pos = _file->tellg(std::ios::end)) < 0 && count < n)
 #else
@@ -211,7 +222,9 @@ void Script::_checkJumps()
 						++count;
 				_opv345();
 			}
+		}
 		else if (ScummRp::game.version <= 7)
+		{
 #ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE
 			while ((pos = _file->tellg(std::ios::end)) < 0 && count < n)
 #else
@@ -223,6 +236,7 @@ void Script::_checkJumps()
 						++count;
 				_opv67();
 			}
+		}
 	}
 	catch (Script::ParseError &) { _log = true; throw; }
 	_log = true;
@@ -1714,6 +1728,7 @@ void Script::_opv345(int r)
 
 	if (r > Script::MAX_RECURSION)
 		throw Script::ParseError("Recursion too deep");
+
 	opcode = mainOpcode = _getByte();
 	switch (opcode)
 	{
@@ -1972,6 +1987,7 @@ void Script::_opv345(int r)
 			{
 				if (ScummRp::game.version <= 4)
 					opcode = (opcode & 0xE0) | convertTable[(opcode & 0x1F)];
+
 				switch (opcode & 0x1F)
 				{
 				case 0x00:
@@ -2037,14 +2053,18 @@ void Script::_opv345(int r)
 					break;
 				case 0x11:
 					if (ScummRp::game.version == 4)
+					{
 						_eatByteOrVar(opcode & 0x80);
+					}
 					else if (ScummRp::game.version == 5)
 					{
 						_eatByteOrVar(opcode & 0x80);
 						_eatByteOrVar(opcode & 0x40);
 					}
 					else // (ScummRp::game.version == 3)
+					{
 						throw Script::ParseError("actorSet case 0x11");
+					}
 					break;
 				case 0x12:
 					break;
@@ -2414,9 +2434,11 @@ void Script::_opv345(int r)
 			_eatWordOrVar(opcode & 0x80);
 			_eatWordOrVar(opcode & 0x40);
 		}
+
 		opcode = _getByte();
 		if (ScummRp::game.version == 3 && (opcode & 0x1F) > 6)
 			throw Script::ParseError("roomOps case > 6");
+
 		switch (opcode & 0x1F)
 		{
 		case 0x01:
@@ -2433,7 +2455,9 @@ void Script::_opv345(int r)
 				_eatWordOrVar(opcode & 0x40);
 			}
 			else if (ScummRp::game.version == 5)
+			{
 				throw Script::ParseError("roomOps case 0x02");
+			}
 			break;
 		case 0x03:
 			if (ScummRp::game.version > 3)
@@ -2579,10 +2603,12 @@ void Script::_opv345(int r)
 	case 0xBB: // getActorScale
 		if (ScummRp::game.id == GID_LOOM)
 			break;
+
 		if (ScummRp::game.id == GID_INDY3)
 		{
 			if (ScummRp::game.features & GF_MACINTOSH)
 				throw Script::ParseError("getActorScale");
+
 			_eatByteOrVar(opcode & 0x80);
 		}
 		else
@@ -2943,6 +2969,7 @@ void Script::_opv345(int r)
 	case 0xA7: // saveLoadVars
 		if (ScummRp::game.version != 3)
 			throw Script::ParseError("saveLoadVars");
+
 		_getByte();
 		while ((opcode = _getByte()) != 0)
 		{
@@ -2982,6 +3009,7 @@ void Script::_opv345(int r)
 		_eatByteOrVar(opcode & 0x80);
 		_eatByteOrVar(opcode & 0x40);
 		_eatByteOrVar(opcode & 0x20);
+
 		switch (opcode)
 		{
 		case 0x01:
@@ -2995,6 +3023,7 @@ void Script::_opv345(int r)
 	case 0xAC: // expression
 		_eatVar();
 		while ((opcode = _getByte()) != 0xFF)
+		{
 			switch (opcode & 0x1F)
 			{
 			case 0x01:
@@ -3011,6 +3040,7 @@ void Script::_opv345(int r)
 			default:
 				throw Script::ParseError(xsprintf("expression case %i", opcode & 0x1F));
 			}
+		}
 		break;
 	case 0xAE: // wait
 		if (ScummRp::game.id == GID_INDY3 && !(ScummRp::game.features & GF_MACINTOSH))
