@@ -50,7 +50,7 @@ const ScummRp::Parameter ScummRp::_rpParameters[] =
 	{ 'd', ScummRp::_paramDumpingDir, sizeof ScummRp::_paramDumpingDir, true },
 	{ 'p', ScummRp::_paramGameDir, sizeof ScummRp::_paramGameDir, true },
 	{ 't', ScummRp::_paramTag, sizeof ScummRp::_paramTag, false },
-	{ 0, nullptr, 0 }
+	{ '\0', nullptr, 0, false }
 };
 
 char ScummRp::_paramGameId[16] = "";

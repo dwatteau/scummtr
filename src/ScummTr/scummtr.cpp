@@ -48,7 +48,7 @@ const ScummRp::Parameter ScummTr::_trParameters[] =
 	{ 'p', ScummRp::_paramGameDir, sizeof ScummRp::_paramGameDir, true },
 	{ 'a', ScummTr::_paramPaddedRsc, sizeof ScummTr::_paramPaddedRsc, false },
 	{ 'A', ScummTr::_paramPaddedRsc, sizeof ScummTr::_paramPaddedRsc, false },
-	{ 0, nullptr, 0 }
+	{ '\0', nullptr, 0, false }
 };
 
 char ScummTr::_paramTextFile[512] = "./text";
