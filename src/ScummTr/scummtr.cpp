@@ -384,83 +384,85 @@ int ScummTr::main(int argc, const char **argv)
 
 bool ScummTr::_readOption(const char *arg, char *pendingParams)
 {
-	int i;
 	char c;
 
-	i = 0;
-	if (arg[i++] == '-')
-		while ((c = arg[i++]) != '\0')
-			switch (c)
-			{
-			case '-':
-				return false;
-			case 'h':
-				ScummTr::_textOptions |= Text::TXT_HEADER;
-				break;
-			case 'H':
-				ScummTr::_textOptions |= Text::TXT_HEXA;
-				break;
-			case 'I':
-				ScummTr::_textOptions |= Text::TXT_OPCODE;
-				break;
-			case 'A':
-				ScummTr::_exportWithPadding = true;
-				ScummTr::_maxPadding = true;
-				ScummRp::_queueParam(pendingParams, c);
-				break;
-			case 'a':
-				ScummTr::_exportWithPadding = true;
-				ScummTr::_maxPadding = false;
-				ScummRp::_queueParam(pendingParams, c);
-				break;
-			case 'w':
-				ScummTr::_textOptions |= Text::TXT_CRLF;
-				break;
-			case 'c':
-				ScummTr::_textOptions |= Text::TXT_USECHARSET;
-				break;
-			case 'b':
-				ScummTr::_textOptions |= Text::TXT_BINARY;
-				break;
-			case 'o':
-				ScummRp::_options |= ScummRp::OPT_EXPORT;
-				break;
-			case 'i':
-				ScummRp::_options |= ScummRp::OPT_IMPORT;
-				break;
-			case 's':
-				ScummRp::_fileOptions = BlocksFile::BFOPT_NULL;
-				break;
-			case 'm':
-				ScummRp::_fileOptions &= ~BlocksFile::BFOPT_AUTO;
-				ScummRp::_fileOptions |= BlocksFile::BFOPT_RAM;
-				break;
-			case 'O':
-				ScummRp::_fileOptions &= ~BlocksFile::BFOPT_AUTO;
-				ScummRp::_fileOptions |= BlocksFile::BFOPT_SEQFILE;
-				break;
-			case 'L':
-				ScummRp::_options |= ScummRp::OPT_LIST;
-				return false;
-			case 'q':
-				ScummRp::_infoSlots = INF_NULL; // intentionally not definitive
-				break;
-			case 'v':
-				ScummRp::_infoSlots |= INF_DETAIL;
-				break;
-// 			case 'V':
-// 				ScummRp::_infoSlots |= INF_LISTING;
-// 				break;
-			case 'g':
-				ScummRp::_options |= ScummRp::OPT_GAME_FILES;
-				ScummRp::_queueParam(pendingParams, c);
-				break;
-			case 'l':
-			case 'p':
-			case 'f':
-				ScummRp::_queueParam(pendingParams, c);
-				break;
-			}
+	if (arg[0] != '-')
+		return true;
+
+	for (int i = 1; (c = arg[i]) != '\0'; i++)
+	{
+		switch (c)
+		{
+		case '-':
+			return false;
+		case 'h':
+			ScummTr::_textOptions |= Text::TXT_HEADER;
+			break;
+		case 'H':
+			ScummTr::_textOptions |= Text::TXT_HEXA;
+			break;
+		case 'I':
+			ScummTr::_textOptions |= Text::TXT_OPCODE;
+			break;
+		case 'A':
+			ScummTr::_exportWithPadding = true;
+			ScummTr::_maxPadding = true;
+			ScummRp::_queueParam(pendingParams, c);
+			break;
+		case 'a':
+			ScummTr::_exportWithPadding = true;
+			ScummTr::_maxPadding = false;
+			ScummRp::_queueParam(pendingParams, c);
+			break;
+		case 'w':
+			ScummTr::_textOptions |= Text::TXT_CRLF;
+			break;
+		case 'c':
+			ScummTr::_textOptions |= Text::TXT_USECHARSET;
+			break;
+		case 'b':
+			ScummTr::_textOptions |= Text::TXT_BINARY;
+			break;
+		case 'o':
+			ScummRp::_options |= ScummRp::OPT_EXPORT;
+			break;
+		case 'i':
+			ScummRp::_options |= ScummRp::OPT_IMPORT;
+			break;
+		case 's':
+			ScummRp::_fileOptions = BlocksFile::BFOPT_NULL;
+			break;
+		case 'm':
+			ScummRp::_fileOptions &= ~BlocksFile::BFOPT_AUTO;
+			ScummRp::_fileOptions |= BlocksFile::BFOPT_RAM;
+			break;
+		case 'O':
+			ScummRp::_fileOptions &= ~BlocksFile::BFOPT_AUTO;
+			ScummRp::_fileOptions |= BlocksFile::BFOPT_SEQFILE;
+			break;
+		case 'L':
+			ScummRp::_options |= ScummRp::OPT_LIST;
+			return false;
+		case 'q':
+			ScummRp::_infoSlots = INF_NULL; // intentionally not definitive
+			break;
+		case 'v':
+			ScummRp::_infoSlots |= INF_DETAIL;
+			break;
+// 		case 'V':
+// 			ScummRp::_infoSlots |= INF_LISTING;
+// 			break;
+		case 'g':
+			ScummRp::_options |= ScummRp::OPT_GAME_FILES;
+			ScummRp::_queueParam(pendingParams, c);
+			break;
+		case 'l':
+		case 'p':
+		case 'f':
+			ScummRp::_queueParam(pendingParams, c);
+			break;
+		}
+	}
 
 	return true;
 }
@@ -471,23 +473,29 @@ void ScummTr::_getOptions(int argc, const char **argv, const ScummRp::Parameter 
 
 	pendingParams[0] = '\0';
 	for (int i = 1; i < argc && argv[i] && ScummTr::_readOption(argv[i], pendingParams); ++i)
+	{
 		for (int j = 0; pendingParams[j] != '\0'; pendingParams[j++] = '\0')
+		{
 			for (int k = 0; params[k].c != '\0'; ++k)
-				if (params[k].c == pendingParams[j])
+			{
+				if (params[k].c != pendingParams[j])
+					continue;
+
+				++i;
+				if (i < argc && argv[i])
 				{
-					++i;
-					if (i < argc && argv[i])
-					{
-						strncpy(params[k].value, argv[i], params[k].maxSize - 1);
-						params[k].value[params[k].maxSize - 1] = '\0';
+					strncpy(params[k].value, argv[i], params[k].maxSize - 1);
+					params[k].value[params[k].maxSize - 1] = '\0';
 #ifdef _WIN32
-						if (params[k].isPath)
-							for (char *p = strchr(params[k].value, '\\'); p != 0; p = strchr(params[k].value, '\\'))
-								*p++ = '/';
+					if (params[k].isPath)
+						for (char *p = strchr(params[k].value, '\\'); p; p = strchr(params[k].value, '\\'))
+							*p++ = '/';
 #endif
-					}
-					break;
 				}
+				break;
+			}
+		}
+	}
 }
 
 bool ScummTr::_invalidOptions()

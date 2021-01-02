@@ -457,23 +457,30 @@ void TreeBlock::update(const char *path)
 	newSize = input.size();
 	sizeDiff = newSize - _file->size();
 	if (newSize < _headerSize)
-		ScummRpIO::warning(xsprintf("%s not updated: File size < Header size", _fileName()));
-	else
 	{
-		ScummRpIO::info(INF_LISTING, xsprintf("Importing %s", path));
-		if (newSize < _file->size())
-			_file->resize(newSize);
-		_file->seekp(0, std::ios::beg);
-		input.seekg(0, std::ios::beg);
-		_file->write(input, newSize);
-		_file->seekp(0, std::ios::beg);
-		Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag); // Ignore the imported header
-		if (_parent != nullptr)
-			_parent->_subblockUpdated(*this, sizeDiff);
-		id = TreeBlock::_findIdInBlock(*this);
-		if (id != _id && id != -1)
-			throw InvalidDataFromDump(xsprintf("%s has the id %i instead of %i", _fileName(), id, _id));
+		ScummRpIO::warning(xsprintf("%s not updated: File size < Header size", _fileName()));
+		input.close();
+		return;
 	}
+
+	ScummRpIO::info(INF_LISTING, xsprintf("Importing %s", path));
+
+	if (newSize < _file->size())
+		_file->resize(newSize);
+	_file->seekp(0, std::ios::beg);
+	input.seekg(0, std::ios::beg);
+
+	_file->write(input, newSize);
+	_file->seekp(0, std::ios::beg);
+	Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag); // Ignore the imported header
+
+	if (_parent != nullptr)
+		_parent->_subblockUpdated(*this, sizeDiff);
+
+	id = TreeBlock::_findIdInBlock(*this);
+	if (id != _id && id != -1)
+		throw InvalidDataFromDump(xsprintf("%s has the id %i instead of %i", _fileName(), id, _id));
+
 	input.close();
 }
 
@@ -1955,19 +1962,21 @@ void OldRoom::_findMostLikelyOIId(std::vector<int> &candidates) const
 	int i, j;
 
 	for (i = 0; pref[i].oiNbr != 0; ++i)
-		if (pref[i].oiNbr == (int)_oiId.size() && pref[i].candidatesNbr == (int)candidates.size())
-		{
-			for (j = 0; j < pref[i].candidatesNbr; ++j)
-				if (pref[i].candidates[j] != candidates[j] || _oiId[pref[i].candidates[j]] != pref[i].candidatesIds[j])
-					break;
+	{
+		if (pref[i].oiNbr != (int)_oiId.size() || pref[i].candidatesNbr != (int)candidates.size())
+			continue;
 
-			if (j == pref[i].candidatesNbr)
-			{
-				candidates[pref[i].best] = pref[i].candidates[0];
-				candidates[0] = pref[i].candidates[pref[i].best];
+		for (j = 0; j < pref[i].candidatesNbr; ++j)
+			if (pref[i].candidates[j] != candidates[j] || _oiId[pref[i].candidates[j]] != pref[i].candidatesIds[j])
 				break;
-			}
+
+		if (j == pref[i].candidatesNbr)
+		{
+			candidates[pref[i].best] = pref[i].candidates[0];
+			candidates[0] = pref[i].candidates[pref[i].best];
+			break;
 		}
+	}
 
 	msg = xsprintf("%s_%.4i might actually be %s_%.4i", Block::tagToStr(_tags(BT_OI)), _oiId[candidates[0]], Block::tagToStr(_tags(BT_OI)), _oiId[candidates[1]]);
 	for (i = 2; i < (int)candidates.size(); ++i)
@@ -2136,23 +2145,23 @@ void OldRoom::_calcSizes(std::vector<int32> &sizes, const std::vector<uint16> &o
 
 	n = offsets.size();
 	sizes.resize(n);
-	if (n > 0)
+	if (n == 0)
+		return;
+
+	orderedOffsets.resize(n);
+	std::copy(offsets.begin(), offsets.end(), orderedOffsets.begin());
+	std::sort(orderedOffsets.begin(), orderedOffsets.end());
+
+	if (orderedOffsets.back() > end)
+		throw Block::InvalidDataFromGame(xsprintf("Bad offset in room %i", _parent->_id), _file->name(), _file->fullOffset());
+
+	for (int i = 0; i < (int)n; ++i)
 	{
-		orderedOffsets.resize(n);
-		copy(offsets.begin(), offsets.end(), orderedOffsets.begin());
-		sort(orderedOffsets.begin(), orderedOffsets.end());
-
-		if (orderedOffsets.back() > end)
-			throw Block::InvalidDataFromGame(xsprintf("Bad offset in room %i", _parent->_id), _file->name(), _file->fullOffset());
-
-		for (int i = 0; i < (int)n; ++i)
-		{
-			pos = find(orderedOffsets.begin(), orderedOffsets.end(), offsets[i]);
-			if (i < (int)n - 1)
-				sizes[i] = *(pos + 1) - *pos;
-			else
-				sizes[i] = end - *pos;
-		}
+		pos = std::find(orderedOffsets.begin(), orderedOffsets.end(), offsets[i]);
+		if (i < (int)n - 1)
+			sizes[i] = *(pos + 1) - *pos;
+		else
+			sizes[i] = end - *pos;
 	}
 }
 
@@ -2196,47 +2205,54 @@ void OldRoom::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 	_updated = true;
 	_cleanup();
 	TreeBlock::_subblockUpdated(subblock, sizeDiff);
-	if (sizeDiff != 0)
+	if (sizeDiff == 0)
+		return;
+
+	minOffset = subblock._file->offset() + subblock._file->size() - sizeDiff;
+	if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('H','D','v','#') & 0xFFFFFF00)) // TODO _tagToType(): 'HDv1' -> BT_HD
+		throw InvalidDataFromDump(xsprintf("%s blocks must always be 4 bytes long", tagToStr(subblock._tag)));
+
+	if ((oiBlockPtr = dynamic_cast<OldOIBlock *> (&subblock)) != nullptr)
 	{
-		minOffset = subblock._file->offset() + subblock._file->size() - sizeDiff;
-		if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('H','D','v','#') & 0xFFFFFF00)) // TODO _tagToType(): 'HDv1' -> BT_HD
-			throw InvalidDataFromDump(xsprintf("%s blocks must always be 4 bytes long", tagToStr(subblock._tag)));
-
-		if ((oiBlockPtr = dynamic_cast<OldOIBlock *> (&subblock)) != nullptr)
-			_oiSize[oiBlockPtr->_num] = subblock._file->size();
-		else if ((lsBlockPtr = dynamic_cast<OldLSBlock *> (&subblock)) != nullptr)
-			_lsSize[lsBlockPtr->_num] = subblock._file->size();
-		else if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('N','L','v','#') & 0xFFFFFF00) || (subblock._tag & 0xFFFFFF00) == (MKTAG4('S','L','v','#') & 0xFFFFFF00))
-		{
-			if (subblock._file->size() & 0xFFFFFF00)
-				throw InvalidDataFromDump(xsprintf("%s blocks must be smaller than 256 bytes", tagToStr(subblock._tag)));
-
-			if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('S','L','v','#') & 0xFFFFFF00))
-				_file->seekp(_oSLSize(), std::ios::beg);
-			else // ((subblock._tag & 0xFFFFFF00) == (MKTAG4('N','L','v','#') & 0xFFFFFF00))
-				_file->seekp(_oNLSize(), std::ios::beg);
-			_file->putByte((byte)subblock._file->size());
-			_oLSTOC = (uint16)(_oLSTOC + sizeDiff);
-		}
-		w = _getBXOffset();
-		if (w >= minOffset)
-		{
-			_setBXOffset((uint16)(w + sizeDiff));
-			if (_getBXOffset() < w + sizeDiff)
-				throw InvalidDataFromDump(xsprintf("%s block too big", tagToStr(subblock._tag)));
-		}
-		_updateOffset(_ooEX(), minOffset, sizeDiff, subblock._tag);
-		_updateOffset(_ooEN(), minOffset, sizeDiff, subblock._tag);
-
-		for (int i = 0; i < _bmNbr(); ++i)
-			_updateOffset(_ooBM() + i * 2, minOffset, sizeDiff, subblock._tag);
-
-		for (int i = 0; i < (int)_oiSize.size() * 2; ++i)
-			_updateOffset(_oObjTOC() + 2 * i, minOffset, sizeDiff, subblock._tag);
-
-		for (int i = 0; i < (int)_lsSize.size(); ++i)
-			_updateOffset(_oLSTOC + 3 * i + 1, minOffset, sizeDiff, subblock._tag);
+		_oiSize[oiBlockPtr->_num] = subblock._file->size();
 	}
+	else if ((lsBlockPtr = dynamic_cast<OldLSBlock *> (&subblock)) != nullptr)
+	{
+		_lsSize[lsBlockPtr->_num] = subblock._file->size();
+	}
+	else if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('N','L','v','#') & 0xFFFFFF00) || (subblock._tag & 0xFFFFFF00) == (MKTAG4('S','L','v','#') & 0xFFFFFF00))
+	{
+		if (subblock._file->size() & 0xFFFFFF00)
+			throw InvalidDataFromDump(xsprintf("%s blocks must be smaller than 256 bytes", tagToStr(subblock._tag)));
+
+		if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('S','L','v','#') & 0xFFFFFF00))
+			_file->seekp(_oSLSize(), std::ios::beg);
+		else // ((subblock._tag & 0xFFFFFF00) == (MKTAG4('N','L','v','#') & 0xFFFFFF00))
+			_file->seekp(_oNLSize(), std::ios::beg);
+
+		_file->putByte((byte)subblock._file->size());
+		_oLSTOC = (uint16)(_oLSTOC + sizeDiff);
+	}
+
+	w = _getBXOffset();
+	if (w >= minOffset)
+	{
+		_setBXOffset((uint16)(w + sizeDiff));
+		if (_getBXOffset() < w + sizeDiff)
+			throw InvalidDataFromDump(xsprintf("%s block too big", tagToStr(subblock._tag)));
+	}
+
+	_updateOffset(_ooEX(), minOffset, sizeDiff, subblock._tag);
+	_updateOffset(_ooEN(), minOffset, sizeDiff, subblock._tag);
+
+	for (int i = 0; i < _bmNbr(); ++i)
+		_updateOffset(_ooBM() + i * 2, minOffset, sizeDiff, subblock._tag);
+
+	for (int i = 0; i < (int)_oiSize.size() * 2; ++i)
+		_updateOffset(_oObjTOC() + 2 * i, minOffset, sizeDiff, subblock._tag);
+
+	for (int i = 0; i < (int)_lsSize.size(); ++i)
+		_updateOffset(_oLSTOC + 3 * i + 1, minOffset, sizeDiff, subblock._tag);
 }
 
 /*

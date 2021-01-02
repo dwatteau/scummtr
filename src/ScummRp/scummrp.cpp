@@ -525,23 +525,29 @@ void ScummRp::_getOptions(int argc, const char **argv, const ScummRp::Parameter 
 
 	pendingParams[0] = '\0';
 	for (int i = 1; i < argc && argv[i] && ScummRp::_readOption(argv[i], pendingParams); ++i)
+	{
 		for (int j = 0; pendingParams[j] != '\0'; pendingParams[j++] = '\0')
+		{
 			for (int k = 0; params[k].c != '\0'; ++k)
-				if (params[k].c == pendingParams[j])
+			{
+				if (params[k].c != pendingParams[j])
+					continue;
+
+				++i;
+				if (i < argc && argv[i])
 				{
-					++i;
-					if (i < argc && argv[i])
-					{
-						strncpy(params[k].value, argv[i], params[k].maxSize - 1);
-						params[k].value[params[k].maxSize - 1] = '\0';
+					strncpy(params[k].value, argv[i], params[k].maxSize - 1);
+					params[k].value[params[k].maxSize - 1] = '\0';
 #ifdef _WIN32
-						if (params[k].isPath)
-							for (char *p = strchr(params[k].value, '\\'); p != 0; p = strchr(params[k].value, '\\'))
-								*p++ = '/';
+					if (params[k].isPath)
+						for (char *p = strchr(params[k].value, '\\'); p; p = strchr(params[k].value, '\\'))
+							*p++ = '/';
 #endif
-					}
-					break;
 				}
+				break;
+			}
+		}
+	}
 }
 
 bool ScummRp::_invalidOptions()
