@@ -1208,8 +1208,13 @@ File &RAMFile::getline(std::string &s, char delim)
 
 	i -= _gpos;
 	s.resize(i);
+
 	mem = (char *)_mem + _gpos;
-	_gpos = i + _gpos == _size ? _size : _gpos + i + 1;
+
+	if (i + _gpos == _size)
+		_gpos = _size;
+	else
+		_gpos += i + 1;
 
 	while (--i >= 0)
 		s[i] = mem[i];

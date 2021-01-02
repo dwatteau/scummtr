@@ -384,7 +384,7 @@ int32 Script::_eatString(Text::LineType stringType, byte opcode)
 	if (length > 0 && _log) // Skip empty lines
 		_text.push_back(StringRef(start, length + 1, stringType, opcode));
 
-	return _log ? length : 0;
+	return (_log) ? length : 0;
 }
 
 /*
