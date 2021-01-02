@@ -51,7 +51,7 @@ const ScummRp::Parameter ScummTr::_trParameters[] =
 	{ '\0', nullptr, 0, false }
 };
 
-char ScummTr::_paramTextFile[512] = "./text";
+char ScummTr::_paramTextFile[512] = "scummtr.txt";
 char ScummTr::_paramLanguage[3] = "en";
 char ScummTr::_paramPaddedRsc[16] = "";
 
