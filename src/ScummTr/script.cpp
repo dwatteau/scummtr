@@ -164,13 +164,13 @@ void Script::getRscNameLimits()
 void Script::setTrackedSpots(const std::list<int32> &spots)
 {
 	_spot.resize(spots.size());
-	copy(spots.begin(), spots.end(), _spot.begin());
+	std::copy(spots.begin(), spots.end(), _spot.begin());
 }
 
 void Script::getTrackedSpots(std::list<int32> &spots) const
 {
 	spots.resize(_spot.size());
-	copy(_spot.begin(), _spot.end(), spots.begin());
+	std::copy(_spot.begin(), _spot.end(), spots.begin());
 }
 
 #ifdef SCUMMTR_CHECK_SCRIPT_JUMPS

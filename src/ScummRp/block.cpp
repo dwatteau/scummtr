@@ -646,7 +646,7 @@ Room::~Room()
 
 void Room::_uniqueId(uint32 tag, int32 id)
 {
-	if (find(_uIdsSoFar.begin(), _uIdsSoFar.end(), Room::IdAndTag(id, tag)) != _uIdsSoFar.end())
+	if (std::find(_uIdsSoFar.begin(), _uIdsSoFar.end(), Room::IdAndTag(id, tag)) != _uIdsSoFar.end())
 		throw Room::IdNotUnique(xsprintf("%s #%i is not unique", Block::tagToStr(tag), id));
 	_uIdsSoFar.push_back(Room::IdAndTag(id, tag));
 }
@@ -1812,8 +1812,8 @@ void OldRoom::_getSizes()
 		for (i = 0; i < objNbr; ++i)
 			_file->getLE16(ocOffsets[i]);
 		_getOIInfo(bmLastOffset, oiOffsets, ocOffsets);
-		sort(oiOffsets.begin(), oiOffsets.end());
-		sort(ocOffsets.begin(), ocOffsets.end());
+		std::sort(oiOffsets.begin(), oiOffsets.end());
+		std::sort(ocOffsets.begin(), ocOffsets.end());
 		for (i = 0; i < objNbr && oiOffsets[i] == 0; ++i)
 			;
 		if (i == objNbr)
@@ -1968,7 +1968,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 	}
 
 	oiInfo.push_back(OldRoom::OIInfo(-1, firstOCOffset, 0)); // (2)
-	sort(oiInfo.begin(), oiInfo.end());
+	std::sort(oiInfo.begin(), oiInfo.end());
 
 	for (i = j = 0; i < (int)oiInfo.size() - 1; i = j)
 	{
