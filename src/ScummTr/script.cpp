@@ -446,33 +446,19 @@ void Script::_opv67()
 		_getWord();
 		break;
 	case 0x0C: // dup
-		break;
 	case 0x0D: // not
-		break;
 	case 0x0E: // eq
-		break;
 	case 0x0F: // neq
-		break;
 	case 0x10: // gt
-		break;
 	case 0x11: // lt
-		break;
 	case 0x12: // le
-		break;
 	case 0x13: // ge
-		break;
 	case 0x14: // add
-		break;
 	case 0x15: // sub
-		break;
 	case 0x16: // mul
-		break;
 	case 0x17: // div
-		break;
 	case 0x18: // land
-		break;
 	case 0x19: // lor
-		break;
 	case 0x1A: // pop
 	case 0xA7: // pop
 		break;
@@ -525,28 +511,17 @@ void Script::_opv67()
 		_eatJump();
 		break;
 	case 0x5E: // startScriptEx
-		break;
 	case 0x5F: // startScript
-		break;
 	case 0x60: // startObjectEx
-		break;
 	case 0x61: // setObjectState
-		break;
 	case 0x62: // setObjectXY
-		break;
 	case 0x63: // drawBlastObject
-		break;
 	case 0x64: // setBlastObjectWindow
-		break;
 	case 0x65: // stopObjectCode
 	case 0x66: // stopObjectCode
-		break;
 	case 0x67: // endCutscene
-		break;
 	case 0x68: // cutscene
-		break;
 	case 0x69: // stopMusic
-		break;
 	case 0x6A: // freezeUnfreeze
 		break;
 	case 0x6B: // cursorCommand
@@ -571,95 +546,55 @@ void Script::_opv67()
 		}
 		break;
 	case 0x6C: // breakHere
-		break;
 	case 0x6D: // ifClassOfIs
-		break;
 	case 0x6E: // setClass
-		break;
 	case 0x6F: // getState
-		break;
 	case 0x70: // setState
-		break;
 	case 0x71: // setOwner
-		break;
 	case 0x72: // getOwner
 		break;
 	case 0x73: // jump
 		_eatJump();
 		break;
 	case 0x74: // startSound
-		break;
 	case 0x75: // stopSound
-		break;
 	case 0x76: // startMusic
-		break;
 	case 0x77: // stopObjectScript
-		break;
 	case 0x78: // panCameraTo
-		break;
 	case 0x79: // actorFollowCamera
-		break;
 	case 0x7A: // setCameraAt
-		break;
 	case 0x7B: // loadRoom
-		break;
 	case 0x7C: // stopScript
-		break;
 	case 0x7D: // walkActorToObj
-		break;
 	case 0x7E: // walkActorTo
-		break;
 	case 0x7F: // putActorInRoom
-		break;
 	case 0x80: // putActorAtObject
-		break;
 	case 0x81: // faceActor
-		break;
 	case 0x82: // animateActor
-		break;
 	case 0x83: // doSentence
-		break;
 	case 0x84: // pickupObject
-		break;
 	case 0x85: // loadRoomWithEgo
-		break;
 	case 0x87: // getRandomNumber
-		break;
 	case 0x88: // getRandomNumberRange
-		break;
 	case 0x8A: // getActorMoving
-		break;
 	case 0x8B: // isScriptRunning
-		break;
 	case 0x8C: // getActorRoom
-		break;
 	case 0x8D: // getObjectX
-		break;
 	case 0x8E: // getObjectY
-		break;
 	case 0x8F: // getObjectOldDir
-		break;
 	case 0x90: // getActorWalkBox
-		break;
 	case 0x91: // getActorCostume
-		break;
 	case 0x92: // findInventory
-		break;
 	case 0x93: // getInventoryCount
-		break;
 	case 0x94: // getVerbFromXY
-		break;
 	case 0x95: // beginOverride
-		break;
 	case 0x96: // endOverride
 		break;
 	case 0x97: // setObjectName
 		_eatString(Text::LT_RSC, mainOpcode);
 		break;
 	case 0x98: // isSoundRunning
-		break;
 	case 0x99: // setBoxFlags
-		break;
 	case 0x9A: // createBoxMatrix
 		break;
 	case 0x9B: // resourceRoutines
@@ -801,13 +736,9 @@ void Script::_opv67()
 		}
 		break;
 	case 0x9F: // getActorFromXY
-		break;
 	case 0xA0: // findObject
-		break;
 	case 0xA1: // pseudoRoom
-		break;
 	case 0xA2: // getActorElevation
-		break;
 	case 0xA3: // getVerbEntrypoint
 		break;
 	case 0xA4: // arrayOps
@@ -838,7 +769,6 @@ void Script::_opv67()
 		}
 		break;
 	case 0xA6: // drawBox
-		break;
 	case 0xA8: // getActorWidth
 		break;
 	case 0xA9: // wait
@@ -862,11 +792,8 @@ void Script::_opv67()
 		}
 		break;
 	case 0xAA: // getActorScaleX
-		break;
 	case 0xAB: // getActorAnimCounter1
-		break;
 	case 0xAC: // soundKludge
-		break;
 	case 0xAD: // isAnyOf
 		break;
 	case 0xAE: // quitPauseRestart
@@ -881,13 +808,9 @@ void Script::_opv67()
 		}
 		break;
 	case 0xAF: // isActorInBox
-		break;
 	case 0xB0: // delay
-		break;
 	case 0xB1: // delaySeconds
-		break;
 	case 0xB2: // delayMinutes
-		break;
 	case 0xB3: // stopSentence
 		break;
 	case 0xB4: // printLine
@@ -939,9 +862,7 @@ void Script::_opv67()
 		_getWord();
 		break;
 	case 0xBD: // dummy
-		break;
 	case 0xBE: // startObjectQuick
-		break;
 	case 0xBF: // startScriptQuick
 		break;
 	case 0xC0: // dim2
@@ -959,49 +880,32 @@ void Script::_opv67()
 		_getWord();
 		break;
 	case 0xC4: // abs
-		break;
 	case 0xC5: // distObjectObject
-		break;
 	case 0xC6: // distObjectPt
-		break;
 	case 0xC7: // distPtPt
-		break;
 	case 0xC8: // kernelGetFunctions
-		break;
 	case 0xC9: // kernelSetFunctions
-		break;
 	case 0xCA: // delayFrames
-		break;
 	case 0xCB: // pickOneOf
-		break;
 	case 0xCC: // pickOneOfDefault
-		break;
 	case 0xCD: // stampObject
-		break;
 	case 0xD0: // getDateTime
-		break;
 	case 0xD1: // stopTalking
-		break;
 	case 0xD2: // getAnimateVariable
 		break;
 	case 0xD4: // shuffle
 		_getWord();
 		break;
 	case 0xD5: // jumpToScript
-		break;
 	case 0xD6: // band
-		break;
 	case 0xD7: // bor
-		break;
 	case 0xD8: // isRoomScriptRunning
-		break;
 	case 0xD9: // closeFile
 		break;
 	case 0xDA: // openFile
 		_eatString(Text::LT_PLAIN, mainOpcode);
 		break;
 	case 0xDB: // readFile
-		break;
 	case 0xDD: // findAllObjects
 		break;
 	case 0xDE: // deleteFile
@@ -1704,7 +1608,6 @@ void Script::_opv12()
 			throw Script::ParseError(xsprintf("Unknown opcode 0x%.2X", opcode));
 		break;
 	case 0xAE: // waitForMessage
-		break;
 	case 0xC0: // endCutscene
 		break;
 	case 0xC6: // decrement
