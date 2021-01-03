@@ -7,6 +7,7 @@
     IndentCaseLabels: false,
     ColumnLimit: 0,
     ContinuationIndentWidth: 4,
+    Cpp11BracedListStyle: false,
     AccessModifierOffset: -8,
     NamespaceIndentation: None,
     SpaceBeforeParens: ControlStatements,
