@@ -77,7 +77,7 @@ char *xstrdup(const char *src)
 
 void xremove(const char *path)
 {
-	if (remove(path))
+	if (remove(path) != 0)
 	{
 		std::string what("Cannot remove ");
 		what += path;
@@ -87,7 +87,7 @@ void xremove(const char *path)
 
 void xrename(const char *oldname, const char *newname)
 {
-	if (rename(oldname, newname))
+	if (rename(oldname, newname) != 0)
 	{
 		std::string what("Cannot rename ");
 		what += oldname;
