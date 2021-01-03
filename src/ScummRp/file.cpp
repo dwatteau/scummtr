@@ -37,17 +37,25 @@
 const char *const File::TMP_SUFFIX = "~~tmp%.2X";
 
 File::File() :
-	_file(), _gpos(0), _ppos(0), _path(nullptr), _size(0),
-	_part(), _mode((std::ios::openmode)0), _seekedg(false), _seekedp(false)
+    _file(), _gpos(0), _ppos(0), _path(nullptr), _size(0),
+    _part(), _mode((std::ios::openmode)0), _seekedg(false), _seekedp(false)
 {
 }
 
 File::File(const char *filename, std::ios::openmode mode) :
-	_file(filename, mode), _gpos(0), _ppos(0), _path(nullptr), _size(0),
-	_part(), _mode((std::ios::openmode)0), _seekedg(false), _seekedp(false)
+    _file(filename, mode), _gpos(0), _ppos(0), _path(nullptr), _size(0),
+    _part(), _mode((std::ios::openmode)0), _seekedg(false), _seekedp(false)
 {
 	// The destructor won't be called if the constructor has failed.
-	try { _onOpen(filename, mode); } catch (...) { _zap(); throw; }
+	try
+	{
+		_onOpen(filename, mode);
+	}
+	catch (...)
+	{
+		_zap();
+		throw;
+	}
 }
 
 File::~File()
@@ -163,7 +171,9 @@ void File::_truncateAndClose()
 			tmpFile.close();
 			xremove(tmpPath.c_str());
 		}
-		catch (std::runtime_error &) { }
+		catch (std::runtime_error &)
+		{
+		}
 		throw;
 	}
 	_file.close();
@@ -272,7 +282,11 @@ void File::close()
 				_file.close();
 		}
 	}
-	catch (...) { _zap(); throw; }
+	catch (...)
+	{
+		_zap();
+		throw;
+	}
 	_zap();
 }
 
@@ -563,21 +577,21 @@ void File::truncate(std::streamsize newSize)
  */
 
 FilePart::FilePart() :
-	_file(nullptr), _offset(0), _size(0),
-	_parent(nullptr), _xorKey(0), _children()
+    _file(nullptr), _offset(0), _size(0),
+    _parent(nullptr), _xorKey(0), _children()
 {
 }
 
 FilePart::FilePart(File &file) :
-	_file(&file), _offset(0), _size(file.size()),
-	_parent(&file._part), _xorKey(0), _children()
+    _file(&file), _offset(0), _size(file.size()),
+    _parent(&file._part), _xorKey(0), _children()
 {
 	_parent->_children.push_back(this);
 }
 
 FilePart::FilePart(FilePart &parent, std::streamoff o, std::streamsize s) :
-	_file(parent._file), _offset(o + parent._offset), _size(s),
-	_parent(&parent), _xorKey(parent._xorKey), _children()
+    _file(parent._file), _offset(o + parent._offset), _size(s),
+    _parent(&parent), _xorKey(parent._xorKey), _children()
 {
 	if (_offset + _size > parent._offset + parent._size)
 		throw FilePart::Error("FilePart::FilePart: Size too big");
@@ -598,8 +612,8 @@ FilePart::~FilePart()
 }
 
 FilePart::FilePart(const FilePart &f) :
-	_file(f._file), _offset(f._offset), _size(f._size),
-	_parent(nullptr), _xorKey(f._xorKey), _children()
+    _file(f._file), _offset(f._offset), _size(f._size),
+    _parent(nullptr), _xorKey(f._xorKey), _children()
 {
 	if (f._parent == nullptr)
 		throw FilePart::Error("FilePart::FilePart: only 1 root per File is allowed");
@@ -771,7 +785,11 @@ FilePart &FilePart::read(std::string &s, std::streamsize n)
 		s.resize(0);
 		s.append(buffer, n);
 	}
-	catch (...) { delete[] buffer; throw; }
+	catch (...)
+	{
+		delete[] buffer;
+		throw;
+	}
 
 	delete[] buffer;
 
@@ -835,7 +853,11 @@ FilePart &FilePart::write(const char *s, std::streamsize n)
 			FilePart::_xorBuffer(xored, _xorKey, n);
 			_file->write(xored, n);
 		}
-		catch (...) { delete[] xored; throw; }
+		catch (...)
+		{
+			delete[] xored;
+			throw;
+		}
 		delete[] xored;
 	}
 
@@ -1103,15 +1125,23 @@ void FilePart::putBE32(int32 i)
  */
 
 RAMFile::RAMFile() :
-	File(), _mem(nullptr), _out(false), _capacity(0)
+    File(), _mem(nullptr), _out(false), _capacity(0)
 {
 }
 
 RAMFile::RAMFile(const char *filename, std::ios::openmode mode) :
-	File(filename, mode), _mem(nullptr), _out(false), _capacity(0)
+    File(filename, mode), _mem(nullptr), _out(false), _capacity(0)
 {
 	// The destructor won't be called if the constructor has failed.
-	try { _load(); } catch (...) { _zap(); throw; }
+	try
+	{
+		_load();
+	}
+	catch (...)
+	{
+		_zap();
+		throw;
+	}
 	_out = (mode & std::ios::out) != 0;
 }
 

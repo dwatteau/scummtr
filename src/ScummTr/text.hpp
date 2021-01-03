@@ -39,22 +39,22 @@ class Text
 public:
 	enum Charset
 	{
-		CHS_NULL   = 0,
+		CHS_NULL = 0,
 		CHS_V3ANSI = 1,
-		CHS_V1EN   = 2,
-		CHS_V1DE   = 3,
-		CHS_V1IT   = 4,
-		CHS_V1FR   = 5
+		CHS_V1EN = 2,
+		CHS_V1DE = 3,
+		CHS_V1IT = 4,
+		CHS_V1FR = 5
 	};
 	enum
 	{
-		TXT_NULL       = 0,
-		TXT_BINARY     = 1 << 0,
-		TXT_HEXA       = 1 << 1,
-		TXT_CRLF       = 1 << 2,
-		TXT_HEADER     = 1 << 3,
-		TXT_OUT        = 1 << 4,
-		TXT_OPCODE     = 1 << 5,
+		TXT_NULL = 0,
+		TXT_BINARY = 1 << 0,
+		TXT_HEXA = 1 << 1,
+		TXT_CRLF = 1 << 2,
+		TXT_HEADER = 1 << 3,
+		TXT_OUT = 1 << 4,
+		TXT_OPCODE = 1 << 5,
 		TXT_USECHARSET = 1 << 6
 	};
 	enum LineType
@@ -69,6 +69,7 @@ public:
 	public:
 		Error(const std::string &message) : std::runtime_error(message) { }
 	};
+
 private:
 	static const char CT_NULL[256];
 	static const char CT_V3ANSI[256];
@@ -77,6 +78,7 @@ private:
 	static const char CT_V1IT[256];
 	static const char CT_V1FR[256];
 	static const char *const CHARSETS[];
+
 private:
 	File _file;
 	int32 _cur;
@@ -91,11 +93,13 @@ private:
 	bool _opcode;
 	const char *const _charset;
 	char _finalCharset[256];
+
 private:
 	static void _checkMsg(const std::string &s, int l);
 	static void _checkRsc(const std::string &s, int l);
 	static void _checkOldMsg(const std::string &s, int l);
 	static void _checkPlain(const std::string &s, int l);
+
 public:
 	static int funcLen(byte c);
 	static int getLengthRsc(FileHandle &f);
@@ -103,6 +107,7 @@ public:
 	static int getLengthMsg(FileHandle &f);
 	static int getLengthPlain(FileHandle &f);
 	static int getLineLength(FileHandle &f, Text::LineType t);
+
 private:
 	void _writeEscPlain(const std::string &s);
 	void _writeEscRsc(const std::string &s);
@@ -116,6 +121,7 @@ private:
 	void _writeChar(byte c);
 	void _writeEscChar(byte c);
 	void _getBinaryLine(std::string &s, Text::LineType lineType);
+
 public:
 	void setInfo(int lflfId, uint32 tag, int id);
 	const char *info() const;
@@ -124,11 +130,14 @@ public:
 	bool nextLine(std::string &s, Text::LineType lineType);
 	void clear();
 	void addLine(std::string s, Text::LineType lineType, int op = -1);
+
 public:
 	Text(const char *path, int flags, Text::Charset charset);
 	~Text();
+
 private:
 	Text();
+
 private:
 	Text(const Text &);
 	Text &operator=(const Text &);

@@ -62,7 +62,11 @@ int main(int argc, char **argv)
 		int16 snNumChars; // <= 0x100
 		fChar.read((char *)&snNumChars, 2);
 		int nNumChars = snNumChars;
-		if (nNumChars > 0x100 || nNumChars <= 0) { std::cerr << "Error" << std::endl; return 1; }
+		if (nNumChars > 0x100 || nNumChars <= 0)
+		{
+			std::cerr << "Error" << std::endl;
+			return 1;
+		}
 
 		for (int i = 0; i < nNumChars; ++i)
 		{
@@ -102,7 +106,11 @@ int main(int argc, char **argv)
 		int16 snNumChars; // <= 0x100
 		fChar.read((char *)&snNumChars, 2);
 		int nNumChars = snNumChars;
-		if (nNumChars > 0x100 || nNumChars <= 0) { std::cerr << "Error" << std::endl; return 1; }
+		if (nNumChars > 0x100 || nNumChars <= 0)
+		{
+			std::cerr << "Error" << std::endl;
+			return 1;
+		}
 
 		for (int i = 0; i < nNumChars; ++i)
 		{

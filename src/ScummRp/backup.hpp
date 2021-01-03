@@ -31,17 +31,22 @@ class BackUp
 {
 private:
 	static const char *const SUFFIX;
+
 private:
 	std::list<std::string> _files;
+
 private:
 	static std::string _backupPath(const char *f);
+
 public:
 	std::string backup(const char *f, bool createCopy = true);
 	void cancelChanges();
 	void applyChanges();
+
 public:
 	BackUp();
 	~BackUp();
+
 private:
 	BackUp(const BackUp &);
 	BackUp &operator=(const BackUp &);

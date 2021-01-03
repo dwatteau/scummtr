@@ -67,6 +67,7 @@ private:
 		JumpRef(int32 o, int32 t) : offset(o), target(t) { }
 		JumpRef() : offset(0), target(0) { }
 	};
+
 public:
 	class Error : public std::runtime_error
 	{
@@ -78,8 +79,10 @@ public:
 	public:
 		ParseError(const std::string &message) : Script::Error(message) { }
 	};
+
 private:
 	static const int MAX_RECURSION = 32;
+
 private:
 	FilePartHandle _file;
 	std::list<Script::StringRef> _text;
@@ -88,6 +91,7 @@ private:
 	bool _log;
 	bool _gettingRscNameLimits;
 	bool _usingRscNameLimits;
+
 public:
 	byte _peekByte();
 	byte _getByte();
@@ -113,11 +117,14 @@ public:
 	void exportText(Text &output, bool pad);
 	void getRscNameLimits();
 	void parse();
+
 public:
 	Script(FilePart &f, std::streamoff o, std::streamsize s);
 	~Script();
+
 private:
 	Script();
+
 private:
 	Script(const Script &);
 	Script &operator=(const Script &);

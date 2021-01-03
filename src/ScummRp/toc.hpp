@@ -40,6 +40,7 @@ class TableOfContent
 {
 public:
 	static const int INVALID_ID = -1;
+
 public:
 	struct TocElement
 	{
@@ -56,6 +57,7 @@ public:
 		TOCT_COST,
 		TOCT_CHAR
 	};
+
 public:
 	class Error : public std::runtime_error
 	{
@@ -72,12 +74,14 @@ public:
 	public:
 		InvalidId(const std::string &message) : std::logic_error(message) { }
 	};
+
 protected:
 	TocElement *_toc;
 	int _size;
 	TableOfContent::Type _type;
 	int _iterator[256];
 	bool _accessed[256];
+
 protected:
 	virtual bool _idInRange(int id) const;
 	virtual bool _validItem(int id) const;
@@ -91,6 +95,7 @@ protected:
 	virtual void _save8Sep16(FilePart &file, bool fixedSize) const;
 	virtual void _save8Mix32(FilePart &file) const;
 	virtual void _save16Mix32(FilePart &file) const;
+
 public:
 	virtual TableOfContent::Type getType() const;
 	virtual bool accessed(byte roomId) const;
@@ -107,11 +112,14 @@ public:
 	virtual void save(FilePart &file, GlobalTocFormat format);
 	virtual void load(FilePart &file, GlobalTocFormat format, int size);
 	virtual void save(FilePart &file, GlobalTocFormat format, bool fixedSize);
+
 public:
 	TableOfContent(TableOfContent::Type t);
 	virtual ~TableOfContent();
+
 private:
 	TableOfContent();
+
 public:
 	TableOfContent(const TableOfContent &t);
 	virtual TableOfContent &operator=(const TableOfContent &t);
@@ -134,10 +142,13 @@ public:
 	public:
 		IndexTooShort(const std::string &message) : std::runtime_error(message) { }
 	};
+
 protected:
 	bool _first;
+
 protected:
 	virtual void _zap();
+
 public:
 	virtual TableOfContent::TocElement &operator[](int id);
 	virtual TableOfContent::TocElement operator[](int id) const;
@@ -149,11 +160,14 @@ public:
 	virtual void load(FilePart &file, GlobalTocFormat format, int size);
 	virtual void save(FilePart &file, GlobalTocFormat format, bool fixedSize);
 	virtual int numberOfDisks() const;
+
 public:
 	GlobalRoomIndex();
 	virtual ~GlobalRoomIndex();
+
 public:
 	GlobalRoomIndex &operator=(const GlobalRoomIndex &);
+
 private:
 	GlobalRoomIndex(const GlobalRoomIndex &);
 };
@@ -168,6 +182,7 @@ private:
 	TableOfContent _toc;
 	int _iterator;
 	int _map[256];
+
 public:
 	void load(FilePart &file);
 	void save(FilePart &file);
@@ -176,9 +191,11 @@ public:
 	int32 &operator[](byte roomId);
 	void firstId();
 	bool nextId(byte &roomId);
+
 public:
 	RoomIndex();
 	~RoomIndex();
+
 private: // Not copiable
 	RoomIndex(const RoomIndex &);
 	RoomIndex &operator=(const RoomIndex &);

@@ -31,7 +31,7 @@
  */
 
 TextBlock::TextBlock() :
-	LeafBlock()
+    LeafBlock()
 {
 }
 
@@ -40,7 +40,7 @@ TextBlock::~TextBlock()
 }
 
 TextBlock::TextBlock(const TreeBlock &block) :
-	LeafBlock(block)
+    LeafBlock(block)
 {
 }
 
@@ -55,7 +55,7 @@ int TextBlock::_lflfId() const
 	const TreeBlock *block;
 
 	for (block = _parent; block != nullptr; block = block->_parent)
-		if (dynamic_cast<const RoomPack *> (block) != nullptr)
+		if (dynamic_cast<const RoomPack *>(block) != nullptr)
 			break;
 
 	if (block != nullptr)
@@ -80,7 +80,7 @@ int TextBlock::_ownId() const
  */
 
 ScriptBlock::ScriptBlock(int32 subHeaderSize) :
-	TextBlock(), _script(nullptr)
+    TextBlock(), _script(nullptr)
 {
 	_headerSize += subHeaderSize;
 }
@@ -91,7 +91,7 @@ ScriptBlock::~ScriptBlock()
 }
 
 ScriptBlock::ScriptBlock(const TreeBlock &block, int32 subHeaderSize) :
-	TextBlock(block), _script(nullptr)
+    TextBlock(block), _script(nullptr)
 {
 	_headerSize += subHeaderSize;
 }
@@ -167,7 +167,7 @@ void ScriptBlock::getRscNameLimits()
  */
 
 ObjectNameBlock::ObjectNameBlock() :
-	TextBlock()
+    TextBlock()
 {
 }
 
@@ -176,7 +176,7 @@ ObjectNameBlock::~ObjectNameBlock()
 }
 
 ObjectNameBlock::ObjectNameBlock(const TreeBlock &block) :
-	TextBlock(block)
+    TextBlock(block)
 {
 }
 
@@ -253,7 +253,7 @@ void ObjectNameBlock::getRscNameLimits()
  */
 
 ObjectCodeBlock::ObjectCodeBlock() :
-	TextBlock(), _script(nullptr)
+    TextBlock(), _script(nullptr)
 {
 }
 
@@ -263,7 +263,7 @@ ObjectCodeBlock::~ObjectCodeBlock()
 }
 
 ObjectCodeBlock::ObjectCodeBlock(const TreeBlock &block) :
-	TextBlock(block), _script(nullptr)
+    TextBlock(block), _script(nullptr)
 {
 }
 
@@ -420,7 +420,7 @@ void ObjectCodeBlock::getRscNameLimits()
  */
 
 OldObjectCodeBlock::OldObjectCodeBlock() :
-	ObjectCodeBlock()
+    ObjectCodeBlock()
 {
 }
 
@@ -429,7 +429,7 @@ OldObjectCodeBlock::~OldObjectCodeBlock()
 }
 
 OldObjectCodeBlock::OldObjectCodeBlock(const TreeBlock &block) :
-	ObjectCodeBlock(block)
+    ObjectCodeBlock(block)
 {
 }
 
@@ -565,7 +565,7 @@ void OldObjectCodeBlock::getRscNameLimits()
  */
 
 OldObjectCodeBlockV1::OldObjectCodeBlockV1() :
-	OldObjectCodeBlock()
+    OldObjectCodeBlock()
 {
 }
 
@@ -574,7 +574,7 @@ OldObjectCodeBlockV1::~OldObjectCodeBlockV1()
 }
 
 OldObjectCodeBlockV1::OldObjectCodeBlockV1(const TreeBlock &block) :
-	OldObjectCodeBlock(block)
+    OldObjectCodeBlock(block)
 {
 }
 

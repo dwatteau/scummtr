@@ -156,12 +156,12 @@ const char *const Text::CHARSETS[] =
 };
 
 Text::Text(const char *path, int flags, Text::Charset charset) :
-	_file(path, (flags & Text::TXT_OUT) != 0 ? (std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc) : (std::ios::in | std::ios::binary)),
-	_cur(0), _lineCount(0),	_lflfId(-1), _tag(0), _id(-1),
-	_escaped((flags & Text::TXT_BINARY) == 0), _crlf((flags & Text::TXT_CRLF) != 0),
-	_header((flags & Text::TXT_HEADER) != 0), _hex((flags & Text::TXT_HEXA) != 0),
-	_opcode((flags & Text::TXT_OPCODE) != 0),
-	_charset(Text::CHARSETS[(flags & Text::TXT_USECHARSET) != 0 ? (int)charset : (int)Text::CHS_NULL])
+    _file(path, (flags & Text::TXT_OUT) != 0 ? (std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc) : (std::ios::in | std::ios::binary)),
+    _cur(0), _lineCount(0), _lflfId(-1), _tag(0), _id(-1),
+    _escaped((flags & Text::TXT_BINARY) == 0), _crlf((flags & Text::TXT_CRLF) != 0),
+    _header((flags & Text::TXT_HEADER) != 0), _hex((flags & Text::TXT_HEXA) != 0),
+    _opcode((flags & Text::TXT_OPCODE) != 0),
+    _charset(Text::CHARSETS[(flags & Text::TXT_USECHARSET) != 0 ? (int)charset : (int)Text::CHS_NULL])
 
 {
 	if (!_file.is_open())

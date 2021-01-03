@@ -43,15 +43,15 @@ protected:
 	};
 	enum
 	{
-		OPT_NULL        = 0,
-		OPT_EXPORT      = 1 << 0,
-		OPT_IMPORT      = 1 << 1,
-		OPT_LIST        = 1 << 2,
+		OPT_NULL = 0,
+		OPT_EXPORT = 1 << 0,
+		OPT_IMPORT = 1 << 1,
+		OPT_LIST = 1 << 2,
 		OPT_SINGLE_FILE = 1 << 3,
-		OPT_GAME_FILES  = 1 << 4,
-		OPT_RAMFILES    = 1 << 5,
-		OPT_TAG         = 1 << 6,
-		OPT_INVALID     = 1 << 7
+		OPT_GAME_FILES = 1 << 4,
+		OPT_RAMFILES = 1 << 5,
+		OPT_TAG = 1 << 6,
+		OPT_INVALID = 1 << 7
 	};
 	struct TOCSet
 	{
@@ -61,12 +61,14 @@ protected:
 		TableOfContent sounToc;
 		TableOfContent costToc;
 		TableOfContent charToc;
+
 	public:
-		TOCSet() : roomToc(),
-				   scrpToc(TableOfContent::TOCT_SCRP),
-				   sounToc(TableOfContent::TOCT_SOUN),
-				   costToc(TableOfContent::TOCT_COST),
-				   charToc(TableOfContent::TOCT_CHAR)
+		TOCSet() :
+		    roomToc(),
+		    scrpToc(TableOfContent::TOCT_SCRP),
+		    sounToc(TableOfContent::TOCT_SOUN),
+		    costToc(TableOfContent::TOCT_COST),
+		    charToc(TableOfContent::TOCT_CHAR)
 		{
 		}
 	};
@@ -78,15 +80,19 @@ protected:
 		ACT_SAVE,
 		ACT_LOAD
 	};
+
 protected:
 	static const GameDefinition _gameDef[];
+
 public:
 	static const char *const NAME;
 	static const char *const VERSION;
 	static const char *const AUTHOR;
+
 protected:
 	static const int MAX_PARAMS = 16;
 	static const ScummRp::Parameter _rpParameters[];
+
 protected:
 	static GameDefinition _game;
 	static ScummRp::TOCSet _mainTocSet;
@@ -105,9 +111,11 @@ protected:
 	static char _paramDumpingDir[512];
 	static char _paramTag[5];
 	static uint32 _filterTag;
+
 public:
 	static const GameDefinition &game;
 	static TableOfContent *const *const &tocs;
+
 protected:
 	static void _queueParam(char *pendingParams, char c);
 	static bool _readOption(const char *arg, char *pendingParams);
@@ -125,8 +133,10 @@ protected:
 	static void _prepareTmpIndex();
 	static void _mergeTmpIndex();
 	static void _updateMainIndex();
+
 public:
 	static int main(int argc, const char **argv);
+
 private:
 	ScummRp();
 };

@@ -29,7 +29,7 @@
 const char *const BackUp::SUFFIX = "~~scummrp-tmp";
 
 BackUp::BackUp() :
-	_files()
+    _files()
 {
 }
 

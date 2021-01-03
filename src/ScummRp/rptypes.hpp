@@ -62,20 +62,20 @@ enum GameId
 
 enum
 {
-	GF_NULL       = 0,
-	GF_NES        = 1 << 0,
-	GF_FMTOWNS    = 1 << 1,
-	GF_MACINTOSH  = 1 << 2,
+	GF_NULL = 0,
+	GF_NES = 1 << 0,
+	GF_FMTOWNS = 1 << 1,
+	GF_MACINTOSH = 1 << 2,
 	GF_OLD_BUNDLE = 1 << 3
 };
 
 enum
 {
-	INF_NULL    = 0,
-	INF_GLOBAL  = 1 << 0,
-	INF_DETAIL  = 1 << 1,
+	INF_NULL = 0,
+	INF_GLOBAL = 1 << 0,
+	INF_DETAIL = 1 << 1,
 	INF_LISTING = 1 << 2,
-	INF_ALL     = -1
+	INF_ALL = -1
 };
 
 struct GameDefinition

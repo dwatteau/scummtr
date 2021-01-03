@@ -48,14 +48,18 @@ public:
 		RSCT_OBJECT = 1,
 		RSCT_VERB = 2
 	};
+
 protected:
 	static const GameDefinition _gameDef[];
+
 public:
 	static const char *const NAME;
 	static const char *const VERSION;
 	static const char *const AUTHOR;
+
 protected:
 	static const ScummRp::Parameter _trParameters[];
+
 protected:
 	static char _paramLanguage[3];
 	static char _paramTextFile[512];
@@ -69,6 +73,7 @@ protected:
 	} _rscNameLimits;
 	static bool _exportWithPadding;
 	static bool _maxPadding;
+
 protected:
 	static bool _readOption(const char *arg, char *pendingParams);
 	static void _getOptions(int argc, const char **argv, const ScummRp::Parameter *params);
@@ -78,10 +83,12 @@ protected:
 	static void _processGameFilesV123();
 	static void _processGameFilesV4567();
 	static Text::Charset _selectCharset();
+
 public:
 	static void setRscNameMaxLengh(ScummTr::RscType t, int32 id, int32 l);
 	static int32 getRscNameMaxLengh(ScummTr::RscType t, int32 id);
 	static int main(int argc, const char **argv);
+
 private:
 	ScummTr();
 };

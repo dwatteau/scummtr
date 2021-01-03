@@ -38,14 +38,14 @@
  */
 
 Block::Block() :
-	_blockFormat(BFMT_NULL), _headerSize(0),
-	_tag(0), _id(-1), _file(nullptr)
+    _blockFormat(BFMT_NULL), _headerSize(0),
+    _tag(0), _id(-1), _file(nullptr)
 {
 }
 
 Block::Block(const Block &block) :
-	_blockFormat(block._blockFormat), _headerSize(block._headerSize),
-	_tag(block._tag), _id(block._id), _file(block._file)
+    _blockFormat(block._blockFormat), _headerSize(block._headerSize),
+    _tag(block._tag), _id(block._id), _file(block._file)
 {
 }
 
@@ -192,8 +192,8 @@ void Block::_writeHeader(BlockFormat format, FilePart &file, int32 size, uint32 
  */
 
 TreeBlock::TreeBlock() :
-	Block(), _version(0), _parent(nullptr), _parentVersion(0),
-	_nextSubblockOffset(0), _childrenCount(0)
+    Block(), _version(0), _parent(nullptr), _parentVersion(0),
+    _nextSubblockOffset(0), _childrenCount(0)
 {
 }
 
@@ -206,8 +206,8 @@ TreeBlock::~TreeBlock()
 }
 
 TreeBlock::TreeBlock(const TreeBlock &block) :
-	Block(block), _version(block._version), _parent(block._parent), _parentVersion(block._parentVersion),
-	_nextSubblockOffset(block._nextSubblockOffset), _childrenCount(0)
+    Block(block), _version(block._version), _parent(block._parent), _parentVersion(block._parentVersion),
+    _nextSubblockOffset(block._nextSubblockOffset), _childrenCount(0)
 {
 	if (_parent != nullptr)
 		++_parent->_childrenCount;
@@ -384,7 +384,11 @@ T *TreeBlock::_nextBlock()
 		delete subblock;
 		return nullptr;
 	}
-	catch (...) { delete subblock; throw; }
+	catch (...)
+	{
+		delete subblock;
+		throw;
+	}
 }
 
 TreeBlock *TreeBlock::nextBlock()
@@ -489,7 +493,7 @@ void TreeBlock::update(const char *path)
  */
 
 LeafBlock::LeafBlock() :
-	TreeBlock()
+    TreeBlock()
 {
 }
 
@@ -498,7 +502,7 @@ LeafBlock::~LeafBlock()
 }
 
 LeafBlock::LeafBlock(const TreeBlock &block) :
-	TreeBlock(block)
+    TreeBlock(block)
 {
 }
 
@@ -513,7 +517,7 @@ LeafBlock &LeafBlock::operator=(const TreeBlock &block)
  */
 
 GlobalTocBlock::GlobalTocBlock() :
-	TreeBlock()
+    TreeBlock()
 {
 }
 
@@ -538,7 +542,7 @@ void GlobalTocBlock::importToc(TableOfContent &toc)
  */
 
 GlobalTocBlockV1::GlobalTocBlockV1() :
-	GlobalTocBlock()
+    GlobalTocBlock()
 {
 }
 
@@ -563,20 +567,20 @@ void GlobalTocBlockV1::importToc(TableOfContent &toc)
  */
 
 BlocksFile::BlocksFile() :
-	TreeBlock(), _ownFile(), _ownRAMFile(), _ownSeqFile(), _ownSeqRAMFile()
+    TreeBlock(), _ownFile(), _ownRAMFile(), _ownSeqFile(), _ownSeqRAMFile()
 {
 	_blockFormat = BFMT_NOHEADER;
 	_headerSize = 0;
 }
 
 BlocksFile::BlocksFile(const char *path, int opts, BackUp &bak, int id, uint32 tag, byte xorKey) :
-	TreeBlock(), _ownFile(), _ownRAMFile(), _ownSeqFile(), _ownSeqRAMFile()
+    TreeBlock(), _ownFile(), _ownRAMFile(), _ownSeqFile(), _ownSeqRAMFile()
 {
 	_init(path, opts, &bak, id, tag, xorKey);
 }
 
 BlocksFile::BlocksFile(const char *path, int opts, int id, uint32 tag, byte xorKey) :
-	TreeBlock(), _ownFile(), _ownRAMFile(), _ownSeqFile(), _ownSeqRAMFile()
+    TreeBlock(), _ownFile(), _ownRAMFile(), _ownSeqFile(), _ownSeqRAMFile()
 {
 	_init(path, opts, nullptr, id, tag, xorKey);
 }
@@ -660,7 +664,7 @@ BlocksFile::~BlocksFile()
  */
 
 Room::Room() :
-	_uIdsSoFar()
+    _uIdsSoFar()
 {
 }
 
@@ -809,12 +813,12 @@ void RoomPack::_eraseOffsetsInRange(byte roomId, int32 start, int32 end)
  */
 
 IndexFile::IndexFile(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
-	BlocksFile(path, opts, bak, id, 0, xorKey)
+    BlocksFile(path, opts, bak, id, 0, xorKey)
 {
 }
 
 IndexFile::IndexFile(const char *path, int opts, int id, byte xorKey) :
-	BlocksFile(path, opts, id, 0, xorKey)
+    BlocksFile(path, opts, id, 0, xorKey)
 {
 }
 
@@ -837,13 +841,13 @@ TreeBlock *IndexFile::nextBlock()
  */
 
 LFLFile::LFLFile(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
-	BlocksFile(path, opts, bak, id, MKTAG2('L','F'), xorKey), RoomPack()
+    BlocksFile(path, opts, bak, id, MKTAG2('L','F'), xorKey), RoomPack()
 {
 	RoomPack::_eraseOffsetsInRange((byte)_id, _file->size(), 0xFFFFFFFF);
 }
 
 LFLFile::LFLFile(const char *path, int opts, int id, byte xorKey) :
-	BlocksFile(path, opts, id, MKTAG2('L','F'), xorKey), RoomPack()
+    BlocksFile(path, opts, id, MKTAG2('L','F'), xorKey), RoomPack()
 {
 	RoomPack::_eraseOffsetsInRange((byte)_id, _file->size(), 0xFFFFFFFF);
 }
@@ -864,7 +868,7 @@ TreeBlock *LFLFile::_nextLFLSubblock()
 	_nextSubblockOffset += _headerSize;
 	try
 	{
-		if (dynamic_cast<const GlobalRoomIndex *> (toc) == nullptr)
+		if (dynamic_cast<const GlobalRoomIndex *>(toc) == nullptr)
 			subblock = new TreeBlock;
 		else
 			subblock = new T;
@@ -876,10 +880,14 @@ TreeBlock *LFLFile::_nextLFLSubblock()
 			return nullptr;
 		}
 
-		if (dynamic_cast<const GlobalRoomIndex *> (toc) == nullptr)
+		if (dynamic_cast<const GlobalRoomIndex *>(toc) == nullptr)
 			subblock->_id = id;
 	}
-	catch (...) { delete subblock; throw; }
+	catch (...)
+	{
+		delete subblock;
+		throw;
+	}
 
 	return subblock;
 }
@@ -913,12 +921,12 @@ void LFLFile::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
  */
 
 LFLFPack::LFLFPack() :
-	TreeBlock(), RoomPack()
+    TreeBlock(), RoomPack()
 {
 }
 
 LFLFPack::LFLFPack(const TreeBlock &block) :
-	TreeBlock(block)
+    TreeBlock(block)
 {
 	_init();
 }
@@ -964,7 +972,7 @@ TreeBlock *LFLFPack::nextBlock()
 	_nextSubblockOffset += _headerSize;
 	try
 	{
-		if (dynamic_cast<const GlobalRoomIndex *> (toc) == nullptr)
+		if (dynamic_cast<const GlobalRoomIndex *>(toc) == nullptr)
 			subblock = new TreeBlock;
 		else
 			subblock = new RoomBlock;
@@ -976,10 +984,14 @@ TreeBlock *LFLFPack::nextBlock()
 			return nullptr;
 		}
 
-		if (dynamic_cast<const GlobalRoomIndex *> (toc) == nullptr)
+		if (dynamic_cast<const GlobalRoomIndex *>(toc) == nullptr)
 			subblock->_id = id;
 	}
-	catch (...) { delete subblock; throw; }
+	catch (...)
+	{
+		delete subblock;
+		throw;
+	}
 
 	return subblock;
 }
@@ -1002,7 +1014,7 @@ void LFLFPack::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
  */
 
 LECFPack::LECFPack() :
-	TreeBlock(), _firstBlockOffset(0), _loff()
+    TreeBlock(), _firstBlockOffset(0), _loff()
 {
 }
 
@@ -1011,7 +1023,7 @@ LECFPack::~LECFPack()
 }
 
 LECFPack::LECFPack(const TreeBlock &block) :
-	TreeBlock(block), _firstBlockOffset(0), _loff()
+    TreeBlock(block), _firstBlockOffset(0), _loff()
 {
 	_init();
 }
@@ -1119,7 +1131,7 @@ void LECFPack::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
  */
 
 RoomBlock::RoomBlock() :
-	TreeBlock(), Room()
+    TreeBlock(), Room()
 {
 }
 
@@ -1128,7 +1140,7 @@ RoomBlock::~RoomBlock()
 }
 
 RoomBlock::RoomBlock(const TreeBlock &block) :
-	TreeBlock(block), Room()
+    TreeBlock(block), Room()
 {
 }
 
@@ -1175,13 +1187,13 @@ TreeBlock *RoomBlock::nextBlock()
  */
 
 OldIndexFile::OldIndexFile(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
-	BlocksFile(path, opts, bak, id, 0, xorKey), _pos(0)
+    BlocksFile(path, opts, bak, id, 0, xorKey), _pos(0)
 {
 	_headerSize = 2; // To skip the magic number
 }
 
 OldIndexFile::OldIndexFile(const char *path, int opts, int id, byte xorKey) :
-	BlocksFile(path, opts, id, 0, xorKey), _pos(0)
+    BlocksFile(path, opts, id, 0, xorKey), _pos(0)
 {
 	_headerSize = 2; // To skip the magic number
 }
@@ -1254,12 +1266,12 @@ const int OldIndexFileV1::MM_SIZES[] = { 0x0320, 0xA5, 0x69, 0x258, 0x12C, 0 };
 const int OldIndexFileV1::ZAK_SIZES[] = { 0x0307, 0xB7, 0x6F, 0x1D1, 0x168, 0 };
 
 OldIndexFileV1::OldIndexFileV1(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
-	OldIndexFile(path, opts, bak, id, xorKey)
+    OldIndexFile(path, opts, bak, id, xorKey)
 {
 }
 
 OldIndexFileV1::OldIndexFileV1(const char *path, int opts, int id, byte xorKey) :
-	OldIndexFile(path, opts, id, xorKey)
+    OldIndexFile(path, opts, id, xorKey)
 {
 }
 
@@ -1320,12 +1332,12 @@ bool OldIndexFileV1::nextBlock(TreeBlock &subblock)
 const uint32 OldIndexFileV2::TAGS[] = { MKTAG4('0','O','v','2'), MKTAG4('0','R','v','2'), MKTAG4('0','C','v','2'), MKTAG4('0','S','v','2'), MKTAG4('0','N','v','2'), 0 };
 
 OldIndexFileV2::OldIndexFileV2(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
-	OldIndexFile(path, opts, bak, id, xorKey)
+    OldIndexFile(path, opts, bak, id, xorKey)
 {
 }
 
 OldIndexFileV2::OldIndexFileV2(const char *path, int opts, int id, byte xorKey) :
-	OldIndexFile(path, opts, id, xorKey)
+    OldIndexFile(path, opts, id, xorKey)
 {
 }
 
@@ -1340,12 +1352,12 @@ OldIndexFileV2::~OldIndexFileV2()
 const uint32 OldIndexFileV3::TAGS[] = { MKTAG4('0','O','v','3'), MKTAG4('0','R','v','3'), MKTAG4('0','C','v','3'), MKTAG4('0','S','v','3'), MKTAG4('0','N','v','3'), 0 };
 
 OldIndexFileV3::OldIndexFileV3(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
-	OldIndexFile(path, opts, bak, id, xorKey)
+    OldIndexFile(path, opts, bak, id, xorKey)
 {
 }
 
 OldIndexFileV3::OldIndexFileV3(const char *path, int opts, int id, byte xorKey) :
-	OldIndexFile(path, opts, id, xorKey)
+    OldIndexFile(path, opts, id, xorKey)
 {
 }
 
@@ -1358,13 +1370,13 @@ OldIndexFileV3::~OldIndexFileV3()
  */
 
 OldLFLFile::OldLFLFile(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
-	LFLFile(path, opts, bak, id, xorKey), _blocks()
+    LFLFile(path, opts, bak, id, xorKey), _blocks()
 {
 	RoomPack::_eraseOffsetsInRange((byte)_id, _file->size(), 0x0000FFFF);
 }
 
 OldLFLFile::OldLFLFile(const char *path, int opts, int id, byte xorKey) :
-	LFLFile(path, opts, id, xorKey), _blocks()
+    LFLFile(path, opts, id, xorKey), _blocks()
 {
 	RoomPack::_eraseOffsetsInRange((byte)_id, _file->size(), 0x0000FFFF);
 }
@@ -1477,13 +1489,13 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 const uint32 OldLFLFileV1::TAGS[] = { MKTAG4('R','O','v','1'), MKTAG4('C','O','v','1'), MKTAG4('S','C','v','1'), MKTAG4('S','O','v','1') };
 
 OldLFLFileV1::OldLFLFileV1(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
-	OldLFLFile(path, opts, bak, id, xorKey)
+    OldLFLFile(path, opts, bak, id, xorKey)
 {
 	_tag = MKTAG4('L','F','v','1');
 }
 
 OldLFLFileV1::OldLFLFileV1(const char *path, int opts, int id, byte xorKey) :
-	OldLFLFile(path, opts, id, xorKey)
+    OldLFLFile(path, opts, id, xorKey)
 {
 	_tag = MKTAG4('L','F','v','1');
 }
@@ -1504,13 +1516,13 @@ TreeBlock *OldLFLFileV1::nextBlock()
 const uint32 OldLFLFileV2::TAGS[] = { MKTAG4('R','O','v','2'), MKTAG4('C','O','v','2'), MKTAG4('S','C','v','2'), MKTAG4('S','O','v','2') };
 
 OldLFLFileV2::OldLFLFileV2(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
-	OldLFLFile(path, opts, bak, id, xorKey)
+    OldLFLFile(path, opts, bak, id, xorKey)
 {
 	_tag = MKTAG4('L','F','v','2');
 }
 
 OldLFLFileV2::OldLFLFileV2(const char *path, int opts, int id, byte xorKey) :
-	OldLFLFile(path, opts, id, xorKey)
+    OldLFLFile(path, opts, id, xorKey)
 {
 	_tag = MKTAG4('L','F','v','2');
 }
@@ -1531,13 +1543,13 @@ TreeBlock *OldLFLFileV2::nextBlock()
 const uint32 OldLFLFileV3::TAGS[] = { MKTAG4('R','O','v','3'), MKTAG4('C','O','v','3'), MKTAG4('S','C','v','3'), MKTAG4('S','O','v','3') };
 
 OldLFLFileV3::OldLFLFileV3(const char *path, int opts, BackUp &bak, int id, byte xorKey) :
-	OldLFLFile(path, opts, bak, id, xorKey)
+    OldLFLFile(path, opts, bak, id, xorKey)
 {
 	_tag = MKTAG4('L','F','v','3');
 }
 
 OldLFLFileV3::OldLFLFileV3(const char *path, int opts, int id, byte xorKey) :
-	OldLFLFile(path, opts, id, xorKey)
+    OldLFLFile(path, opts, id, xorKey)
 {
 	_tag = MKTAG4('L','F','v','3');
 }
@@ -1556,16 +1568,16 @@ TreeBlock *OldLFLFileV3::nextBlock()
  */
 
 OldRoom::OldRoom() :
-	RoomBlock(), _type(BT_NULL), _pos(0), _n(0),
-	_bmSize(), _bxSize(0), _exSize(0), _enSize(0), _oiId(),
-	_oiSize(), _oLSTOC(0), _lsSize(), _updated(false)
+    RoomBlock(), _type(BT_NULL), _pos(0), _n(0),
+    _bmSize(), _bxSize(0), _exSize(0), _enSize(0), _oiId(),
+    _oiSize(), _oLSTOC(0), _lsSize(), _updated(false)
 {
 }
 
 OldRoom::OldRoom(const TreeBlock &block) :
-	RoomBlock(block), _type(BT_NULL), _pos(0), _n(0),
-	_bmSize(), _bxSize(0), _exSize(0), _enSize(0), _oiId(),
-	_oiSize(), _oLSTOC(0), _lsSize(), _updated(false)
+    RoomBlock(block), _type(BT_NULL), _pos(0), _n(0),
+    _bmSize(), _bxSize(0), _exSize(0), _enSize(0), _oiId(),
+    _oiSize(), _oLSTOC(0), _lsSize(), _updated(false)
 {
 }
 
@@ -1698,7 +1710,11 @@ TreeBlock *OldRoom::nextBlock()
 					_init();
 					ScummRpIO::setQuiet(false);
 				}
-				catch (std::exception &) { ScummRpIO::setQuiet(false); throw; }
+				catch (std::exception &)
+				{
+					ScummRpIO::setQuiet(false);
+					throw;
+				}
 			}
 			return nullptr;
 		case BT_HD:
@@ -1802,7 +1818,11 @@ TreeBlock *OldRoom::nextBlock()
 		}
 		return subblock;
 	}
-	catch (...) { delete subblock; throw; }
+	catch (...)
+	{
+		delete subblock;
+		throw;
+	}
 }
 
 // Here is a function which "guesses" the block sizes in OldRoom
@@ -2212,11 +2232,11 @@ void OldRoom::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
 	if ((subblock._tag & 0xFFFFFF00) == (MKTAG4('H','D','v','#') & 0xFFFFFF00)) // TODO _tagToType(): 'HDv1' -> BT_HD
 		throw InvalidDataFromDump(xsprintf("%s blocks must always be 4 bytes long", tagToStr(subblock._tag)));
 
-	if ((oiBlockPtr = dynamic_cast<OldOIBlock *> (&subblock)) != nullptr)
+	if ((oiBlockPtr = dynamic_cast<OldOIBlock *>(&subblock)) != nullptr)
 	{
 		_oiSize[oiBlockPtr->_num] = subblock._file->size();
 	}
-	else if ((lsBlockPtr = dynamic_cast<OldLSBlock *> (&subblock)) != nullptr)
+	else if ((lsBlockPtr = dynamic_cast<OldLSBlock *>(&subblock)) != nullptr)
 	{
 		_lsSize[lsBlockPtr->_num] = subblock._file->size();
 	}
@@ -2264,12 +2284,12 @@ const uint32 OldRoomV1::TAGS[] = { 0, MKTAG4('H','D','v','1'), MKTAG4('B','X','v
 const uint32 OldRoomV1::BMTAGS[] = { MKTAG4('B','1','v','1'), MKTAG4('B','2','v','1'), MKTAG4('B','3','v','1'), MKTAG4('B','4','v','1'), MKTAG4('B','5','v','1'), 0 };
 
 OldRoomV1::OldRoomV1() :
-	OldRoom()
+    OldRoom()
 {
 }
 
 OldRoomV1::OldRoomV1(const TreeBlock &block) :
-	OldRoom(block)
+    OldRoom(block)
 {
 	_init();
 }
@@ -2404,12 +2424,12 @@ const uint32 OldRoomV2::TAGS[] = { 0, MKTAG4('H','D','v','2'), MKTAG4('B','X','v
 const uint32 OldRoomV2::BMTAGS[] = { MKTAG4('I','M','v','2'), MKTAG4('M','A','v','2'), 0 };
 
 OldRoomV2::OldRoomV2() :
-	OldRoom()
+    OldRoom()
 {
 }
 
 OldRoomV2::OldRoomV2(const TreeBlock &block) :
-	OldRoom(block)
+    OldRoom(block)
 {
 	_init();
 }
@@ -2573,12 +2593,12 @@ const uint32 OldRoomV3::TAGS[] = { 0, MKTAG4('H','D','v','3'), MKTAG4('B','X','v
 const uint32 OldRoomV3::BMTAGS[] = { MKTAG4('I','M','v','3'), MKTAG4('M','A','v','3'), 0 };
 
 OldRoomV3::OldRoomV3() :
-	OldRoom()
+    OldRoom()
 {
 }
 
 OldRoomV3::OldRoomV3(const TreeBlock &block) :
-	OldRoom(block)
+    OldRoom(block)
 {
 	_init();
 }

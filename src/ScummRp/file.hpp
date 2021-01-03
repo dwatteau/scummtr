@@ -65,12 +65,14 @@ public:
 class FilePart
 {
 	friend class File;
+
 public:
 	class Error : public std::logic_error
 	{
 	public:
 		Error(const std::string &message) : std::logic_error(message) { }
 	};
+
 private:
 	File *_file;
 	std::streamoff _offset;
@@ -78,17 +80,20 @@ private:
 	FilePart *_parent;
 	byte _xorKey;
 	std::list<FilePart *> _children;
+
 private:
 	static void _reverse(uint8 &) { }
 	static void _reverse(uint16 &i) { i = (i >> 8) | (i << 8); }
 	static void _reverse(uint32 &i) { i = (i >> 24) | ((i >> 8) & 0x0000FF00) | ((i << 8) & 0x00FF0000) | (i << 24); }
 	static void _xorBuffer(char *buffer, byte xorKey, std::streamsize n);
+
 private:
 	void _zap();
 	void _move(std::streamoff start, std::streamoff shift);
 	void _shiftFrame(std::streamoff start, std::streamoff shift);
 	void _leaveParent();
 	void _adopt(FilePart &f);
+
 public:
 	bool eof();
 	std::streamsize size() const;
@@ -136,13 +141,16 @@ public:
 	FilePart &write(const char *s, std::streamsize n);
 	FilePart &write(FilePart &f, std::streamsize n);
 	FilePart &write(File &f, std::streamsize n);
+
 public:
 	FilePart(File &file);
 	FilePart(FilePart &parent, std::streamoff o, std::streamsize s);
 	virtual ~FilePart();
+
 public:
 	FilePart(const FilePart &f);
 	FilePart &operator=(const FilePart &f);
+
 private: // No public default constructor
 	FilePart();
 };
@@ -154,9 +162,11 @@ private: // No public default constructor
 class File : public FileHandle
 {
 	friend class FilePart;
+
 protected:
 	static const char *const TMP_SUFFIX;
 	static const int CHUNK_SIZE = 0x800;
+
 public:
 	class IOError : public std::runtime_error
 	{
@@ -173,6 +183,7 @@ public:
 	public:
 		AlreadyExists(const std::string &message) : std::runtime_error(message) { }
 	};
+
 protected:
 	std::fstream _file;
 	std::streamoff _gpos;
@@ -183,15 +194,18 @@ protected:
 	std::ios::openmode _mode;
 	bool _seekedg;
 	bool _seekedp;
+
 protected:
 	template <class T1, class T2>
 	static void _copyDataFromFileToFile(T1 &f1, T2 &f2, std::streamsize n);
 	static std::string _tmpPath(const char *srcPath);
+
 public:
 	static bool exists(const char *path);
 	static bool isReadOnly(const char *path);
 	static void copy(const char *src, const char *dest, bool failIfExists);
 	static std::streamsize fileSize(const char *path);
+
 protected:
 	virtual std::streamsize _getStreamSize();
 	virtual void _onOpen(const char *filename, std::ios::openmode mode);
@@ -200,6 +214,7 @@ protected:
 	virtual void _moveFwd(std::streamoff offset, std::streamsize n);
 	virtual void _moveBwd(std::streamoff offset, std::streamsize n);
 	virtual void _setSize(std::streamsize newSize);
+
 public:
 	virtual FilePart *operator->() { return &_part; }
 	virtual FilePart &operator*() { return _part; }
@@ -224,10 +239,12 @@ public:
 	virtual File &getline(std::string &s, char delim);
 	virtual char get();
 	virtual File &put(char c);
+
 public:
 	File();
 	explicit File(const char *filename, std::ios::openmode mode = std::ios::in | std::ios::out | std::ios::binary);
 	virtual ~File();
+
 private: // Not copiable
 	File(const File &);
 	File &operator=(const File &);
@@ -241,21 +258,36 @@ class FilePartHandle : public FileHandle
 {
 private:
 	FilePart *_ptr;
+
 public:
-	void del() { ::delete _ptr; _ptr = nullptr; }
+	void del()
+	{
+		::delete _ptr;
+		_ptr = nullptr;
+	}
 	virtual FilePart *operator->() { return _ptr; }
 	virtual const FilePart *operator->() const { return _ptr; }
 	virtual FilePart &operator*() { return *_ptr; }
 	virtual const FilePart &operator*() const { return *_ptr; }
-	FilePartHandle &operator=(FilePart *p) { if (_ptr != nullptr) del(); _ptr = p; return *this; }
+	FilePartHandle &operator=(FilePart *p)
+	{
+		if (_ptr != nullptr) del();
+		_ptr = p;
+		return *this;
+	}
 	bool operator!=(const FilePart *p) const { return _ptr != p; }
 	bool operator==(const FilePart *p) const { return _ptr == p; }
+
 public:
 	explicit FilePartHandle(FilePart *p) : _ptr(p) { }
 	FilePartHandle() : _ptr(nullptr) { }
 	explicit FilePartHandle(const FilePartHandle &f) : _ptr(f._ptr != nullptr ? new FilePart(*f._ptr) : nullptr) { }
 	virtual ~FilePartHandle() { ::delete _ptr; }
-	FilePartHandle &operator=(const FilePartHandle &f) { _ptr = f._ptr != nullptr ? new FilePart(*f._ptr) : nullptr; return *this; }
+	FilePartHandle &operator=(const FilePartHandle &f)
+	{
+		_ptr = f._ptr != nullptr ? new FilePart(*f._ptr) : nullptr;
+		return *this;
+	}
 };
 
 /*
@@ -268,22 +300,26 @@ protected:
 	byte *_mem;
 	bool _out;
 	std::streamsize _capacity;
+
 protected:
 	virtual void _zap();
 	virtual void _zapRAM();
 	virtual void _load();
 	virtual void _save();
 	virtual void _reallocAtLeast(std::streamsize sz);
+
 public:
 	virtual void open(const char *filename, std::ios::openmode mode = std::ios::in | std::ios::out | std::ios::binary);
 	virtual void close();
 	virtual File &read(char *s, std::streamsize n);
 	virtual File &write(const char *s, std::streamsize n);
 	virtual File &getline(std::string &s, char delim);
+
 public:
 	RAMFile();
 	explicit RAMFile(const char *filename, std::ios::openmode mode = std::ios::in | std::ios::out | std::ios::binary);
 	virtual ~RAMFile();
+
 private: // Not copiable
 	RAMFile(const RAMFile &);
 	RAMFile &operator=(const RAMFile &);
@@ -293,7 +329,8 @@ private: // Not copiable
  * SeqFile
  */
 
-template <class T> class SeqFile : public T
+template <class T>
+class SeqFile : public T
 {
 public:
 	class Error : public std::logic_error
@@ -301,10 +338,12 @@ public:
 	public:
 		Error(const std::string &message) : std::logic_error(message) { }
 	};
+
 protected:
 	T _srcFile;
 	std::streamoff _tmpSize;
 	std::streamoff _shift;
+
 public:
 	virtual void open(const char *, std::ios::openmode)
 	{
@@ -468,14 +507,15 @@ public:
 		_shift += offset;
 		this->seekp(ppos, std::ios::beg);
 	}
+
 public:
 	SeqFile() :
-		T(), _srcFile(), _tmpSize(0), _shift(0)
+	    T(), _srcFile(), _tmpSize(0), _shift(0)
 	{
 	}
 	SeqFile(const char *filename, BackUp &backupSystem) :
-		T(backupSystem.backup(filename, false).c_str(), std::ios::binary | std::ios::in | std::ios::out | std::ios::trunc),
-		_srcFile(filename, std::ios::binary | std::ios::in | std::ios::out), _tmpSize(0), _shift(0)
+	    T(backupSystem.backup(filename, false).c_str(), std::ios::binary | std::ios::in | std::ios::out | std::ios::trunc),
+	    _srcFile(filename, std::ios::binary | std::ios::in | std::ios::out), _tmpSize(0), _shift(0)
 	{
 		if (this->is_open() != _srcFile.is_open())
 		{
@@ -508,10 +548,13 @@ public:
 				T::close();
 				_srcFile.close();
 			}
-			catch (std::exception &) { }
+			catch (std::exception &)
+			{
+			}
 			std::cerr << "Unhandled exception in SeqFile::~SeqFile." << std::endl;
 		}
 	}
+
 private: // Not copiable
 	SeqFile(const SeqFile &);
 	SeqFile &operator=(const SeqFile &);

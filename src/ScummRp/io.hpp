@@ -33,6 +33,7 @@ class ScummRpIO
 private:
 	static bool _quiet;
 	static uint32 _infoSlots;
+
 public:
 	static void info(const char *msg);
 	static void info(int slots, const char *msg);

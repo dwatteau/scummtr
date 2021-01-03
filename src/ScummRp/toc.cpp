@@ -31,7 +31,7 @@
  */
 
 TableOfContent::TableOfContent(TableOfContent::Type t) :
-	_toc(nullptr), _size(0), _type(t)
+    _toc(nullptr), _size(0), _type(t)
 {
 	_zap();
 }
@@ -194,7 +194,11 @@ void TableOfContent::_load16Sep32(FilePart &file)
 		for (int i = 0; i < _size; ++i)
 			file.getLE32(_toc[i].offset);
 	}
-	catch (...) { _zap(); throw; }
+	catch (...)
+	{
+		_zap();
+		throw;
+	}
 }
 
 void TableOfContent::_save16Sep32(FilePart &file) const
@@ -236,7 +240,11 @@ void TableOfContent::_load8Sep16(FilePart &file, int size)
 			_toc[i].offset = (w == 0xFFFF) ? -1 : (int32)w;
 		}
 	}
-	catch (...) { _zap(); throw; }
+	catch (...)
+	{
+		_zap();
+		throw;
+	}
 }
 
 void TableOfContent::_save8Sep16(FilePart &file, bool fixedSize) const
@@ -268,7 +276,11 @@ void TableOfContent::_load8Mix32(FilePart &file)
 			file.getLE32(_toc[i].offset);
 		}
 	}
-	catch (...) { _zap(); throw; }
+	catch (...)
+	{
+		_zap();
+		throw;
+	}
 }
 
 void TableOfContent::_save8Mix32(FilePart &file) const
@@ -299,7 +311,11 @@ void TableOfContent::_load16Mix32(FilePart &file)
 			file.getLE32(_toc[i].offset);
 		}
 	}
-	catch (...) { _zap(); throw; }
+	catch (...)
+	{
+		_zap();
+		throw;
+	}
 }
 
 void TableOfContent::_save16Mix32(FilePart &file) const
@@ -384,7 +400,7 @@ void TableOfContent::save(FilePart &file, GlobalTocFormat format)
  */
 
 GlobalRoomIndex::GlobalRoomIndex() :
-	TableOfContent(TableOfContent::TOCT_ROOM), _first(false)
+    TableOfContent(TableOfContent::TOCT_ROOM), _first(false)
 {
 }
 
@@ -493,7 +509,7 @@ int GlobalRoomIndex::numberOfDisks() const
  */
 
 RoomIndex::RoomIndex() :
-	_toc(TableOfContent::TOCT_LFLF), _iterator(0)
+    _toc(TableOfContent::TOCT_LFLF), _iterator(0)
 {
 	memset(_map, -1, sizeof _map);
 }

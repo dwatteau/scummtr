@@ -32,15 +32,15 @@
  */
 
 Script::Script() :
-	_file(nullptr), _text(), _jump(), _spot(),
-	_log(true), _gettingRscNameLimits(false), _usingRscNameLimits(false)
+    _file(nullptr), _text(), _jump(), _spot(),
+    _log(true), _gettingRscNameLimits(false), _usingRscNameLimits(false)
 
 {
 }
 
 Script::Script(FilePart &f, std::streamoff o, std::streamsize s) :
-	_file(new FilePart(f, o, s)), _text(), _jump(), _spot(),
-	_log(true), _gettingRscNameLimits(false), _usingRscNameLimits(false)
+    _file(new FilePart(f, o, s)), _text(), _jump(), _spot(),
+    _log(true), _gettingRscNameLimits(false), _usingRscNameLimits(false)
 {
 }
 
@@ -141,7 +141,11 @@ void Script::exportText(Text &output, bool pad)
 	{
 		parse();
 	}
-	catch (...) { _usingRscNameLimits = false; throw; }
+	catch (...)
+	{
+		_usingRscNameLimits = false;
+		throw;
+	}
 	_usingRscNameLimits = false;
 
 	for (std::list<StringRef>::iterator i = _text.begin(); i != _text.end(); ++i)
@@ -164,7 +168,11 @@ void Script::getRscNameLimits()
 	{
 		parse();
 	}
-	catch (...) { _gettingRscNameLimits = false; throw; }
+	catch (...)
+	{
+		_gettingRscNameLimits = false;
+		throw;
+	}
 
 	_gettingRscNameLimits = false;
 }
@@ -238,7 +246,11 @@ void Script::_checkJumps()
 			}
 		}
 	}
-	catch (Script::ParseError &) { _log = true; throw; }
+	catch (Script::ParseError &)
+	{
+		_log = true;
+		throw;
+	}
 	_log = true;
 
 	if (count < n)
