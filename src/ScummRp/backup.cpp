@@ -67,7 +67,9 @@ std::string BackUp::backup(const char *f, bool createCopy)
 		}
 	}
 	else if (File::exists(bak.c_str()))
+	{
 		throw File::AlreadyExists(xsprintf("%s already exists", bak.c_str()));
+	}
 
 	_files.push_back(std::string(f));
 

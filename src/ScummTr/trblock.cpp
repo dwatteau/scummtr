@@ -193,25 +193,25 @@ void ObjectNameBlock::importText(Text &input)
 	int32 oldSize;
 
 	oldSize = _file->size();
-	if (oldSize - _headerSize - 1 > 0) // Ignore empty lines
-	{
-		if (!input.nextLine(s, Text::LT_RSC))
-			throw File::UnexpectedEOF("Not enough lines in imported text");
+	if (oldSize - _headerSize - 1 <= 0)
+		return; // Ignore empty lines
 
-		_file->seekp(_headerSize, std::ios::beg);
+	if (!input.nextLine(s, Text::LT_RSC))
+		throw File::UnexpectedEOF("Not enough lines in imported text");
 
-		s += '\0';
-		_file->write(s);
+	_file->seekp(_headerSize, std::ios::beg);
 
-		if (oldSize > (int32)s.size() + _headerSize)
-			_file->resize((int32)s.size() + _headerSize);
+	s += '\0';
+	_file->write(s);
 
-		_file->seekp(0, std::ios::beg);
-		Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag);
+	if (oldSize > (int32)s.size() + _headerSize)
+		_file->resize((int32)s.size() + _headerSize);
 
-		if (_parent != nullptr)
-			_parent->_subblockUpdated(*this, _file->size() - oldSize);
-	}
+	_file->seekp(0, std::ios::beg);
+	Block::_writeHeader(_blockFormat, *_file, _file->size(), _tag);
+
+	if (_parent != nullptr)
+		_parent->_subblockUpdated(*this, _file->size() - oldSize);
 }
 
 void ObjectNameBlock::exportText(Text &output, bool pad)
@@ -496,30 +496,30 @@ void OldObjectCodeBlock::_importName(Text &input, int32 &scriptOffset)
 		;
 
 	size = _file->tellg(std::ios::beg) - o;
-	if (size > 1) // Ignore empty lines
+	if (size <= 1)
+		return; // Ignore empty lines
+
+	if (!input.nextLine(s, Text::LT_RSC))
+		throw File::UnexpectedEOF("Not enough lines in imported text");
+
+	f = new FilePart(*_file, o, size);
+
+	f->resize((int32)s.size() + 1);
+	f->seekp(0, std::ios::beg);
+
+	f->write(s);
+	f->putByte((byte)0);
+
+	sizeDiff = f->size() - size;
+	scriptOffset += sizeDiff;
+	if (sizeDiff != 0)
 	{
-		if (!input.nextLine(s, Text::LT_RSC))
-			throw File::UnexpectedEOF("Not enough lines in imported text");
+		_listVerbs(verbs, scriptOffset);
 
-		f = new FilePart(*_file, o, size);
+		for (std::list<int32>::iterator i = verbs.begin(); i != verbs.end(); ++i)
+			*i += sizeDiff;
 
-		f->resize((int32)s.size() + 1);
-		f->seekp(0, std::ios::beg);
-
-		f->write(s);
-		f->putByte((byte)0);
-
-		sizeDiff = f->size() - size;
-		scriptOffset += sizeDiff;
-		if (sizeDiff != 0)
-		{
-			_listVerbs(verbs, scriptOffset);
-
-			for (std::list<int32>::iterator i = verbs.begin(); i != verbs.end(); ++i)
-				*i += sizeDiff;
-
-			_updateVerbs(verbs, scriptOffset, input.lineNumber());
-		}
+		_updateVerbs(verbs, scriptOffset, input.lineNumber());
 	}
 }
 

@@ -162,7 +162,6 @@ Text::Text(const char *path, int flags, Text::Charset charset) :
     _header((flags & Text::TXT_HEADER) != 0), _hex((flags & Text::TXT_HEXA) != 0),
     _opcode((flags & Text::TXT_OPCODE) != 0),
     _charset(Text::CHARSETS[(flags & Text::TXT_USECHARSET) != 0 ? (int)charset : (int)Text::CHS_NULL])
-
 {
 	if (!_file.is_open())
 		throw File::IOError(xsprintf("Cannot open %s", path));
