@@ -344,9 +344,8 @@ void Script::_eatVar()
 
 	if (ScummRp::game.version <= 2)
 		_getByte();
-	else
-		if (((w = _getWord()) & 0x2000) && ScummRp::game.version <= 5)
-			_getWord();
+	else if (((w = _getWord()) & 0x2000) && ScummRp::game.version <= 5)
+		_getWord();
 }
 
 void Script::_eatArgList()
@@ -372,7 +371,7 @@ void Script::_eatJump()
 	offset = _file->tellg(std::ios::beg);
 	val = (int16)_getWord();
 	if (_log)
-		_jump.push_back(JumpRef(offset, val + offset + sizeof (int16)));
+		_jump.push_back(JumpRef(offset, val + offset + sizeof(int16)));
 }
 
 int32 Script::_eatString(Text::LineType stringType, byte opcode)

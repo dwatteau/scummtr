@@ -1224,13 +1224,13 @@ bool OldIndexFile::nextBlock(TreeBlock &subblock)
 	{
 		_file->seekg(_nextSubblockOffset, std::ios::beg);
 		_file->getLE16(w);
-		size = sizeof (uint16) + w * (int32)_sizeOfObjFlag();
+		size = sizeof(uint16) + w * (int32)_sizeOfObjFlag();
 	}
 	else
 	{
 		_file->seekg(_nextSubblockOffset, std::ios::beg);
 		_file->getByte(b);
-		size = sizeof (byte) + b * (sizeof (uint16) + sizeof (byte));
+		size = sizeof(byte) + b * (sizeof(uint16) + sizeof(byte));
 	}
 
 	if (size + _nextSubblockOffset > _file->size())

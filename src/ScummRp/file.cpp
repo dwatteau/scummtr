@@ -955,7 +955,7 @@ T FilePart::get(T &i)
 {
 	read((char *)&i, sizeof i);
 
-	if (sizeof (T) > 1)
+	if (sizeof(T) > 1)
 	{
 		if (cpu_is_little_endian())
 		{
@@ -966,7 +966,6 @@ T FilePart::get(T &i)
 		{
 			if (!B)
 				FilePart::_reverse(i);
-
 		}
 	}
 
@@ -976,7 +975,7 @@ T FilePart::get(T &i)
 template <bool B, class T>
 void FilePart::put(T i)
 {
-	if (sizeof (T) > 1)
+	if (sizeof(T) > 1)
 	{
 		if (cpu_is_little_endian())
 		{

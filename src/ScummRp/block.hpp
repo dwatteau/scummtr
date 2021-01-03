@@ -597,7 +597,7 @@ protected:
 	static const uint32 TAGS[];
 protected:
 	virtual uint32 _tags(int i) const { return OldIndexFileV3::TAGS[i]; }
-	virtual size_t _sizeOfObjFlag() const { return sizeof (uint32); }
+	virtual size_t _sizeOfObjFlag() const { return sizeof(uint32); }
 public:
 	OldIndexFileV3(const char *path, int opts, int id, byte xorKey);
 	OldIndexFileV3(const char *path, int opts, BackUp &bak, int id, byte xorKey);
@@ -926,7 +926,8 @@ private:
  */
 
 // Used to get rid of "try { } catch (...) { delete block; }"
-template <class T> class BlockPtr
+template <class T>
+class BlockPtr
 {
 private:
 	T *_ptr;
@@ -942,9 +943,8 @@ public:
 			del();
 		if (p == nullptr)
 			_ptr = nullptr;
-		else
-			if ((_ptr = dynamic_cast<T *> (p)) == nullptr)
-				throw std::logic_error("BlockPtr::operator=: Impossible cast");
+		else if ((_ptr = dynamic_cast<T *>(p)) == nullptr)
+			throw std::logic_error("BlockPtr::operator=: Impossible cast");
 		return *this;
 	}
 	template <class T2> bool is() const { return dynamic_cast<T2 *> (_ptr) != nullptr; }

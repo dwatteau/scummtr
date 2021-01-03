@@ -302,7 +302,7 @@ void ObjectCodeBlock::_tUpdateVerbs(const std::list<int32> &l, int32 scriptOffse
 	for (std::list<int32>::const_iterator i = l.begin(); i != l.end(); ++i)
 	{
 		_file->seekp(1, std::ios::cur);
-		if (((uint32)(*i + scriptOffset) >> (sizeof (T) * 8)) != 0)
+		if (((uint32)(*i + scriptOffset) >> (sizeof(T) * 8)) != 0)
 			throw ObjectCodeBlock::Error(xsprintf("Line too long (line %i)", n));
 
 		o = (T)(*i + scriptOffset);
