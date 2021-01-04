@@ -195,21 +195,25 @@ static void getFontInfo(int32 &baseOffset, std::ifstream &file, int &version, in
 			{
 				file.seekg(baseOffset + 0x15 + offset, std::ios::beg);
 				width = file.get();
-				height = file.get();
 				if (width > maxWidth)
 					maxWidth = width;
+
+				height = file.get();
 				if (height > maxHeight)
 					maxHeight = height;
+
 				o << width << ", ";
 			}
 #else
 			file.seekg(baseOffset + 0x19 + i * 4, std::ios::beg);
 			file.read((char *)&offset, 4);
+
 			file.seekg(baseOffset + 0x15 + offset, std::ios::beg);
 			width = file.get();
-			height = file.get();
 			if (width > maxWidth)
 				maxWidth = width;
+
+			height = file.get();
 			if (height > maxHeight)
 				maxHeight = height;
 #endif
@@ -404,28 +408,40 @@ static void saveFont(const char *path)
 			for (int k = maxWidth - 1; k >= 0; --k)
 			{
 				for (int j = 0; j < maxHeight; ++j)
+				{
 					if ((byte)(glFontBitmap[k + maxWidth * (j + maxHeight * i)] + 1) > 1)
 					{
 						width = k + 1;
 						break;
 					}
+				}
+
 				if (width != 0)
 					break;
 			}
+
 			if (version > 1)
+			{
 				for (int j = maxHeight - 1; j >= 0; --j)
 				{
 					for (int k = 0; k < width; ++k)
+					{
 						if ((byte)(glFontBitmap[k + maxWidth * (j + maxHeight * i)] + 1) > 1)
 						{
 							height = j + 1;
 							break;
 						}
+					}
+
 					if (height != 0)
 						break;
 				}
+			}
 			else
+			{
 				height = maxHeight;
+			}
+
 			if (version == 1)
 			{
 				tmpFile.seekp(baseOffset + 0x8 + i, std::ios::beg);
@@ -470,14 +486,17 @@ static void saveFont(const char *path)
 					continue;
 				}
 			}
+
 			b = p = 0;
 			for (int j = 0; j < height; ++j)
+			{
 				for (int k = 0; k < width; ++k)
 				{
 					int l = k + maxWidth * (j + maxHeight * i);
 
 					if ((glFontBitmap[l] & ((1 << bpp) - 1)) == glFontBitmap[l])
 						b |= glFontBitmap[l] << (8 - bpp - p);
+
 					p += bpp;
 					if (p >= 8)
 					{
@@ -486,6 +505,8 @@ static void saveFont(const char *path)
 						b = p = 0;
 					}
 				}
+			}
+
 			if (p != 0)
 			{
 				tmpFile.put((char)b);
@@ -602,12 +623,14 @@ static void loadFont(const char *path)
 
 			file.seekg(2, std::ios::cur);
 		}
+
 		mask = b = p = 0;
 		for (int j = 0; j < height; ++j)
 		{
 			for (int k = 0; k < width; ++k)
 			{
 				glFontBitmap[k + maxWidth * (j + maxHeight * i)] = 0xFD ^ (i & 1);
+
 				mask >>= bpp;
 				p += bpp;
 				if (mask == 0)
@@ -616,9 +639,11 @@ static void loadFont(const char *path)
 					b = (byte)file.get();
 					p = 0;
 				}
+
 				if ((b & mask) != 0)
 					glFontBitmap[k + maxWidth * (j + maxHeight * i)] = (b & mask) >> (8 - bpp - p);
 			}
+
 			if (version == 1)
 				mask = b = p = 0;
 		}
@@ -629,6 +654,7 @@ int main(int argc, char **argv) try
 {
 	if (argc < 4)
 		return usage();
+
 	if (argv[1][0] == 'i')
 	{
 		fail_on_big_endian_systems();
@@ -641,8 +667,10 @@ int main(int argc, char **argv) try
 		loadFont(argv[2]);
 		saveBmp(argv[3]);
 	}
-	else
+	else {
 		return usage();
+	}
+
 	return 0;
 }
 catch (std::exception &e)
