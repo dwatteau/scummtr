@@ -83,8 +83,8 @@ private:
 
 private:
 	static void _reverse(uint8 &) { }
-	static void _reverse(uint16 &i) { i = (i >> 8) | (i << 8); }
-	static void _reverse(uint32 &i) { i = (i >> 24) | ((i >> 8) & 0x0000FF00) | ((i << 8) & 0x00FF0000) | (i << 24); }
+	static void _reverse(uint16 &i) { i = ((i << 8) & 0xff00) | ((i >> 8) & 0x00ff); }
+	static void _reverse(uint32 &i) { i = ((i << 24) & 0xff000000) | ((i << 8) & 0x00ff0000) | ((i >> 8) & 0x0000ff00) | ((i >> 24) & 0x000000ff); }
 	static void _xorBuffer(char *buffer, byte xorKey, std::streamsize n);
 
 private:

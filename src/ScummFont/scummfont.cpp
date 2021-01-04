@@ -612,7 +612,7 @@ static void loadFont(const char *path)
 				p += bpp;
 				if (mask == 0)
 				{
-					mask = ((1 << bpp) - 1) << (8 - bpp);
+					mask = (((1 << bpp) - 1) << (8 - bpp)) & 0xFF;
 					b = (byte)file.get();
 					p = 0;
 				}
