@@ -245,10 +245,11 @@ void Text::_writeEscChar(byte b)
 	{
 		_file.write("\\x", 2);
 		c = (char)(b / 0x10) + '0';
-		b %= 0x10;
 		if (c > '9')
 			c += 'A' - '9' - 1;
 		_file.write(&c, 1);
+
+		b %= 0x10;
 		c = (char)b + '0';
 		if (c > '9')
 			c += 'A' - '9' - 1;
@@ -258,11 +259,13 @@ void Text::_writeEscChar(byte b)
 	{
 		_file.write("\\", 1);
 		c = (char)(b / 100) + '0';
+		_file.write(&c, 1);
+
 		b %= 100;
-		_file.write(&c, 1);
 		c = (char)(b / 10) + '0';
-		b %= 10;
 		_file.write(&c, 1);
+
+		b %= 10;
 		c = (char)b + '0';
 		_file.write(&c, 1);
 	}

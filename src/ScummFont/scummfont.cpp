@@ -151,8 +151,8 @@ static void getFontInfo(int32 &baseOffset, std::ifstream &file, int &version, in
 
 	file.read((char *)&tag, 4);
 	baseOffset = (tag == MKTAG4('R','A','H','C')) ? 8 : 0;
-	file.seekg(baseOffset + 0x04, std::ios::beg);
 
+	file.seekg(baseOffset + 0x04, std::ios::beg);
 	if (file.get() != 'c')
 		throw std::runtime_error("Not a scumm font");
 
@@ -173,12 +173,14 @@ static void getFontInfo(int32 &baseOffset, std::ifstream &file, int &version, in
 #ifdef SCUMMFONT_MAKETABLE
 		std::ofstream o("table", std::ios::binary | std::ios::out | std::ios::trunc);
 #endif
+		bytesPerChar = 8;
+		maxWidth = maxHeight = 0;
+
 		file.seekg(baseOffset + 0x15, std::ios::beg);
 		bpp = file.get();
 		lineSpacing = file.get();
 		file.read((char *)&numChars, 2);
-		bytesPerChar = 8;
-		maxWidth = maxHeight = 0;
+
 		for (int i = 0; i < numChars; ++i)
 		{
 			int32 offset;
@@ -218,9 +220,11 @@ static void getFontInfo(int32 &baseOffset, std::ifstream &file, int &version, in
 				maxHeight = height;
 #endif
 		}
+
 		if (maxHeight < lineSpacing)
 			maxHeight = lineSpacing;
 	}
+
 	if ((uint32)bytesPerChar < 8 || bpp == 0 || bpp == 3 || (uint32)bpp > 4
 		|| (uint16)numChars > 0x100 || maxHeight < 0 || maxWidth < 0)
 		throw std::runtime_error("Your font is strange...");
@@ -303,6 +307,7 @@ static void saveBmp(const char *path)
 	memset(buf, 0, roundTo4(glWidth) * glHeight);
 	for (int i = 0; i < glHeight; ++i)
 		memcpy(buf + i * roundTo4(glWidth), glFontBitmap + (glHeight - i - 1) * glWidth, glWidth);
+
 	file.write((char *)buf, roundTo4(glWidth) * glHeight);
 }
 

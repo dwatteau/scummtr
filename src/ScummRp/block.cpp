@@ -1858,7 +1858,9 @@ void OldRoom::_getSizes()
 		bmEnd = ocEnd = exEnd = w;
 	}
 	else
+	{
 		_enSize = 0;
+	}
 
 	// -- EX --
 	_file->seekg(_ooEX(), std::ios::beg);
@@ -1869,7 +1871,9 @@ void OldRoom::_getSizes()
 		bmEnd = ocEnd = w;
 	}
 	else
+	{
 		_exSize = 0;
+	}
 
 	// -- BM (1) --
 	_getBMOffsets(bmOffsets);
