@@ -34,16 +34,16 @@ macOS 10.9+ builds for x86\_64 and arm64 are done on a macOS 11.0 system ([MacP
 
 ```sh
 sudo port install cmake
-rm -rf build && mkdir -p build
+rm -rf build && mkdir build
 cmake -DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" ..
 make -j2
 ```
 
-Mac OS X 10.4–10.8 builds for ppc32 and i386 are done on a Mac OS X 10.5 system (Xcode and [CMake 3.3.2](https://cmake.org/files/v3.3/cmake-3.3.2-Darwin-universal.dmg) must be installed):
+Mac OS X 10.4–10.8 builds for ppc32 and i386 are done on a Mac OS X 10.5 system (Xcode 3.1.4 and [CMake 3.3.2](https://cmake.org/files/v3.3/cmake-3.3.2-Darwin-universal.dmg) must be installed):
 
 ```sh
-rm -rf build && mkdir -p build
-cmake -DCMAKE_CXX_FLAGS="-Wa,-force_cpusubtype_ALL" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.4 -DCMAKE_OSX_ARCHITECTURES="ppc;i386" ..
+rm -rf build && mkdir build
+/Applications/CMake.app/Contents/bin/cmake -DCMAKE_CXX_FLAGS="-Wa,-force_cpusubtype_ALL" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.4 -DCMAKE_OSX_ARCHITECTURES="ppc;i386" -DCOMPILER_SUPPORTS_HARDENING_FLAGS=0 ..
 make
 ```
 
