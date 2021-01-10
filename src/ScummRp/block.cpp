@@ -782,6 +782,18 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 				ScummRpIO::info(INF_DETAIL, "Removed SC_0051 from index (duplicate of SC_0052)");
 			}
 		}
+		else if (j == 2 && ScummRp::tocs[i]->getType() == TableOfContent::TOCT_COST)
+		{
+			// Hack for Monkey1 Floppy VGA
+			if (roomId == 59 && ScummRp::tocs[i]->getSize() == 199
+				&& (*ScummRp::tocs[i])[10].offset == (*ScummRp::tocs[i])[117].offset
+				&& (*ScummRp::tocs[i])[10].roomId == (*ScummRp::tocs[i])[117].roomId)
+			{
+				(*ScummRp::tocs[i])[117].offset = -1;
+				j = 1;
+				ScummRpIO::info(INF_DETAIL, "Removed CO_0117 from index (duplicate of CO_0010)");
+			}
+		}
 		n += j;
 		if (n > 1)
 			throw RoomPack::BadOffset(xsprintf("Duplicate offset in index: 0x%X in room %i", offset, roomId));
