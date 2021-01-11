@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef SCUMMRP_FILE_HPP
-#define SCUMMRP_FILE_HPP
+#ifndef SCUMM_COMMON_FILE_HPP
+#define SCUMM_COMMON_FILE_HPP
 
 #include "common/types.hpp"
 #include "common/backup.hpp"

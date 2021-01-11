@@ -26,7 +26,7 @@
 #include "common/backup.hpp"
 #include "common/io.hpp"
 
-const char *const BackUp::SUFFIX = "~~scummrp-tmp";
+const char *const BackUp::SUFFIX = "~~scummio-tmp";
 
 BackUp::BackUp() :
     _files()
@@ -86,7 +86,7 @@ void BackUp::cancelChanges()
 		}
 		catch (std::runtime_error &e)
 		{
-			ScummRpIO::warning(e.what());
+			ScummIO::warning(e.what());
 		}
 	}
 	_files.clear();
@@ -103,7 +103,7 @@ void BackUp::applyChanges()
 		}
 		catch (std::runtime_error &e)
 		{
-			ScummRpIO::warning(e.what());
+			ScummIO::warning(e.what());
 		}
 	}
 	_files.clear();

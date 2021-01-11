@@ -27,53 +27,53 @@
 #include <iostream>
 
 /*
- * ScummRpIO
+ * ScummIO
  */
 
-uint32 ScummRpIO::_infoSlots = 0;
-bool ScummRpIO::_quiet = false;
+uint32 ScummIO::_infoSlots = 0;
+bool ScummIO::_quiet = false;
 
-void ScummRpIO::info(const char *msg)
+void ScummIO::info(const char *msg)
 {
 	std::cout << msg << std::endl;
 }
 
-void ScummRpIO::info(int slots, const char *msg)
+void ScummIO::info(int slots, const char *msg)
 {
-	if (ScummRpIO::_infoSlots & slots && !ScummRpIO::_quiet)
+	if (ScummIO::_infoSlots & slots && !ScummIO::_quiet)
 		std::cout << msg << std::endl;
 }
 
-void ScummRpIO::crash(const char *msg)
+void ScummIO::crash(const char *msg)
 {
 	std::cerr << "CRASH: " << msg << std::endl;
 	std::abort();
 }
 
-void ScummRpIO::fatal(const char *msg)
+void ScummIO::fatal(const char *msg)
 {
 	std::cerr << "ERROR: " << msg << std::endl;
 	std::exit(1);
 }
 
-void ScummRpIO::error(const char *msg)
+void ScummIO::error(const char *msg)
 {
-	if (!ScummRpIO::_quiet)
+	if (!ScummIO::_quiet)
 		std::cerr << "ERROR: " << msg << std::endl;
 }
 
-void ScummRpIO::warning(const char *msg)
+void ScummIO::warning(const char *msg)
 {
-	if (!ScummRpIO::_quiet)
+	if (!ScummIO::_quiet)
 		std::cerr << "WARNING: " << msg << std::endl;
 }
 
-void ScummRpIO::setQuiet(bool q)
+void ScummIO::setQuiet(bool q)
 {
-	ScummRpIO::_quiet = q;
+	ScummIO::_quiet = q;
 }
 
-void ScummRpIO::setInfoSlots(uint32 infoSlots)
+void ScummIO::setInfoSlots(uint32 infoSlots)
 {
-	ScummRpIO::_infoSlots = infoSlots;
+	ScummIO::_infoSlots = infoSlots;
 }

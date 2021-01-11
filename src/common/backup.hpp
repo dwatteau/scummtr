@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef SCUMMRP_BACKUP_HPP
-#define SCUMMRP_BACKUP_HPP
+#ifndef SCUMM_COMMON_BACKUP_HPP
+#define SCUMM_COMMON_BACKUP_HPP
 
 #include <list>
 #include <string>

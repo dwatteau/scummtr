@@ -607,7 +607,7 @@ FilePart::~FilePart()
 	}
 	catch (FilePart::Error &e)
 	{
-		ScummRpIO::fatal(e.what());
+		ScummIO::fatal(e.what());
 	}
 }
 

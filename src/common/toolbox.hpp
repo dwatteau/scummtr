@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef SCUMMRP_TOOLBOX_HPP
-#define SCUMMRP_TOOLBOX_HPP
+#ifndef SCUMM_COMMON_TOOLBOX_HPP
+#define SCUMM_COMMON_TOOLBOX_HPP
 
 #if !defined(__GNUC__) && !defined(__clang__)
 #  define  __attribute__(x)  /* NOTHING */

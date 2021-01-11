@@ -129,7 +129,7 @@ void ScriptBlock::importText(Text &input)
 	}
 	catch (Script::ParseError &e)
 	{
-		ScummRpIO::error(xsprintf("%s %s", e.what(), input.info()));
+		ScummIO::error(xsprintf("%s %s", e.what(), input.info()));
 	}
 }
 
@@ -145,7 +145,7 @@ void ScriptBlock::exportText(Text &output, bool pad)
 	}
 	catch (Script::ParseError &e)
 	{
-		ScummRpIO::error(xsprintf("%s %s", e.what(), output.info()));
+		ScummIO::error(xsprintf("%s %s", e.what(), output.info()));
 	}
 }
 
@@ -363,7 +363,7 @@ void ObjectCodeBlock::_importText(Text &input, int32 oldSize, int32 scriptOffset
 	}
 	catch (Script::ParseError &e)
 	{
-		ScummRpIO::error(xsprintf("%s %s", e.what(), input.info()));
+		ScummIO::error(xsprintf("%s %s", e.what(), input.info()));
 	}
 
 	_updateVerbs(verbs, scriptOffset, input.lineNumber());
@@ -395,7 +395,7 @@ void ObjectCodeBlock::exportText(Text &output, bool pad)
 	}
 	catch (Script::ParseError &e)
 	{
-		ScummRpIO::error(xsprintf("%s %s", e.what(), output.info()));
+		ScummIO::error(xsprintf("%s %s", e.what(), output.info()));
 	}
 }
 
