@@ -21,10 +21,10 @@
  *
  */
 
-#include "toolbox.hpp"
-#include "file.hpp"
-#include "backup.hpp"
-#include "io.hpp"
+#include "common/toolbox.hpp"
+#include "common/file.hpp"
+#include "common/backup.hpp"
+#include "common/io.hpp"
 
 const char *const BackUp::SUFFIX = "~~scummrp-tmp";
 

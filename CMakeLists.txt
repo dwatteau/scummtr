@@ -56,6 +56,7 @@ else()
 endif()
 
 include_directories ("src")
+add_subdirectory ("src/common")
 add_subdirectory ("src/FontXY")
 add_subdirectory ("src/ScummFont")
 add_subdirectory ("src/ScummRp")

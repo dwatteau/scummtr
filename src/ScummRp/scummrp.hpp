@@ -24,9 +24,10 @@
 #ifndef SCUMMRP_SCUMMRP_HPP
 #define SCUMMRP_SCUMMRP_HPP
 
+#include "common/backup.hpp"
+
 #include "block.hpp"
 #include "toc.hpp"
-#include "backup.hpp"
 #include "rptypes.hpp"
 
 // TODO make it instanciable (though it's not needed yet)

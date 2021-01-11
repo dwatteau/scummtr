@@ -21,8 +21,9 @@
  *
  */
 
+#include "common/toolbox.hpp"
+
 #include "toc.hpp"
-#include "toolbox.hpp"
 
 #include <cstring>
 

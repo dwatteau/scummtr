@@ -25,11 +25,11 @@
 #define SCUMMRP_BLOCK_HPP
 
 #include "common/types.hpp"
+#include "common/file.hpp"
+#include "common/backup.hpp"
 
 #include "toc.hpp"
-#include "file.hpp"
 #include "rptypes.hpp"
-#include "backup.hpp"
 
 #include <stdexcept>
 #include <string>

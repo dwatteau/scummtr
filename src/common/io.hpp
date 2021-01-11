@@ -21,59 +21,27 @@
  *
  */
 
-#include "io.hpp"
+#ifndef SCUMMRP_IO_HPP
+#define SCUMMRP_IO_HPP
 
-#include <cstdlib>
-#include <iostream>
+#include "common/types.hpp"
+#include "common/toolbox.hpp"
 
-/*
- * ScummRpIO
- */
-
-uint32 ScummRpIO::_infoSlots = 0;
-bool ScummRpIO::_quiet = false;
-
-void ScummRpIO::info(const char *msg)
+class ScummRpIO
 {
-	std::cout << msg << std::endl;
-}
+private:
+	static bool _quiet;
+	static uint32 _infoSlots;
 
-void ScummRpIO::info(int slots, const char *msg)
-{
-	if (ScummRpIO::_infoSlots & slots && !ScummRpIO::_quiet)
-		std::cout << msg << std::endl;
-}
+public:
+	static void info(const char *msg);
+	static void info(int slots, const char *msg);
+	static void warning(const char *msg);
+	static void error(const char *msg);
+	static void fatal(const char *msg) __attribute__((noreturn));
+	static void crash(const char *msg) __attribute__((noreturn));
+	static void setQuiet(bool q);
+	static void setInfoSlots(uint32 infoSlots);
+};
 
-void ScummRpIO::crash(const char *msg)
-{
-	std::cerr << "CRASH: " << msg << std::endl;
-	std::abort();
-}
-
-void ScummRpIO::fatal(const char *msg)
-{
-	std::cerr << "ERROR: " << msg << std::endl;
-	std::exit(1);
-}
-
-void ScummRpIO::error(const char *msg)
-{
-	if (!ScummRpIO::_quiet)
-		std::cerr << "ERROR: " << msg << std::endl;
-}
-
-void ScummRpIO::warning(const char *msg)
-{
-	if (!ScummRpIO::_quiet)
-		std::cerr << "WARNING: " << msg << std::endl;
-}
-
-void ScummRpIO::setQuiet(bool q)
-{
-	ScummRpIO::_quiet = q;
-}
-
-void ScummRpIO::setInfoSlots(uint32 infoSlots)
-{
-	ScummRpIO::_infoSlots = infoSlots;
-}
+#endif

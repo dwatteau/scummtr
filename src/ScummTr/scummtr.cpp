@@ -25,10 +25,11 @@
  * #ifdef's to learn more about the changes.
  */
 
+#include "common/backup.hpp"
+#include "common/io.hpp"
+
 #include "scummtr.hpp"
-#include "backup.hpp"
 #include "trblock.hpp"
-#include "io.hpp"
 
 #include <cstring>
 

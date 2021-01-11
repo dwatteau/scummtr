@@ -23,9 +23,10 @@
  * It seems that no functional change was made after that date.
  */
 
+#include "common/io.hpp"
+#include "common/toolbox.hpp"
+
 #include "scummrp.hpp"
-#include "io.hpp"
-#include "toolbox.hpp"
 
 #include <cstring>
 

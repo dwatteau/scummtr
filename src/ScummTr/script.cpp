@@ -21,9 +21,10 @@
  *
  */
 
+#include "ScummRp/scummrp.hpp"
+
 #include "script.hpp"
 #include "scummtr.hpp"
-#include "scummrp.hpp"
 
 #include <algorithm>
 

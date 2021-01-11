@@ -21,9 +21,10 @@
  *
  */
 
+#include "common/toolbox.hpp"
+#include "ScummRp/block.hpp" // for tagToStr
+
 #include "text.hpp"
-#include "toolbox.hpp"
-#include "block.hpp" // for tagToStr
 
 const char Text::CT_NULL[256] =
 {

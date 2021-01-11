@@ -21,11 +21,12 @@
  *
  */
 
+#include "common/io.hpp"
+#include "common/toolbox.hpp"
+
 #include "block.hpp"
-#include "io.hpp"
 #include "scummrp.hpp"
 #include "rptypes.hpp"
-#include "toolbox.hpp"
 
 #include <cstdio>
 #include <cstring>

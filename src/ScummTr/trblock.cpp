@@ -21,10 +21,11 @@
  *
  */
 
-#include "file.hpp"
+#include "common/file.hpp"
+#include "common/io.hpp"
+
 #include "trblock.hpp"
 #include "scummtr.hpp"
-#include "io.hpp"
 
 /*
  * TextBlock
