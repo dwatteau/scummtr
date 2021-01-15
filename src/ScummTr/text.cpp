@@ -627,7 +627,6 @@ void Text::_getBinaryLine(std::string &s, Text::LineType lineType)
 {
 	int l;
 
-	l = 0;
 	switch (lineType)
 	{
 	case LT_OLDMSG:
@@ -642,6 +641,8 @@ void Text::_getBinaryLine(std::string &s, Text::LineType lineType)
 	case LT_PLAIN:
 		l = Text::getLengthPlain(_file);
 		break;
+	default:
+		throw std::logic_error("Text::_getBinaryLine: Wrong type");
 	}
 
 	_file->read(s, l);

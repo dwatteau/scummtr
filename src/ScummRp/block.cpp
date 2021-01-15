@@ -153,6 +153,7 @@ void Block::_readHeader(BlockFormat format, FilePart &file, int32 &size, uint32 
 		size = (int32)w;
 		break;
 	case BFMT_NOHEADER:
+		size = 0;
 		break;
 	case BFMT_NULL:
 		throw Block::InvalidBlock("Block::_readHeader: No block format specified");
@@ -704,6 +705,7 @@ int RoomPack::_findNextLFLFRootBlock(byte roomId, int32 currentOffset, int32 roo
 	int32 nextOffset, offset;
 
 	toc = nullptr;
+	id = -1;
 	nextOffset = roomSize;
 	for (int i = 0; ScummRp::tocs[i] != nullptr; ++i)
 	{

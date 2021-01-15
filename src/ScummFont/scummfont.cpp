@@ -146,7 +146,6 @@ static void getFontInfo(int32 &baseOffset, std::ifstream &file, int &version, in
 	int32 tag;
 	int lineSpacing;
 
-	lineSpacing = 0;
 	file.exceptions(std::ios::eofbit | std::ios::failbit | std::ios::badbit);
 
 	file.read((char *)&tag, 4);
