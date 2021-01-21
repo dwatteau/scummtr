@@ -306,7 +306,7 @@ void ScummRp::_processGameFilesV123()
 		std::string dataPath(ScummRp::_paramGameDir);
 		TreeBlockPtr room;
 
-		sprintf(dataFileName, ScummRp::_game.dataFileName, i);
+		snprintf(dataFileName, sizeof(dataFileName), ScummRp::_game.dataFileName, i);
 		dataPath += '/';
 		dataPath += dataFileName;
 
@@ -348,7 +348,7 @@ void ScummRp::_processGameFilesV4567()
 		std::string dataPath(ScummRp::_paramGameDir);
 		TreeBlockPtr disk;
 
-		sprintf(dataFileName, ScummRp::_game.dataFileName, i);
+		snprintf(dataFileName, sizeof(dataFileName), ScummRp::_game.dataFileName, i);
 		dataPath += '/';
 		dataPath += dataFileName;
 		disk = new BlocksFile(dataPath.c_str(), ScummRp::_fileOptions, ScummRp::_backupSystem, i, MKTAG4('D','I','S','K'), ScummRp::_game.dataXorKey);

@@ -108,11 +108,12 @@ static int32 glHeight = 0;
 
 static const char *xsprintf(const char *format, ...)
 {
-	static char errorMessage[256];
+	static const int MAX_MSG_SIZE = 256;
+	static char errorMessage[MAX_MSG_SIZE];
 	va_list va;
 
 	va_start(va, format);
-	vsprintf(errorMessage, format, va);
+	vsnprintf(errorMessage, MAX_MSG_SIZE, format, va);
 	va_end(va);
 
 	return errorMessage;

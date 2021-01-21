@@ -39,10 +39,6 @@
 # include <sys/stat.h>
 #endif
 
-/*
- *
- */
-
 const char *xsprintf(const char *format, ...)
 {
 	static const int MAX_MSG_SIZE = 1024;
@@ -53,11 +49,7 @@ const char *xsprintf(const char *format, ...)
 
 	currentStr = (currentStr + 1) % MAX_USES;
 	va_start(va, format);
-#ifdef _MSC_VER
-	_vsnprintf(errorMessage[currentStr], MAX_MSG_SIZE, format, va);
-#else
-	vsprintf(errorMessage[currentStr], format, va); // FIXME unsafe sprintf
-#endif
+	vsnprintf(errorMessage[currentStr], MAX_MSG_SIZE, format, va);
 	va_end(va);
 
 	return errorMessage[currentStr];

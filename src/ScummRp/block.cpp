@@ -121,9 +121,9 @@ const char *Block::_fileName() const
 	static char fileName[32] = { 0 };
 
 	if (_id >= 0)
-		sprintf(fileName, "%s_%.4i", Block::tagToStr(_tag), _id);
+		snprintf(fileName, sizeof(fileName), "%s_%.4i", Block::tagToStr(_tag), _id);
 	else
-		strcpy(fileName, Block::tagToStr(_tag));
+		snprintf(fileName, sizeof(fileName), "%s", Block::tagToStr(_tag));
 
 	return fileName;
 }
