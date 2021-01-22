@@ -106,6 +106,8 @@ static byte *glFontBitmap = nullptr;
 static int32 glWidth = 0;
 static int32 glHeight = 0;
 
+static const char *xsprintf(const char *format, ...) __attribute__((format(printf, 1, 2)));
+
 static const char *xsprintf(const char *format, ...)
 {
 	static const int MAX_MSG_SIZE = 256;

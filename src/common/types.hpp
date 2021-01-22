@@ -53,6 +53,10 @@ typedef short int16;
 typedef int int32;
 #endif
 
+#if !defined(__GNUC__) && !defined(__clang__)
+#  define  __attribute__(x)  /* NOTHING */
+#endif
+
 #define MKTAG2(a,b)     ((uint16)((b) | ((a) << 8)))
 #define MKTAG4(a,b,c,d) ((uint32)((d) | ((c) << 8) | ((b) << 16) | ((a) << 24)))
 
