@@ -77,6 +77,7 @@ void xremove(const char *path)
 	}
 }
 
+// note: newname must not already exist. call xremove() beforehand if necessary.
 void xrename(const char *oldname, const char *newname)
 {
 	if (rename(oldname, newname) != 0)
