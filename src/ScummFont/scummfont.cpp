@@ -241,12 +241,9 @@ static std::string tmpPath(const char *path)
 	return s;
 }
 
-static int roundTo4(int i)
+static inline int roundTo4(int i)
 {
-	if ((i & 3) != 0)
-		return i + 4 - (i & 3);
-
-	return i;
+	return (i + 3) & ~0x3;
 }
 
 static void saveBmp(const char *path)
