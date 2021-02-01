@@ -29,6 +29,9 @@ else()
         add_compile_options(-Widiomatic-parentheses -Wparentheses -Wimplicit-int-conversion)
     endif()
 
+    # -O3 has no benefit, and it's sometimes buggy
+    string(REPLACE "-O3" "-O2" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
+
     # Warnings requiring a recent compiler. Do a single test, it's not critical
     set(SCUMMTR_MODERN_WARNING_FLAGS "-Winit-self;-Wtype-limits;-Wignored-qualifiers") # -Wzero-as-null-pointer-constant for C++11
     CHECK_CXX_COMPILER_FLAG("${SCUMMTR_MODERN_WARNING_FLAGS}" COMPILER_SUPPORTS_MODERN_WARNING_FLAGS)
