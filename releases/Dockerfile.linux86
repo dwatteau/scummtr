@@ -1,4 +1,4 @@
-# Linux x86 and x86-64 builds, with an older glibc version for maximum
+# Linux x86 and x86-64 builds, with glibc 2.12 and g++ 4.4 for maximum
 # compatibility.
 
 FROM centos:6.10
@@ -17,12 +17,12 @@ RUN mkdir -p /scummtr/project /scummtr/build /scummtr/output
 WORKDIR /scummtr
 
 CMD cd /scummtr/build \
-	&& cmake3 -DCMAKE_C_FLAGS="-m64" -DCMAKE_CXX_FLAGS="-m64" /scummtr/project \
+	&& cmake3 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS="-m64" /scummtr/project \
 	&& make VERBOSE=1 \
 	&& cp -pR . /scummtr/output/linux-x64 \
 	\
 	&& rm -rf /scummtr/build/* \
 	\
-	&& cmake3 -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32" /scummtr/project \
+	&& cmake3 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS="-m32" /scummtr/project \
 	&& make VERBOSE=1 \
 	&& cp -pR . /scummtr/output/linux-x86
