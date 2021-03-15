@@ -2045,7 +2045,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 
 		_file->seekg(ocOffset[i] + _oOCWidth(), std::ios::beg);
 		_file->getByte(b);
-		width = (b << 3) & 0xFF;
+		width = b << 3;
 
 		_file->seekg(ocOffset[i] + _oOCHeight(), std::ios::beg);
 		_file->getByte(b);
