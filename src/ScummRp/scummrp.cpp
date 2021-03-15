@@ -375,7 +375,7 @@ int ScummRp::main(int argc, const char **argv)
 
 	ScummRp::_getOptions(argc, argv, ScummRp::_rpParameters);
 	ScummRpIO::setInfoSlots(ScummRp::_infoSlots);
-	ScummRpIO::info(INF_GLOBAL, xsprintf("%s %s by %s", ScummRp::NAME, ScummRp::VERSION, ScummRp::AUTHOR));
+	ScummRpIO::info(INF_GLOBAL, xsprintf("%s %s (build %s) by %s", ScummRp::NAME, ScummRp::VERSION, SCUMMTR_BUILD_DATE, ScummRp::AUTHOR));
 	ScummRpIO::info(INF_GLOBAL, "");
 
 	if (ScummRp::_options & ScummRp::OPT_LIST)

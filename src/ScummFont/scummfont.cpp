@@ -123,7 +123,7 @@ static const char *xsprintf(const char *format, ...)
 
 static int usage()
 {
-	std::cout << "ScummFont 0.2 by Thomas Combeleran" << std::endl;
+	std::cout << "ScummFont 0.2 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran" << std::endl;
 	std::cout << std::endl;
 	std::cout << "usage:" << std::endl;
 	std::cout << "  scummfont {i|o} font bitmap.bmp" << std::endl;

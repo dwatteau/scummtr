@@ -28,6 +28,10 @@
 #  error "Visual Studio 2015 or better is required"
 #endif
 
+#ifndef SCUMMTR_BUILD_DATE
+#define SCUMMTR_BUILD_DATE "UNDEFINED-UNKNOWN"
+#endif
+
 #include <climits>
 
 #if CHAR_BIT != 8 || UCHAR_MAX != 0xff || USHRT_MAX != 0xffff || UINT_MAX != 0xffffffffU
