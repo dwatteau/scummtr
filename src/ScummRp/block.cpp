@@ -774,7 +774,7 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 				j = 1;
 				ScummRpIO::info(INF_DETAIL, "Removed SC_0008 from index (duplicate of SC_0013)");
 			}
-			// Hack for Loom EGA English
+			// Hacks for Loom EGA English
 			else if (roomId == 11 && ScummRp::tocs[i]->getSize() == 200
 					 && (*ScummRp::tocs[i])[51].offset == (*ScummRp::tocs[i])[52].offset
 					 && (*ScummRp::tocs[i])[51].roomId == (*ScummRp::tocs[i])[52].roomId)
@@ -782,6 +782,14 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 				(*ScummRp::tocs[i])[51].offset = -1;
 				j = 1;
 				ScummRpIO::info(INF_DETAIL, "Removed SC_0051 from index (duplicate of SC_0052)");
+			}
+			else if (roomId == 18 && ScummRp::tocs[i]->getSize() == 200
+					 && (*ScummRp::tocs[i])[55].offset == (*ScummRp::tocs[i])[56].offset
+					 && (*ScummRp::tocs[i])[55].roomId == (*ScummRp::tocs[i])[56].roomId)
+			{
+				(*ScummRp::tocs[i])[55].offset = -1;
+				j = 1;
+				ScummRpIO::info(INF_DETAIL, "Removed SC_0055 from index (duplicate of SC_0056)");
 			}
 		}
 		n += j;
