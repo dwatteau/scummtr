@@ -129,7 +129,7 @@ static int usage()
 	std::cout << "  scummfont {i|o} font bitmap.bmp" << std::endl;
 	std::cout << std::endl;
 	std::cout << "  o: Export bitmap.bmp from font" << std::endl;
-	std::cout << "  i: Import bitmap.bmp into font (result written in font-new)" << std::endl;
+	std::cout << "  i: Import bitmap.bmp into font" << std::endl;
 	std::cout << std::endl;
 	std::cout << "\"font\" is either a CHAR block extracted with scummrp, or an LFL file" << std::endl;
 
@@ -241,6 +241,15 @@ static std::string tmpPath(const char *path)
 	return s;
 }
 
+static void renameAndRemoveOriginal(const char *from, const char *to)
+{
+	if (remove(to) != 0) // for Win32
+		throw std::runtime_error("Can't replace the existing font: remove failed");
+
+	if (rename(from, to) != 0)
+		throw std::runtime_error("Can't replace the existing font: rename failed");
+}
+
 static inline int roundTo4(int i)
 {
 	return (i + 3) & ~0x3;
@@ -308,6 +317,8 @@ static void saveBmp(const char *path)
 		memcpy(buf + i * roundTo4(glWidth), glFontBitmap + (glHeight - i - 1) * glWidth, glWidth);
 
 	file.write((char *)buf, roundTo4(glWidth) * glHeight);
+
+	file.close();
 }
 
 static void loadBmp(const char *path)
@@ -360,6 +371,8 @@ static void loadBmp(const char *path)
 	file.read((char *)buf, roundTo4(glWidth) * glHeight);
 	for (int i = 0; i < glHeight; ++i)
 		memcpy(glFontBitmap + i * glWidth, buf + (glHeight - i - 1) * roundTo4(glWidth), glWidth);
+
+	file.close();
 }
 
 static void saveFont(const char *path)
@@ -522,6 +535,8 @@ static void saveFont(const char *path)
 				++endOffset;
 			}
 		}
+		file.close();
+
 		if (baseOffset == 8) // block header
 		{
 			tmpFile.seekp(0x4, std::ios::beg);
@@ -550,9 +565,9 @@ static void saveFont(const char *path)
 			numChars = newNumChars;
 			tmpFile.write((char *)&numChars, 2);
 		}
+		tmpFile.close();
 
-		std::cout << "Output file has been written to " << tmpfilepath << std::endl;
-		std::cout << "Don't forget to replace your original file with the new version" << std::endl;
+		renameAndRemoveOriginal(path, tmpfilepath.c_str());
 	}
 }
 
@@ -652,6 +667,7 @@ static void loadFont(const char *path)
 				mask = b = p = 0;
 		}
 	}
+	file.close();
 }
 
 int main(int argc, char **argv) try
