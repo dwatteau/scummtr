@@ -14,6 +14,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 string(TIMESTAMP SCUMMTR_BUILD_DATE "%Y%m%d-%H%M" UTC)
 add_definitions(-DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
+
 include(CheckCXXCompilerFlag)
 
 if (MSVC)
@@ -67,3 +69,9 @@ add_subdirectory ("src/FontXY")
 add_subdirectory ("src/ScummFont")
 add_subdirectory ("src/ScummRp")
 add_subdirectory ("src/ScummTr")
+
+if (UNIX)
+    install(FILES man/FontXY.1 man/scummfont.1 man/scummrp.1 man/scummtr.1 DESTINATION share/man/man1)
+else()
+    install(DIRECTORY man/html DESTINATION html FILES_MATCHING PATTERN "*.html")
+endif()
