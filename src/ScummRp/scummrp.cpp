@@ -499,24 +499,23 @@ bool ScummRp::_readOption(const char *arg, char *pendingParams)
 
 void ScummRp::_usage()
 {
-	std::cout << "options:" << std::endl;
-	std::cout << std::endl;
-	std::cout << " -g gameid  " << "Select a game" << std::endl;
-	std::cout << " -i         " << "Import blocks into the game files (Input)" << std::endl;
-	std::cout << " -o         " << "Export blocks from the game files (Output)" << std::endl;
-	std::cout << " -d path    " << "Path to dumping directory" << std::endl;
-	std::cout << " -p path    " << "Path to the game directory" << std::endl;
-	std::cout << " -t tag     " << "Only export/import blocks with this tag" << std::endl;
-// 	std::cout << " -m         " << "Work in memory (whole game files are loaded in RAM)" << std::endl;
-// 	std::cout << " -O         " << "Optimize for sequential access (with -i)" << std::endl;
-// 	std::cout << " -s         " << "Slow mode (disable automatic -m or -O)" << std::endl;
-	std::cout << " -L         " << "List supported games" << std::endl;
-	std::cout << " -v         " << "Verbose" << std::endl;
-	std::cout << " -V         " << "More verbose (lists blocks)" << std::endl;
-	std::cout << " -q         " << "Quiet" << std::endl;
-	std::cout << std::endl;
-	std::cout << "Example:" << std::endl;
-	std::cout << "scummrp -gp monkey2 ./mi2 -id ./dumps/mi2" << std::endl;
+	std::cout << "options:\n\n";
+	std::cout << " -i         " << "import blocks into the game files (input)\n";
+	std::cout << " -o         " << "export blocks from the game files (output)\n";
+	std::cout << " -L         " << "list supported games\n\n";
+	std::cout << " -d path    " << "path to dumping directory (default: " << ScummRp::_paramDumpingDir << ")\n";
+	std::cout << " -g gameid  " << "select a game target (as given by -L)\n";
+// 	std::cout << " -m         " << "work in memory (whole game files are loaded in RAM)\n";
+// 	std::cout << " -O         " << "optimize for sequential access (with -i)\n";
+	std::cout << " -p path    " << "path to the game (default: current directory)\n";
+	std::cout << " -q         " << "quiet mode\n";
+// 	std::cout << " -s         " << "slow mode (disable automatic -m or -O)\n";
+	std::cout << " -t tag     " << "only export/import blocks with this tag\n";
+	std::cout << " -v         " << "verbose mode\n";
+	std::cout << " -V         " << "more verbose mode (lists blocks)\n\n";
+	std::cout << "Examples:\n";
+	std::cout << "scummrp -g monkey2 -p MI2 -od MI2_DUMP" << std::endl;
+	std::cout << "scummrp -g loomcd -t SCRP -o" << std::endl;
 }
 
 void ScummRp::_getOptions(int argc, const char **argv, const ScummRp::Parameter *params)
@@ -570,12 +569,11 @@ void ScummRp::_listGames()
 {
 	size_t l1, l2;
 
-	std::cout << "supported games:" << std::endl;
-	std::cout << std::endl;
+	std::cout << "supported games:\n\n";
 	std::cout << "id" << std::setw(12) << "| " << std::setw(0) << "description"
 		 << std::setw(42) << "| " << std::setw(0) << "file" << std::endl;
 	std::cout << "------------|-------------------------------------"
-		"---------------|-------------" << std::endl;
+		"---------------|-------------\n";
 
 	for (int i = 0; ScummRp::_gameDef[i].shortName != nullptr; ++i)
 	{
@@ -586,8 +584,9 @@ void ScummRp::_listGames()
 			 << std::setw(0) << ScummRp::_gameDef[i].name
 			 << std::setw(53 - (std::streamsize)l2) << "| "
 			 << std::setw(0) << ScummRp::_gameDef[i].indexFileName
-			 << std::endl;
+			 << "\n";
 	}
+	std::cout << std::flush;
 }
 
 /*

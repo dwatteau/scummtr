@@ -123,14 +123,11 @@ static const char *xsprintf(const char *format, ...)
 
 static int usage()
 {
-	std::cout << "ScummFont 0.2 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran" << std::endl;
-	std::cout << std::endl;
-	std::cout << "usage:" << std::endl;
-	std::cout << "  scummfont {i|o} font bitmap.bmp" << std::endl;
-	std::cout << std::endl;
-	std::cout << "  o: Export bitmap.bmp from font" << std::endl;
-	std::cout << "  i: Import bitmap.bmp into font (result written in font-new)" << std::endl;
-	std::cout << std::endl;
+	std::cout << "ScummFont 0.2 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran\n\n";
+	std::cout << "usage:\n";
+	std::cout << "  scummfont {i|o} font bitmap.bmp\n\n";
+	std::cout << "  o: Export bitmap.bmp from font\n";
+	std::cout << "  i: Import bitmap.bmp into font (result written in font-new)\n\n";
 	std::cout << "\"font\" is either a CHAR block extracted with scummrp, or an LFL file" << std::endl;
 
 	return 0;
