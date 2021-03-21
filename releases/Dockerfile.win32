@@ -12,4 +12,4 @@ WORKDIR /scummtr
 CMD cd /scummtr/build \
 	&& cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++ -DCMAKE_CXX_FLAGS="-DWINVER=0x0501 -D_WIN32_WINNT=0x0501" -DCMAKE_EXE_LINKER_FLAGS="-static-libgcc -static-libstdc++ -static" /scummtr/project \
 	&& make VERBOSE=1 \
-	&& cp -pR . /scummtr/output/win32
+	&& make install DESTDIR=/scummtr/output/win32
