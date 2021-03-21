@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <style>
+    table.head, table.foot { width: 100%; }
+    td.head-rtitle, td.foot-os { text-align: right; }
+    td.head-vol { text-align: center; }
+    div.Pp { margin: 1ex 0ex; }
+    div.Nd, div.Bf, div.Op { display: inline; }
+    span.Pa, span.Ad { font-style: italic; }
+    span.Ms { font-weight: bold; }
+    dl.Bl-diag > dt { font-weight: bold; }
+    code.Nm, code.Fl, code.Cm, code.Ic, code.In, code.Fd, code.Fn,
+    code.Cd { font-weight: bold; font-family: inherit; }
+  </style>
+  <title>FONTXY(1)</title>
+</head>
+<body>
+<table class="head">
+  <tr>
+    <td class="head-ltitle">FONTXY(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">FONTXY(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<code class="Nm">FontXY</code> &#x2014;
+<div class="Nd">adjust glyph dimensions inside SCUMM fonts</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">FontXY</code></td>
+    <td><code class="Cm">i</code> <var class="Ar">CHARFILE</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">FontXY</code></td>
+    <td><code class="Cm">o</code> <var class="Ar">CHARFILE</var></td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+The <code class="Nm">FontXY</code> tool lets you adjust the relative size of
+  each glyph inside a SCUMM character file. The mode of operation is chosen with
+  one of the following options:
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#i"><code class="Cm" id="i">i</code></a></dt>
+  <dd>Import glyph dimensions from a <span class="Pa">XY.txt</span> file into
+      the specified <var class="Ar">CHARFILE</var> resource.</dd>
+  <dt><a class="permalink" href="#o"><code class="Cm" id="o">o</code></a></dt>
+  <dd>Export glyph dimensions from the specified <var class="Ar">CHARFILE</var>
+      resource into a <span class="Pa">XY.txt</span> file.</dd>
+</dl>
+<p class="Pp"><var class="Ar">CHARFILE</var> must be a &#x201C;CHAR_*&#x201D;
+    resource file, as extracted by <a class="Xr">scummrp(1)</a>.</p>
+<p class="Pp">Glyph dimensions are represented as a series of
+    &#x2018;<code class="Li">X;Y</code>&#x2019; coordinates, relative to zero,
+    each glyph being separated by a newline character. Empty glyphs are
+    represented as empty lines.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="HISTORY"><a class="permalink" href="#HISTORY">HISTORY</a></h1>
+The <code class="Nm">FontXY</code> tool was written in 2006 by Thomas Combeleran
+  for the ATP team, and was open-sourced in 2020 under an MIT license.
+</section>
+<section class="Sh">
+<h1 class="Sh" id="CAVEATS"><a class="permalink" href="#CAVEATS">CAVEATS</a></h1>
+Only Unix-type newline characters (LF) are currently supported.
+<p class="Pp"><span class="Pa">XY.txt</span> pathname is hardcoded.</p>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">November 19, 2020</td>
+    <td class="foot-os">mandoc</td>
+  </tr>
+</table>
+</body>
+</html>
