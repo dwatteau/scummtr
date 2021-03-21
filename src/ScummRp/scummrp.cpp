@@ -55,7 +55,7 @@ const ScummRp::Parameter ScummRp::_rpParameters[] =
 
 char ScummRp::_paramGameId[16] = "";
 char ScummRp::_paramGameDir[512] = ".";
-char ScummRp::_paramDumpingDir[512] = ".";
+char ScummRp::_paramDumpingDir[512] = "DUMP";
 char ScummRp::_paramTag[5] = "";
 
 // template <int A>
