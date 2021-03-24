@@ -70,7 +70,7 @@ Same as
 .Fl a ,
 with variable IDs taken into account.
 .It Fl b
-Translation file will be handled in binary mode.
+Translation file will be handled in binary mode, instead of text.
 .It Fl c
 Translation file will be handled as Windows-1252, allowing easier use of some Western European characters.
 Without
@@ -91,7 +91,7 @@ context of the current string.
 .It Fl H
 Represent extended characters as hexadecimal codes, instead of decimal codes.
 .It Fl I
-Show instruction opcode, when exporting.
+Include the current SCUMM instruction opcode, before each line.
 .It Fl l Ar language
 V1 and V2 games only.
 The name of the language charset to be used for this translation.
@@ -124,7 +124,7 @@ compatible with some text editors.
 .El
 .Sh EXAMPLES
 Extract the text of the original Monkey Island 2 game to a
-Windows-1252 file compatible with Notepad.exe, with added context:
+Windows-1252 file compatible with Microsoft Notepad, with added context:
 .Pp
 .Dl $ scummtr -cw -h -g monkey2 -p /path/to/MI2 -of mi2_orig.txt
 .Pp

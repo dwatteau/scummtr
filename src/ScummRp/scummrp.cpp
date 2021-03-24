@@ -504,7 +504,7 @@ void ScummRp::_usage()
 	std::cout << " -o         " << "export blocks from the game files (output)\n";
 	std::cout << " -L         " << "list supported games\n\n";
 	std::cout << " -d path    " << "path to dumping directory (default: " << ScummRp::_paramDumpingDir << ")\n";
-	std::cout << " -g gameid  " << "select a game target (as given by -L)\n";
+	std::cout << " -g gameid  " << "select a game (as given by -L)\n";
 // 	std::cout << " -m         " << "work in memory (whole game files are loaded in RAM)\n";
 // 	std::cout << " -O         " << "optimize for sequential access (with -i)\n";
 	std::cout << " -p path    " << "path to the game (default: current directory)\n";
