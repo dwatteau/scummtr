@@ -74,13 +74,15 @@ Translation file will be handled in binary mode, instead of text.
 .Pp
 Note that this makes most other options inoperative.
 .It Fl c
-Translation file will be handled as Windows-1252, allowing easier use of some Western European characters.
+Translation file will be handled as Windows-1252, allowing easier use of
+some Western European characters.
 Without
 .Fl c ,
 non-ASCII characters will be handled as escape sequences.
 .Pp
 Note that SCUMM games only supported their own smaller subset of the
-the official Windows-1252 (also known as ISO-8859-1) table.
+the official Windows-1252 table (which is mainly compatible with
+ISO-8859-1).
 .It Fl f Ar file
 The path to the translation file (default:
 .Pa scummtr.txt ) .
