@@ -760,19 +760,20 @@ void Text::addLine(std::string s, Text::LineType lineType, int op)
 		Text::_spaceBitToChar(s);
 
 	_file.seekp(0, std::ios::end);
-	if (_header)
-		_file.write(info());
-
-	if (_opcode)
-	{
-		if (op >= 0)
-			_file.write(xsprintf("(%.2X)", op));
-		else
-			_file.write(xsprintf("(__)"));
-	}
 
 	if (_escaped)
 	{
+		if (_header)
+			_file.write(info());
+
+		if (_opcode)
+		{
+			if (op >= 0)
+				_file.write(xsprintf("(%.2X)", op));
+			else
+				_file.write(xsprintf("(__)"));
+		}
+
 		_writeEsc(s, lineType);
 	}
 	else
