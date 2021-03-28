@@ -714,8 +714,24 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 	if (_escaped)
 	{
 		_file.getline(s, '\n');
+
+		if (_header && s[0] == '[')
+		{
+			size_t endHeader = s.find(']', 0);
+			if (endHeader != std::string::npos)
+				s.erase(0, endHeader + 1);
+		}
+
+		if (_opcode && s[0] == '(')
+		{
+			size_t endPos = s.find(')', 0);
+			if (endPos != std::string::npos)
+				s.erase(0, endPos + 1);
+		}
+
 		if (_crlf)
 			s.resize(s.size() - 1);
+
 		_unEsc(s, lineType);
 	}
 	else
