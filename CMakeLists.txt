@@ -11,15 +11,17 @@ set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+string(TIMESTAMP SCUMMTR_BUILD_DATE "%Y%m%d-%H%M" UTC)
+add_definitions(-DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
+
 include(CheckCXXCompilerFlag)
 
 if (MSVC)
-    # /wd4996?
     add_compile_options(/wd4244 /wd4267 /wd26451 /wd26495)
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN)
 else()
     # GCC 2.95 compatible warnings we always want
-    add_compile_options(-Wall -pedantic -Wpointer-arith -Wcast-qual -Wcast-align -Wuninitialized -Wundef -Wmultichar -Wwrite-strings -Wctor-dtor-privacy -Wredundant-decls -Wunused -Wsign-compare)
+    add_compile_options(-Wall -pedantic -Wpointer-arith -Wcast-qual -Wcast-align -Wundef -Wmultichar -Wwrite-strings -Wctor-dtor-privacy -Wredundant-decls -Wunused -Wsign-compare)
     # GCC 2.95 compatible warnings we don't want (yet)
     add_compile_options(-Wno-non-virtual-dtor -Wno-conversion -Wno-overloaded-virtual -Wno-old-style-cast -Wno-format)
 
@@ -30,14 +32,19 @@ else()
         add_compile_options(-Widiomatic-parentheses -Wparentheses -Wimplicit-int-conversion)
     endif()
 
+    # -O3 has no benefit, and it's sometimes buggy
+    string(REPLACE "-O3" "-O2" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
+
     # Warnings requiring a recent compiler. Do a single test, it's not critical
     set(SCUMMTR_MODERN_WARNING_FLAGS "-Winit-self;-Wtype-limits;-Wignored-qualifiers") # -Wzero-as-null-pointer-constant for C++11
     CHECK_CXX_COMPILER_FLAG("${SCUMMTR_MODERN_WARNING_FLAGS}" COMPILER_SUPPORTS_MODERN_WARNING_FLAGS)
     if(COMPILER_SUPPORTS_MODERN_WARNING_FLAGS)
-        add_compile_options("${SCUMMTR_MODERN_WARNING_FLAGS};-Wshadow")
+        add_compile_options("${SCUMMTR_MODERN_WARNING_FLAGS};-Wshadow;-Wuninitialized")
     endif()
 
-    if (NOT MINGW)
+    if (MINGW)
+        add_definitions(-D__USE_MINGW_ANSI_STDIO)
+    else()
         add_definitions(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS)
         set(SCUMMTR_HARDENING_FLAGS "-fstack-protector;--param=ssp-buffer-size=4")
         CHECK_CXX_COMPILER_FLAG("${SCUMMTR_HARDENING_FLAGS}" COMPILER_SUPPORTS_HARDENING_FLAGS)

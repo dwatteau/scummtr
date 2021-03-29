@@ -24,13 +24,7 @@
 #ifndef SCUMM_COMMON_TOOLBOX_HPP
 #define SCUMM_COMMON_TOOLBOX_HPP
 
-#if !defined(__GNUC__) && !defined(__clang__)
-#  define  __attribute__(x)  /* NOTHING */
-#endif
-
-/*
- *
- */
+#include "common/types.hpp"
 
 const char *xsprintf(const char *format, ...) __attribute__((format(printf, 1, 2)));
 char *xstrdup(const char *src);

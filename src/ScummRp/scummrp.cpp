@@ -56,7 +56,7 @@ const ScummRp::Parameter ScummRp::_rpParameters[] =
 
 char ScummRp::_paramGameId[16] = "";
 char ScummRp::_paramGameDir[512] = ".";
-char ScummRp::_paramDumpingDir[512] = ".";
+char ScummRp::_paramDumpingDir[512] = "DUMP";
 char ScummRp::_paramTag[5] = "";
 
 // template <int A>
@@ -307,7 +307,7 @@ void ScummRp::_processGameFilesV123()
 		std::string dataPath(ScummRp::_paramGameDir);
 		TreeBlockPtr room;
 
-		sprintf(dataFileName, ScummRp::_game.dataFileName, i);
+		snprintf(dataFileName, sizeof(dataFileName), ScummRp::_game.dataFileName, i); // ignore -Wformat-security here, ScummRp::_game.dataFileName is internal and safe
 		dataPath += '/';
 		dataPath += dataFileName;
 
@@ -349,7 +349,7 @@ void ScummRp::_processGameFilesV4567()
 		std::string dataPath(ScummRp::_paramGameDir);
 		TreeBlockPtr disk;
 
-		sprintf(dataFileName, ScummRp::_game.dataFileName, i);
+		snprintf(dataFileName, sizeof(dataFileName), ScummRp::_game.dataFileName, i); // ignore -Wformat-security here, ScummRp::_game.dataFileName is internal and safe
 		dataPath += '/';
 		dataPath += dataFileName;
 		disk = new BlocksFile(dataPath.c_str(), ScummRp::_fileOptions, ScummRp::_backupSystem, i, MKTAG4('D','I','S','K'), ScummRp::_game.dataXorKey);
@@ -376,7 +376,7 @@ int ScummRp::main(int argc, const char **argv)
 
 	ScummRp::_getOptions(argc, argv, ScummRp::_rpParameters);
 	ScummIO::setInfoSlots(ScummRp::_infoSlots);
-	ScummIO::info(INF_GLOBAL, xsprintf("%s %s by %s", ScummRp::NAME, ScummRp::VERSION, ScummRp::AUTHOR));
+	ScummIO::info(INF_GLOBAL, xsprintf("%s %s (build %s) by %s", ScummRp::NAME, ScummRp::VERSION, SCUMMTR_BUILD_DATE, ScummRp::AUTHOR));
 	ScummIO::info(INF_GLOBAL, "");
 
 	if (ScummRp::_options & ScummRp::OPT_LIST)
@@ -500,24 +500,23 @@ bool ScummRp::_readOption(const char *arg, char *pendingParams)
 
 void ScummRp::_usage()
 {
-	std::cout << "options:" << std::endl;
-	std::cout << std::endl;
-	std::cout << " -g gameid  " << "Select a game" << std::endl;
-	std::cout << " -i         " << "Import blocks into the game files (Input)" << std::endl;
-	std::cout << " -o         " << "Export blocks from the game files (Output)" << std::endl;
-	std::cout << " -d path    " << "Path to dumping directory" << std::endl;
-	std::cout << " -p path    " << "Path to the game directory" << std::endl;
-	std::cout << " -t tag     " << "Only export/import blocks with this tag" << std::endl;
-// 	std::cout << " -m         " << "Work in memory (whole game files are loaded in RAM)" << std::endl;
-// 	std::cout << " -O         " << "Optimize for sequential access (with -i)" << std::endl;
-// 	std::cout << " -s         " << "Slow mode (disable automatic -m or -O)" << std::endl;
-	std::cout << " -L         " << "List supported games" << std::endl;
-	std::cout << " -v         " << "Verbose" << std::endl;
-	std::cout << " -V         " << "More verbose (lists blocks)" << std::endl;
-	std::cout << " -q         " << "Quiet" << std::endl;
-	std::cout << std::endl;
-	std::cout << "Example:" << std::endl;
-	std::cout << "scummrp -gp monkey2 ./mi2 -id ./dumps/mi2" << std::endl;
+	std::cout << "options:\n\n";
+	std::cout << " -i         " << "import blocks into the game files (input)\n";
+	std::cout << " -o         " << "export blocks from the game files (output)\n";
+	std::cout << " -L         " << "list supported games\n\n";
+	std::cout << " -d path    " << "path to dumping directory (default: " << ScummRp::_paramDumpingDir << ")\n";
+	std::cout << " -g gameid  " << "select a game (as given by -L)\n";
+// 	std::cout << " -m         " << "work in memory (whole game files are loaded in RAM)\n";
+// 	std::cout << " -O         " << "optimize for sequential access (with -i)\n";
+	std::cout << " -p path    " << "path to the game (default: current directory)\n";
+	std::cout << " -q         " << "quiet mode\n";
+// 	std::cout << " -s         " << "slow mode (disable automatic -m or -O)\n";
+	std::cout << " -t tag     " << "only export/import blocks with this tag\n";
+	std::cout << " -v         " << "verbose mode\n";
+	std::cout << " -V         " << "more verbose mode (lists blocks)\n\n";
+	std::cout << "Examples:\n";
+	std::cout << "scummrp -g monkey2 -p MI2 -od MI2_DUMP" << std::endl;
+	std::cout << "scummrp -g loomcd -t SCRP -o" << std::endl;
 }
 
 void ScummRp::_getOptions(int argc, const char **argv, const ScummRp::Parameter *params)
@@ -571,12 +570,11 @@ void ScummRp::_listGames()
 {
 	size_t l1, l2;
 
-	std::cout << "supported games:" << std::endl;
-	std::cout << std::endl;
+	std::cout << "supported games:\n\n";
 	std::cout << "id" << std::setw(12) << "| " << std::setw(0) << "description"
 		 << std::setw(42) << "| " << std::setw(0) << "file" << std::endl;
 	std::cout << "------------|-------------------------------------"
-		"---------------|-------------" << std::endl;
+		"---------------|-------------\n";
 
 	for (int i = 0; ScummRp::_gameDef[i].shortName != nullptr; ++i)
 	{
@@ -587,8 +585,9 @@ void ScummRp::_listGames()
 			 << std::setw(0) << ScummRp::_gameDef[i].name
 			 << std::setw(53 - (std::streamsize)l2) << "| "
 			 << std::setw(0) << ScummRp::_gameDef[i].indexFileName
-			 << std::endl;
+			 << "\n";
 	}
+	std::cout << std::flush;
 }
 
 /*
@@ -597,53 +596,49 @@ void ScummRp::_listGames()
 
 const GameDefinition ScummRp::_gameDef[] =
 {
-	// Old LFL format
-	{ "maniacv1", "Maniac Mansion", "00.LFL", "%.2u.LFL", GID_MANIAC,
+	{ "maniacv1", "Maniac Mansion (V1)", "00.LFL", "%.2u.LFL", GID_MANIAC,
 	  1, 0xFF, 0xFF, GTCFMT_8SEP16, BFMT_SIZEONLY, 4, GF_OLD_BUNDLE },
+	{ "maniacv2", "Maniac Mansion (V2)", "00.LFL", "%.2u.LFL", GID_MANIAC,
+	  2, 0xFF, 0xFF, GTCFMT_8SEP16, BFMT_SIZEONLY, 4, GF_OLD_BUNDLE },
 // 	{ "maniacnes", "Maniac Mansion (NES)", "00.LFL", "%.2u.LFL", GID_MANIAC,
 // 	  1, 0xFF, 0xFF, GTCFMT_8SEP16, BFMT_SIZEONLY, 4, GF_OLD_BUNDLE | GF_NES },
-	{ "zakv1", "Zak McKracken and the Alien Mindbenders", "00.LFL", "%.2u.LFL", GID_ZAK,
+	{ "zakv1", "Zak McKracken and the Alien Mindbenders (V1)", "00.LFL", "%.2u.LFL", GID_ZAK,
 	  1, 0xFF, 0xFF, GTCFMT_8SEP16, BFMT_SIZEONLY, 4, GF_OLD_BUNDLE },
-	{ "maniacv2", "Maniac Mansion (enhanced)", "00.LFL", "%.2u.LFL", GID_MANIAC,
+	{ "zakv2", "Zak McKracken and the Alien Mindbenders (V2)", "00.LFL", "%.2u.LFL", GID_ZAK,
 	  2, 0xFF, 0xFF, GTCFMT_8SEP16, BFMT_SIZEONLY, 4, GF_OLD_BUNDLE },
-	{ "zakv2", "Zak McKracken and the Alien Mindbenders (enhanced)", "00.LFL", "%.2u.LFL", GID_ZAK,
-	  2, 0xFF, 0xFF, GTCFMT_8SEP16, BFMT_SIZEONLY, 4, GF_OLD_BUNDLE },
-	{ "indy3", "Indiana Jones and the Last Crusade", "00.LFL", "%.2u.LFL", GID_INDY3,
+	{ "zaktowns", "Zak McKracken and the Alien Mindbenders (FM-TOWNS)", "00.LFL", "%.2u.LFL", GID_ZAK,
+	  3, 0x00, 0x00, GTCFMT_16MIX32, BFMT_SHORTTAG, 6, GF_FMTOWNS },
+	{ "indy3", "Indiana Jones and the Last Crusade (EGA)", "00.LFL", "%.2u.LFL", GID_INDY3,
 	  3, 0xFF, 0xFF, GTCFMT_8SEP16, BFMT_SIZEONLY, 4, GF_OLD_BUNDLE },
 	{ "indy3mac", "Indiana Jones and the Last Crusade (Macintosh)", "00.LFL", "%.2u.LFL", GID_INDY3,
 	  3, 0xFF, 0xFF, GTCFMT_8SEP16, BFMT_SIZEONLY, 4, GF_OLD_BUNDLE | GF_MACINTOSH },
-	{ "loom", "Loom", "00.LFL", "%.2u.LFL", GID_LOOM,
-	  3, 0xFF, 0xFF, GTCFMT_8SEP16, BFMT_SIZEONLY, 4, GF_OLD_BUNDLE },
-	// FM Towns LFL format
-	{ "indy3towns", "Indiana Jones and the Last Crusade (FM Towns)", "00.LFL", "%.2u.LFL", GID_INDY3,
+	{ "indy3towns", "Indiana Jones and the Last Crusade (FM-TOWNS)", "00.LFL", "%.2u.LFL", GID_INDY3,
 	  3, 0x00, 0x00, GTCFMT_16MIX32, BFMT_SHORTTAG, 6, GF_FMTOWNS },
-	{ "indy3vga", "Indiana Jones and the Last Crusade (256 colours)", "00.LFL", "%.2u.LFL", GID_INDY3,
+	{ "indy3vga", "Indiana Jones and the Last Crusade (VGA)", "00.LFL", "%.2u.LFL", GID_INDY3,
 	  3, 0x00, 0x00, GTCFMT_16MIX32, BFMT_SHORTTAG, 6, GF_NULL },
-	{ "zaktowns", "Zak McKracken and the Alien Mindbenders (FM Towns)", "00.LFL", "%.2u.LFL", GID_ZAK,
+	{ "loom", "Loom (EGA)", "00.LFL", "%.2u.LFL", GID_LOOM,
+	  3, 0xFF, 0xFF, GTCFMT_8SEP16, BFMT_SIZEONLY, 4, GF_OLD_BUNDLE },
+	{ "loomtowns", "Loom (FM-TOWNS)", "00.LFL", "%.2u.LFL", GID_LOOM,
 	  3, 0x00, 0x00, GTCFMT_16MIX32, BFMT_SHORTTAG, 6, GF_FMTOWNS },
-	{ "loomtowns", "Loom (FM Towns)", "00.LFL", "%.2u.LFL", GID_LOOM,
-	  3, 0x00, 0x00, GTCFMT_16MIX32, BFMT_SHORTTAG, 6, GF_FMTOWNS },
-	// Old LEC format
-	{ "monkey", "Monkey Island 1", "000.LFL", "DISK%.2u.LEC", GID_MONKEY,
+	{ "loomcd", "Loom (VGA)", "000.LFL", "DISK%.2u.LEC", GID_LOOM,
 	  4, 0x00, 0x69, GTCFMT_16MIX32, BFMT_SHORTTAG, 6, GF_NULL },
-	{ "loomcd", "Loom (Talkie)", "000.LFL", "DISK%.2u.LEC", GID_LOOM,
+	{ "monkey", "The Secret of Monkey Island (EGA)", "000.LFL", "DISK%.2u.LEC", GID_MONKEY,
 	  4, 0x00, 0x69, GTCFMT_16MIX32, BFMT_SHORTTAG, 6, GF_NULL },
-	// New LEC format
-	{ "monkeycd", "Monkey Island 1 (CD)", "MONKEY.000", "MONKEY.%.3u", GID_MONKEY,
+	{ "monkeycd", "The Secret of Monkey Island (CD)", "MONKEY.000", "MONKEY.%.3u", GID_MONKEY,
 	  5, 0x69, 0x69, GTCFMT_16SEP32, BFMT_LONGTAG, 8, GF_NULL },
-	{ "monkeycdalt", "Monkey Island 1 (CD, MONKEY1.000)", "MONKEY1.000", "MONKEY1.%.3u", GID_MONKEY,
+	{ "monkeycdalt", "The Secret of Monkey Island (CD, MONKEY1.000)", "MONKEY1.000", "MONKEY1.%.3u", GID_MONKEY,
 	  5, 0x69, 0x69, GTCFMT_16SEP32, BFMT_LONGTAG, 8, GF_NULL },
-	{ "monkeysega", "Monkey Island 1 (SegaCD)", "GAME.000", "GAME.%.3u", GID_MONKEY,
+	{ "monkeysega", "The Secret of Monkey Island (SEGA)", "GAME.000", "GAME.%.3u", GID_MONKEY,
 	  5, 0x69, 0x69, GTCFMT_16SEP32, BFMT_LONGTAG, 8, GF_NULL },
-	{ "monkey2", "Monkey Island 2: LeChuck's revenge", "MONKEY2.000", "MONKEY2.%.3u", GID_MONKEY2,
+	{ "monkey2", "Monkey Island 2: LeChuck's Revenge", "MONKEY2.000", "MONKEY2.%.3u", GID_MONKEY2,
 	  5, 0x69, 0x69, GTCFMT_16SEP32, BFMT_LONGTAG, 8, GF_NULL },
 	{ "atlantis", "Indiana Jones and the Fate of Atlantis", "ATLANTIS.000", "ATLANTIS.%.3u", GID_INDY4,
 	  5, 0x69, 0x69, GTCFMT_16SEP32, BFMT_LONGTAG, 8, GF_NULL },
-	{ "tentacle", "Day Of The Tentacle", "TENTACLE.000", "TENTACLE.%.3u", GID_TENTACLE,
+	{ "tentacle", "Day of the Tentacle", "TENTACLE.000", "TENTACLE.%.3u", GID_TENTACLE,
 	  6, 0x69, 0x69, GTCFMT_16SEP32, BFMT_LONGTAG, 8, GF_NULL },
-	{ "samnmax", "Sam & Max", "SAMNMAX.000", "SAMNMAX.%.3u", GID_SAMNMAX,
+	{ "samnmax", "Sam & Max Hit the Road", "SAMNMAX.000", "SAMNMAX.%.3u", GID_SAMNMAX,
 	  6, 0x69, 0x69, GTCFMT_16SEP32, BFMT_LONGTAG, 8, GF_NULL },
-	{ "samnmaxalt", "Sam & Max (SAMNMAX.SM0)", "SAMNMAX.SM0", "SAMNMAX.SM%u", GID_SAMNMAX,
+	{ "samnmaxalt", "Sam & Max Hit the Road (SAMNMAX.SM0)", "SAMNMAX.SM0", "SAMNMAX.SM%u", GID_SAMNMAX,
 	  6, 0x69, 0x69, GTCFMT_16SEP32, BFMT_LONGTAG, 8, GF_NULL },
 	{ "ft", "Full Throttle", "FT.LA0", "FT.LA%u", GID_FT,
 	  7, 0x00, 0x00, GTCFMT_16SEP32, BFMT_LONGTAG, 8, GF_NULL },

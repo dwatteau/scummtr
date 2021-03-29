@@ -106,13 +106,16 @@ static byte *glFontBitmap = nullptr;
 static int32 glWidth = 0;
 static int32 glHeight = 0;
 
+static const char *xsprintf(const char *format, ...) __attribute__((format(printf, 1, 2)));
+
 static const char *xsprintf(const char *format, ...)
 {
-	static char errorMessage[256];
+	static const int MAX_MSG_SIZE = 256;
+	static char errorMessage[MAX_MSG_SIZE];
 	va_list va;
 
 	va_start(va, format);
-	vsprintf(errorMessage, format, va);
+	vsnprintf(errorMessage, MAX_MSG_SIZE, format, va);
 	va_end(va);
 
 	return errorMessage;
@@ -120,14 +123,11 @@ static const char *xsprintf(const char *format, ...)
 
 static int usage()
 {
-	std::cout << "ScummFont 0.2 by Thomas Combeleran" << std::endl;
-	std::cout << std::endl;
-	std::cout << "usage:" << std::endl;
-	std::cout << "  scummfont {i|o} font bitmap.bmp" << std::endl;
-	std::cout << std::endl;
-	std::cout << "  o: Export bitmap.bmp from font" << std::endl;
-	std::cout << "  i: Import bitmap.bmp into font (result written in font-new)" << std::endl;
-	std::cout << std::endl;
+	std::cout << "ScummFont 0.2 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran\n\n";
+	std::cout << "usage:\n";
+	std::cout << "  scummfont {i|o} font bitmap.bmp\n\n";
+	std::cout << "  o: Export bitmap.bmp from font\n";
+	std::cout << "  i: Import bitmap.bmp into font (result written in font-new)\n\n";
 	std::cout << "\"font\" is either a CHAR block extracted with scummrp, or an LFL file" << std::endl;
 
 	return 0;
@@ -146,7 +146,6 @@ static void getFontInfo(int32 &baseOffset, std::ifstream &file, int &version, in
 	int32 tag;
 	int lineSpacing;
 
-	lineSpacing = 0;
 	file.exceptions(std::ios::eofbit | std::ios::failbit | std::ios::badbit);
 
 	file.read((char *)&tag, 4);
@@ -239,12 +238,9 @@ static std::string tmpPath(const char *path)
 	return s;
 }
 
-static int roundTo4(int i)
+static inline int roundTo4(int i)
 {
-	if ((i & 3) != 0)
-		return i + 4 - (i & 3);
-
-	return i;
+	return (i + 3) & ~0x3;
 }
 
 static void saveBmp(const char *path)
@@ -640,7 +636,7 @@ static void loadFont(const char *path)
 				p += bpp;
 				if (mask == 0)
 				{
-					mask = (((1 << bpp) - 1) << (8 - bpp)) & 0xFF;
+					mask = ((1 << bpp) - 1) << (8 - bpp);
 					b = (byte)file.get();
 					p = 0;
 				}

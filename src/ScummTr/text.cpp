@@ -628,7 +628,6 @@ void Text::_getBinaryLine(std::string &s, Text::LineType lineType)
 {
 	int l;
 
-	l = 0;
 	switch (lineType)
 	{
 	case LT_OLDMSG:
@@ -643,6 +642,8 @@ void Text::_getBinaryLine(std::string &s, Text::LineType lineType)
 	case LT_PLAIN:
 		l = Text::getLengthPlain(_file);
 		break;
+	default:
+		throw std::logic_error("Text::_getBinaryLine: Wrong type");
 	}
 
 	_file->read(s, l);
@@ -714,8 +715,24 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 	if (_escaped)
 	{
 		_file.getline(s, '\n');
+
+		if (_header && s[0] == '[')
+		{
+			size_t endHeader = s.find(']', 0);
+			if (endHeader != std::string::npos)
+				s.erase(0, endHeader + 1);
+		}
+
+		if (_opcode && s[0] == '(')
+		{
+			size_t endPos = s.find(')', 0);
+			if (endPos != std::string::npos)
+				s.erase(0, endPos + 1);
+		}
+
 		if (_crlf)
 			s.resize(s.size() - 1);
+
 		_unEsc(s, lineType);
 	}
 	else
@@ -744,19 +761,20 @@ void Text::addLine(std::string s, Text::LineType lineType, int op)
 		Text::_spaceBitToChar(s);
 
 	_file.seekp(0, std::ios::end);
-	if (_header)
-		_file.write(info());
-
-	if (_opcode)
-	{
-		if (op >= 0)
-			_file.write(xsprintf("(%.2X)", op));
-		else
-			_file.write(xsprintf("(__)"));
-	}
 
 	if (_escaped)
 	{
+		if (_header)
+			_file.write(info());
+
+		if (_opcode)
+		{
+			if (op >= 0)
+				_file.write(xsprintf("(%.2X)", op));
+			else
+				_file.write(xsprintf("(__)"));
+		}
+
 		_writeEsc(s, lineType);
 	}
 	else

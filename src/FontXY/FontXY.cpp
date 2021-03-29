@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 {
 	if (argc != 3 || argv[1][0] == '\0' || argv[1][1] != '\0' || (argv[1][0] != 'i' && argv[1][0] != 'o'))
 	{
-		std::cout << "FontXY 0.1 by Thomas Combeleran\n" << std::endl;
+		std::cout << "FontXY 0.1 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran\n\n";
 		std::cout << "Usage: FontXY {i|o} <CHAR file>\n\nExamples:\tFontXY o CHAR_0002\n\t\tFontXY i CHAR_0003" << std::endl;
 		return 0;
 	}
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 			// Just add an empty line
 			if (uOffset == 0)
 			{
-				fTxt << std::endl;
+				fTxt << "\n";
 			}
 			// Read the values, and write them in the TXT file
 			else
@@ -131,8 +131,9 @@ int main(int argc, char **argv)
 				int8 byTop;
 				fChar.read((char *)&byLeft, 1);
 				fChar.read((char *)&byTop, 1);
-				fTxt << (int)byLeft << ";" << (int)byTop << std::endl;
+				fTxt << (int)byLeft << ";" << (int)byTop << "\n";
 			}
 		}
+		fTxt << std::flush;
 	}
 }

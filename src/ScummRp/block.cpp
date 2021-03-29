@@ -122,9 +122,9 @@ const char *Block::_fileName() const
 	static char fileName[32] = { 0 };
 
 	if (_id >= 0)
-		sprintf(fileName, "%s_%.4i", Block::tagToStr(_tag), _id);
+		snprintf(fileName, sizeof(fileName), "%s_%.4i", Block::tagToStr(_tag), _id);
 	else
-		strcpy(fileName, Block::tagToStr(_tag));
+		snprintf(fileName, sizeof(fileName), "%s", Block::tagToStr(_tag));
 
 	return fileName;
 }
@@ -154,6 +154,7 @@ void Block::_readHeader(BlockFormat format, FilePart &file, int32 &size, uint32 
 		size = (int32)w;
 		break;
 	case BFMT_NOHEADER:
+		size = 0;
 		break;
 	case BFMT_NULL:
 		throw Block::InvalidBlock("Block::_readHeader: No block format specified");
@@ -705,6 +706,7 @@ int RoomPack::_findNextLFLFRootBlock(byte roomId, int32 currentOffset, int32 roo
 	int32 nextOffset, offset;
 
 	toc = nullptr;
+	id = -1;
 	nextOffset = roomSize;
 	for (int i = 0; ScummRp::tocs[i] != nullptr; ++i)
 	{
@@ -773,7 +775,7 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 				j = 1;
 				ScummIO::info(INF_DETAIL, "Removed SC_0008 from index (duplicate of SC_0013)");
 			}
-			// Hack for Loom EGA English
+			// Hacks for Loom EGA English
 			else if (roomId == 11 && ScummRp::tocs[i]->getSize() == 200
 					 && (*ScummRp::tocs[i])[51].offset == (*ScummRp::tocs[i])[52].offset
 					 && (*ScummRp::tocs[i])[51].roomId == (*ScummRp::tocs[i])[52].roomId)
@@ -781,6 +783,26 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 				(*ScummRp::tocs[i])[51].offset = -1;
 				j = 1;
 				ScummIO::info(INF_DETAIL, "Removed SC_0051 from index (duplicate of SC_0052)");
+			}
+			else if (roomId == 18 && ScummRp::tocs[i]->getSize() == 200
+					 && (*ScummRp::tocs[i])[55].offset == (*ScummRp::tocs[i])[56].offset
+					 && (*ScummRp::tocs[i])[55].roomId == (*ScummRp::tocs[i])[56].roomId)
+			{
+				(*ScummRp::tocs[i])[55].offset = -1;
+				j = 1;
+				ScummIO::info(INF_DETAIL, "Removed SC_0055 from index (duplicate of SC_0056)");
+			}
+		}
+		else if (j == 2 && ScummRp::tocs[i]->getType() == TableOfContent::TOCT_COST)
+		{
+			// Hack for Monkey1 Floppy VGA
+			if (roomId == 59 && ScummRp::tocs[i]->getSize() == 199
+				&& (*ScummRp::tocs[i])[10].offset == (*ScummRp::tocs[i])[117].offset
+				&& (*ScummRp::tocs[i])[10].roomId == (*ScummRp::tocs[i])[117].roomId)
+			{
+				(*ScummRp::tocs[i])[117].offset = -1;
+				j = 1;
+				ScummIO::info(INF_DETAIL, "Removed CO_0117 from index (duplicate of CO_0010)");
 			}
 		}
 		n += j;
@@ -2044,7 +2066,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 
 		_file->seekg(ocOffset[i] + _oOCWidth(), std::ios::beg);
 		_file->getByte(b);
-		width = (b << 3) & 0xFF;
+		width = b << 3;
 
 		_file->seekg(ocOffset[i] + _oOCHeight(), std::ios::beg);
 		_file->getByte(b);

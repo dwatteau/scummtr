@@ -24,6 +24,14 @@
 #ifndef SCUMMTR_COMMON_TYPES_HPP
 #define SCUMMTR_COMMON_TYPES_HPP
 
+#if defined(_MSC_VER) && _MSC_VER < 1900
+#  error "Visual Studio 2015 or better is required"
+#endif
+
+#ifndef SCUMMTR_BUILD_DATE
+#define SCUMMTR_BUILD_DATE "UNDEFINED-UNKNOWN"
+#endif
+
 #include <climits>
 
 #if CHAR_BIT != 8 || UCHAR_MAX != 0xff || USHRT_MAX != 0xffff || UINT_MAX != 0xffffffffU
@@ -49,10 +57,14 @@ typedef short int16;
 typedef int int32;
 #endif
 
+#if !defined(__GNUC__) && !defined(__clang__)
+#  define  __attribute__(x)  /* NOTHING */
+#endif
+
 #define MKTAG2(a,b)     ((uint16)((b) | ((a) << 8)))
 #define MKTAG4(a,b,c,d) ((uint32)((d) | ((c) << 8) | ((b) << 16) | ((a) << 24)))
 
-#if __cplusplus < 201103L && !defined(nullptr) && (!defined(_MSC_VER) || _MSC_VER < 1600)
+#if __cplusplus < 201103L && !defined(nullptr) && !defined(_MSC_VER)
 #  define nullptr       0
 #endif
 
