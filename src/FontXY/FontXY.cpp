@@ -23,6 +23,7 @@
  */
 
 #include "common/types.hpp"
+#include "common/file.hpp"
 
 #include <algorithm>
 #include <fstream>
@@ -40,12 +41,6 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
-	if (!cpu_is_little_endian())
-	{
-		std::cerr << "ERROR: FontXY is currently only compatible with little-endian systems" << std::endl;
-		return 1;
-	}
-
 	bool bImport = argv[1][0] == 'i';
 	char *pszChar = argv[2];
 	char szTxt[] = "XY.txt"; // TODO: param
@@ -53,14 +48,27 @@ int main(int argc, char **argv)
 	if (bImport)
 	{
 		char szLine[1024];
-		std::fstream fChar(pszChar, std::fstream::in | std::fstream::out | std::fstream::binary);
 		std::ifstream fTxt(szTxt, std::ifstream::in);
+		File fChar;
+
+		if (!fTxt.is_open())
+		{
+			std::cerr << "Error: cannot open " << szTxt << std::endl;
+			return 1;
+		}
+
+		fChar.open(pszChar, std::ios::in | std::ios::out | std::ios::binary);
+		if (!fChar.is_open())
+		{
+			std::cerr << "Error: cannot open " << pszChar << std::endl;
+			return 1;
+		}
 
 		// Seek after the header
-		fChar.seekg(8 + 0x17);
+		fChar.seekg(8 + 0x17, std::ios::beg);
 
 		int16 snNumChars; // <= 0x100
-		fChar.read((char *)&snNumChars, 2);
+		fChar->getLE16(snNumChars);
 		int nNumChars = snNumChars;
 		if (nNumChars > 0x100 || nNumChars <= 0)
 		{
@@ -71,8 +79,8 @@ int main(int argc, char **argv)
 		for (int i = 0; i < nNumChars; ++i)
 		{
 			uint32 uOffset;
-			fChar.seekg(8 + 0x19 + i * 4);
-			fChar.read((char *)&uOffset, 4);
+			fChar.seekg(8 + 0x19 + i * 4, std::ios::beg);
+			fChar->getLE32(uOffset);
 
 			if (uOffset == 0)
 			{
@@ -89,22 +97,37 @@ int main(int argc, char **argv)
 				fTxt.getline(szLine, sizeof szLine, '\n');
 				byLeft = (int8)nLeft;
 				byTop = (int8)nTop;
-				fChar.seekp(8 + 0x15 + uOffset + 2);
+				fChar.seekp(8 + 0x15 + uOffset + 2, std::ios::beg);
 				fChar.write((char *)&byLeft, 1);
 				fChar.write((char *)&byTop, 1);
 			}
 		}
+		fTxt.close();
+		fChar.close();
 	}
 	else
 	{
-		std::ifstream fChar(pszChar, std::ifstream::in | std::ifstream::binary);
+		File fChar;
 		std::ofstream fTxt(szTxt, std::ofstream::out | std::ofstream::trunc);
 
+		if (!fTxt.is_open())
+		{
+			std::cerr << "Error: cannot open " << szTxt << std::endl;
+			return 1;
+		}
+
+		fChar.open(pszChar, std::ios::in | std::ios::binary);
+		if (!fChar.is_open())
+		{
+			std::cerr << "Error: cannot open " << pszChar << std::endl;
+			return 1;
+		}
+
 		// Seek after the header
-		fChar.seekg(8 + 0x17);
+		fChar.seekg(8 + 0x17, std::ios::beg);
 
 		int16 snNumChars; // <= 0x100
-		fChar.read((char *)&snNumChars, 2);
+		fChar->getLE16(snNumChars);
 		int nNumChars = snNumChars;
 		if (nNumChars > 0x100 || nNumChars <= 0)
 		{
@@ -115,8 +138,8 @@ int main(int argc, char **argv)
 		for (int i = 0; i < nNumChars; ++i)
 		{
 			uint32 uOffset;
-			fChar.seekg(8 + 0x19 + i * 4);
-			fChar.read((char *)&uOffset, 4);
+			fChar.seekg(8 + 0x19 + i * 4, std::ios::beg);
+			fChar->getLE32(uOffset);
 
 			// Just add an empty line
 			if (uOffset == 0)
@@ -126,14 +149,15 @@ int main(int argc, char **argv)
 			// Read the values, and write them in the TXT file
 			else
 			{
-				fChar.seekg(8 + 0x15 + uOffset + 2);
 				int8 byLeft;
 				int8 byTop;
+				fChar.seekg(8 + 0x15 + uOffset + 2, std::ios::beg);
 				fChar.read((char *)&byLeft, 1);
 				fChar.read((char *)&byTop, 1);
 				fTxt << (int)byLeft << ";" << (int)byTop << "\n";
 			}
 		}
-		fTxt << std::flush;
+		fTxt.close();
+		fChar.close();
 	}
 }

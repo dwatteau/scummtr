@@ -25,6 +25,7 @@
  */
 
 #include "common/types.hpp"
+#include "common/file.hpp"
 
 #include <cstdarg>
 #include <cstdio>
@@ -106,21 +107,6 @@ static byte *glFontBitmap = nullptr;
 static int32 glWidth = 0;
 static int32 glHeight = 0;
 
-static const char *xsprintf(const char *format, ...) __attribute__((format(printf, 1, 2)));
-
-static const char *xsprintf(const char *format, ...)
-{
-	static const int MAX_MSG_SIZE = 256;
-	static char errorMessage[MAX_MSG_SIZE];
-	va_list va;
-
-	va_start(va, format);
-	vsnprintf(errorMessage, MAX_MSG_SIZE, format, va);
-	va_end(va);
-
-	return errorMessage;
-}
-
 static int usage()
 {
 	std::cout << "ScummFont 0.2 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran\n\n";
@@ -133,22 +119,12 @@ static int usage()
 	return 0;
 }
 
-static void fail_on_big_endian_systems()
-{
-	if (!cpu_is_little_endian())
-	{
-		throw std::runtime_error("ScummFont is currently only compatible with little-endian systems");
-	}
-}
-
-static void getFontInfo(int32 &baseOffset, std::ifstream &file, int &version, int &bpp, int &maxHeight, int &maxWidth, int &bytesPerChar, int16 &numChars)
+static void getFontInfo(int32 &baseOffset, File &file, int &version, int &bpp, int &maxHeight, int &maxWidth, int &bytesPerChar, int16 &numChars)
 {
 	int32 tag;
 	int lineSpacing;
 
-	file.exceptions(std::ios::eofbit | std::ios::failbit | std::ios::badbit);
-
-	file.read((char *)&tag, 4);
+	file->getLE32(tag);
 	baseOffset = (tag == MKTAG4('R','A','H','C')) ? 8 : 0;
 
 	file.seekg(baseOffset + 0x04, std::ios::beg);
@@ -178,7 +154,7 @@ static void getFontInfo(int32 &baseOffset, std::ifstream &file, int &version, in
 		file.seekg(baseOffset + 0x15, std::ios::beg);
 		bpp = file.get();
 		lineSpacing = file.get();
-		file.read((char *)&numChars, 2);
+		file->getLE16(numChars);
 
 		for (int i = 0; i < numChars; ++i)
 		{
@@ -207,7 +183,7 @@ static void getFontInfo(int32 &baseOffset, std::ifstream &file, int &version, in
 			}
 #else
 			file.seekg(baseOffset + 0x19 + i * 4, std::ios::beg);
-			file.read((char *)&offset, 4);
+			file->getLE32(offset);
 
 			file.seekg(baseOffset + 0x15 + offset, std::ios::beg);
 			width = file.get();
@@ -245,57 +221,58 @@ static inline int roundTo4(int i)
 
 static void saveBmp(const char *path)
 {
-	std::ofstream file(path, std::ios::binary | std::ios::out | std::ios::trunc);
+	File file;
 	uint32 udw;
 	int32 sdw;
 	uint16 w;
 	byte *buf;
 
+	file.open(path, std::ios::binary | std::ios::out | std::ios::trunc);
 	if (!file.is_open())
 		throw std::runtime_error("Cannot open BMP file");
 
 	file.write("BM", 2);
 
 	udw = 0x436 + roundTo4(glWidth) * glHeight;
-	file.write((char *)&udw, 4);
+	file->putLE32(udw);
 
 	udw = 0;
-	file.write((char *)&udw, 4);
+	file->putLE32(udw);
 
 	udw = 0x436;
-	file.write((char *)&udw, 4);
+	file->putLE32(udw);
 
 	udw = 0x28;
-	file.write((char *)&udw, 4);
+	file->putLE32(udw);
 
 	sdw = glWidth;
-	file.write((char *)&sdw, 4);
+	file->putLE32(sdw);
 	sdw = glHeight;
-	file.write((char *)&sdw, 4);
+	file->putLE32(sdw);
 
 	w = 1;
-	file.write((char *)&w, 2);
+	file->putLE16(w);
 
 	w = 8;
-	file.write((char *)&w, 2);
+	file->putLE16(w);
 
 	udw = 0;
-	file.write((char *)&udw, 4);
+	file->putLE32(udw);
 
 	udw = roundTo4(glWidth) * glHeight;
-	file.write((char *)&udw, 4);
+	file->putLE32(udw);
 
 	sdw = 0;
-	file.write((char *)&sdw, 4);
+	file->putLE32(sdw);
 
 	sdw = 0;
-	file.write((char *)&sdw, 4);
+	file->putLE32(sdw);
 
 	udw = 256;
-	file.write((char *)&udw, 4);
+	file->putLE32(udw);
 
 	udw = 256;
-	file.write((char *)&udw, 4);
+	file->putLE32(udw);
 
 	file.write((char *)glPalette, 0x400);
 
@@ -305,49 +282,52 @@ static void saveBmp(const char *path)
 		memcpy(buf + i * roundTo4(glWidth), glFontBitmap + (glHeight - i - 1) * glWidth, glWidth);
 
 	file.write((char *)buf, roundTo4(glWidth) * glHeight);
+
+	file.close();
 }
 
 static void loadBmp(const char *path)
 {
-	std::ifstream file(path, std::ios::binary | std::ios::in);
+	File file;
 	uint32 udw;
 	int32 sdw;
 	uint16 w;
 	byte *buf;
 	uint32 off;
 
+	file.open(path, std::ios::in | std::ios::binary);
 	if (!file.is_open())
 		throw std::runtime_error("Cannot open BMP file");
 
-	file.read((char *)&w, 2);
+	file->getLE16(w);
 	if (w != MKTAG2('M','B'))
 		throw std::runtime_error("This is not a BMP file");
 
 	file.seekg(8, std::ios::cur);
-	file.read((char *)&off, 4);
+	file->getLE32(off);
 	if (off < 0x36)
 		throw std::runtime_error("This is not a valid BMP file");
 
-	file.read((char *)&udw, 4);
+	file->getLE32(udw);
 	if (udw != 0x28)
 		throw std::runtime_error(xsprintf("This is not a BMPv3 file: version 0x%x was found", udw));
 
-	file.read((char *)&sdw, 4);
+	file->getLE32(sdw);
 	glWidth = sdw;
-	file.read((char *)&sdw, 4);
+	file->getLE32(sdw);
 	glHeight = sdw;
 	if (glWidth <= 0 || glHeight <= 0)
 		throw std::runtime_error(xsprintf("Unsupported \"%i\" per \"%i\" width/height", glWidth, glHeight));
 
-	file.read((char *)&w, 2);
+	file->getLE16(w);
 	if (w != 1)
 		throw std::runtime_error(xsprintf("This is not a single-plane BMP file: %hu planes found", w));
 
-	file.read((char *)&w, 2);
+	file->getLE16(w);
 	if (w != 8)
 		throw std::runtime_error(xsprintf("This is not an 8bpp BMP file: %hubpp found", w));
 
-	file.read((char *)&udw, 4);
+	file->getLE32(udw);
 	if (udw != 0)
 		throw std::runtime_error(xsprintf("This BMP file must be uncompressed, but \"%u\" compression was found", udw));
 
@@ -357,16 +337,19 @@ static void loadBmp(const char *path)
 	file.read((char *)buf, roundTo4(glWidth) * glHeight);
 	for (int i = 0; i < glHeight; ++i)
 		memcpy(glFontBitmap + i * glWidth, buf + (glHeight - i - 1) * roundTo4(glWidth), glWidth);
+
+	file.close();
 }
 
 static void saveFont(const char *path)
 {
-	std::ifstream file(path, std::ios::in | std::ios::binary);
+	File file;
 	int version, bpp, maxHeight, maxWidth, bytesPerChar;
 	int16 numChars;
 	int newNumChars;
 	int32 baseOffset, endOffset;
 
+	file.open(path, std::ios::in | std::ios::binary);
 	if (!file.is_open())
 		throw std::runtime_error("Cannot open font file");
 
@@ -385,10 +368,11 @@ static void saveFont(const char *path)
 		newNumChars = (version == 1) ? 0xFF : 0x100;
 
 	{
+		File tmpFile;
 		std::string tmpfilepath = tmpPath(path);
-		std::ofstream tmpFile(tmpfilepath.c_str(), std::ios::binary | std::ios::out | std::ios::trunc);
 		char buffer[0x440];
 
+		tmpFile.open(tmpfilepath.c_str(), std::ios::binary | std::ios::out | std::ios::trunc);
 		if (!tmpFile.is_open())
 			throw std::runtime_error("Cannot open new font file");
 
@@ -461,7 +445,7 @@ static void saveFont(const char *path)
 					if (i < numChars)
 					{
 						file.seekg(baseOffset + 0x19 + i * 4, std::ios::beg);
-						file.read((char *)&offset, 4);
+						file->getLE32(offset);
 						if (offset != 0)
 						{
 							file.seekg(baseOffset + 0x15 + offset + 2, std::ios::beg);
@@ -471,7 +455,7 @@ static void saveFont(const char *path)
 					}
 					offset = endOffset - baseOffset - 0x15;
 					tmpFile.seekp(baseOffset + 0x19 + i * 4, std::ios::beg);
-					tmpFile.write((char *)&offset, 4);
+					tmpFile->putLE32(offset);
 					tmpFile.seekp(endOffset, std::ios::beg);
 					tmpFile.put(width);
 					tmpFile.put(height);
@@ -483,7 +467,7 @@ static void saveFont(const char *path)
 				{
 					offset = 0;
 					tmpFile.seekp(baseOffset + 0x19 + i * 4, std::ios::beg);
-					tmpFile.write((char *)&offset, 4);
+					tmpFile->putLE32(offset);
 					continue;
 				}
 			}
@@ -533,7 +517,7 @@ static void saveFont(const char *path)
 			{
 				tmpFile.seekp(baseOffset, std::ios::beg);
 				++endOffset;
-				tmpFile.write((char *)&endOffset, 4);
+				tmpFile->putLE32(endOffset);
 				tmpFile.seekp(baseOffset + 0x6, std::ios::beg);
 				tmpFile.put(newNumChars);
 			}
@@ -542,10 +526,10 @@ static void saveFont(const char *path)
 		{
 			tmpFile.seekp(baseOffset, std::ios::beg);
 			endOffset -= 0xF + baseOffset;
-			tmpFile.write((char *)&endOffset, 4);
+			tmpFile->putLE32(endOffset);
 			tmpFile.seekp(baseOffset + 0x17, std::ios::beg);
 			numChars = newNumChars;
-			tmpFile.write((char *)&numChars, 2);
+			tmpFile->putLE16(numChars);
 		}
 
 		std::cout << "Output file has been written to " << tmpfilepath << std::endl;
@@ -555,11 +539,12 @@ static void saveFont(const char *path)
 
 static void loadFont(const char *path)
 {
-	std::ifstream file(path, std::ios::in | std::ios::binary);
+	File file;
 	int version, bpp, maxHeight, maxWidth, bytesPerChar;
 	int16 numChars;
 	int32 baseOffset;
 
+	file.open(path, std::ios::in | std::ios::binary);
 	if (!file.is_open())
 		throw std::runtime_error("Cannot open font file");
 
@@ -614,7 +599,7 @@ static void loadFont(const char *path)
 			int32 offset;
 
 			file.seekg(baseOffset + 0x19 + i * 4, std::ios::beg);
-			file.read((char *)&offset, 4);
+			file->getLE32(offset);
 			if (offset == 0)
 				continue;
 
@@ -649,6 +634,7 @@ static void loadFont(const char *path)
 				mask = b = p = 0;
 		}
 	}
+	file.close();
 }
 
 int main(int argc, char **argv) try
@@ -658,13 +644,11 @@ int main(int argc, char **argv) try
 
 	if (argv[1][0] == 'i')
 	{
-		fail_on_big_endian_systems();
 		loadBmp(argv[3]);
 		saveFont(argv[2]);
 	}
 	else if (argv[1][0] == 'o')
 	{
-		fail_on_big_endian_systems();
 		loadFont(argv[2]);
 		saveBmp(argv[3]);
 	}
