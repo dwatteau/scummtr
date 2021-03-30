@@ -19,10 +19,10 @@ WORKDIR /scummtr
 CMD cd /scummtr/build \
 	&& cmake3 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS="-m64" /scummtr/project \
 	&& make VERBOSE=1 \
-	&& cp -pR . /scummtr/output/linux-x64 \
+	&& make install DESTDIR=/scummtr/output/linux-x64 \
 	\
 	&& rm -rf /scummtr/build/* \
 	\
 	&& cmake3 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS="-m32" /scummtr/project \
 	&& make VERBOSE=1 \
-	&& cp -pR . /scummtr/output/linux-x86
+	&& make install DESTDIR=/scummtr/output/linux-x86
