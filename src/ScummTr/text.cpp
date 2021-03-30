@@ -125,6 +125,16 @@ const char Text::CT_V1IT[256] =
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
+// Note: internally, official non-English SCUMM games tend to follow the CP 850
+// MS-DOS code page, although in an incomplete way, and with local modifications
+// (such as the ellipsis, the non-breaking space, the copyright or TM symbols)
+// which can vary between games. We pick a "safe" choice of useful characters,
+// as long as they're available at the same codepoints in both Windows-1252
+// and ISO-8859-1, and as long as no SCUMM game already uses that codepoint for
+// some other useful character.
+//
+// 0 means that the corresponding character in the SCUMM font will need to be
+// used through an escape sequence.
 const char Text::CT_V3ANSI[256] =
 {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -135,13 +145,13 @@ const char Text::CT_V3ANSI[256] =
 	'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '[', '\\', ']', '^', '_',
 	'`', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
 	'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~', 0,
-	'\xc7', '\xfc', '\xe9', '\xe2', '\xe4', '\xe0', 0, '\xe7', '\xea', '\xeb', '\xe8', '\xef', '\xee', '\xec', '\xc4', 0,
+	'\xc7', '\xfc', '\xe9', '\xe2', '\xe4', '\xe0', '\xe5', '\xe7', '\xea', '\xeb', '\xe8', '\xef', '\xee', '\xec', '\xc4', '\xc5',
 	'\xc9', '\xe6', '\xc6', '\xf4', '\xf6', '\xf2', '\xfb', '\xf9', 0, '\xd6', '\xdc', 0, 0, 0, 0, 0,
 	'\xe1', '\xed', '\xf3', '\xfa', '\xf1', '\xd1', 0, 0, '\xbf', 0, 0, 0, 0, '\xa1', 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, '\xdf', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, '\xc1', '\xc2', '\xc0', 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, '\xe3', '\xc3', 0, 0, 0, 0, 0, 0, 0, 0,
+	'\xf0', '\xd0', '\xca', '\xcb', '\xc8', 0, '\xcd', '\xce', '\xcf', 0, 0, 0, 0, 0, '\xcc', 0,
+	'\xd3', '\xdf', '\xd4', '\xd2', '\xf5', '\xd5', 0, '\xfe', '\xde', '\xda', '\xdb', '\xd9', '\xfd', '\xdd', 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
