@@ -3,4 +3,4 @@ add_library (scummrplib STATIC "backup.cpp" "block.cpp" "file.cpp" "io.cpp" "scu
 add_executable (scummrp "main.cpp")
 target_link_libraries (scummrp PUBLIC scummrplib)
 
-install(TARGETS scummrp RUNTIME DESTINATION bin)
+install(TARGETS scummrp RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")

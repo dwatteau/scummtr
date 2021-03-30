@@ -1,3 +1,3 @@
 add_executable (scummfont "scummfont.cpp")
 
-install(TARGETS scummfont RUNTIME DESTINATION bin)
+install(TARGETS scummfont RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
