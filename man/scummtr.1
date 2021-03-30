@@ -74,15 +74,20 @@ Translation file will be handled in binary mode, instead of text.
 .Pp
 Note that this makes most other options inoperative.
 .It Fl c
-Translation file will be handled as Windows-1252, allowing easier use of
-some Western European characters.
+Translation file will be handled as Windows-1252 (or ISO-8859-1),
+allowing easier use of some Western European characters.
 Without
 .Fl c ,
-non-ASCII characters will be handled as escape sequences.
+non-ASCII characters can only be used through escape sequences.
 .Pp
-Note that SCUMM games only supported their own smaller subset of the
-the official Windows-1252 table (which is mainly compatible with
-ISO-8859-1).
+Note that SCUMM games only include an incomplete subset of the MS-DOS
+CP 850 code page, with some local modifications.
+.Nm
+translates this code page to Windows-1252, but doesn't add the
+missing characters to the internal fonts.
+Use
+.Xr scummfont 1
+for this.
 .It Fl f Ar file
 The path to the translation file (default:
 .Pa scummtr.txt ) .
@@ -93,12 +98,12 @@ The ID of the game variant to be translated, as given by
 Include a small header at the start of each line, indicating the internal script
 context of the current string.
 .It Fl H
-Represent extended characters as hexadecimal codes, instead of decimal codes.
+Represent escape sequences as hexadecimal codes, instead of decimal codes.
 .It Fl I
 Include the current SCUMM instruction opcode, before each line.
 .It Fl l Ar language
-V1 and V2 games only.
-The name of the language charset to be used for this translation.
+V1 and V2 games only (i.e. all games before Zak McKracken FM-TOWNS).
+The name of the language character set to be used for this translation.
 .Pp
 Possible values are:
 .Bl -tag -width Ds
@@ -157,8 +162,8 @@ See also
 .Xr scummfont 1
 in order to visualize or modify the included font tables.
 .Pp
-Unicode files are not supported, and non-Roman languages need
-some extra work for convenient use.
+Unicode files are not supported, and non-Roman languages cannot
+be easily typed, since escape sequences are required.
 .Pp
 On case-sensitive file systems, game data files must currently
 follow the DOS convention of being all-uppercase to be properly
