@@ -529,7 +529,7 @@ void ScummTr::_usage()
 	std::cout << " -a [oav]   " << "pad objects, actors, verbs with @ for extra safety\n";
 	std::cout << " -A [oav]   " << "Same as -a, with variable IDs taken into account\n";
 	std::cout << " -b         " << "binary mode\n";
-	std::cout << " -c         " << "convert some non-ASCII characters to Windows-1252\n";
+	std::cout << " -c         " << "convert some Western European characters to Windows-1252\n";
 	std::cout << " -f path    " << "path to the text file (default: " << ScummTr::_paramTextFile << ")\n";
 	std::cout << " -g gameid  " << "select a game (as given by -L)\n";
 	std::cout << " -h         " << "include SCUMM script context before each line\n";
