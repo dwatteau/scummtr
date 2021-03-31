@@ -175,6 +175,9 @@ void ScummTr::_processGameFilesV123()
 	{
 		Text text(ScummTr::_paramTextFile, ScummTr::_textOptions, charset);
 
+		if (ScummRp::_options & ScummRp::OPT_EXPORT)
+			text.addExportHeaders();
+
 		for (int i = 1; i < 98; ++i)
 		{
 			std::string dataPath(ScummRp::_paramGameDir);
@@ -229,6 +232,9 @@ void ScummTr::_processGameFilesV4567()
 	ScummRp::_prepareTmpIndex();
 	{
 		Text text(ScummTr::_paramTextFile, ScummTr::_textOptions, charset);
+
+		if (ScummRp::_options & ScummRp::OPT_EXPORT)
+			text.addExportHeaders();
 
 		for (int i = 1; i < numberOfDisks; ++i)
 		{

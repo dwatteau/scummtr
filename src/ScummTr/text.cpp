@@ -189,6 +189,16 @@ const char *Text::info() const
 	return xsprintf("[%.3i:%s#%.4i]", _lflfId, Block::tagToStr(_tag), _id);
 }
 
+const char *Text::internalCommentHeader() const
+{
+	const char *eol = (_crlf) ? "\r\n" : "\n";
+
+	return xsprintf(
+	    ";; ScummTR note: every line starting with this prefix is ignored%s"
+	    ";; ScummTR note: file encoding is Windows-1252/ISO-8859-1 (\xa1""caf\xe9-pi\xf1""ata Stra\xdf""e!)%s",
+	    eol, eol);
+}
+
 int32 Text::lineNumber() const
 {
 	return _lineCount;
@@ -715,6 +725,14 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 	{
 		_file.getline(s, '\n');
 
+		// Ignore lines starting with an internal comment
+		if (s.find(";; ScummTR note: ", 0) == 0)
+		{
+			++_lineCount;
+			_cur = _file.tellg(std::ios::beg);
+			return Text::nextLine(s, lineType);
+		}
+
 		if (_header && s[0] == '[')
 		{
 			size_t endHeader = s.find(']', 0);
@@ -749,6 +767,11 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 	_cur = _file.tellg(std::ios::beg);
 
 	return true;
+}
+
+void Text::addExportHeaders()
+{
+	_file.write(internalCommentHeader());
 }
 
 void Text::addLine(std::string s, Text::LineType lineType, int op)
