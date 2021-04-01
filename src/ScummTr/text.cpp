@@ -771,7 +771,8 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 
 void Text::addExportHeaders()
 {
-	_file.write(internalCommentHeader());
+	if (_escaped)
+		_file.write(internalCommentHeader());
 }
 
 void Text::addLine(std::string s, Text::LineType lineType, int op)
