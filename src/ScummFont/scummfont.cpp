@@ -145,7 +145,7 @@ static void getFontInfo(int32 &baseOffset, File &file, int &version, int &bpp, i
 	else
 	{
 #ifdef SCUMMFONT_MAKETABLE
-		std::ofstream o("table", std::ios::binary | std::ios::out | std::ios::trunc);
+		std::ofstream tableOutput("width-table.txt", std::ios::binary | std::ios::out | std::ios::trunc);
 #endif
 		bytesPerChar = 8;
 		maxWidth = maxHeight = 0;
@@ -160,15 +160,16 @@ static void getFontInfo(int32 &baseOffset, File &file, int &version, int &bpp, i
 			int32 offset;
 			int width, height;
 
-#ifdef SCUMMFONT_MAKETABLE
 			file.seekg(baseOffset + 0x19 + i * 4, std::ios::beg);
 			file->getLE32(offset);
+#ifdef SCUMMFONT_MAKETABLE
 			if (offset == 0)
 			{
-				o << 0 << ", ";
+				tableOutput << 0 << ", ";
 			}
 			else
 			{
+#endif
 				file.seekg(baseOffset + 0x15 + offset, std::ios::beg);
 				width = file.get();
 				if (width > maxWidth)
@@ -178,20 +179,9 @@ static void getFontInfo(int32 &baseOffset, File &file, int &version, int &bpp, i
 				if (height > maxHeight)
 					maxHeight = height;
 
-				o << width << ", ";
+#ifdef SCUMMFONT_MAKETABLE
+				tableOutput << width << ", ";
 			}
-#else
-			file.seekg(baseOffset + 0x19 + i * 4, std::ios::beg);
-			file->getLE32(offset);
-
-			file.seekg(baseOffset + 0x15 + offset, std::ios::beg);
-			width = file.get();
-			if (width > maxWidth)
-				maxWidth = width;
-
-			height = file.get();
-			if (height > maxHeight)
-				maxHeight = height;
 #endif
 		}
 
