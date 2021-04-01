@@ -138,8 +138,7 @@ static void getFontInfo(int32 &baseOffset, File &file, int &version, int &bpp, i
 	if (version == 1)
 	{
 		bpp = 1;
-		maxWidth = 8;
-		maxHeight = 8;
+		maxWidth = maxHeight = 8;
 		numChars = (byte)file.get();
 		bytesPerChar = file.get();
 	}
@@ -163,7 +162,7 @@ static void getFontInfo(int32 &baseOffset, File &file, int &version, int &bpp, i
 
 #ifdef SCUMMFONT_MAKETABLE
 			file.seekg(baseOffset + 0x19 + i * 4, std::ios::beg);
-			file.read((char *)&offset, 4);
+			file->getLE32(offset);
 			if (offset == 0)
 			{
 				o << 0 << ", ";
