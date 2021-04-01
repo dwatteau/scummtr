@@ -140,7 +140,7 @@ static void getFontInfo(int32 &baseOffset, File &file, int &version, int &bpp, i
 		bpp = 1;
 		maxWidth = 8;
 		maxHeight = 8;
-		numChars = (int16)file.get();
+		numChars = (byte)file.get();
 		bytesPerChar = file.get();
 	}
 	else
