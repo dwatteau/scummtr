@@ -430,14 +430,14 @@ static void saveFont(const char *path)
 			if (version == 1)
 			{
 				tmpFile.seekp(baseOffset + 0x8 + i, std::ios::beg);
-				tmpFile.put(width);
+				tmpFile.put((char)width);
 				width = maxWidth;
 				tmpFile.seekp(baseOffset + 0x8 + newNumChars + i * bytesPerChar, std::ios::beg);
 			}
 			else
 			{
 				int32 offset;
-				int x, y;
+				byte x, y;
 
 				if (width != 0 && height != 0)
 				{
@@ -457,8 +457,8 @@ static void saveFont(const char *path)
 					tmpFile.seekp(baseOffset + 0x19 + i * 4, std::ios::beg);
 					tmpFile->putLE32(offset);
 					tmpFile.seekp(endOffset, std::ios::beg);
-					tmpFile.put(width);
-					tmpFile.put(height);
+					tmpFile.put((char)width);
+					tmpFile.put((char)height);
 					tmpFile.put(x);
 					tmpFile.put(y);
 					endOffset += 4;
@@ -519,7 +519,7 @@ static void saveFont(const char *path)
 				++endOffset;
 				tmpFile->putLE32(endOffset);
 				tmpFile.seekp(baseOffset + 0x6, std::ios::beg);
-				tmpFile.put(newNumChars);
+				tmpFile.put((char)newNumChars);
 			}
 		}
 		else
@@ -528,7 +528,7 @@ static void saveFont(const char *path)
 			endOffset -= 0xF + baseOffset;
 			tmpFile->putLE32(endOffset);
 			tmpFile.seekp(baseOffset + 0x17, std::ios::beg);
-			numChars = newNumChars;
+			numChars = (int16)newNumChars;
 			tmpFile->putLE16(numChars);
 		}
 
