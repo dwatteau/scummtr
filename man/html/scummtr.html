@@ -106,14 +106,16 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
   <dd>Same as <code class="Fl">-a</code>, with variable IDs taken into
     account.</dd>
   <dt><a class="permalink" href="#b"><code class="Fl" id="b">-b</code></a></dt>
-  <dd>Translation file will be handled in binary mode.</dd>
+  <dd>Translation file will be handled in binary mode, instead of text.
+    <p class="Pp">Note that this makes most other options inoperative.</p>
+  </dd>
   <dt><a class="permalink" href="#c"><code class="Fl" id="c">-c</code></a></dt>
   <dd>Translation file will be handled as Windows-1252, allowing easier use of
       some Western European characters. Without <code class="Fl">-c</code>,
       non-ASCII characters will be handled as escape sequences.
     <p class="Pp">Note that SCUMM games only supported their own smaller subset
-        of the the official Windows-1252 (also known as ISO-8859-1 or ANSI)
-        table.</p>
+        of the the official Windows-1252 table (which is mainly compatible with
+        ISO-8859-1).</p>
   </dd>
   <dt><a class="permalink" href="#f"><code class="Fl" id="f">-f</code></a>
     <var class="Ar">file</var></dt>
@@ -130,7 +132,7 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
   <dd>Represent extended characters as hexadecimal codes, instead of decimal
       codes.</dd>
   <dt><a class="permalink" href="#I"><code class="Fl" id="I">-I</code></a></dt>
-  <dd>Show instruction opcode, when exporting.</dd>
+  <dd>Include the current SCUMM instruction opcode, before each line.</dd>
   <dt><a class="permalink" href="#l"><code class="Fl" id="l">-l</code></a>
     <var class="Ar">language</var></dt>
   <dd>V1 and V2 games only. The name of the language charset to be used for this
@@ -165,7 +167,7 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
 <section class="Sh">
 <h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
 Extract the text of the original Monkey Island 2 game to a Windows-1252 file
-  compatible with Notepad.exe, with added context:
+  compatible with Microsoft Notepad, with added context:
 <p class="Pp"></p>
 <div class="Bd Bd-indent"><code class="Li">$ scummtr -cw -h -g monkey2 -p
   /path/to/MI2 -of mi2_orig.txt</code></div>
