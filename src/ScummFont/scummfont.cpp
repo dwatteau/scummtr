@@ -195,13 +195,13 @@ static void getFontInfo(int32 &baseOffset, File &file, int &version, int &bpp, i
 		throw std::runtime_error("Your font is strange...");
 }
 
-static std::string tmpPath(const char *path)
+static const char *tmpPath(const char *path)
 {
 	static std::string s(path);
 
 	s += "-new";
 
-	return s;
+	return s.c_str();
 }
 
 static inline int roundTo4(int i)
@@ -359,10 +359,10 @@ static void saveFont(const char *path)
 
 	{
 		File tmpFile;
-		std::string tmpfilepath = tmpPath(path);
 		char buffer[0x440];
+		const char *tmpfilepath = tmpPath(path);
 
-		tmpFile.open(tmpfilepath.c_str(), std::ios::binary | std::ios::out | std::ios::trunc);
+		tmpFile.open(tmpfilepath, std::ios::binary | std::ios::out | std::ios::trunc);
 		if (!tmpFile.is_open())
 			throw std::runtime_error("Cannot open new font file");
 
@@ -524,7 +524,7 @@ static void saveFont(const char *path)
 		file.close();
 
 		xremove(path);
-		xrename(tmpfilepath.c_str(), path);
+		xrename(tmpfilepath, path);
 	}
 }
 
