@@ -26,6 +26,7 @@
 
 #include "common/types.hpp"
 #include "common/file.hpp"
+#include "common/toolbox.hpp"
 
 #include <cstdarg>
 #include <cstdio>
@@ -113,7 +114,7 @@ static int usage()
 	std::cout << "usage:\n";
 	std::cout << "  scummfont {i|o} font bitmap.bmp\n\n";
 	std::cout << "  o: Export bitmap.bmp from font\n";
-	std::cout << "  i: Import bitmap.bmp into font (result written in font-new)\n\n";
+	std::cout << "  i: Import bitmap.bmp into font\n\n";
 	std::cout << "\"font\" is either a CHAR block extracted with scummrp, or an LFL file" << std::endl;
 
 	return 0;
@@ -194,13 +195,13 @@ static void getFontInfo(int32 &baseOffset, File &file, int &version, int &bpp, i
 		throw std::runtime_error("Your font is strange...");
 }
 
-static std::string tmpPath(const char *path)
+static const char *tmpPath(const char *path)
 {
 	static std::string s(path);
 
 	s += "-new";
 
-	return s;
+	return s.c_str();
 }
 
 static inline int roundTo4(int i)
@@ -358,10 +359,10 @@ static void saveFont(const char *path)
 
 	{
 		File tmpFile;
-		std::string tmpfilepath = tmpPath(path);
 		char buffer[0x440];
+		const char *tmpfilepath = tmpPath(path);
 
-		tmpFile.open(tmpfilepath.c_str(), std::ios::binary | std::ios::out | std::ios::trunc);
+		tmpFile.open(tmpfilepath, std::ios::binary | std::ios::out | std::ios::trunc);
 		if (!tmpFile.is_open())
 			throw std::runtime_error("Cannot open new font file");
 
@@ -519,9 +520,11 @@ static void saveFont(const char *path)
 			numChars = (int16)newNumChars;
 			tmpFile->putLE16(numChars);
 		}
+		tmpFile.close();
+		file.close();
 
-		std::cout << "Output file has been written to " << tmpfilepath << std::endl;
-		std::cout << "Don't forget to replace your original file with the new version" << std::endl;
+		xremove(path);
+		xrename(tmpfilepath, path);
 	}
 }
 
