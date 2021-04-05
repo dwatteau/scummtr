@@ -125,10 +125,12 @@ private:
 public:
 	void setInfo(int lflfId, uint32 tag, int id);
 	const char *info() const;
+	const char *internalCommentHeader() const;
 	int32 lineNumber() const;
 	void firstLine();
 	bool nextLine(std::string &s, Text::LineType lineType);
 	void clear();
+	void addExportHeaders();
 	void addLine(std::string s, Text::LineType lineType, int op = -1);
 
 public:

@@ -176,6 +176,9 @@ void ScummTr::_processGameFilesV123()
 	{
 		Text text(ScummTr::_paramTextFile, ScummTr::_textOptions, charset);
 
+		if (ScummRp::_options & ScummRp::OPT_EXPORT)
+			text.addExportHeaders();
+
 		for (int i = 1; i < 98; ++i)
 		{
 			std::string dataPath(ScummRp::_paramGameDir);
@@ -230,6 +233,9 @@ void ScummTr::_processGameFilesV4567()
 	ScummRp::_prepareTmpIndex();
 	{
 		Text text(ScummTr::_paramTextFile, ScummTr::_textOptions, charset);
+
+		if (ScummRp::_options & ScummRp::OPT_EXPORT)
+			text.addExportHeaders();
 
 		for (int i = 1; i < numberOfDisks; ++i)
 		{
@@ -524,7 +530,7 @@ void ScummTr::_usage()
 	std::cout << " -a [oav]   " << "pad objects, actors, verbs with @ for extra safety\n";
 	std::cout << " -A [oav]   " << "Same as -a, with variable IDs taken into account\n";
 	std::cout << " -b         " << "binary mode\n";
-	std::cout << " -c         " << "convert some non-ASCII characters to Windows-1252\n";
+	std::cout << " -c         " << "convert some Western European characters to Windows-1252\n";
 	std::cout << " -f path    " << "path to the text file (default: " << ScummTr::_paramTextFile << ")\n";
 	std::cout << " -g gameid  " << "select a game (as given by -L)\n";
 	std::cout << " -h         " << "include SCUMM script context before each line\n";

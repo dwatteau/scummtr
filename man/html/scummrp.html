@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <style>
+    table.head, table.foot { width: 100%; }
+    td.head-rtitle, td.foot-os { text-align: right; }
+    td.head-vol { text-align: center; }
+    div.Pp { margin: 1ex 0ex; }
+    div.Nd, div.Bf, div.Op { display: inline; }
+    span.Pa, span.Ad { font-style: italic; }
+    span.Ms { font-weight: bold; }
+    dl.Bl-diag > dt { font-weight: bold; }
+    code.Nm, code.Fl, code.Cm, code.Ic, code.In, code.Fd, code.Fn,
+    code.Cd { font-weight: bold; font-family: inherit; }
+  </style>
+  <title>SCUMMRP(1)</title>
+</head>
+<body>
+<table class="head">
+  <tr>
+    <td class="head-ltitle">SCUMMRP(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">SCUMMRP(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<code class="Nm">scummrp</code> &#x2014;
+<div class="Nd">pack and unpack SCUMM game data resources</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">scummrp</code></td>
+    <td><code class="Fl">-i</code> [<code class="Fl">-qvV</code>]
+      [<code class="Fl">-t</code> <var class="Ar">tag</var>]
+      <code class="Fl">-g</code> <var class="Ar">gameid</var>
+      <code class="Fl">-p</code> <var class="Ar">gamedir</var>
+      <code class="Fl">-d</code> <var class="Ar">dumpdir</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">scummrp</code></td>
+    <td><code class="Fl">-o</code> [<code class="Fl">-qvV</code>]
+      [<code class="Fl">-t</code> <var class="Ar">tag</var>]
+      <code class="Fl">-g</code> <var class="Ar">gameid</var>
+      <code class="Fl">-p</code> <var class="Ar">gamedir</var>
+      <code class="Fl">-d</code> <var class="Ar">dumpdir</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">scummrp</code></td>
+    <td><code class="Fl">-L</code></td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+The <code class="Nm">scummrp</code> tool imports and exports game data resources
+  for SCUMM engine games. The mode of operation is chosen with one of the
+  following options:
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#i"><code class="Fl" id="i">-i</code></a></dt>
+  <dd>Import resources into the game files.</dd>
+  <dt><a class="permalink" href="#o"><code class="Fl" id="o">-o</code></a></dt>
+  <dd>Export resources from the game files.</dd>
+  <dt><a class="permalink" href="#L"><code class="Fl" id="L">-L</code></a></dt>
+  <dd>List all supported games with their respective
+      <var class="Ar">gameid</var>.</dd>
+</dl>
+<p class="Pp">The other options are as follows:</p>
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#d"><code class="Fl" id="d">-d</code></a>
+    <var class="Ar">dumpdir</var></dt>
+  <dd>The path to the dump directory (default: <span class="Pa">DUMP</span>).
+      Game content is represented as a hierarchy of multiple files and
+      subdirectories. If it doesn't exist, the directory will be created.</dd>
+  <dt><a class="permalink" href="#g"><code class="Fl" id="g">-g</code></a>
+    <var class="Ar">gameid</var></dt>
+  <dd>The ID of the game variant to pack or unpack, as given by
+      <code class="Fl">-L</code>.</dd>
+  <dt><a class="permalink" href="#p"><code class="Fl" id="p">-p</code></a>
+    <var class="Ar">gamedir</var></dt>
+  <dd>The path to the game (default: current directory).</dd>
+  <dt><a class="permalink" href="#q"><code class="Fl" id="q">-q</code></a></dt>
+  <dd>Quiet mode. Suppress informational output.</dd>
+  <dt><a class="permalink" href="#t"><code class="Fl" id="t">-t</code></a>
+    <var class="Ar">tag</var></dt>
+  <dd>Only export/import game resources matching the specified
+      <var class="Ar">tag</var>. A tag is the internal name of a resource type
+      inside SCUMM. It is usually a four-letter name, such as
+      &#x201C;SCRP&#x201D;.</dd>
+  <dt><a class="permalink" href="#v"><code class="Fl" id="v">-v</code></a></dt>
+  <dd>Verbose mode.</dd>
+  <dt><a class="permalink" href="#V"><code class="Fl" id="V">-V</code></a></dt>
+  <dd>Same as <code class="Fl">-v</code>, but list resource names as they're
+      being treated, too.</dd>
+</dl>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
+Dump all the resources of the original Monkey Island 2 game to the
+  <span class="Pa">DUMP_MI2</span> directory:
+<p class="Pp"></p>
+<div class="Bd Bd-indent"><code class="Li">$ scummrp -g monkey2 -p /path/to/MI2
+  -od DUMP_MI2</code></div>
+<p class="Pp">Dump the script resources of the Talkie CD version of Loom, using
+    default paths:</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent"><code class="Li">$ scummrp -g loomcd -t SCRP
+  -o</code></div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="HISTORY"><a class="permalink" href="#HISTORY">HISTORY</a></h1>
+The <code class="Nm">scummrp</code> tool was written in 2003 by Thomas
+  Combeleran for the ATP team, and was open-sourced in 2020 under an MIT
+  license.
+</section>
+<section class="Sh">
+<h1 class="Sh" id="CAVEATS"><a class="permalink" href="#CAVEATS">CAVEATS</a></h1>
+On case-sensitive file systems, game data files must currently follow the DOS
+  convention of being all-uppercase to be properly detected.
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">November 19, 2020</td>
+    <td class="foot-os">mandoc</td>
+  </tr>
+</table>
+</body>
+</html>

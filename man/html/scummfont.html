@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <style>
+    table.head, table.foot { width: 100%; }
+    td.head-rtitle, td.foot-os { text-align: right; }
+    td.head-vol { text-align: center; }
+    div.Pp { margin: 1ex 0ex; }
+    div.Nd, div.Bf, div.Op { display: inline; }
+    span.Pa, span.Ad { font-style: italic; }
+    span.Ms { font-weight: bold; }
+    dl.Bl-diag > dt { font-weight: bold; }
+    code.Nm, code.Fl, code.Cm, code.Ic, code.In, code.Fd, code.Fn,
+    code.Cd { font-weight: bold; font-family: inherit; }
+  </style>
+  <title>SCUMMFONT(1)</title>
+</head>
+<body>
+<table class="head">
+  <tr>
+    <td class="head-ltitle">SCUMMFONT(1)</td>
+    <td class="head-vol">General Commands Manual</td>
+    <td class="head-rtitle">SCUMMFONT(1)</td>
+  </tr>
+</table>
+<div class="manual-text">
+<section class="Sh">
+<h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
+<code class="Nm">scummfont</code> &#x2014;
+<div class="Nd">transform SCUMM font files to bitmaps</div>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">scummfont</code></td>
+    <td><code class="Cm">i</code> <var class="Ar">FONTFILE</var>
+      <var class="Ar">image.bmp</var></td>
+  </tr>
+</table>
+<br/>
+<table class="Nm">
+  <tr>
+    <td><code class="Nm">scummfont</code></td>
+    <td><code class="Cm">o</code> <var class="Ar">FONTFILE</var>
+      <var class="Ar">image.bmp</var></td>
+  </tr>
+</table>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
+The <code class="Nm">scummfont</code> tool transforms SCUMM font files between
+  their internal format and a bitmap representation. The mode of operation is
+  chosen with one of the following options:
+<dl class="Bl-tag">
+  <dt><a class="permalink" href="#i"><code class="Cm" id="i">i</code></a></dt>
+  <dd>Import the content of an <span class="Pa">image.bmp</span> bitmap file
+      into the specified <var class="Ar">FONTFILE</var> SCUMM resource, with a
+      &#x201C;-new&#x201D; suffix added to it.</dd>
+  <dt><a class="permalink" href="#o"><code class="Cm" id="o">o</code></a></dt>
+  <dd>Extract a font from a <var class="Ar">FONTFILE</var> SCUMM resource into
+      an <span class="Pa">image.bmp</span> bitmap file.</dd>
+</dl>
+<p class="Pp"><var class="Ar">FONTFILE</var> can either be a
+    &#x201C;CHAR_*&#x201D; block extracted by <a class="Xr">scummrp(1)</a>, or
+    an LFL file containing a font resource.</p>
+<p class="Pp">Generated bitmap files contain every character available in the
+    selected font. Characters are sorted in the ascending order of the font
+    table; that is, the 19th displayed character is always accessible in a
+    <a class="Xr">scummtr(1)</a> translation file by using the
+    &#x201C;\019&#x201D; decimal sequence.</p>
+</section>
+<section class="Sh">
+<h1 class="Sh" id="HISTORY"><a class="permalink" href="#HISTORY">HISTORY</a></h1>
+The <code class="Nm">scummfont</code> tool was written between 2003 and 2004 by
+  Thomas Combeleran for the ATP team, and was open-sourced in 2020 under an MIT
+  license.
+</section>
+<section class="Sh">
+<h1 class="Sh" id="CAVEATS"><a class="permalink" href="#CAVEATS">CAVEATS</a></h1>
+Only simple, uncompressed 8-bit per pixel BMPv3 bitmap files (also known as
+  Windows 3.x bitmap files) with 256 colors are supported.
+<p class="Pp">If your input file is rejected after having been modified by an
+    external tool, Netpbm can be used to revert it to a compatible format:</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent"><code class="Li">$ bmptoppm input.bmp | ppmtobmp
+  -windows -bpp 8 &gt; compatible-output.bmp</code></div>
+</section>
+</div>
+<table class="foot">
+  <tr>
+    <td class="foot-date">December 27, 2020</td>
+    <td class="foot-os">mandoc</td>
+  </tr>
+</table>
+</body>
+</html>
