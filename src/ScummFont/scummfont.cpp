@@ -492,14 +492,13 @@ static void saveFont(const char *path)
 				++endOffset;
 			}
 		}
+
 		if (baseOffset == 8) // block header
 		{
 			tmpFile.seekp(0x4, std::ios::beg);
-			tmpFile.put((char)((endOffset >> 0x18) & 0xFF));
-			tmpFile.put((char)((endOffset >> 0x10) & 0xFF));
-			tmpFile.put((char)((endOffset >> 0x8) & 0xFF));
-			tmpFile.put((char)(endOffset & 0xFF));
+			tmpFile->putBE32(endOffset);
 		}
+
 		if (version == 1)
 		{
 			if (numChars != newNumChars)
