@@ -25,8 +25,8 @@
 #define SCUMMRP_TOC_HPP
 
 #include "common/types.hpp"
+#include "common/file.hpp"
 
-#include "file.hpp"
 #include "rptypes.hpp"
 
 #include <stdexcept>

@@ -24,9 +24,10 @@
 #ifndef SCUMMTR_TRBLOCK_HPP
 #define SCUMMTR_TRBLOCK_HPP
 
+#include "ScummRp/block.hpp"
+
 #include "text.hpp"
 #include "script.hpp"
-#include "block.hpp"
 
 #include <list>
 

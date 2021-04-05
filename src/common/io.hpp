@@ -21,14 +21,13 @@
  *
  */
 
-#ifndef SCUMMRP_IO_HPP
-#define SCUMMRP_IO_HPP
+#ifndef SCUMM_COMMON_IO_HPP
+#define SCUMM_COMMON_IO_HPP
 
 #include "common/types.hpp"
+#include "common/toolbox.hpp"
 
-#include "toolbox.hpp"
-
-class ScummRpIO
+class ScummIO
 {
 private:
 	static bool _quiet;

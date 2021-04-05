@@ -21,13 +21,12 @@
  *
  */
 
-#ifndef SCUMMRP_FILE_HPP
-#define SCUMMRP_FILE_HPP
+#ifndef SCUMM_COMMON_FILE_HPP
+#define SCUMM_COMMON_FILE_HPP
 
 #include "common/types.hpp"
-
-#include "backup.hpp"
-#include "toolbox.hpp"
+#include "common/backup.hpp"
+#include "common/toolbox.hpp"
 
 #include <fstream>
 #include <iostream>

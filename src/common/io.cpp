@@ -21,15 +21,59 @@
  *
  */
 
-#ifndef SCUMMRP_TOOLBOX_HPP
-#define SCUMMRP_TOOLBOX_HPP
+#include "common/io.hpp"
 
-#include "common/types.hpp"
+#include <cstdlib>
+#include <iostream>
 
-const char *xsprintf(const char *format, ...) __attribute__((format(printf, 1, 2)));
-char *xstrdup(const char *src);
-void xremove(const char *path);
-void xrename(const char *oldname, const char *newname);
-int xmkdir(const char *path);
+/*
+ * ScummIO
+ */
 
-#endif
+uint32 ScummIO::_infoSlots = 0;
+bool ScummIO::_quiet = false;
+
+void ScummIO::info(const char *msg)
+{
+	std::cout << msg << std::endl;
+}
+
+void ScummIO::info(int slots, const char *msg)
+{
+	if (ScummIO::_infoSlots & slots && !ScummIO::_quiet)
+		std::cout << msg << std::endl;
+}
+
+void ScummIO::crash(const char *msg)
+{
+	std::cerr << "CRASH: " << msg << std::endl;
+	std::abort();
+}
+
+void ScummIO::fatal(const char *msg)
+{
+	std::cerr << "ERROR: " << msg << std::endl;
+	std::exit(1);
+}
+
+void ScummIO::error(const char *msg)
+{
+	if (!ScummIO::_quiet)
+		std::cerr << "ERROR: " << msg << std::endl;
+}
+
+void ScummIO::warning(const char *msg)
+{
+	if (!ScummIO::_quiet)
+		std::cerr << "WARNING: " << msg << std::endl;
+}
+
+void ScummIO::setQuiet(bool q)
+{
+	ScummIO::_quiet = q;
+}
+
+void ScummIO::setInfoSlots(uint32 infoSlots)
+{
+	ScummIO::_infoSlots = infoSlots;
+}

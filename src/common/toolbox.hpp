@@ -21,35 +21,15 @@
  *
  */
 
-#ifndef SCUMMRP_BACKUP_HPP
-#define SCUMMRP_BACKUP_HPP
+#ifndef SCUMM_COMMON_TOOLBOX_HPP
+#define SCUMM_COMMON_TOOLBOX_HPP
 
-#include <list>
-#include <string>
+#include "common/types.hpp"
 
-class BackUp
-{
-private:
-	static const char *const SUFFIX;
-
-private:
-	std::list<std::string> _files;
-
-private:
-	static std::string _backupPath(const char *f);
-
-public:
-	std::string backup(const char *f, bool createCopy = true);
-	void cancelChanges();
-	void applyChanges();
-
-public:
-	BackUp();
-	~BackUp();
-
-private:
-	BackUp(const BackUp &);
-	BackUp &operator=(const BackUp &);
-};
+const char *xsprintf(const char *format, ...) __attribute__((format(printf, 1, 2)));
+char *xstrdup(const char *src);
+void xremove(const char *path);
+void xrename(const char *oldname, const char *newname);
+int xmkdir(const char *path);
 
 #endif

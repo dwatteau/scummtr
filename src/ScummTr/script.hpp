@@ -24,9 +24,10 @@
 #ifndef SCUMMTR_SCRIPT_HPP
 #define SCUMMTR_SCRIPT_HPP
 
+#include "common/file.hpp"
+#include "common/toolbox.hpp"
+
 #include "text.hpp"
-#include "file.hpp"
-#include "toolbox.hpp"
 
 #include <list>
 #include <stdexcept>

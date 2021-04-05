@@ -25,11 +25,11 @@
 #define SCUMMTR_SCUMMTR_HPP
 
 #include "common/types.hpp"
+#include "ScummRp/rptypes.hpp"
+#include "ScummRp/scummrp.hpp"
+#include "ScummRp/block.hpp"
 
-#include "scummrp.hpp"
-#include "block.hpp"
 #include "text.hpp"
-#include "rptypes.hpp"
 
 #include <vector>
 

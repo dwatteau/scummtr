@@ -21,11 +21,12 @@
  *
  */
 
+#include "common/io.hpp"
+#include "common/toolbox.hpp"
+
 #include "block.hpp"
-#include "io.hpp"
 #include "scummrp.hpp"
 #include "rptypes.hpp"
-#include "toolbox.hpp"
 
 #include <cstdio>
 #include <cstring>
@@ -203,7 +204,7 @@ TreeBlock::~TreeBlock()
 	if (_parent)
 		--_parent->_childrenCount;
 	if (_childrenCount)
-		ScummRpIO::crash("TreeBlock destroyed before its children");
+		ScummIO::crash("TreeBlock destroyed before its children");
 }
 
 TreeBlock::TreeBlock(const TreeBlock &block) :
@@ -357,7 +358,7 @@ bool TreeBlock::nextBlock(TreeBlock &subblock)
 	}
 	catch (Block::InvalidDataFromGame &e)
 	{
-		ScummRpIO::warning(xsprintf("Bad data was found and ignored at 0x%X in %s", e.offset(), e.file().c_str()));
+		ScummIO::warning(xsprintf("Bad data was found and ignored at 0x%X in %s", e.offset(), e.file().c_str()));
 		return false;
 	}
 
@@ -436,11 +437,11 @@ void TreeBlock::dump(const char *path)
 	output.open(path, std::ios::binary | std::ios::out | std::ios::trunc);
 	if (!output.is_open())
 	{
-		ScummRpIO::warning(xsprintf("Cannot open %s", path));
+		ScummIO::warning(xsprintf("Cannot open %s", path));
 		return;
 	}
 
-	ScummRpIO::info(INF_LISTING, xsprintf("Exporting %s", path));
+	ScummIO::info(INF_LISTING, xsprintf("Exporting %s", path));
 	_file->seekg(0, std::ios::beg);
 	output.write(*_file, _file->size());
 	output.close();
@@ -463,12 +464,12 @@ void TreeBlock::update(const char *path)
 	sizeDiff = newSize - _file->size();
 	if (newSize < _headerSize)
 	{
-		ScummRpIO::warning(xsprintf("%s not updated: File size < Header size", _fileName()));
+		ScummIO::warning(xsprintf("%s not updated: File size < Header size", _fileName()));
 		input.close();
 		return;
 	}
 
-	ScummRpIO::info(INF_LISTING, xsprintf("Importing %s", path));
+	ScummIO::info(INF_LISTING, xsprintf("Importing %s", path));
 
 	if (newSize < _file->size())
 		_file->resize(newSize);
@@ -607,7 +608,7 @@ void BlocksFile::_init(const char *path, int opts, BackUp *bak, int id, uint32 t
 	{
 		opts |= BlocksFile::BFOPT_SEQFILE;
 		opts &= ~BlocksFile::BFOPT_RAM;
-		ScummRpIO::info(INF_GLOBAL, "File too big, forced -O and disabled -m");
+		ScummIO::info(INF_GLOBAL, "File too big, forced -O and disabled -m");
 	}
 
 	_blockFormat = BFMT_NOHEADER;
@@ -755,7 +756,7 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 			{
 				(*ScummRp::tocs[i])[8].offset = -1;
 				j = 1;
-				ScummRpIO::info(INF_DETAIL, "Removed SCRP_0008 from index (duplicate of SCRP_0009)");
+				ScummIO::info(INF_DETAIL, "Removed SCRP_0008 from index (duplicate of SCRP_0009)");
 			}
 			// Hacks for Maniac Mansion CGA
 			else if (roomId == 8 && ScummRp::tocs[i]->getSize() == 200
@@ -764,7 +765,7 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 			{
 				(*ScummRp::tocs[i])[7].offset = -1;
 				j = 1;
-				ScummRpIO::info(INF_DETAIL, "Removed SC_0007 from index (duplicate of SC_0012)");
+				ScummIO::info(INF_DETAIL, "Removed SC_0007 from index (duplicate of SC_0012)");
 			}
 			else if (roomId == 8 && ScummRp::tocs[i]->getSize() == 200
 					 && (*ScummRp::tocs[i])[8].offset == (*ScummRp::tocs[i])[13].offset
@@ -772,7 +773,7 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 			{
 				(*ScummRp::tocs[i])[8].offset = -1;
 				j = 1;
-				ScummRpIO::info(INF_DETAIL, "Removed SC_0008 from index (duplicate of SC_0013)");
+				ScummIO::info(INF_DETAIL, "Removed SC_0008 from index (duplicate of SC_0013)");
 			}
 			// Hacks for Loom EGA English
 			else if (roomId == 11 && ScummRp::tocs[i]->getSize() == 200
@@ -781,7 +782,7 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 			{
 				(*ScummRp::tocs[i])[51].offset = -1;
 				j = 1;
-				ScummRpIO::info(INF_DETAIL, "Removed SC_0051 from index (duplicate of SC_0052)");
+				ScummIO::info(INF_DETAIL, "Removed SC_0051 from index (duplicate of SC_0052)");
 			}
 			else if (roomId == 18 && ScummRp::tocs[i]->getSize() == 200
 					 && (*ScummRp::tocs[i])[55].offset == (*ScummRp::tocs[i])[56].offset
@@ -789,7 +790,7 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 			{
 				(*ScummRp::tocs[i])[55].offset = -1;
 				j = 1;
-				ScummRpIO::info(INF_DETAIL, "Removed SC_0055 from index (duplicate of SC_0056)");
+				ScummIO::info(INF_DETAIL, "Removed SC_0055 from index (duplicate of SC_0056)");
 			}
 		}
 		else if (j == 2 && ScummRp::tocs[i]->getType() == TableOfContent::TOCT_COST)
@@ -801,7 +802,7 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 			{
 				(*ScummRp::tocs[i])[117].offset = -1;
 				j = 1;
-				ScummRpIO::info(INF_DETAIL, "Removed CO_0117 from index (duplicate of CO_0010)");
+				ScummIO::info(INF_DETAIL, "Removed CO_0117 from index (duplicate of CO_0010)");
 			}
 		}
 		n += j;
@@ -822,7 +823,7 @@ void RoomPack::_eraseOffsetsInRange(byte roomId, int32 start, int32 end)
 			TableOfContent::TocElement &el = (*ScummRp::tocs[i])[blockId];
 			if (el.offset >= start && el.offset < end)
 			{
-				ScummRpIO::info(INF_DETAIL, xsprintf("Removed (%.2u, 0x%X) from the index", el.roomId, el.offset));
+				ScummIO::info(INF_DETAIL, xsprintf("Removed (%.2u, 0x%X) from the index", el.roomId, el.offset));
 				el.offset = -1;
 				el.roomId = (byte)-1;
 			}
@@ -1190,7 +1191,7 @@ bool RoomBlock::nextBlock(TreeBlock &subblock)
 			}
 			catch (Room::IdNotUnique &e)
 			{
-				ScummRpIO::warning(e.what());
+				ScummIO::warning(e.what());
 			}
 		}
 		return true;
@@ -1456,7 +1457,7 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 		if (_nextSubblockOffset >= _file->size() - 4)
 		{
 			if (o < _nextSubblockOffset)
-				ScummRpIO::warning(xsprintf("%.2i.LFL should actually end at 0x%X", _id, o));
+				ScummIO::warning(xsprintf("%.2i.LFL should actually end at 0x%X", _id, o));
 			return false;
 		}
 
@@ -1474,7 +1475,7 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 		++_nextSubblockOffset;
 	}
 	if (gap)
-		ScummRpIO::warning(xsprintf("Gap at 0x%X in %.2i.LFL", o, _id));
+		ScummIO::warning(xsprintf("Gap at 0x%X in %.2i.LFL", o, _id));
 
 	_checkDupOffset((byte)_id, _nextSubblockOffset);
 	switch (toc->getType())
@@ -1728,13 +1729,13 @@ TreeBlock *OldRoom::nextBlock()
 			{
 				try
 				{
-					ScummRpIO::setQuiet(true);
+					ScummIO::setQuiet(true);
 					_init();
-					ScummRpIO::setQuiet(false);
+					ScummIO::setQuiet(false);
 				}
 				catch (std::exception &)
 				{
-					ScummRpIO::setQuiet(false);
+					ScummIO::setQuiet(false);
 					throw;
 				}
 			}
@@ -1835,7 +1836,7 @@ TreeBlock *OldRoom::nextBlock()
 			}
 			catch (Room::IdNotUnique &e)
 			{
-				ScummRpIO::warning(e.what());
+				ScummIO::warning(e.what());
 			}
 		}
 		return subblock;
@@ -2031,11 +2032,11 @@ void OldRoom::_findMostLikelyOIId(std::vector<int> &candidates) const
 	if (pref[i].oiNbr != 0)
 	{
 		msg += " (unlikely)";
-		ScummRpIO::info(INF_DETAIL, msg.c_str());
+		ScummIO::info(INF_DETAIL, msg.c_str());
 	}
 	else
 	{
-		ScummRpIO::warning(msg.c_str());
+		ScummIO::warning(msg.c_str());
 	}
 }
 
@@ -2109,7 +2110,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 					&& oiInfo[k].num == 11 && _oiId[oiInfo[k].num] == 553
 					&& oiInfo[j].offset - oiInfo[k].offset == 0x384)
 				{
-					ScummRpIO::warning("Erroneous OI #553?");
+					ScummIO::warning("Erroneous OI #553?");
 					oiInfo[k].size = 0x384;
 					v.push_back(oiInfo[k].num);
 				}
@@ -2118,7 +2119,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 						 && oiInfo[k].num == 12 && _oiId[oiInfo[k].num] == 554
 						 && oiInfo[j].offset - oiInfo[k].offset == 0x3C2)
 				{
-					ScummRpIO::warning("Erroneous OI #554?");
+					ScummIO::warning("Erroneous OI #554?");
 					oiInfo[k].size = 0x3C2;
 					v.push_back(oiInfo[k].num);
 				}

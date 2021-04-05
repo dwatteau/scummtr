@@ -21,9 +21,9 @@
  *
  */
 
-#include "file.hpp"
-#include "io.hpp"
-#include "toolbox.hpp"
+#include "common/file.hpp"
+#include "common/io.hpp"
+#include "common/toolbox.hpp"
 
 #include <cstring>
 
@@ -607,7 +607,7 @@ FilePart::~FilePart()
 	}
 	catch (FilePart::Error &e)
 	{
-		ScummRpIO::fatal(e.what());
+		ScummIO::fatal(e.what());
 	}
 }
 

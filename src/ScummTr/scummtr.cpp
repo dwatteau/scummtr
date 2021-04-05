@@ -25,10 +25,11 @@
  * #ifdef's to learn more about the changes.
  */
 
+#include "common/backup.hpp"
+#include "common/io.hpp"
+
 #include "scummtr.hpp"
-#include "backup.hpp"
 #include "trblock.hpp"
-#include "io.hpp"
 
 #include <cstring>
 
@@ -197,9 +198,9 @@ void ScummTr::_processGameFilesV123()
 				{
 					if (ScummTr::_exportWithPadding)
 					{
-						ScummRpIO::setQuiet(true);
+						ScummIO::setQuiet(true);
 						ScummTr::_explore(*room, ScummTr::ACT_RSCNAMELIMITS, text);
-						ScummRpIO::setQuiet(false);
+						ScummIO::setQuiet(false);
 					}
 					ScummTr::_explore(*room, ScummRp::ACT_EXPORT, text);
 				}
@@ -209,9 +210,9 @@ void ScummTr::_processGameFilesV123()
 
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
 	{
-		ScummRpIO::setQuiet(true);
+		ScummIO::setQuiet(true);
 		ScummRp::_exploreIndex<ScummRp::ACT_SAVE>(*index);
-		ScummRpIO::setQuiet(false);
+		ScummIO::setQuiet(false);
 	}
 }
 
@@ -253,9 +254,9 @@ void ScummTr::_processGameFilesV4567()
 			{
 				if (ScummTr::_exportWithPadding)
 				{
-					ScummRpIO::setQuiet(true);
+					ScummIO::setQuiet(true);
 					ScummTr::_explore(*disk, ScummTr::ACT_RSCNAMELIMITS, text);
-					ScummRpIO::setQuiet(false);
+					ScummIO::setQuiet(false);
 				}
 				ScummTr::_explore(*disk, ScummRp::ACT_EXPORT, text);
 			}
@@ -266,9 +267,9 @@ void ScummTr::_processGameFilesV4567()
 
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
 	{
-		ScummRpIO::setQuiet(true);
+		ScummIO::setQuiet(true);
 		ScummRp::_exploreIndex<ScummRp::ACT_SAVE>(*index);
-		ScummRpIO::setQuiet(false);
+		ScummIO::setQuiet(false);
 	}
 }
 
@@ -286,7 +287,7 @@ Text::Charset ScummTr::_selectCharset()
 	if (strcmp(ScummTr::_paramLanguage, "fr") == 0)
 		return Text::CHS_V1FR;
 
-	ScummRpIO::warning(xsprintf("Unknown language code %s", ScummTr::_paramLanguage));
+	ScummIO::warning(xsprintf("Unknown language code %s", ScummTr::_paramLanguage));
 
 	return Text::CHS_NULL;
 }
@@ -327,9 +328,9 @@ int ScummTr::main(int argc, const char **argv)
 	int g;
 
 	ScummTr::_getOptions(argc, argv, ScummTr::_trParameters);
-	ScummRpIO::setInfoSlots(ScummRp::_infoSlots);
-	ScummRpIO::info(INF_GLOBAL, xsprintf("%s %s (build %s) by %s", ScummTr::NAME, ScummTr::VERSION, SCUMMTR_BUILD_DATE, ScummTr::AUTHOR));
-	ScummRpIO::info(INF_GLOBAL, "");
+	ScummIO::setInfoSlots(ScummRp::_infoSlots);
+	ScummIO::info(INF_GLOBAL, xsprintf("%s %s (build %s) by %s", ScummTr::NAME, ScummTr::VERSION, SCUMMTR_BUILD_DATE, ScummTr::AUTHOR));
+	ScummIO::info(INF_GLOBAL, "");
 
 	if (ScummRp::_options & ScummRp::OPT_LIST)
 	{

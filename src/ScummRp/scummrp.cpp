@@ -23,9 +23,10 @@
  * It seems that no functional change was made after that date.
  */
 
+#include "common/io.hpp"
+#include "common/toolbox.hpp"
+
 #include "scummrp.hpp"
-#include "io.hpp"
-#include "toolbox.hpp"
 
 #include <cstring>
 
@@ -98,7 +99,7 @@ char ScummRp::_paramTag[5] = "";
 // 					}
 // 				}
 // 				else
-// 					ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was %s",
+// 					ScummIO::warning(xsprintf("%s not unique. Only the first occurence was %s",
 // 												filename.c_str(),
 // 												A == ScummRp::ACT_IMPORT ? "replaced" : "dumped"));
 // 			}
@@ -121,7 +122,7 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 			if (processedBlocks.find(filename) == processedBlocks.end())
 				ScummRp::_explore(*blockPtr, action);
 			else
-				ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was explored.", filename.c_str()));
+				ScummIO::warning(xsprintf("%s not unique. Only the first occurence was explored.", filename.c_str()));
 		}
 		else
 		{
@@ -130,7 +131,7 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 			case MKTAG4('L','E','C','F'):
 			case MKTAG2('L','E'):
 				if (processedBlocks.find(filename) != processedBlocks.end())
-					ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was explored.", filename.c_str()));
+					ScummIO::warning(xsprintf("%s not unique. Only the first occurence was explored.", filename.c_str()));
 
 				{
 					TreeBlockPtr lecf;
@@ -144,7 +145,7 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 					break;
 
 				if (processedBlocks.find(filename) != processedBlocks.end())
-					ScummRpIO::warning(xsprintf("%s not unique. Only the first occurence was %s.", filename.c_str(), action == ScummRp::ACT_IMPORT ? "replaced" : "dumped"));
+					ScummIO::warning(xsprintf("%s not unique. Only the first occurence was %s.", filename.c_str(), action == ScummRp::ACT_IMPORT ? "replaced" : "dumped"));
 
 				if (action == ScummRp::ACT_IMPORT)
 				{
@@ -322,9 +323,9 @@ void ScummRp::_processGameFilesV123()
 
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
 	{
-		ScummRpIO::setQuiet(true);
+		ScummIO::setQuiet(true);
 		ScummRp::_exploreIndex<ScummRp::ACT_SAVE>(*index);
-		ScummRpIO::setQuiet(false);
+		ScummIO::setQuiet(false);
 	}
 }
 
@@ -363,9 +364,9 @@ void ScummRp::_processGameFilesV4567()
 
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
 	{
-		ScummRpIO::setQuiet(true);
+		ScummIO::setQuiet(true);
 		ScummRp::_exploreIndex<ScummRp::ACT_SAVE>(*index);
-		ScummRpIO::setQuiet(false);
+		ScummIO::setQuiet(false);
 	}
 }
 
@@ -374,9 +375,9 @@ int ScummRp::main(int argc, const char **argv)
 	int g;
 
 	ScummRp::_getOptions(argc, argv, ScummRp::_rpParameters);
-	ScummRpIO::setInfoSlots(ScummRp::_infoSlots);
-	ScummRpIO::info(INF_GLOBAL, xsprintf("%s %s (build %s) by %s", ScummRp::NAME, ScummRp::VERSION, SCUMMTR_BUILD_DATE, ScummRp::AUTHOR));
-	ScummRpIO::info(INF_GLOBAL, "");
+	ScummIO::setInfoSlots(ScummRp::_infoSlots);
+	ScummIO::info(INF_GLOBAL, xsprintf("%s %s (build %s) by %s", ScummRp::NAME, ScummRp::VERSION, SCUMMTR_BUILD_DATE, ScummRp::AUTHOR));
+	ScummIO::info(INF_GLOBAL, "");
 
 	if (ScummRp::_options & ScummRp::OPT_LIST)
 	{

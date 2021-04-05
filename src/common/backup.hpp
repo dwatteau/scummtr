@@ -21,59 +21,35 @@
  *
  */
 
-#include "io.hpp"
+#ifndef SCUMM_COMMON_BACKUP_HPP
+#define SCUMM_COMMON_BACKUP_HPP
 
-#include <cstdlib>
-#include <iostream>
+#include <list>
+#include <string>
 
-/*
- * ScummRpIO
- */
-
-uint32 ScummRpIO::_infoSlots = 0;
-bool ScummRpIO::_quiet = false;
-
-void ScummRpIO::info(const char *msg)
+class BackUp
 {
-	std::cout << msg << std::endl;
-}
+private:
+	static const char *const SUFFIX;
 
-void ScummRpIO::info(int slots, const char *msg)
-{
-	if (ScummRpIO::_infoSlots & slots && !ScummRpIO::_quiet)
-		std::cout << msg << std::endl;
-}
+private:
+	std::list<std::string> _files;
 
-void ScummRpIO::crash(const char *msg)
-{
-	std::cerr << "CRASH: " << msg << std::endl;
-	std::abort();
-}
+private:
+	static std::string _backupPath(const char *f);
 
-void ScummRpIO::fatal(const char *msg)
-{
-	std::cerr << "ERROR: " << msg << std::endl;
-	std::exit(1);
-}
+public:
+	std::string backup(const char *f, bool createCopy = true);
+	void cancelChanges();
+	void applyChanges();
 
-void ScummRpIO::error(const char *msg)
-{
-	if (!ScummRpIO::_quiet)
-		std::cerr << "ERROR: " << msg << std::endl;
-}
+public:
+	BackUp();
+	~BackUp();
 
-void ScummRpIO::warning(const char *msg)
-{
-	if (!ScummRpIO::_quiet)
-		std::cerr << "WARNING: " << msg << std::endl;
-}
+private:
+	BackUp(const BackUp &);
+	BackUp &operator=(const BackUp &);
+};
 
-void ScummRpIO::setQuiet(bool q)
-{
-	ScummRpIO::_quiet = q;
-}
-
-void ScummRpIO::setInfoSlots(uint32 infoSlots)
-{
-	ScummRpIO::_infoSlots = infoSlots;
-}
+#endif
