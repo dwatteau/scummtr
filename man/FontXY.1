@@ -40,7 +40,7 @@ resource file, as extracted by
 .Pp
 Glyph dimensions are represented as a series of
 .Ql X;Y
-coordinates, relative to zero, each glyph being separated by a newline character.
+coordinates, relative to zero, each glyph being separated by a new line.
 Empty glyphs are represented as empty lines.
 .Sh HISTORY
 The
@@ -48,7 +48,8 @@ The
 tool was written in 2006 by Thomas Combeleran for the ATP team,
 and was open-sourced in 2020 under an MIT license.
 .Sh CAVEATS
-Only Unix-type newline characters (LF) are currently supported.
+Only newline characters native to the current platform are accepted
+(CRLF on Windows and LF on most other systems).
 .Pp
 .Pa XY.txt
 pathname is hardcoded.
