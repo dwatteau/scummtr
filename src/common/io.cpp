@@ -53,7 +53,7 @@ void ScummIO::crash(const char *msg)
 void ScummIO::fatal(const char *msg)
 {
 	std::cerr << "ERROR: " << msg << std::endl;
-	std::exit(1);
+	std::exit(EXIT_FAILURE);
 }
 
 void ScummIO::error(const char *msg)

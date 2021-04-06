@@ -25,6 +25,8 @@
 #include "common/types.hpp"
 #include "common/file.hpp"
 
+#include <cstdlib>
+
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -54,14 +56,14 @@ int main(int argc, char **argv)
 		if (!fTxt.is_open())
 		{
 			std::cerr << "Error: cannot open " << szTxt << std::endl;
-			return 1;
+			return EXIT_FAILURE;
 		}
 
 		fChar.open(pszChar, std::ios::in | std::ios::out | std::ios::binary);
 		if (!fChar.is_open())
 		{
 			std::cerr << "Error: cannot open " << pszChar << std::endl;
-			return 1;
+			return EXIT_FAILURE;
 		}
 
 		// Seek after the header
@@ -73,7 +75,7 @@ int main(int argc, char **argv)
 		if (nNumChars > 0x100 || nNumChars <= 0)
 		{
 			std::cerr << "Error: invalid number of chars: " << nNumChars << std::endl;
-			return 1;
+			return EXIT_FAILURE;
 		}
 
 		for (int i = 0; i < nNumChars; ++i)
@@ -113,14 +115,14 @@ int main(int argc, char **argv)
 		if (!fTxt.is_open())
 		{
 			std::cerr << "Error: cannot open " << szTxt << std::endl;
-			return 1;
+			return EXIT_FAILURE;
 		}
 
 		fChar.open(pszChar, std::ios::in | std::ios::binary);
 		if (!fChar.is_open())
 		{
 			std::cerr << "Error: cannot open " << pszChar << std::endl;
-			return 1;
+			return EXIT_FAILURE;
 		}
 
 		// Seek after the header
@@ -132,7 +134,7 @@ int main(int argc, char **argv)
 		if (nNumChars > 0x100 || nNumChars <= 0)
 		{
 			std::cerr << "Error: invalid number of chars: " << nNumChars << std::endl;
-			return 1;
+			return EXIT_FAILURE;
 		}
 
 		for (int i = 0; i < nNumChars; ++i)
