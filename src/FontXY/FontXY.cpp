@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 		int nNumChars = snNumChars;
 		if (nNumChars > 0x100 || nNumChars <= 0)
 		{
-			std::cerr << "Error" << std::endl;
+			std::cerr << "Error: invalid number of chars: " << nNumChars << std::endl;
 			return 1;
 		}
 
@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 		int nNumChars = snNumChars;
 		if (nNumChars > 0x100 || nNumChars <= 0)
 		{
-			std::cerr << "Error" << std::endl;
+			std::cerr << "Error: invalid number of chars: " << nNumChars << std::endl;
 			return 1;
 		}
 
