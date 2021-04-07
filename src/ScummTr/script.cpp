@@ -353,11 +353,9 @@ int32 Script::_eatWordOrVar(byte flag)
 
 void Script::_eatVar()
 {
-	uint16 w;
-
 	if (ScummRp::game.version <= 2)
 		_getByte();
-	else if (((w = _getWord()) & 0x2000) && ScummRp::game.version <= 5)
+	else if ((_getWord() & 0x2000) && ScummRp::game.version <= 5)
 		_getWord();
 }
 
@@ -1174,7 +1172,7 @@ void Script::_opv12()
 		_eatByteOrVar(opcode & 0x80);
 		_eatWordOrVar(opcode & 0x40);
 		_eatWordOrVar(opcode & 0x20);
-		switch (opcode = _getByte())
+		switch (_getByte())
 		{
 		case 0x00:
 		case 0x01:

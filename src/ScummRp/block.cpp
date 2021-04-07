@@ -1478,6 +1478,10 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 		ScummIO::warning(xsprintf("Gap at 0x%X in %.2i.LFL", o, _id));
 
 	_checkDupOffset((byte)_id, _nextSubblockOffset);
+
+	if (toc == nullptr)
+		throw std::logic_error("OldLFLFile::nextBlock: TOC shouldn't be null");
+
 	switch (toc->getType())
 	{
 	case TableOfContent::TOCT_ROOM:
