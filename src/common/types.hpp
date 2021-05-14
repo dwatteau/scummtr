@@ -24,6 +24,10 @@
 #ifndef SCUMMTR_COMMON_TYPES_HPP
 #define SCUMMTR_COMMON_TYPES_HPP
 
+#if __cplusplus > 201703L
+#  error "This code is not compatible with C++20 and later versions"
+#endif
+
 #if defined(_MSC_VER) && _MSC_VER < 1900
 #  error "Visual Studio 2015 or better is required"
 #endif
