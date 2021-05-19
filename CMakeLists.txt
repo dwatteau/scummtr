@@ -46,6 +46,9 @@ else()
 
     if (MINGW)
         add_definitions(-D__USE_MINGW_ANSI_STDIO)
+    elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "OpenBSD")
+        # OpenBSD just does its hardening all by itself. However, we need -Wno-system-headers, there
+        add_compile_options(-Wno-system-headers) 
     else()
         add_definitions(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS)
         set(SCUMMTR_HARDENING_FLAGS "-fstack-protector;--param=ssp-buffer-size=4")
