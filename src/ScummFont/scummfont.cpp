@@ -28,6 +28,7 @@
 #include "common/file.hpp"
 #include "common/toolbox.hpp"
 
+#include <clocale>
 #include <cstdarg>
 #include <cstdio>
 #include <cstring>
@@ -630,6 +631,8 @@ static void loadFont(const char *path)
 
 int main(int argc, char **argv) try
 {
+	std::setlocale(LC_CTYPE, "");
+
 	if (argc < 4)
 		return usage();
 

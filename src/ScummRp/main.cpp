@@ -23,8 +23,12 @@
 
 #include "scummrp.hpp"
 
+#include <clocale>
+
 int main(int argc, const char **argv) try
 {
+	std::setlocale(LC_CTYPE, "");
+
 	return ScummRp::main(argc, argv);
 }
 catch (std::logic_error &e)

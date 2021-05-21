@@ -23,9 +23,13 @@
 
 #include "scummtr.hpp"
 
+#include <clocale>
+
 int main(int argc, const char **argv) try
 {
-	ScummTr::main(argc, argv);
+	std::setlocale(LC_CTYPE, "");
+
+	return ScummTr::main(argc, argv);
 }
 catch (std::runtime_error &e)
 {

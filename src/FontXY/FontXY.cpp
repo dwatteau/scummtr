@@ -25,6 +25,7 @@
 #include "common/types.hpp"
 #include "common/file.hpp"
 
+#include <clocale>
 #include <cstdlib>
 
 #include <algorithm>
@@ -36,6 +37,8 @@
 
 int main(int argc, char **argv)
 {
+	std::setlocale(LC_CTYPE, "");
+
 	if (argc != 3 || argv[1][0] == '\0' || argv[1][1] != '\0' || (argv[1][0] != 'i' && argv[1][0] != 'o'))
 	{
 		std::cout << "FontXY 0.1 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran\n\n";
