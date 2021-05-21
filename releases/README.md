@@ -51,7 +51,9 @@ make
 
 On other environments, you are currently expected to build ScummTR from source. For speed reasons, GCC is currently recommended over Clang or MSVC (issue #4).
 
-Older compiler versions should be pretty well supported if necessary, since ScummTR was written in C++98. For example, g++ 3.3 (OpenBSD) and g++ 2.95.3 (BeOS) have been tested.
+Older compiler versions should be pretty well supported if necessary, since ScummTR was written in C++98. For example, g++ 3.3 (on OpenBSD) and g++ 2.95.3 (on Haiku) have been tested.
+
+Note that, for MSVC however, only MSVC 2015 and later are supported.
 
 ## Building
 
