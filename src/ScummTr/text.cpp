@@ -284,20 +284,20 @@ void Text::_writeEscChar(byte b)
 
 void Text::_writeEscPlain(const std::string &s)
 {
-	int size;
+	size_t size;
 
-	size = (int)s.size();
-	for (int i = 0; i < size; ++i)
+	size = s.size();
+	for (size_t i = 0; i < size; ++i)
 		_writeChar((byte)s[i]);
 }
 
 void Text::_writeEscRsc(const std::string &s)
 {
-	int size, countdown;
+	size_t size, countdown;
 
 	countdown = 0;
-	size = (int)s.size();
-	for (int i = 0; i < size; ++i)
+	size = s.size();
+	for (size_t i = 0; i < size; ++i)
 	{
 		if (countdown > 0)
 		{
@@ -318,11 +318,11 @@ void Text::_writeEscRsc(const std::string &s)
 
 void Text::_writeEscOldMsg(const std::string &s)
 {
-	int size, countdown;
+	size_t size, countdown;
 
 	countdown = 0;
-	size = (int)s.size();
-	for (int i = 0; i < size; ++i)
+	size = s.size();
+	for (size_t i = 0; i < size; ++i)
 	{
 		if (countdown > 0)
 		{
@@ -344,12 +344,12 @@ void Text::_writeEscOldMsg(const std::string &s)
 void Text::_writeEscMsg(const std::string &s)
 {
 	bool func;
-	int size, countdown;
+	size_t size, countdown;
 
 	func = false;
 	countdown = 0;
-	size = (int)s.size();
-	for (int i = 0; i < size; ++i)
+	size = s.size();
+	for (size_t i = 0; i < size; ++i)
 	{
 		if (countdown > 0)
 		{
@@ -400,13 +400,13 @@ void Text::_writeEsc(const std::string &s, Text::LineType t)
 
 void Text::_checkMsg(const std::string &s, int l)
 {
-	int size, countdown;
+	size_t size, countdown;
 	bool func;
 
 	func = false;
 	countdown = 0;
-	size = (int)s.size();
-	for (int i = 0; i < size; ++i)
+	size = s.size();
+	for (size_t i = 0; i < size; ++i)
 	{
 		if (countdown > 0)
 		{
@@ -433,11 +433,11 @@ void Text::_checkMsg(const std::string &s, int l)
 
 void Text::_checkRsc(const std::string &s, int l)
 {
-	int size, countdown;
+	size_t size, countdown;
 
 	countdown = 0;
-	size = (int)s.size();
-	for (int i = 0; i < size; ++i)
+	size = s.size();
+	for (size_t i = 0; i < size; ++i)
 	{
 		if (countdown > 0)
 			--countdown;
@@ -453,11 +453,11 @@ void Text::_checkRsc(const std::string &s, int l)
 
 void Text::_checkOldMsg(const std::string &s, int l)
 {
-	int size, countdown;
+	size_t size, countdown;
 
 	countdown = 0;
-	size = (int)s.size();
-	for (int i = 0; i < size; ++i)
+	size = s.size();
+	for (size_t i = 0; i < size; ++i)
 	{
 		if (countdown > 0)
 			--countdown;
@@ -473,20 +473,20 @@ void Text::_checkOldMsg(const std::string &s, int l)
 
 void Text::_checkPlain(const std::string &s, int l)
 {
-	int size;
+	size_t size;
 
-	size = (int)s.size();
-	for (int i = 0; i < size; ++i)
+	size = s.size();
+	for (size_t i = 0; i < size; ++i)
 		if (s[i] == '\0')
 			throw Text::Error(xsprintf("NULL char in line %i", l));
 }
 
 void Text::_unEsc(std::string &s, Text::LineType t) const
 {
-	int size;
-	int i, j;
+	size_t size;
+	size_t i, j;
 
-	size = (int)s.size();
+	size = s.size();
 	for (j = i = 0; i < size; ++i)
 	{
 		if (s[i] != '\\')
@@ -661,10 +661,10 @@ void Text::_getBinaryLine(std::string &s, Text::LineType lineType)
 
 void Text::_spaceCharToBit(std::string &s) const
 {
-	int last;
-	int i, j;
+	size_t last;
+	size_t i, j;
 
-	last = (int)s.size() - 1;
+	last = s.size() - 1;
 	for (j = i = 0; i < last; ++i)
 	{
 		if ((byte)s[i] & 0x80)
@@ -682,7 +682,7 @@ void Text::_spaceCharToBit(std::string &s) const
 		}
 	}
 
-	if (i < (int)s.size())
+	if (i < s.size())
 		s[j++] = s[i];
 
 	s.resize(j);
@@ -691,11 +691,11 @@ void Text::_spaceCharToBit(std::string &s) const
 void Text::_spaceBitToChar(std::string &s) const
 {
 	std::string s2;
-	int size;
+	size_t size;
 
-	size = (int)s.size();
+	size = s.size();
 	s2.reserve(2 * size);
-	for (int i = 0; i < size; ++i)
+	for (size_t i = 0; i < size; ++i)
 	{
 		if ((byte)s[i] & 0x80)
 		{
