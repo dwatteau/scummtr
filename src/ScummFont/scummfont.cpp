@@ -295,8 +295,8 @@ static void loadBmp(const char *path)
 	if (!file.is_open())
 		throw std::runtime_error("Cannot open BMP file");
 
-	file->getLE16(w);
-	if (w != MKTAG2('M','B'))
+	file->getBE16(w);
+	if (w != MKTAG2('B','M'))
 		throw std::runtime_error("This is not a BMP file");
 
 	file.seekg(8, std::ios::cur);
