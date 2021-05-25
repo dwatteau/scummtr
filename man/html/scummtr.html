@@ -86,7 +86,7 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
     <p class="Pp">Some game resources are created with a short name and use a
         longer name later in the game. By default, this must be handled with
         manual &#x2018;<code class="Li">@</code>&#x2019; character padding, to
-        prevent game errors when the rename happens. The
+        prevent game errors when the resource is renamed. The
         <code class="Fl">-a</code> option just applies extra padding to all
         specified resource types to make things easier, at the cost of increased
         memory usage.</p>
@@ -196,8 +196,8 @@ Your text editor must not remove trailing spaces or empty lines, otherwise you
     accepted characters, it is not possible to know if a character is available
     without testing it in the game. See also <a class="Xr">scummfont(1)</a> in
     order to visualize or modify the included font tables.</p>
-<p class="Pp">Unicode files are not supported, and non-Roman languages need some
-    extra work for convenient use.</p>
+<p class="Pp">Unicode files are not supported, and non-Latin-script alphabets
+    need extra work for convenient use.</p>
 <p class="Pp">On case-sensitive file systems, game data files must currently
     follow the DOS convention of being all-uppercase to be properly
   detected.</p>
