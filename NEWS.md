@@ -19,11 +19,14 @@ Bugfixes:
 
 Incompatibilities with the previous version:
 
-- In some circumstances, uppercase option flags (e.g. 'O' for 'o') were tolerated, but this wasn't documented and wasn't implemented everywhere. This is now not accepted anymore.
-- ScummTR: a translation file created by an earlier version of ScummTR will not necessarily be compatible with this new version, unless the `-b` option was used. Is it recommended to make a backup, and create a new translation file again with the new ScummTR and its `-o` output option.
+- ScummTR: a translation file created by an earlier version of ScummTR will not necessarily be compatible with this new version. It is recommended to make a backup, import (`-i`) your current translation with the old ScummTR, and extract (`-o`) it again with the new ScummTR.
 - ScummTR: the default value for the `-f` option is now the `scummtr.txt` file, instead of `./text`.
 - ScummTR: ignore the `-h` and `-I` options, when the `-b` option is used.
 - ScummRP: the default value for the `-d` option is now the `DUMP` directory, instead of the current (`.`) directory.
+
+Known bugs:
+
+- ScummTR: the `-b` option may not correctly work with all games.
 
 Portability (for developers):
 
