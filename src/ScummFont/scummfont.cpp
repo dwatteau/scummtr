@@ -24,6 +24,11 @@
  * were never released.
  */
 
+// Some useful references:
+//
+// https://wiki.scummvm.org/index.php?title=SCUMM/Technical_Reference/Charset_resources
+// https://wiki.scummvm.org/index.php/SCUMM/Technical_Reference/SCUMM_6_resource_files#3.2.20_CHAR
+
 #include "common/types.hpp"
 #include "common/file.hpp"
 #include "common/toolbox.hpp"
@@ -126,8 +131,8 @@ static void getFontInfo(int32 &baseOffset, File &file, int &version, int &bpp, i
 	int32 tag;
 	int lineSpacing;
 
-	file->getLE32(tag);
-	baseOffset = (tag == MKTAG4('R','A','H','C')) ? 8 : 0;
+	file->getBE32(tag);
+	baseOffset = (tag == MKTAG4('C','H','A','R')) ? 8 : 0;
 
 	file.seekg(baseOffset + 0x04, std::ios::beg);
 	if (file.get() != 'c')
