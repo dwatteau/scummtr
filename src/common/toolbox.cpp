@@ -99,7 +99,7 @@ int xmkdir(const char *path)
 
 	ret = -1;
 	tmpPath = xstrdup(path);
-	prevChar = 0;
+	prevChar = '\0';
 	for (int i = 0; tmpPath[i] != '\0'; ++i)
 	{
 		if (tmpPath[i] == '/' && i > 0 && prevChar != '/')
