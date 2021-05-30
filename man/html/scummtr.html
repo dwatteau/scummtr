@@ -111,12 +111,12 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
         may not correctly work with all games.</p>
   </dd>
   <dt><a class="permalink" href="#c"><code class="Fl" id="c">-c</code></a></dt>
-  <dd>Translation file will be handled as Windows-1252, allowing easier use of
-      some Western European characters. Without <code class="Fl">-c</code>,
-      non-ASCII characters will be handled as escape sequences.
-    <p class="Pp">Note that SCUMM games only supported their own smaller subset
-        of the the official Windows-1252 table (which is mainly compatible with
-        ISO-8859-1).</p>
+  <dd>Ease the use of some Western European characters, by interpreting the
+      internal DOS code page as Windows-1252/ISO-8859-1. Without
+      <code class="Fl">-c</code>, non-ASCII characters will be handled as escape
+      sequences.
+    <p class="Pp">Note that you can only use the characters which are part of
+        the internal fonts.</p>
   </dd>
   <dt><a class="permalink" href="#f"><code class="Fl" id="f">-f</code></a>
     <var class="Ar">file</var></dt>
@@ -130,8 +130,8 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
   <dd>Include a small header at the start of each line, indicating the internal
       script context of the current string.</dd>
   <dt><a class="permalink" href="#H"><code class="Fl" id="H">-H</code></a></dt>
-  <dd>Represent extended characters as hexadecimal codes, instead of decimal
-      codes.</dd>
+  <dd>Represent escape sequences as hexadecimal codes, instead of decimal
+    codes.</dd>
   <dt><a class="permalink" href="#I"><code class="Fl" id="I">-I</code></a></dt>
   <dd>Include the current SCUMM instruction opcode, before each line.</dd>
   <dt><a class="permalink" href="#l"><code class="Fl" id="l">-l</code></a>
@@ -158,10 +158,9 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
   <dt><a class="permalink" href="#v_2"><code class="Fl" id="v_2">-v</code></a></dt>
   <dd>Verbose mode.</dd>
   <dt><a class="permalink" href="#w"><code class="Fl" id="w">-w</code></a></dt>
-  <dd>Translation file uses Windows-type newline characters (CRLF).
-    <p class="Pp">By default, <code class="Nm">scummtr</code> only uses
-        Unix-type newline characters (LF), which may be less compatible with
-        some text editors.</p>
+  <dd>Use Windows-type newline characters (CRLF).
+    <p class="Pp">By default, Unix-type newline characters (LF) are used, which
+        may be compatible with fewer text editors.</p>
   </dd>
 </dl>
 </section>
@@ -193,9 +192,10 @@ The <code class="Nm">scummtr</code> tool was written between 2003 and 2005 by
 Your text editor must not remove trailing spaces or empty lines, otherwise you
   will have import errors.
 <p class="Pp">Since each game and each variant of each game had its own list of
-    accepted characters, it is not possible to know if a character is available
-    without testing it in the game. See also <a class="Xr">scummfont(1)</a> in
-    order to visualize or modify the included font tables.</p>
+    accepted characters (usually a subset of an MS-DOS code page), it is not
+    possible to know if a character is available without testing it in the game.
+    See also <a class="Xr">scummfont(1)</a> in order to visualize or modify the
+    included font tables.</p>
 <p class="Pp">Unicode files are not supported, and non-Latin-script alphabets
     need extra work for convenient use.</p>
 <p class="Pp">On case-sensitive file systems, game data files must currently
