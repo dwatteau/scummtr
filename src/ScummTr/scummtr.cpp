@@ -425,7 +425,7 @@ bool ScummTr::_readOption(const char *arg, char *pendingParams)
 			ScummTr::_textOptions |= Text::TXT_CRLF;
 			break;
 		case 'c':
-			ScummTr::_textOptions |= Text::TXT_USECHARSET;
+			ScummTr::_textOptions |= Text::TXT_CHARSET1252;
 			break;
 		case 'b':
 			ScummTr::_textOptions |= Text::TXT_BINARY;

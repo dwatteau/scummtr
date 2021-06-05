@@ -55,7 +55,7 @@ public:
 		TXT_HEADER = 1 << 3,
 		TXT_OUT = 1 << 4,
 		TXT_OPCODE = 1 << 5,
-		TXT_USECHARSET = 1 << 6,
+		TXT_CHARSET1252 = 1 << 6,
 		TXT_RAW = 1 << 7
 	};
 	enum LineType
