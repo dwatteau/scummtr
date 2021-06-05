@@ -76,9 +76,12 @@ Note that this makes most other options inoperative.
 This flag may not correctly work with all games.
 .It Fl c
 Ease the use of some Western European characters, by interpreting
-the internal DOS code page as Windows-1252/ISO-8859-1.
-Without
-.Fl c ,
+the text as Windows-1252/ISO-8859-1.
+If neither
+.Fl c
+nor
+.Fl r
+is used,
 non-ASCII characters will be handled as escape sequences.
 .Pp
 Note that you can only use the characters which are part of the
@@ -116,6 +119,17 @@ The path to the game (default: current directory).
 .It Fl q
 Quiet mode.
 Suppress informational output.
+.It Fl r
+Raw text.
+Preserve the original text encoding of the game.
+.Pp
+This disables any text encoding conversion and escaping:
+the text is interpreted
+.Dq as-is ,
+and you must configure your text editor to recognize
+its encoding (usually an older MS-DOS code page).
+.Pp
+This can be useful for languages not based on Western European characters.
 .It Fl v
 Verbose mode.
 .It Fl w
@@ -133,6 +147,11 @@ Windows-1252 file compatible with Microsoft Notepad, with added context:
 Import a new French translation into the game files:
 .Pp
 .Dl $ scummtr -cw -h -g monkey2 -p /path/to/MI2 -if mi2_fr.txt
+.Pp
+Extract the text of the Japanese version of Monkey Island 2 (FM-TOWNS)
+in Shift_JIS, from the current directory:
+.Pp
+.Dl $ scummtr -w -g monkey2 -r -of mi2_towns_jpn.txt
 .Pp
 Export the text of a German Zak McKracken V2 game, padding objects
 and verbs, and using default paths:

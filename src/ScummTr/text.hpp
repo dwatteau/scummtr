@@ -55,7 +55,8 @@ public:
 		TXT_HEADER = 1 << 3,
 		TXT_OUT = 1 << 4,
 		TXT_OPCODE = 1 << 5,
-		TXT_USECHARSET = 1 << 6
+		TXT_USECHARSET = 1 << 6,
+		TXT_RAW = 1 << 7
 	};
 	enum LineType
 	{
@@ -86,11 +87,12 @@ private:
 	int _lflfId;
 	uint32 _tag;
 	int _id;
-	bool _escaped;
+	bool _binary;
 	bool _crlf;
 	bool _header;
 	bool _hex;
 	bool _opcode;
+	bool _rawText;
 	const char *const _charset;
 	char _finalCharset[256];
 

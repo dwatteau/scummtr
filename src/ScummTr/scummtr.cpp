@@ -453,6 +453,9 @@ bool ScummTr::_readOption(const char *arg, char *pendingParams)
 		case 'q':
 			ScummRp::_infoSlots = INF_NULL; // intentionally not definitive
 			break;
+		case 'r':
+			ScummTr::_textOptions |= Text::TXT_RAW;
+			break;
 		case 'v':
 			ScummRp::_infoSlots |= INF_DETAIL;
 			break;
@@ -541,6 +544,7 @@ void ScummTr::_usage()
 // 	std::cout << " -O         " << "optimize for sequential access (with -i)\n";
 	std::cout << " -p path    " << "path to the game (default: current directory)\n";
 	std::cout << " -q         " << "quiet mode\n";
+	std::cout << " -r         " << "raw text (preserve original text encoding)\n";
 // 	std::cout << " -s         " << "slow mode (disable automatic -m or -O)\n";
 	std::cout << " -v         " << "verbose mode\n";
 // 	std::cout << " -V         " << "more verbose (lists blocks)\n";

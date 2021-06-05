@@ -111,10 +111,10 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
         may not correctly work with all games.</p>
   </dd>
   <dt><a class="permalink" href="#c"><code class="Fl" id="c">-c</code></a></dt>
-  <dd>Ease the use of some Western European characters, by interpreting the
-      internal DOS code page as Windows-1252/ISO-8859-1. Without
-      <code class="Fl">-c</code>, non-ASCII characters will be handled as escape
-      sequences.
+  <dd>Ease the use of some Western European characters, by interpreting the text
+      as Windows-1252/ISO-8859-1. If neither <code class="Fl">-c</code> nor
+      <code class="Fl">-r</code> is used, non-ASCII characters will be handled
+      as escape sequences.
     <p class="Pp">Note that you can only use the characters which are part of
         the internal fonts.</p>
   </dd>
@@ -155,6 +155,15 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
   <dd>The path to the game (default: current directory).</dd>
   <dt><a class="permalink" href="#q"><code class="Fl" id="q">-q</code></a></dt>
   <dd>Quiet mode. Suppress informational output.</dd>
+  <dt><a class="permalink" href="#r"><code class="Fl" id="r">-r</code></a></dt>
+  <dd>Raw text. Preserve the original text encoding of the game.
+    <p class="Pp">This disables any text encoding conversion and escaping: the
+        text is interpreted &#x201C;as-is&#x201D;, and you must configure your
+        text editor to recognize its encoding (usually an older MS-DOS code
+        page).</p>
+    <p class="Pp">This can be useful for languages not based on Western European
+        characters.</p>
+  </dd>
   <dt><a class="permalink" href="#v_2"><code class="Fl" id="v_2">-v</code></a></dt>
   <dd>Verbose mode.</dd>
   <dt><a class="permalink" href="#w"><code class="Fl" id="w">-w</code></a></dt>
@@ -175,6 +184,11 @@ Extract the text of the original Monkey Island 2 game to a Windows-1252 file
 <p class="Pp"></p>
 <div class="Bd Bd-indent"><code class="Li">$ scummtr -cw -h -g monkey2 -p
   /path/to/MI2 -if mi2_fr.txt</code></div>
+<p class="Pp">Extract the text of the Japanese version of Monkey Island 2
+    (FM-TOWNS) in Shift_JIS, from the current directory:</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent"><code class="Li">$ scummtr -w -g monkey2 -r -of
+  mi2_towns_jpn.txt</code></div>
 <p class="Pp">Export the text of a German Zak McKracken V2 game, padding objects
     and verbs, and using default paths:</p>
 <p class="Pp"></p>
