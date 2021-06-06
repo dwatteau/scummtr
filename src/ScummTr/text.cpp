@@ -296,8 +296,10 @@ void Text::_writeEscPlain(const std::string &s)
 
 void Text::_writeEscRsc(const std::string &s)
 {
+	bool func;
 	size_t size, countdown;
 
+	func = false;
 	countdown = 0;
 	size = s.size();
 	for (size_t i = 0; i < size; ++i)
@@ -307,15 +309,16 @@ void Text::_writeEscRsc(const std::string &s)
 			_writeEscChar((byte)s[i]);
 			--countdown;
 		}
-		else if ((byte)s[i] == 0xFF)
+		else if (func)
 		{
 			_writeEscChar((byte)s[i]);
-			countdown = 3;
+			countdown = Text::funcLen((byte)s[i]);
+			func = false;
 		}
-		else if ((byte)s[i] == 0xFE)
+		else if ((byte)s[i] == 0xFF || (byte)s[i] == 0xFE)
 		{
 			_writeEscChar((byte)s[i]);
-			countdown = 1;
+			func = true;
 		}
 		else
 		{
@@ -442,22 +445,33 @@ void Text::_checkMsg(const std::string &s, int l)
 void Text::_checkRsc(const std::string &s, int l)
 {
 	size_t size, countdown;
+	bool func;
 
+	func = false;
 	countdown = 0;
 	size = s.size();
 	for (size_t i = 0; i < size; ++i)
 	{
 		if (countdown > 0)
+		{
 			--countdown;
-		else if ((byte)s[i] == 0xFF)
-			countdown = 3;
-		else if ((byte)s[i] == 0xFE)
-			countdown = 1;
+		}
+		else if (func)
+		{
+			countdown = Text::funcLen((byte)s[i]);
+			func = false;
+		}
+		else if ((byte)s[i] == 0xFF || (byte)s[i] == 0xFE)
+		{
+			func = true;
+		}
 		else if (s[i] == '\0')
+		{
 			throw Text::Error(xsprintf("NULL char in line %i", l));
+		}
 	}
 
-	if (countdown > 0)
+	if (countdown > 0 || func)
 		throw Text::Error(xsprintf("Truncated function in line %i", l));
 }
 
@@ -598,10 +612,13 @@ int Text::getLengthRsc(FileHandle &f)
 	start = f->tellg(std::ios::beg);
 	while (!f->eof() && f->getByte(b) != 0)
 	{
-		if (b == 0xFF)
-			f->seekg(3, std::ios::cur);
-		else if (b == 0xFE)
-			f->seekg(1, std::ios::cur);
+		if (b == 0xFF || b == 0xFE)
+		{
+			int i;
+
+			i = Text::funcLen(f->getByte(b));
+			f->seekg(i, std::ios::cur);
+		}
 	}
 
 	return f->tellg(std::ios::beg) - start - 1;
@@ -624,13 +641,14 @@ int Text::getLengthMsg(FileHandle &f)
 {
 	byte b;
 	int32 start;
-	int i;
 
 	start = f->tellg(std::ios::beg);
 	while (!f->eof() && f->getByte(b) != 0)
 	{
 		if (b == 0xFF || b == 0xFE)
 		{
+			int i;
+
 			i = Text::funcLen(f->getByte(b));
 			f->seekg(i, std::ios::cur);
 		}
