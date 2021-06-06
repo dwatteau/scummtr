@@ -622,7 +622,7 @@ const GameDefinition ScummRp::_gameDef[] =
 	  3, 0x00, 0x00, GTCFMT_16MIX32, BFMT_SHORTTAG, 6, GF_FMTOWNS },
 	{ "loomcd", "Loom (VGA)", "000.LFL", "DISK%.2u.LEC", GID_LOOM,
 	  4, 0x00, 0x69, GTCFMT_16MIX32, BFMT_SHORTTAG, 6, GF_NULL },
-	{ "monkey", "The Secret of Monkey Island (EGA)", "000.LFL", "DISK%.2u.LEC", GID_MONKEY,
+	{ "monkey", "The Secret of Monkey Island (Floppy EGA/VGA)", "000.LFL", "DISK%.2u.LEC", GID_MONKEY,
 	  4, 0x00, 0x69, GTCFMT_16MIX32, BFMT_SHORTTAG, 6, GF_NULL },
 	{ "monkeycd", "The Secret of Monkey Island (CD)", "MONKEY.000", "MONKEY.%.3u", GID_MONKEY,
 	  5, 0x69, 0x69, GTCFMT_16SEP32, BFMT_LONGTAG, 8, GF_NULL },
