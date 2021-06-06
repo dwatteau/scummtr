@@ -243,7 +243,7 @@ void Text::_writeChar(byte b)
 
 	c = (_rawText) ? (char)b : _charset[b];
 
-	if (!_rawText && c == '\0')
+	if ((!_rawText && c == '\0') || (_rawText && b < 0x20))
 		_writeEscChar(b);
 	else if (c == '\\')
 		_file.write("\\\\", 2);

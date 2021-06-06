@@ -158,9 +158,10 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
   <dt><a class="permalink" href="#r"><code class="Fl" id="r">-r</code></a></dt>
   <dd>Raw text. Preserve the original text encoding of the game.
     <p class="Pp">This disables any text encoding conversion and escaping: the
-        text is interpreted &#x201C;as-is&#x201D;, and you must configure your
-        text editor to recognize its encoding (usually an older MS-DOS code
-        page).</p>
+        text is interpreted &#x201C;as-is&#x201D; (except for non-printable
+        ASCII characters and some internal SCUMM sequences, which remain
+        escaped), and you must configure your text editor to recognize the
+        intended encoding (usually an older MS-DOS code page).</p>
     <p class="Pp">This can be useful for languages not based on Western European
         characters.</p>
   </dd>

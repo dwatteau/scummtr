@@ -125,9 +125,11 @@ Preserve the original text encoding of the game.
 .Pp
 This disables any text encoding conversion and escaping:
 the text is interpreted
-.Dq as-is ,
+.Dq as-is
+(except for non-printable ASCII characters and some internal
+SCUMM sequences, which remain escaped),
 and you must configure your text editor to recognize
-its encoding (usually an older MS-DOS code page).
+the intended encoding (usually an older MS-DOS code page).
 .Pp
 This can be useful for languages not based on Western European characters.
 .It Fl v
