@@ -312,6 +312,11 @@ void Text::_writeEscRsc(const std::string &s)
 			_writeEscChar((byte)s[i]);
 			countdown = 3;
 		}
+		else if ((byte)s[i] == 0xFE)
+		{
+			_writeEscChar((byte)s[i]);
+			countdown = 1;
+		}
 		else
 		{
 			_writeChar((byte)s[i]);
@@ -446,6 +451,8 @@ void Text::_checkRsc(const std::string &s, int l)
 			--countdown;
 		else if ((byte)s[i] == 0xFF)
 			countdown = 3;
+		else if ((byte)s[i] == 0xFE)
+			countdown = 1;
 		else if (s[i] == '\0')
 			throw Text::Error(xsprintf("NULL char in line %i", l));
 	}
@@ -590,8 +597,12 @@ int Text::getLengthRsc(FileHandle &f)
 
 	start = f->tellg(std::ios::beg);
 	while (!f->eof() && f->getByte(b) != 0)
+	{
 		if (b == 0xFF)
 			f->seekg(3, std::ios::cur);
+		else if (b == 0xFE)
+			f->seekg(1, std::ios::cur);
+	}
 
 	return f->tellg(std::ios::beg) - start - 1;
 }
