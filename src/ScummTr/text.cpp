@@ -159,10 +159,11 @@ const char *const Text::CHARSETS[] =
 Text::Text(const char *path, int flags, Text::Charset charset) :
     _file(path, (flags & Text::TXT_OUT) != 0 ? (std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc) : (std::ios::in | std::ios::binary)),
     _cur(0), _lineCount(0), _lflfId(-1), _tag(0), _id(-1),
-    _escaped((flags & Text::TXT_BINARY) == 0), _crlf((flags & Text::TXT_CRLF) != 0),
+    _binary((flags & Text::TXT_BINARY) != 0), _crlf((flags & Text::TXT_CRLF) != 0),
     _header((flags & Text::TXT_HEADER) != 0), _hex((flags & Text::TXT_HEXA) != 0),
     _opcode((flags & Text::TXT_OPCODE) != 0),
-    _charset(Text::CHARSETS[(flags & Text::TXT_USECHARSET) != 0 ? (int)charset : (int)Text::CHS_NULL])
+    _rawText((flags & Text::TXT_RAW) != 0),
+    _charset(Text::CHARSETS[(flags & Text::TXT_CHARSET1252) != 0 ? (int)charset : (int)Text::CHS_NULL])
 {
 	if (!_file.is_open())
 		throw File::IOError(xsprintf("Cannot open %s", path));
@@ -193,11 +194,12 @@ const char *Text::info() const
 const char *Text::internalCommentHeader() const
 {
 	const char *eol = (_crlf) ? "\r\n" : "\n";
+	const char *encoding = (_rawText) ? "RAW" : "Windows-1252/ISO-8859-1 (\xa1""caf\xe9-pi\xf1""ata Stra\xdf""e!)";
 
 	return xsprintf(
 	    ";; ScummTR note: every line starting with this prefix is ignored%s"
-	    ";; ScummTR note: file encoding is Windows-1252/ISO-8859-1 (\xa1""caf\xe9-pi\xf1""ata Stra\xdf""e!)%s",
-	    eol, eol);
+	    ";; ScummTR note: file encoding is %s%s",
+	    eol, encoding, eol);
 }
 
 int32 Text::lineNumber() const
@@ -239,8 +241,9 @@ void Text::_writeChar(byte b)
 {
 	char c;
 
-	c = _charset[b];
-	if (c == '\0')
+	c = (_rawText) ? (char)b : _charset[b];
+
+	if ((!_rawText && c == '\0') || (_rawText && b < 0x20))
 		_writeEscChar(b);
 	else if (c == '\\')
 		_file.write("\\\\", 2);
@@ -308,6 +311,11 @@ void Text::_writeEscRsc(const std::string &s)
 		{
 			_writeEscChar((byte)s[i]);
 			countdown = 3;
+		}
+		else if ((byte)s[i] == 0xFE)
+		{
+			_writeEscChar((byte)s[i]);
+			countdown = 1;
 		}
 		else
 		{
@@ -443,6 +451,8 @@ void Text::_checkRsc(const std::string &s, int l)
 			--countdown;
 		else if ((byte)s[i] == 0xFF)
 			countdown = 3;
+		else if ((byte)s[i] == 0xFE)
+			countdown = 1;
 		else if (s[i] == '\0')
 			throw Text::Error(xsprintf("NULL char in line %i", l));
 	}
@@ -491,7 +501,10 @@ void Text::_unEsc(std::string &s, Text::LineType t) const
 	{
 		if (s[i] != '\\')
 		{
-			s[j++] = _finalCharset[(byte)s[i]];
+			if (_rawText)
+				s[j++] = (char)(byte)s[i];
+			else
+				s[j++] = _finalCharset[(byte)s[i]];
 		}
 		else
 		{
@@ -584,8 +597,12 @@ int Text::getLengthRsc(FileHandle &f)
 
 	start = f->tellg(std::ios::beg);
 	while (!f->eof() && f->getByte(b) != 0)
+	{
 		if (b == 0xFF)
 			f->seekg(3, std::ios::cur);
+		else if (b == 0xFE)
+			f->seekg(1, std::ios::cur);
+	}
 
 	return f->tellg(std::ios::beg) - start - 1;
 }
@@ -722,7 +739,11 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 	}
 
 	_file.seekg(_cur, std::ios::beg);
-	if (_escaped)
+	if (_binary)
+	{
+		_getBinaryLine(s, lineType);
+	}
+	else
 	{
 		_file.getline(s, '\n');
 
@@ -753,10 +774,6 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 
 		_unEsc(s, lineType);
 	}
-	else
-	{
-		_getBinaryLine(s, lineType);
-	}
 
 	if (s.size() == 0)
 		throw Text::Error(xsprintf("Empty lines are forbidden (line %i)", _lineCount));
@@ -772,7 +789,7 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 
 void Text::addExportHeaders()
 {
-	if (_escaped)
+	if (!_binary)
 		_file.write(internalCommentHeader());
 }
 
@@ -786,7 +803,12 @@ void Text::addLine(std::string s, Text::LineType lineType, int op)
 
 	_file.seekp(0, std::ios::end);
 
-	if (_escaped)
+	if (_binary)
+	{
+		_file.write(s);
+		_file->putByte((byte)0);
+	}
+	else
 	{
 		if (_header)
 			_file.write(info());
@@ -800,11 +822,6 @@ void Text::addLine(std::string s, Text::LineType lineType, int op)
 		}
 
 		_writeEsc(s, lineType);
-	}
-	else
-	{
-		_file.write(s);
-		_file->putByte((byte)0);
 	}
 }
 
