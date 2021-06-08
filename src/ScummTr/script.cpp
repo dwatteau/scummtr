@@ -515,8 +515,6 @@ void Script::_opv67()
 		_getWord();
 		break;
 	case 0x5C: // jumpTrue
-		_eatJump();
-		break;
 	case 0x5D: // jumpFalse
 		_eatJump();
 		break;
@@ -760,7 +758,6 @@ void Script::_opv67()
 			_eatString(Text::LT_RSC, mainOpcode);
 			break;
 		case 208:
-			break;
 		case 212:
 			break;
 		default:
@@ -792,8 +789,6 @@ void Script::_opv67()
 		case 171:
 			break;
 		case 226:
-			_getWord();
-			break;
 		case 232:
 			_getWord();
 			break;
@@ -837,7 +832,6 @@ void Script::_opv67()
 		case 0x45:
 		case 0x47:
 		case 0x48:
-			break;
 		case 0x4A:
 			break;
 		case 0x4B:
@@ -939,8 +933,6 @@ void Script::_opv67()
 		switch (_getByte())
 		{
 		case 197:
-			_getWord();
-			break;
 		case 202:
 			_getWord();
 			break;
@@ -949,7 +941,6 @@ void Script::_opv67()
 		}
 		throw Script::ParseError(xsprintf("unknown%.2X", opcode));
 	case 0xEC: // getActorLayer
-		break;
 	case 0xED: // getObjectNewDir
 		break;
 	case 0xFA: // unknownFA
@@ -1379,8 +1370,6 @@ void Script::_opv12()
 		break;
 	case 0x3B: // waitForActor
 	case 0xBB: // waitForActor
-		_eatByteOrVar(opcode & 0x80);
-		break;
 	case 0x3C: // stopSound
 	case 0xBC: // stopSound
 		_eatByteOrVar(opcode & 0x80);
@@ -1586,9 +1575,6 @@ void Script::_opv12()
 		break;
 	case 0x7B: // getActorWalkBox
 	case 0xFB: // getActorWalkBox
-		_eatVar();
-		_eatByteOrVar(opcode & 0x80);
-		break;
 	case 0x7C: // isSoundRunning
 	case 0xFC: // isSoundRunning
 		_eatVar();
@@ -1600,7 +1586,6 @@ void Script::_opv12()
 		_eatJump();
 		break;
 	case 0x80: // breakHere
-		break;
 	case 0x98: // restart
 		break;
 	case 0xA8: // notEqualZero
@@ -1899,8 +1884,6 @@ void Script::_opv345(int r)
 				switch (opcode & 0x1F)
 				{
 				case 0x00:
-					_eatByteOrVar(opcode & 0x80);
-					break;
 				case 0x01:
 					_eatByteOrVar(opcode & 0x80);
 					break;
@@ -1909,8 +1892,6 @@ void Script::_opv345(int r)
 					_eatByteOrVar(opcode & 0x40);
 					break;
 				case 0x03:
-					_eatByteOrVar(opcode & 0x80);
-					break;
 				case 0x04:
 					_eatByteOrVar(opcode & 0x80);
 					break;
@@ -1983,8 +1964,6 @@ void Script::_opv345(int r)
 				case 0x15:
 					break;
 				case 0x16:
-					_eatByteOrVar(opcode & 0x80);
-					break;
 				case 0x17:
 					_eatByteOrVar(opcode & 0x80);
 					break;
@@ -2082,9 +2061,6 @@ void Script::_opv345(int r)
 		break;
 	case 0x1A: // move
 	case 0x9A: // move
-		_eatVar();
-		_eatWordOrVar(opcode & 0x80);
-		break;
 	case 0x1B: // multiply
 	case 0x9B: // multiply
 		_eatVar();
@@ -2229,8 +2205,6 @@ void Script::_opv345(int r)
 			_eatByteOrVar(opcode & 0x20);
 			break;
 		case 0x0C:
-			_eatByteOrVar(opcode & 0x80);
-			break;
 		case 0x0D:
 			_eatByteOrVar(opcode & 0x80);
 			break;
@@ -2281,13 +2255,7 @@ void Script::_opv345(int r)
 		switch (opcode & 0x1F)
 		{
 		case 0x01:
-			_eatByteOrVar(opcode & 0x80);
-			_eatByteOrVar(opcode & 0x40);
-			break;
 		case 0x02:
-			_eatByteOrVar(opcode & 0x80);
-			_eatByteOrVar(opcode & 0x40);
-			break;
 		case 0x03:
 			_eatByteOrVar(opcode & 0x80);
 			_eatByteOrVar(opcode & 0x40);
@@ -2400,13 +2368,6 @@ void Script::_opv345(int r)
 			_eatWordOrVar(opcode & 0x80);
 			break;
 		case 0x0B:
-			_eatWordOrVar(opcode & 0x80);
-			_eatWordOrVar(opcode & 0x40);
-			_eatWordOrVar(opcode & 0x20);
-			opcode = _getByte();
-			_eatByteOrVar(opcode & 0x80);
-			_eatByteOrVar(opcode & 0x40);
-			break;
 		case 0x0C:
 			_eatWordOrVar(opcode & 0x80);
 			_eatWordOrVar(opcode & 0x40);
@@ -2416,9 +2377,6 @@ void Script::_opv345(int r)
 			_eatByteOrVar(opcode & 0x40);
 			break;
 		case 0x0D:
-			_eatByteOrVar(opcode & 0x80);
-			_eatString(Text::LT_PLAIN, mainOpcode);
-			break;
 		case 0x0E:
 			_eatByteOrVar(opcode & 0x80);
 			_eatString(Text::LT_PLAIN, mainOpcode);
@@ -2623,8 +2581,6 @@ void Script::_opv345(int r)
 		break;
 	case 0x60: // freezeScripts
 	case 0xE0: // freezeScripts
-		_eatByteOrVar(opcode & 0x80);
-		break;
 	case 0x62: // stopScript
 	case 0xE2: // stopScript
 		_eatByteOrVar(opcode & 0x80);
@@ -2641,9 +2597,6 @@ void Script::_opv345(int r)
 		break;
 	case 0x67: // getStringWidth
 	case 0xE7: // getStringWidth
-		_eatVar();
-		_eatByteOrVar(opcode & 0x80);
-		break;
 	case 0x68: // isScriptRunning
 	case 0xE8: // isScriptRunning
 		_eatVar();
@@ -2707,8 +2660,6 @@ void Script::_opv345(int r)
 					}
 					break;
 				case 0x03:
-					_eatByteOrVar(opcode & 0x80);
-					break;
 				case 0x04:
 					_eatByteOrVar(opcode & 0x80);
 					break;
@@ -2803,7 +2754,6 @@ void Script::_opv345(int r)
 				_eatString(Text::LT_MSG, mainOpcode); // according to Zak256.
 				break;
 			case 0x04:
-				break;
 			case 0x1F:
 				break;
 			default:
