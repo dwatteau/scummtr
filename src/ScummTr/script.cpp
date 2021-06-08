@@ -1668,7 +1668,9 @@ void Script::_opv345(int r)
 			_eatByteOrVar(opcode & 0x80);
 		}
 		else
+		{
 			_eatByteOrVar(opcode & 0x80);
+		}
 		break;
 	case 0x03: // getActorRoom
 	case 0x83: // getActorRoom
@@ -1771,9 +1773,11 @@ void Script::_opv345(int r)
 		opcode = _getByte();
 		if (opcode != 0x11)
 			_eatByteOrVar(opcode & 0x80);
+
 		if (!(ScummRp::game.features & GF_FMTOWNS))
 			if ((opcode & 0x3F) != (opcode & 0x1F))
 				throw Script::ParseError("resourceRoutines");
+
 		switch (opcode & 0x3F)
 		{
 		case 0x01:
@@ -2066,7 +2070,9 @@ void Script::_opv345(int r)
 	case 0xD9: // doSentence
 	case 0xF9: // doSentence
 		if (!(opcode & 0x80) && _peekByte() == 0xFE)
+		{
 			_getByte();
+		}
 		else
 		{
 			_eatByteOrVar(opcode & 0x80);
@@ -2235,7 +2241,9 @@ void Script::_opv345(int r)
 				_eatByteOrVar(opcode & 0x40);
 			}
 			else
+			{
 				_eatArgList();
+			}
 			break;
 		default:
 			throw Script::ParseError("cursorCommand");
