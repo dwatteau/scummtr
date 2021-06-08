@@ -1755,17 +1755,8 @@ void Script::_opv345(int r)
 	case 0xAA: // startScript
 	case 0xCA: // startScript
 	case 0xEA: // startScript
-		{
-#ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE_DEBUG
-			int i = _eatByteOrVar(opcode & 0x80);
-			_eatArgList();
-			if (i == 66)
-				std::cout << "ahoy" << std::endl;
-#else
-			_eatByteOrVar(opcode & 0x80);
-			_eatArgList();
-#endif
-		}
+		_eatByteOrVar(opcode & 0x80);
+		_eatArgList();
 		break;
 	case 0x0B: // getVerbEntrypoint
 	case 0x4B: // getVerbEntrypoint
@@ -2095,37 +2086,7 @@ void Script::_opv345(int r)
 		break;
 	case 0x1C: // startSound
 	case 0x9C: // startSound
-		{
-#ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE_DEBUG
-			int i = _eatByteOrVar(opcode & 0x80);
-			switch (i)
-			{
-			case 29:
-			case 35:
-			case 38:
-			case 39:
-			case 40:
-			case 41:
-			case 42:
-			case 54:
-			case 66:
-			case 67:
-			case 69:
-			case 70:
-			case 75:
-			case 76:
-			case 77:
-			case 80:
-				std::cout << "startSound(" << i << ")" << std::endl;
-				break;
-			case -1:
-				std::cout << "startSound(?)" << std::endl;
-				break;
-			}
-#else
-			_eatByteOrVar(opcode & 0x80);
-#endif
-		}
+		_eatByteOrVar(opcode & 0x80);
 		break;
 	case 0x1D: // ifClassOfIs
 	case 0x9D: // ifClassOfIs
@@ -2532,37 +2493,7 @@ void Script::_opv345(int r)
 		break;
 	case 0x3C: // stopSound
 	case 0xBC: // stopSound
-		{
-#ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE_DEBUG
-			int i = _eatByteOrVar(opcode & 0x80);
-			switch (i)
-			{
-			case 29:
-			case 35:
-			case 38:
-			case 39:
-			case 40:
-			case 41:
-			case 42:
-			case 54:
-			case 66:
-			case 67:
-			case 69:
-			case 70:
-			case 75:
-			case 76:
-			case 77:
-			case 80:
-				std::cout << "stopSound(" << i << ")" << std::endl;
-				break;
-			case -1:
-				std::cout << "stopSound(?)" << std::endl;
-				break;
-			}
-#else
-			_eatByteOrVar(opcode & 0x80);
-#endif
-		}
+		_eatByteOrVar(opcode & 0x80);
 		break;
 	case 0x3D: // findInventory
 	case 0x7D: // findInventory
@@ -2588,17 +2519,8 @@ void Script::_opv345(int r)
 		break;
 	case 0x42: // chainScript
 	case 0xC2: // chainScript
-		{
-#ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE_DEBUG
-			int i = _eatByteOrVar(opcode & 0x80);
-			_eatArgList();
-			if (i == 66)
-				std::cout << "ahoy" << std::endl;
-#else
-			_eatByteOrVar(opcode & 0x80);
-			_eatArgList();
-#endif
-		}
+		_eatByteOrVar(opcode & 0x80);
+		_eatArgList();
 		break;
 	case 0x43: // getActorX
 	case 0xC3: // getActorX
@@ -2834,37 +2756,7 @@ void Script::_opv345(int r)
 	case 0x7C: // isSoundRunning
 	case 0xFC: // isSoundRunning
 		_eatVar();
-		{
-#ifdef SCUMMTR_CHANGED_JUST_AFTER_RELEASE_DEBUG
-			int i = _eatByteOrVar(opcode & 0x80);
-			switch (i)
-			{
-			case 29:
-			case 35:
-			case 38:
-			case 39:
-			case 40:
-			case 41:
-			case 42:
-			case 54:
-			case 66:
-			case 67:
-			case 69:
-			case 70:
-			case 75:
-			case 76:
-			case 77:
-			case 80:
-				std::cout << "isSoundRunning(" << i << ")" << std::endl;
-				break;
-			case -1:
-				std::cout << "isSoundRunning(?)" << std::endl;
-				break;
-			}
-#else
-			_eatByteOrVar(opcode & 0x80);
-#endif
-		}
+		_eatByteOrVar(opcode & 0x80);
 		break;
 	case 0x80: // breakHere
 		break;
