@@ -379,6 +379,9 @@ int ScummTr::main(int argc, const char **argv)
 		ScummTr::_textOptions |= Text::TXT_OUT;
 	}
 
+	if (ScummTr::_textOptions & Text::TXT_BINARY)
+		ScummIO::warning("the -b option doesn't work reliably with all games");
+
 	if (ScummRp::_game.version < 4)
 		ScummTr::_processGameFilesV123();
 	else
