@@ -24,6 +24,16 @@ _deps
 *.obj
 *.suo
 tags
+# IDE files
+.idea*
+.metadata
+*.njsproj
+.project
+*.properties
+.settings
+*.sln*
+.vscode*
+.vs
 # CMake build stuff
 build/
 *.cmake
