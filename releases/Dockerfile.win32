@@ -1,5 +1,6 @@
 # Win32 build, with best-effort support for Windows XP (thus, using the
-# older 5.0.1 version of Mingw-w64 on Debian 9 is intentional).
+# older 5.0.1 version of Mingw-w64 on Debian 9 is intentional).  Also
+# uses CMake 3.7.2.
 
 FROM debian:9.13-slim
 

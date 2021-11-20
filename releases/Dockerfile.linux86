@@ -1,5 +1,7 @@
 # Linux x86 and x86-64 builds, with glibc 2.12 and g++ 4.4 for maximum
-# compatibility.
+# compatibility.  Also uses CMake 3.6.1.
+#
+# note: this Dockerfile requires a Linux kernel with vsyscall=emulate
 
 FROM centos:6.10
 
