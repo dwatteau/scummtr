@@ -1,1 +1,7 @@
-Dockerfile.* diff linguist-language=Dockerfile gitlab-language=docker
+Dockerfile.* diff text eol=lf linguist-language=Dockerfile gitlab-language=docker
+CMakeLists.txt text eol=lf
+*.1 text eol=lf
+*.cpp text eol=lf
+*.hpp text eol=lf
+*.md text eol=lf
+*.sh text eol=lf
