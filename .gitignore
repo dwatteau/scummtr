@@ -41,6 +41,7 @@ CMakeCache.txt
 CMakeFiles/
 CMakeScripts
 compile_commands.json
+CMakeSettings.json
 Testing
 # Test files. Take care of the .txt case...
 *.0*
