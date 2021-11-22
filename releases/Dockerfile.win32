@@ -5,7 +5,7 @@
 FROM debian:9.13-slim
 
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends cmake make mingw-w64 \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cmake make mingw-w64 \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /scummtr/project /scummtr/build /scummtr/output
