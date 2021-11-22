@@ -51,11 +51,11 @@ public:
 
 public:
 	TextBlock();
-	virtual ~TextBlock() = 0;
+	~TextBlock() override = 0;
 
 public:
 	TextBlock(const TreeBlock &block);
-	virtual TextBlock &operator=(const TreeBlock &block);
+	TextBlock &operator=(const TreeBlock &block) override;
 };
 
 /*
@@ -68,13 +68,13 @@ protected:
 	Script *_script;
 
 public:
-	virtual void importText(Text &input);
-	virtual void exportText(Text &output, bool pad = false);
-	virtual void getRscNameLimits();
+	void importText(Text &input) override;
+	void exportText(Text &output, bool pad = false) override;
+	void getRscNameLimits() override;
 
 public:
 	ScriptBlock(int32 subHeaderSize = 0);
-	virtual ~ScriptBlock();
+	~ScriptBlock() override;
 
 private: // Not copiable
 	ScriptBlock(const ScriptBlock &);
@@ -82,7 +82,7 @@ private: // Not copiable
 
 public: // TreeBlock part still copiable
 	ScriptBlock(const TreeBlock &block, int32 subHeaderSize = 0);
-	virtual ScriptBlock &operator=(const TreeBlock &block);
+	ScriptBlock &operator=(const TreeBlock &block) override;
 };
 
 /*
@@ -92,13 +92,13 @@ public: // TreeBlock part still copiable
 class ObjectNameBlock : public TextBlock
 {
 public:
-	virtual void importText(Text &input);
-	virtual void exportText(Text &output, bool pad = false);
-	virtual void getRscNameLimits();
+	void importText(Text &input) override;
+	void exportText(Text &output, bool pad = false) override;
+	void getRscNameLimits() override;
 
 public:
 	ObjectNameBlock();
-	virtual ~ObjectNameBlock();
+	~ObjectNameBlock() override;
 
 private: // Not copiable
 	ObjectNameBlock(const ObjectNameBlock &);
@@ -106,7 +106,7 @@ private: // Not copiable
 
 public: // TreeBlock part still copiable
 	ObjectNameBlock(const TreeBlock &block);
-	virtual ObjectNameBlock &operator=(const TreeBlock &block);
+	ObjectNameBlock &operator=(const TreeBlock &block) override;
 };
 
 /*
@@ -135,13 +135,13 @@ protected:
 	virtual void _importText(Text &input, int32 oldSize, int32 scriptOffset);
 
 public:
-	virtual void importText(Text &input);
-	virtual void exportText(Text &output, bool pad = false);
-	virtual void getRscNameLimits();
+	void importText(Text &input) override;
+	void exportText(Text &output, bool pad = false) override;
+	void getRscNameLimits() override;
 
 public:
 	ObjectCodeBlock();
-	virtual ~ObjectCodeBlock();
+	~ObjectCodeBlock() override;
 
 private: // Not copiable
 	ObjectCodeBlock(const ObjectCodeBlock &);
@@ -149,7 +149,7 @@ private: // Not copiable
 
 public: // TreeBlock part still copiable
 	ObjectCodeBlock(const TreeBlock &block);
-	virtual ObjectCodeBlock &operator=(const TreeBlock &block);
+	ObjectCodeBlock &operator=(const TreeBlock &block) override;
 };
 
 /*
@@ -159,19 +159,19 @@ public: // TreeBlock part still copiable
 class OldObjectCodeBlock : public ObjectCodeBlock
 {
 protected:
-	virtual void _listVerbs(std::list<int32> &l, int32 scriptOffset);
-	virtual void _updateVerbs(const std::list<int32> &l, int32 scriptOffset, int n);
-	virtual int32 _findScriptOffset();
+	void _listVerbs(std::list<int32> &l, int32 scriptOffset) override;
+	void _updateVerbs(const std::list<int32> &l, int32 scriptOffset, int n) override;
+	int32 _findScriptOffset() override;
 	template <int I> void _exportName(Text &output, bool pad = false);
 	template <int I> void _importName(Text &input, int32 &scriptOffset);
 public:
-	virtual void importText(Text &input);
-	virtual void exportText(Text &output, bool pad = false);
-	virtual void getRscNameLimits();
+	void importText(Text &input) override;
+	void exportText(Text &output, bool pad = false) override;
+	void getRscNameLimits() override;
 
 public:
 	OldObjectCodeBlock();
-	virtual ~OldObjectCodeBlock();
+	~OldObjectCodeBlock() override;
 
 private: // Not copiable
 	OldObjectCodeBlock(const OldObjectCodeBlock &);
@@ -179,7 +179,7 @@ private: // Not copiable
 
 public: // TreeBlock part still copiable
 	OldObjectCodeBlock(const TreeBlock &block);
-	virtual OldObjectCodeBlock &operator=(const TreeBlock &block);
+	OldObjectCodeBlock &operator=(const TreeBlock &block) override;
 };
 
 /*
@@ -189,18 +189,18 @@ public: // TreeBlock part still copiable
 class OldObjectCodeBlockV1 : public OldObjectCodeBlock
 {
 protected:
-	virtual void _listVerbs(std::list<int32> &l, int32 scriptOffset);
-	virtual void _updateVerbs(const std::list<int32> &l, int32 scriptOffset, int n);
-	virtual int32 _findScriptOffset();
+	void _listVerbs(std::list<int32> &l, int32 scriptOffset) override;
+	void _updateVerbs(const std::list<int32> &l, int32 scriptOffset, int n) override;
+	int32 _findScriptOffset() override;
 
 public:
-	virtual void importText(Text &input);
-	virtual void exportText(Text &output, bool pad = false);
-	virtual void getRscNameLimits();
+	void importText(Text &input) override;
+	void exportText(Text &output, bool pad = false) override;
+	void getRscNameLimits() override;
 
 public:
 	OldObjectCodeBlockV1();
-	virtual ~OldObjectCodeBlockV1();
+	~OldObjectCodeBlockV1() override;
 
 private: // Not copiable
 	OldObjectCodeBlockV1(const OldObjectCodeBlockV1 &);
@@ -208,7 +208,7 @@ private: // Not copiable
 
 public: // TreeBlock part still copiable
 	OldObjectCodeBlockV1(const TreeBlock &block);
-	virtual OldObjectCodeBlockV1 &operator=(const TreeBlock &block);
+	OldObjectCodeBlockV1 &operator=(const TreeBlock &block) override;
 };
 
 #endif

@@ -70,8 +70,11 @@ typedef int int32;
 #define MKTAG2(a,b)     ((uint16)((b) | ((a) << 8)))
 #define MKTAG4(a,b,c,d) ((uint32)((d) | ((c) << 8) | ((b) << 16) | ((a) << 24)))
 
-#if __cplusplus < 201103L && !defined(nullptr) && !defined(_MSC_VER)
-#  define nullptr       0
+#if __cplusplus < 201103L && !defined(_MSC_VER)
+#  ifndef nullptr
+#    define nullptr       0
+#  endif
+#  define override
 #endif
 
 // note: assuming that your compiler optimizes this to a constant expression
