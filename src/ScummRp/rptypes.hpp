@@ -26,6 +26,8 @@
 #ifndef SCUMMRP_RPTYPES_HPP
 #define SCUMMRP_RPTYPES_HPP
 
+#include "common/types.hpp"
+
 enum BlockFormat
 {
 	BFMT_NULL = 0,

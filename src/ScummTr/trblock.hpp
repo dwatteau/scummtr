@@ -26,6 +26,7 @@
 #ifndef SCUMMTR_TRBLOCK_HPP
 #define SCUMMTR_TRBLOCK_HPP
 
+#include "common/types.hpp"
 #include "ScummRp/block.hpp"
 
 #include "text.hpp"

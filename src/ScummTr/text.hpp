@@ -26,6 +26,7 @@
 #ifndef SCUMMTR_TEXT_HPP
 #define SCUMMTR_TEXT_HPP
 
+#include "common/types.hpp"
 #include "common/file.hpp"
 
 #include <string>

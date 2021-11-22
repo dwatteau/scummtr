@@ -26,6 +26,7 @@
 #ifndef SCUMMRP_SCUMMRP_HPP
 #define SCUMMRP_SCUMMRP_HPP
 
+#include "common/types.hpp"
 #include "common/backup.hpp"
 
 #include "block.hpp"

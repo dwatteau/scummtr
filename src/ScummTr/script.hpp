@@ -26,6 +26,7 @@
 #ifndef SCUMMTR_SCRIPT_HPP
 #define SCUMMTR_SCRIPT_HPP
 
+#include "common/types.hpp"
 #include "common/file.hpp"
 #include "common/toolbox.hpp"
 
