@@ -12,7 +12,11 @@ if [ $# -ne 1 ]; then
 fi
 VERSION="$1"
 
+export BUILDKIT_PROGRESS=plain
+
 for builder in linux86 win32 ; do
+	echo "===> Building for $builder"
+
 	if [ "$builder" = "linux86" ] && [ "$(uname -s)" = "Linux" ] && ! grep -q vsyscall /proc/self/maps ; then
 		echo "WARNING: Dockerfile.$builder requires a Linux kernel with vsyscall=emulate" >&2
 		echo "Without this, your build will likely fail with \"non-zero code: 139\" errors!" >&2
