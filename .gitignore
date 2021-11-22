@@ -45,10 +45,12 @@ CMakeSettings.json
 Testing
 # Test files. Take care of the .txt case...
 *.0*
-*.bat
+*.[bBaAtT]
 *.bmp
 CHAR_????
-*.LFL
+*.[eExXeE]
+*.[iImMsS]
+*.[lLfFlL]
 *.log
 *-new
 *-tmp
