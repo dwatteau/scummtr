@@ -3,7 +3,7 @@
 #
 # note: this Dockerfile requires a Linux kernel with vsyscall=emulate
 
-FROM centos:6.10
+FROM --platform=linux/amd64 centos:6.10
 
 # CentOS 6 is EOLd, so we need to use Vault mirrors
 RUN sed -i -e 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf \
