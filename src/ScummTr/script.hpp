@@ -66,7 +66,6 @@ private:
 	{
 		int32 offset;
 		int32 target;
-		bool valid;
 
 		JumpRef(int32 o, int32 t) : offset(o), target(t) { }
 		JumpRef() : offset(0), target(0) { }
