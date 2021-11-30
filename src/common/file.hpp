@@ -217,10 +217,10 @@ protected:
 	virtual void _setSize(std::streamsize newSize);
 
 public:
-	virtual FilePart *operator->() { return &_part; }
-	virtual FilePart &operator*() { return _part; }
-	virtual const FilePart *operator->() const { return &_part; }
-	virtual const FilePart &operator*() const { return _part; }
+	FilePart *operator->() override { return &_part; }
+	FilePart &operator*() override { return _part; }
+	const FilePart *operator->() const override { return &_part; }
+	const FilePart &operator*() const override { return _part; }
 	virtual void truncate(std::streamsize newSize);
 	virtual std::streamsize size() const;
 	virtual File &seekg(std::streamoff off, std::ios::seekdir dir);
@@ -266,10 +266,10 @@ public:
 		::delete _ptr;
 		_ptr = nullptr;
 	}
-	virtual FilePart *operator->() { return _ptr; }
-	virtual const FilePart *operator->() const { return _ptr; }
-	virtual FilePart &operator*() { return *_ptr; }
-	virtual const FilePart &operator*() const { return *_ptr; }
+	FilePart *operator->() override { return _ptr; }
+	const FilePart *operator->() const override { return _ptr; }
+	FilePart &operator*() override { return *_ptr; }
+	const FilePart &operator*() const override { return *_ptr; }
 	FilePartHandle &operator=(FilePart *p)
 	{
 		if (_ptr != nullptr) del();
@@ -303,23 +303,23 @@ protected:
 	std::streamsize _capacity;
 
 protected:
-	virtual void _zap();
+	void _zap() override;
 	virtual void _zapRAM();
 	virtual void _load();
 	virtual void _save();
 	virtual void _reallocAtLeast(std::streamsize sz);
 
 public:
-	virtual void open(const char *filename, std::ios::openmode mode = std::ios::in | std::ios::out | std::ios::binary);
-	virtual void close();
-	virtual File &read(char *s, std::streamsize n);
-	virtual File &write(const char *s, std::streamsize n);
-	virtual File &getline(std::string &s, char delim);
+	void open(const char *filename, std::ios::openmode mode = std::ios::in | std::ios::out | std::ios::binary) override;
+	void close() override;
+	File &read(char *s, std::streamsize n) override;
+	File &write(const char *s, std::streamsize n) override;
+	File &getline(std::string &s, char delim) override;
 
 public:
 	RAMFile();
 	explicit RAMFile(const char *filename, std::ios::openmode mode = std::ios::in | std::ios::out | std::ios::binary);
-	virtual ~RAMFile();
+	~RAMFile() override;
 
 private: // Not copiable
 	RAMFile(const RAMFile &);

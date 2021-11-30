@@ -104,7 +104,7 @@ public:
 		}
 		const std::string &file() { return _file; }
 		int32 offset() { return _offset; }
-		~InvalidDataFromGame() throw() { }
+		~InvalidDataFromGame() throw() override { }
 	};
 	class InvalidDataFromDump : public std::runtime_error
 	{
@@ -219,7 +219,7 @@ public:
 
 public:
 	TreeBlock();
-	virtual ~TreeBlock();
+	~TreeBlock() override;
 
 public:
 	TreeBlock(const TreeBlock &block);
@@ -300,18 +300,18 @@ protected:
 	int _LOFFOffset;
 
 protected:
-	virtual void _init();
-	virtual int _findSubblockId(TreeBlock &subblock) const;
-	virtual void _subblockUpdated(TreeBlock &subblock, int32 sizeDiff);
+	void _init() override;
+	int _findSubblockId(TreeBlock &subblock) const override;
+	void _subblockUpdated(TreeBlock &subblock, int32 sizeDiff) override;
 
 public:
-	virtual TreeBlock *nextBlock();
-	virtual bool nextBlock(TreeBlock &subblock);
-	virtual void firstBlock();
+	TreeBlock *nextBlock() override;
+	bool nextBlock(TreeBlock &subblock) override;
+	void firstBlock() override;
 
 public:
 	LECFPack();
-	virtual ~LECFPack();
+	~LECFPack() override;
 
 private: // Not copiable
 	LECFPack(const LECFPack &);
@@ -319,7 +319,7 @@ private: // Not copiable
 
 public: // TreeBlock part still copiable
 	LECFPack(const TreeBlock &block);
-	virtual LECFPack &operator=(const TreeBlock &block);
+	LECFPack &operator=(const TreeBlock &block) override;
 };
 
 /*
@@ -334,7 +334,7 @@ public:
 
 public:
 	GlobalTocBlock();
-	virtual ~GlobalTocBlock();
+	~GlobalTocBlock() override;
 
 private: // Not copiable
 	GlobalTocBlock(const GlobalTocBlock &);
@@ -348,12 +348,12 @@ private: // Not copiable
 class GlobalTocBlockV1 : public GlobalTocBlock
 {
 public:
-	virtual void exportToc(TableOfContent &toc);
-	virtual void importToc(TableOfContent &toc);
+	void exportToc(TableOfContent &toc) override;
+	void importToc(TableOfContent &toc) override;
 
 public:
 	GlobalTocBlockV1();
-	virtual ~GlobalTocBlockV1();
+	~GlobalTocBlockV1() override;
 
 private: // Not copiable
 	GlobalTocBlockV1(const GlobalTocBlockV1 &);
@@ -389,7 +389,7 @@ protected:
 public:
 	BlocksFile(const char *path, int opts, BackUp &bak, int id, uint32 tag, byte xorKey);
 	BlocksFile(const char *path, int opts, int id, uint32 tag, byte xorKey);
-	virtual ~BlocksFile();
+	~BlocksFile() override;
 
 private: // No default constructor
 	BlocksFile();
@@ -406,16 +406,16 @@ private: // Not copiable
 class LFLFPack : public TreeBlock, public RoomPack
 {
 protected:
-	virtual void _init();
-	virtual void _subblockUpdated(TreeBlock &subblock, int32 sizeDiff);
+	void _init() override;
+	void _subblockUpdated(TreeBlock &subblock, int32 sizeDiff) override;
 
 public:
-	virtual TreeBlock *nextBlock();
-	virtual bool nextBlock(TreeBlock &subblock);
+	TreeBlock *nextBlock() override;
+	bool nextBlock(TreeBlock &subblock) override;
 
 public:
 	LFLFPack();
-	virtual ~LFLFPack();
+	~LFLFPack() override;
 
 private: // Not copiable
 	LFLFPack(const LFLFPack &);
@@ -423,7 +423,7 @@ private: // Not copiable
 
 public: // TreeBlock part still copiable
 	LFLFPack(const TreeBlock &block);
-	virtual LFLFPack &operator=(const TreeBlock &block);
+	LFLFPack &operator=(const TreeBlock &block) override;
 };
 
 /*
@@ -433,16 +433,16 @@ public: // TreeBlock part still copiable
 class LFLFile : public BlocksFile, public RoomPack
 {
 protected:
-	virtual void _subblockUpdated(TreeBlock &subblock, int32 sizeDiff);
+	void _subblockUpdated(TreeBlock &subblock, int32 sizeDiff) override;
 
 public:
-	virtual TreeBlock *nextBlock();
-	virtual bool nextBlock(TreeBlock &subblock);
+	TreeBlock *nextBlock() override;
+	bool nextBlock(TreeBlock &subblock) override;
 	template <class T> TreeBlock *_nextLFLSubblock();
 public:
 	LFLFile(const char *path, int opts, BackUp &bak, int id, byte xorKey);
 	LFLFile(const char *path, int opts, int id, byte xorKey);
-	virtual ~LFLFile();
+	~LFLFile() override;
 
 private: // No default constructor
 	LFLFile();
@@ -462,17 +462,17 @@ protected:
 	std::vector<int32> _blocks;
 
 protected:
-	virtual void _moveLFLFRootBlockInToc(byte roomId, int32 minOffset, int32 n) const;
+	void _moveLFLFRootBlockInToc(byte roomId, int32 minOffset, int32 n) const override;
 	virtual uint32 _tags(int i) const = 0;
-	virtual void _subblockUpdated(TreeBlock &subblock, int32 sizeDiff);
+	void _subblockUpdated(TreeBlock &subblock, int32 sizeDiff) override;
 
 public:
-	virtual bool nextBlock(TreeBlock &subblock);
+	bool nextBlock(TreeBlock &subblock) override;
 
 public:
 	OldLFLFile(const char *path, int opts, BackUp &bak, int id, byte xorKey);
 	OldLFLFile(const char *path, int opts, int id, byte xorKey);
-	virtual ~OldLFLFile() = 0;
+	~OldLFLFile() override = 0;
 };
 
 /*
@@ -485,15 +485,15 @@ protected:
 	static const uint32 TAGS[];
 
 protected:
-	virtual uint32 _tags(int i) const { return OldLFLFileV1::TAGS[i]; }
+	uint32 _tags(int i) const override { return OldLFLFileV1::TAGS[i]; }
 
 public:
-	virtual TreeBlock *nextBlock();
+	TreeBlock *nextBlock() override;
 
 public:
 	OldLFLFileV1(const char *path, int opts, BackUp &bak, int id, byte xorKey);
 	OldLFLFileV1(const char *path, int opts, int id, byte xorKey);
-	virtual ~OldLFLFileV1();
+	~OldLFLFileV1() override;
 
 private: // No default constructor
 	OldLFLFileV1();
@@ -513,15 +513,15 @@ protected:
 	static const uint32 TAGS[];
 
 protected:
-	virtual uint32 _tags(int i) const { return OldLFLFileV2::TAGS[i]; }
+	uint32 _tags(int i) const override { return OldLFLFileV2::TAGS[i]; }
 
 public:
-	virtual TreeBlock *nextBlock();
+	TreeBlock *nextBlock() override;
 
 public:
 	OldLFLFileV2(const char *path, int opts, BackUp &bak, int id, byte xorKey);
 	OldLFLFileV2(const char *path, int opts, int id, byte xorKey);
-	virtual ~OldLFLFileV2();
+	~OldLFLFileV2() override;
 
 private: // No default constructor
 	OldLFLFileV2();
@@ -541,15 +541,15 @@ protected:
 	static const uint32 TAGS[];
 
 protected:
-	virtual uint32 _tags(int i) const { return OldLFLFileV3::TAGS[i]; }
+	uint32 _tags(int i) const override { return OldLFLFileV3::TAGS[i]; }
 
 public:
-	virtual TreeBlock *nextBlock();
+	TreeBlock *nextBlock() override;
 
 public:
 	OldLFLFileV3(const char *path, int opts, BackUp &bak, int id, byte xorKey);
 	OldLFLFileV3(const char *path, int opts, int id, byte xorKey);
-	virtual ~OldLFLFileV3();
+	~OldLFLFileV3() override;
 
 private: // No default constructor
 	OldLFLFileV3();
@@ -566,13 +566,13 @@ private: // Not copiable
 class IndexFile : public BlocksFile
 {
 public:
-	virtual TreeBlock *nextBlock();
-	virtual bool nextBlock(TreeBlock &subblock);
+	TreeBlock *nextBlock() override;
+	bool nextBlock(TreeBlock &subblock) override;
 
 public:
 	IndexFile(const char *path, int opts, int id, byte xorKey);
 	IndexFile(const char *path, int opts, BackUp &bak, int id, byte xorKey);
-	virtual ~IndexFile();
+	~IndexFile() override;
 
 private: // No default constructor
 	IndexFile();
@@ -596,14 +596,14 @@ protected:
 	virtual size_t _sizeOfObjFlag() const = 0;
 
 public:
-	virtual void firstBlock();
-	virtual bool nextBlock(TreeBlock &subblock);
-	virtual TreeBlock *nextBlock();
+	void firstBlock() override;
+	bool nextBlock(TreeBlock &subblock) override;
+	TreeBlock *nextBlock() override;
 
 public:
 	OldIndexFile(const char *path, int opts, int id, byte xorKey);
 	OldIndexFile(const char *path, int opts, BackUp &bak, int id, byte xorKey);
-	virtual ~OldIndexFile() = 0;
+	~OldIndexFile() override = 0;
 };
 
 /*
@@ -618,17 +618,17 @@ protected:
 	static const int MM_SIZES[];
 
 protected:
-	virtual uint32 _tags(int i) const { return OldIndexFileV1::TAGS[i]; }
-	virtual size_t _sizeOfObjFlag() const { return sizeof(byte); }
+	uint32 _tags(int i) const override { return OldIndexFileV1::TAGS[i]; }
+	size_t _sizeOfObjFlag() const override { return sizeof(byte); }
 
 public:
-	virtual TreeBlock *nextBlock();
-	virtual bool nextBlock(TreeBlock &subblock);
+	TreeBlock *nextBlock() override;
+	bool nextBlock(TreeBlock &subblock) override;
 
 public:
 	OldIndexFileV1(const char *path, int opts, int id, byte xorKey);
 	OldIndexFileV1(const char *path, int opts, BackUp &bak, int id, byte xorKey);
-	virtual ~OldIndexFileV1();
+	~OldIndexFileV1() override;
 
 private: // No default constructor
 	OldIndexFileV1();
@@ -648,13 +648,13 @@ protected:
 	static const uint32 TAGS[];
 
 protected:
-	virtual uint32 _tags(int i) const { return OldIndexFileV2::TAGS[i]; }
-	virtual size_t _sizeOfObjFlag() const { return sizeof(byte); }
+	uint32 _tags(int i) const override { return OldIndexFileV2::TAGS[i]; }
+	size_t _sizeOfObjFlag() const override { return sizeof(byte); }
 
 public:
 	OldIndexFileV2(const char *path, int opts, int id, byte xorKey);
 	OldIndexFileV2(const char *path, int opts, BackUp &bak, int id, byte xorKey);
-	virtual ~OldIndexFileV2();
+	~OldIndexFileV2() override;
 
 private: // No default constructor
 	OldIndexFileV2();
@@ -674,13 +674,13 @@ protected:
 	static const uint32 TAGS[];
 
 protected:
-	virtual uint32 _tags(int i) const { return OldIndexFileV3::TAGS[i]; }
-	virtual size_t _sizeOfObjFlag() const { return sizeof(uint32); }
+	uint32 _tags(int i) const override { return OldIndexFileV3::TAGS[i]; }
+	size_t _sizeOfObjFlag() const override { return sizeof(uint32); }
 
 public:
 	OldIndexFileV3(const char *path, int opts, int id, byte xorKey);
 	OldIndexFileV3(const char *path, int opts, BackUp &bak, int id, byte xorKey);
-	virtual ~OldIndexFileV3();
+	~OldIndexFileV3() override;
 
 private: // No default constructor
 	OldIndexFileV3();
@@ -697,13 +697,13 @@ private: // Not copiable
 class RoomBlock : public TreeBlock, public Room
 {
 public:
-	virtual void firstBlock();
-	virtual TreeBlock *nextBlock();
-	virtual bool nextBlock(TreeBlock &subblock);
+	void firstBlock() override;
+	TreeBlock *nextBlock() override;
+	bool nextBlock(TreeBlock &subblock) override;
 
 public:
 	RoomBlock();
-	virtual ~RoomBlock();
+	~RoomBlock() override;
 
 private: // Not copiable
 	RoomBlock(const RoomBlock &);
@@ -711,7 +711,7 @@ private: // Not copiable
 
 public: // TreeBlock part still copiable
 	RoomBlock(const TreeBlock &block);
-	virtual RoomBlock &operator=(const TreeBlock &block);
+	RoomBlock &operator=(const TreeBlock &block) override;
 };
 
 /*
@@ -793,20 +793,20 @@ protected:
 	void _prepareBlockOO(TreeBlock &subblock, int32 offsetToOffset, int32 size, int type);
 	void _updateOffset(int32 offsetToOffset, int32 minOffset, int32 shift, uint32 subblockTag);
 	void _cleanup();
-	virtual void _subblockUpdated(TreeBlock &subblock, int32 sizeDiff);
+	void _subblockUpdated(TreeBlock &subblock, int32 sizeDiff) override;
 
 public:
-	virtual TreeBlock *nextBlock();
-	virtual bool nextBlock(TreeBlock &subblock);
-	virtual void firstBlock();
+	TreeBlock *nextBlock() override;
+	bool nextBlock(TreeBlock &subblock) override;
+	void firstBlock() override;
 
 public:
 	OldRoom();
-	virtual ~OldRoom() = 0;
+	~OldRoom() override = 0;
 
 public: // TreeBlock copy
 	OldRoom(const TreeBlock &block);
-	virtual OldRoom &operator=(const TreeBlock &block);
+	OldRoom &operator=(const TreeBlock &block) override;
 };
 
 /*
@@ -820,32 +820,32 @@ protected:
 	static const uint32 BMTAGS[];
 
 protected:
-	virtual uint32 _tags(int i) const { return OldRoomV1::TAGS[i]; }
-	virtual uint32 _bmTags(int i) const { return OldRoomV1::BMTAGS[i]; }
-	virtual int _oBMWidth() const { return 0x04; }
-	virtual int _oBMHeight() const { return 0x06; }
-	virtual int _ooBM() const { return 0x0A; }
-	virtual int _oObjNbr() const { return 0x14; }
-	virtual int _ooBX() const { return 0x15; }
-	virtual int _oNLSize() const { return 0x16; }
-	virtual int _oSLSize() const { return 0x17; }
-	virtual int _ooEX() const { return 0x18; }
-	virtual int _ooEN() const { return 0x1A; }
-	virtual int _oObjTOC() const { return 0x1C; }
-	virtual int _oOCId() const { return 0x04; }
-	virtual int _oOCWidth() const { return 0x09; }
-	virtual int _oOCHeight() const { return 0x0D; }
-	virtual int _bmNbr() const { return 5; }
-	virtual void _init();
-	virtual uint16 _getOISize(uint16 width, uint16 height, uint16 offset, bool &ambiguous);
-	virtual void _checkOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd);
-	virtual void _setBXOffset(uint16 o);
-	virtual uint16 _getBXOffset();
-	virtual void _getLSOffsets(std::vector<uint16> &lsOffset, byte objNbr, byte nlSize, byte slSize);
+	uint32 _tags(int i) const override { return OldRoomV1::TAGS[i]; }
+	uint32 _bmTags(int i) const override { return OldRoomV1::BMTAGS[i]; }
+	int _oBMWidth() const override { return 0x04; }
+	int _oBMHeight() const override { return 0x06; }
+	int _ooBM() const override { return 0x0A; }
+	int _oObjNbr() const override { return 0x14; }
+	int _ooBX() const override { return 0x15; }
+	int _oNLSize() const override { return 0x16; }
+	int _oSLSize() const override { return 0x17; }
+	int _ooEX() const override { return 0x18; }
+	int _ooEN() const override { return 0x1A; }
+	int _oObjTOC() const override { return 0x1C; }
+	int _oOCId() const override { return 0x04; }
+	int _oOCWidth() const override { return 0x09; }
+	int _oOCHeight() const override { return 0x0D; }
+	int _bmNbr() const override { return 5; }
+	void _init() override;
+	uint16 _getOISize(uint16 width, uint16 height, uint16 offset, bool &ambiguous) override;
+	void _checkOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd) override;
+	void _setBXOffset(uint16 o) override;
+	uint16 _getBXOffset() override;
+	void _getLSOffsets(std::vector<uint16> &lsOffset, byte objNbr, byte nlSize, byte slSize) override;
 
 public:
 	OldRoomV1();
-	virtual ~OldRoomV1();
+	~OldRoomV1() override;
 
 private: // Not copiable
 	OldRoomV1(const OldRoomV1 &);
@@ -853,7 +853,7 @@ private: // Not copiable
 
 public: // TreeBlock part still copiable
 	OldRoomV1(const TreeBlock &block);
-	virtual OldRoomV1 &operator=(const TreeBlock &block);
+	OldRoomV1 &operator=(const TreeBlock &block) override;
 };
 
 /*
@@ -867,32 +867,32 @@ protected:
 	static const uint32 BMTAGS[];
 
 protected:
-	virtual uint32 _tags(int i) const { return OldRoomV2::TAGS[i]; }
-	virtual uint32 _bmTags(int i) const { return OldRoomV2::BMTAGS[i]; }
-	virtual int _oBMWidth() const { return 0x04; }
-	virtual int _oBMHeight() const { return 0x06; }
-	virtual int _ooBM() const { return 0x0A; }
-	virtual int _oObjNbr() const { return 0x14; }
-	virtual int _ooBX() const { return 0x15; }
-	virtual int _oNLSize() const { return 0x16; }
-	virtual int _oSLSize() const { return 0x17; }
-	virtual int _ooEX() const { return 0x18; }
-	virtual int _ooEN() const { return 0x1A; }
-	virtual int _oObjTOC() const { return 0x1C; }
-	virtual int _oOCId() const { return 0x04; }
-	virtual int _oOCWidth() const { return 0x09; }
-	virtual int _oOCHeight() const { return 0x0D; }
-	virtual int _bmNbr() const { return 2; }
-	virtual void _init();
-	virtual uint16 _getOISize(uint16 width, uint16 height, uint16 offset, bool &ambiguous);
-	virtual void _checkOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd);
-	virtual void _setBXOffset(uint16 o);
-	virtual uint16 _getBXOffset();
-	virtual void _getLSOffsets(std::vector<uint16> &lsOffset, byte objNbr, byte nlSize, byte slSize);
+	uint32 _tags(int i) const override { return OldRoomV2::TAGS[i]; }
+	uint32 _bmTags(int i) const override { return OldRoomV2::BMTAGS[i]; }
+	int _oBMWidth() const override { return 0x04; }
+	int _oBMHeight() const override { return 0x06; }
+	int _ooBM() const override { return 0x0A; }
+	int _oObjNbr() const override { return 0x14; }
+	int _ooBX() const override { return 0x15; }
+	int _oNLSize() const override { return 0x16; }
+	int _oSLSize() const override { return 0x17; }
+	int _ooEX() const override { return 0x18; }
+	int _ooEN() const override { return 0x1A; }
+	int _oObjTOC() const override { return 0x1C; }
+	int _oOCId() const override { return 0x04; }
+	int _oOCWidth() const override { return 0x09; }
+	int _oOCHeight() const override { return 0x0D; }
+	int _bmNbr() const override { return 2; }
+	void _init() override;
+	uint16 _getOISize(uint16 width, uint16 height, uint16 offset, bool &ambiguous) override;
+	void _checkOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd) override;
+	void _setBXOffset(uint16 o) override;
+	uint16 _getBXOffset() override;
+	void _getLSOffsets(std::vector<uint16> &lsOffset, byte objNbr, byte nlSize, byte slSize) override;
 
 public:
 	OldRoomV2();
-	virtual ~OldRoomV2();
+	~OldRoomV2() override;
 
 private: // Not copiable
 	OldRoomV2(const OldRoomV2 &);
@@ -900,7 +900,7 @@ private: // Not copiable
 
 public: // TreeBlock part still copiable
 	OldRoomV2(const TreeBlock &block);
-	virtual OldRoomV2 &operator=(const TreeBlock &block);
+	OldRoomV2 &operator=(const TreeBlock &block) override;
 };
 
 /*
@@ -914,32 +914,32 @@ protected:
 	static const uint32 BMTAGS[];
 
 protected:
-	virtual uint32 _tags(int i) const { return OldRoomV3::TAGS[i]; }
-	virtual uint32 _bmTags(int i) const { return OldRoomV3::BMTAGS[i]; }
-	virtual int _oBMWidth() const { return 0x04; }
-	virtual int _oBMHeight() const { return 0x06; }
-	virtual int _ooBM() const { return 0x0A; }
-	virtual int _oObjNbr() const { return 0x14; }
-	virtual int _ooBX() const { return 0x15; }
-	virtual int _oNLSize() const { return 0x17; }
-	virtual int _oSLSize() const { return 0x18; }
-	virtual int _ooEX() const { return 0x19; }
-	virtual int _ooEN() const { return 0x1B; }
-	virtual int _oObjTOC() const { return 0x1D; }
-	virtual int _oOCId() const { return 0x04; }
-	virtual int _oOCWidth() const { return 0x09; }
-	virtual int _oOCHeight() const { return 0x0F; }
-	virtual int _bmNbr() const { return 2; }
-	virtual void _init();
-	virtual uint16 _getOISize(uint16 width, uint16 height, uint16 offset, bool &ambiguous);
-	virtual void _checkOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd);
-	virtual void _setBXOffset(uint16 o);
-	virtual uint16 _getBXOffset();
-	virtual void _getLSOffsets(std::vector<uint16> &lsOffset, byte objNbr, byte nlSize, byte slSize);
+	uint32 _tags(int i) const override { return OldRoomV3::TAGS[i]; }
+	uint32 _bmTags(int i) const override { return OldRoomV3::BMTAGS[i]; }
+	int _oBMWidth() const override { return 0x04; }
+	int _oBMHeight() const override { return 0x06; }
+	int _ooBM() const override { return 0x0A; }
+	int _oObjNbr() const override { return 0x14; }
+	int _ooBX() const override { return 0x15; }
+	int _oNLSize() const override { return 0x17; }
+	int _oSLSize() const override { return 0x18; }
+	int _ooEX() const override { return 0x19; }
+	int _ooEN() const override { return 0x1B; }
+	int _oObjTOC() const override { return 0x1D; }
+	int _oOCId() const override { return 0x04; }
+	int _oOCWidth() const override { return 0x09; }
+	int _oOCHeight() const override { return 0x0F; }
+	int _bmNbr() const override { return 2; }
+	void _init() override;
+	uint16 _getOISize(uint16 width, uint16 height, uint16 offset, bool &ambiguous) override;
+	void _checkOCSizes(const std::vector<uint16> &ocOffset, int32 ocEnd) override;
+	void _setBXOffset(uint16 o) override;
+	uint16 _getBXOffset() override;
+	void _getLSOffsets(std::vector<uint16> &lsOffset, byte objNbr, byte nlSize, byte slSize) override;
 
 public:
 	OldRoomV3();
-	virtual ~OldRoomV3();
+	~OldRoomV3() override;
 
 private: // Not copiable
 	OldRoomV3(const OldRoomV3 &);
@@ -947,7 +947,7 @@ private: // Not copiable
 
 public: // TreeBlock part still copiable
 	OldRoomV3(const TreeBlock &block);
-	virtual OldRoomV3 &operator=(const TreeBlock &block);
+	OldRoomV3 &operator=(const TreeBlock &block) override;
 };
 
 /*
@@ -956,7 +956,7 @@ public: // TreeBlock part still copiable
 
 class LeafBlock : public TreeBlock
 {
-	virtual int _findSubblockId(TreeBlock &) const
+	int _findSubblockId(TreeBlock &) const override
 	{
 		throw TreeBlock::ForbiddenMethod("LeafBlock::_findSubblockId: shouldn't be here");
 	}
@@ -964,36 +964,36 @@ class LeafBlock : public TreeBlock
 	{
 		throw TreeBlock::ForbiddenMethod("LeafBlock::_readSubblockHeader: shouldn't be here");
 	}
-	virtual bool _readNextSubblock(TreeBlock &)
+	bool _readNextSubblock(TreeBlock &) override
 	{
 		throw TreeBlock::ForbiddenMethod("LeafBlock::_readNextSubblock: shouldn't be here");
 	}
-	virtual void _subblockUpdated(TreeBlock &, int32)
+	void _subblockUpdated(TreeBlock &, int32) override
 	{
 		throw TreeBlock::ForbiddenMethod("LeafBlock::_subblockUpdated: shouldn't be here");
 	}
-	virtual void _adopt(TreeBlock &)
+	void _adopt(TreeBlock &) override
 	{
 		throw TreeBlock::ForbiddenMethod("LeafBlock::_adopt: shouldn't be here");
 	}
 
 public:
-	virtual TreeBlock *nextBlock()
+	TreeBlock *nextBlock() override
 	{
 		throw TreeBlock::ForbiddenMethod("LeafBlock::nextBlock: shouldn't be here");
 	}
-	virtual bool nextBlock(TreeBlock &)
+	bool nextBlock(TreeBlock &) override
 	{
 		throw TreeBlock::ForbiddenMethod("LeafBlock::nextBlock: shouldn't be here");
 	}
-	virtual void firstBlock()
+	void firstBlock() override
 	{
 		throw TreeBlock::ForbiddenMethod("LeafBlock::firstBlock: shouldn't be here");
 	}
 
 public:
 	LeafBlock();
-	virtual ~LeafBlock();
+	~LeafBlock() override;
 
 private:
 	LeafBlock(const LeafBlock &);
@@ -1001,7 +1001,7 @@ private:
 
 public:
 	LeafBlock(const TreeBlock &block);
-	virtual LeafBlock &operator=(const TreeBlock &block);
+	LeafBlock &operator=(const TreeBlock &block) override;
 };
 
 /*

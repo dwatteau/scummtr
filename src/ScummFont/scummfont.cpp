@@ -655,7 +655,8 @@ int main(int argc, char **argv) try
 		loadFont(argv[2]);
 		saveBmp(argv[3]);
 	}
-	else {
+	else
+	{
 		return usage();
 	}
 
