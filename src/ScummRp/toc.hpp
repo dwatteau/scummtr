@@ -149,23 +149,23 @@ protected:
 	bool _first;
 
 protected:
-	virtual void _zap();
+	void _zap() override;
 
 public:
-	virtual TableOfContent::TocElement &operator[](int id);
-	virtual TableOfContent::TocElement operator[](int id) const;
-	virtual void merge(const TableOfContent &t);
-	virtual int count(byte roomId, int32 offset) const;
-	virtual int findId(byte roomId, int32 offset) const;
-	virtual void firstId(byte roomId);
-	virtual bool nextId(int &id, byte roomId);
-	virtual void load(FilePart &file, GlobalTocFormat format, int size);
-	virtual void save(FilePart &file, GlobalTocFormat format, bool fixedSize);
+	TableOfContent::TocElement &operator[](int id) override;
+	TableOfContent::TocElement operator[](int id) const override;
+	void merge(const TableOfContent &t) override;
+	int count(byte roomId, int32 offset) const override;
+	int findId(byte roomId, int32 offset) const override;
+	void firstId(byte roomId) override;
+	bool nextId(int &id, byte roomId) override;
+	void load(FilePart &file, GlobalTocFormat format, int size) override;
+	void save(FilePart &file, GlobalTocFormat format, bool fixedSize) override;
 	virtual int numberOfDisks() const;
 
 public:
 	GlobalRoomIndex();
-	virtual ~GlobalRoomIndex();
+	~GlobalRoomIndex() override;
 
 public:
 	GlobalRoomIndex &operator=(const GlobalRoomIndex &);
