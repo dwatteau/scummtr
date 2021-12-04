@@ -7,18 +7,21 @@
 *.*.swp
 # OS cruft
 ._*
+desktop.ini
 .DS_Store
 .fseventsd
 .Spotlight-V100
 Thumbs.db
 .Trashes
-# Binaries or build artefacts
+# Binaries or build/debug artefacts
 *.a
 *.core
 .deps
 _deps
 *.dSYM
 *.exe
+.gdb_history
+gdb.txt
 *.ncb
 *.o
 *.obj
