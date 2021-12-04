@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html>
+<!-- This is an automatically generated file.  Do not edit.
+   SPDX-License-Identifier: MIT
+  
+   Copyright (c) 2020-2021 Donovan Watteau
+  
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+  
+   The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
+  
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   THE SOFTWARE.
+ -->
 <head>
   <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
     table.head, table.foot { width: 100%; }
     td.head-rtitle, td.foot-os { text-align: right; }
     td.head-vol { text-align: center; }
-    div.Pp { margin: 1ex 0ex; }
-    div.Nd, div.Bf, div.Op { display: inline; }
-    span.Pa, span.Ad { font-style: italic; }
-    span.Ms { font-weight: bold; }
-    dl.Bl-diag > dt { font-weight: bold; }
-    code.Nm, code.Fl, code.Cm, code.Ic, code.In, code.Fd, code.Fn,
-    code.Cd { font-weight: bold; font-family: inherit; }
+    .Nd, .Bf, .Op { display: inline; }
+    .Pa, .Ad { font-style: italic; }
+    .Ms { font-weight: bold; }
+    .Bl-diag > dt { font-weight: bold; }
+    code.Nm, .Fl, .Cm, .Ic, code.In, .Fd, .Fn, .Cd { font-weight: bold;
+      font-family: inherit; }
   </style>
   <title>SCUMMTR(1)</title>
 </head>
@@ -27,8 +50,8 @@
 <div class="manual-text">
 <section class="Sh">
 <h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
-<code class="Nm">scummtr</code> &#x2014;
-<div class="Nd">import and export fan translations for SCUMM engine games</div>
+<p class="Pp"><code class="Nm">scummtr</code> &#x2014; <span class="Nd">import
+    and export fan translations for SCUMM engine games</span></p>
 </section>
 <section class="Sh">
 <h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
@@ -65,21 +88,21 @@
 </section>
 <section class="Sh">
 <h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
-The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
-  engine games. The mode of operation is chosen with one of the following
-  options:
+<p class="Pp">The <code class="Nm">scummtr</code> tool imports and exports text
+    for SCUMM engine games. The mode of operation is chosen with one of the
+    following options:</p>
 <dl class="Bl-tag">
-  <dt><a class="permalink" href="#i"><code class="Fl" id="i">-i</code></a></dt>
+  <dt id="i"><a class="permalink" href="#i"><code class="Fl">-i</code></a></dt>
   <dd>Import text into the game data files.</dd>
-  <dt><a class="permalink" href="#o"><code class="Fl" id="o">-o</code></a></dt>
+  <dt id="o"><a class="permalink" href="#o"><code class="Fl">-o</code></a></dt>
   <dd>Export text from the game data files.</dd>
-  <dt><a class="permalink" href="#L"><code class="Fl" id="L">-L</code></a></dt>
+  <dt id="L"><a class="permalink" href="#L"><code class="Fl">-L</code></a></dt>
   <dd>List all supported games with their respective
       <var class="Ar">gameid</var>.</dd>
 </dl>
 <p class="Pp">The other options are as follows:</p>
 <dl class="Bl-tag">
-  <dt><a class="permalink" href="#a"><code class="Fl" id="a">-a</code></a>
+  <dt id="a"><a class="permalink" href="#a"><code class="Fl">-a</code></a>
     <var class="Ar">resource</var></dt>
   <dd>Protect the specified SCUMM resource types with extra padding, when
       exporting.
@@ -93,24 +116,24 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
     <p class="Pp">Valid resource types for the <code class="Fl">-a</code> option
         are:</p>
     <dl class="Bl-tag">
-      <dt><a class="permalink" href="#a_2"><code class="Ic" id="a_2">a</code></a></dt>
+      <dt id="a~2"><a class="permalink" href="#a~2"><code class="Ic">a</code></a></dt>
       <dd>Pad all actor resources.</dd>
-      <dt><a class="permalink" href="#o_2"><code class="Ic" id="o_2">o</code></a></dt>
+      <dt id="o~2"><a class="permalink" href="#o~2"><code class="Ic">o</code></a></dt>
       <dd>Pad all object resources.</dd>
-      <dt><a class="permalink" href="#v"><code class="Ic" id="v">v</code></a></dt>
+      <dt id="v"><a class="permalink" href="#v"><code class="Ic">v</code></a></dt>
       <dd>Pad all verb resources.</dd>
     </dl>
   </dd>
-  <dt><a class="permalink" href="#A"><code class="Fl" id="A">-A</code></a>
+  <dt id="A"><a class="permalink" href="#A"><code class="Fl">-A</code></a>
     <var class="Ar">resource</var></dt>
   <dd>Same as <code class="Fl">-a</code>, with variable IDs taken into
     account.</dd>
-  <dt><a class="permalink" href="#b"><code class="Fl" id="b">-b</code></a></dt>
+  <dt id="b"><a class="permalink" href="#b"><code class="Fl">-b</code></a></dt>
   <dd>Translation file will be handled in binary mode, instead of text.
     <p class="Pp">Note that this makes most other options inoperative. This flag
         may not correctly work with all games.</p>
   </dd>
-  <dt><a class="permalink" href="#c"><code class="Fl" id="c">-c</code></a></dt>
+  <dt id="c"><a class="permalink" href="#c"><code class="Fl">-c</code></a></dt>
   <dd>Ease the use of some Western European characters, by interpreting the text
       as Windows-1252/ISO-8859-1. If neither <code class="Fl">-c</code> nor
       <code class="Fl">-r</code> is used, non-ASCII characters will be handled
@@ -118,44 +141,44 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
     <p class="Pp">Note that you can only use the characters which are part of
         the internal fonts.</p>
   </dd>
-  <dt><a class="permalink" href="#f"><code class="Fl" id="f">-f</code></a>
+  <dt id="f"><a class="permalink" href="#f"><code class="Fl">-f</code></a>
     <var class="Ar">file</var></dt>
   <dd>The path to the translation file (default:
       <span class="Pa">scummtr.txt</span>).</dd>
-  <dt><a class="permalink" href="#g"><code class="Fl" id="g">-g</code></a>
+  <dt id="g"><a class="permalink" href="#g"><code class="Fl">-g</code></a>
     <var class="Ar">gameid</var></dt>
   <dd>The ID of the game variant to be translated, as given by
       <code class="Fl">-L</code>.</dd>
-  <dt><a class="permalink" href="#h"><code class="Fl" id="h">-h</code></a></dt>
+  <dt id="h"><a class="permalink" href="#h"><code class="Fl">-h</code></a></dt>
   <dd>Include a small header at the start of each line, indicating the internal
       script context of the current string.</dd>
-  <dt><a class="permalink" href="#H"><code class="Fl" id="H">-H</code></a></dt>
+  <dt id="H"><a class="permalink" href="#H"><code class="Fl">-H</code></a></dt>
   <dd>Represent escape sequences as hexadecimal codes, instead of decimal
     codes.</dd>
-  <dt><a class="permalink" href="#I"><code class="Fl" id="I">-I</code></a></dt>
+  <dt id="I"><a class="permalink" href="#I"><code class="Fl">-I</code></a></dt>
   <dd>Include the current SCUMM instruction opcode, before each line.</dd>
-  <dt><a class="permalink" href="#l"><code class="Fl" id="l">-l</code></a>
+  <dt id="l"><a class="permalink" href="#l"><code class="Fl">-l</code></a>
     <var class="Ar">language</var></dt>
   <dd>V1 and V2 games only. The name of the language charset to be used for this
       translation.
     <p class="Pp">Possible values are:</p>
     <dl class="Bl-tag">
-      <dt><a class="permalink" href="#de"><code class="Ic" id="de">de</code></a></dt>
+      <dt id="de"><a class="permalink" href="#de"><code class="Ic">de</code></a></dt>
       <dd>Original German charset.</dd>
-      <dt><a class="permalink" href="#en"><code class="Ic" id="en">en</code></a></dt>
+      <dt id="en"><a class="permalink" href="#en"><code class="Ic">en</code></a></dt>
       <dd>Original English charset (default).</dd>
-      <dt><a class="permalink" href="#fr"><code class="Ic" id="fr">fr</code></a></dt>
+      <dt id="fr"><a class="permalink" href="#fr"><code class="Ic">fr</code></a></dt>
       <dd>Original French charset.</dd>
-      <dt><a class="permalink" href="#it"><code class="Ic" id="it">it</code></a></dt>
+      <dt id="it"><a class="permalink" href="#it"><code class="Ic">it</code></a></dt>
       <dd>Original Italian charset.</dd>
     </dl>
   </dd>
-  <dt><a class="permalink" href="#p"><code class="Fl" id="p">-p</code></a>
+  <dt id="p"><a class="permalink" href="#p"><code class="Fl">-p</code></a>
     <var class="Ar">gamedir</var></dt>
   <dd>The path to the game (default: current directory).</dd>
-  <dt><a class="permalink" href="#q"><code class="Fl" id="q">-q</code></a></dt>
+  <dt id="q"><a class="permalink" href="#q"><code class="Fl">-q</code></a></dt>
   <dd>Quiet mode. Suppress informational output.</dd>
-  <dt><a class="permalink" href="#r"><code class="Fl" id="r">-r</code></a></dt>
+  <dt id="r"><a class="permalink" href="#r"><code class="Fl">-r</code></a></dt>
   <dd>Raw text. Preserve the original text encoding of the game.
     <p class="Pp">This disables any text encoding conversion and escaping: the
         text is interpreted &#x201C;as-is&#x201D; (except for non-printable
@@ -165,9 +188,9 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
     <p class="Pp">This can be useful for languages not based on Western European
         characters.</p>
   </dd>
-  <dt><a class="permalink" href="#v_2"><code class="Fl" id="v_2">-v</code></a></dt>
+  <dt id="v~2"><a class="permalink" href="#v~2"><code class="Fl">-v</code></a></dt>
   <dd>Verbose mode.</dd>
-  <dt><a class="permalink" href="#w"><code class="Fl" id="w">-w</code></a></dt>
+  <dt id="w"><a class="permalink" href="#w"><code class="Fl">-w</code></a></dt>
   <dd>Use Windows-type newline characters (CRLF).
     <p class="Pp">By default, Unix-type newline characters (LF) are used, which
         may be compatible with fewer text editors.</p>
@@ -176,8 +199,8 @@ The <code class="Nm">scummtr</code> tool imports and exports text for SCUMM
 </section>
 <section class="Sh">
 <h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
-Extract the text of the original Monkey Island 2 game to a Windows-1252 file
-  compatible with Microsoft Notepad, with added context:
+<p class="Pp">Extract the text of the original Monkey Island 2 game to a
+    Windows-1252 file compatible with Microsoft Notepad, with added context:</p>
 <p class="Pp"></p>
 <div class="Bd Bd-indent"><code class="Li">$ scummtr -cw -h -g monkey2 -p
   /path/to/MI2 -of mi2_orig.txt</code></div>
@@ -198,14 +221,14 @@ Extract the text of the original Monkey Island 2 game to a Windows-1252 file
 </section>
 <section class="Sh">
 <h1 class="Sh" id="HISTORY"><a class="permalink" href="#HISTORY">HISTORY</a></h1>
-The <code class="Nm">scummtr</code> tool was written between 2003 and 2005 by
-  Thomas Combeleran for the ATP team, and was open-sourced in 2020 under an MIT
-  license.
+<p class="Pp">The <code class="Nm">scummtr</code> tool was written between 2003
+    and 2005 by Thomas Combeleran for the ATP team, and was open-sourced in 2020
+    under an MIT license.</p>
 </section>
 <section class="Sh">
 <h1 class="Sh" id="CAVEATS"><a class="permalink" href="#CAVEATS">CAVEATS</a></h1>
-Your text editor must not remove trailing spaces or empty lines, otherwise you
-  will have import errors.
+<p class="Pp">Your text editor must not remove trailing spaces or empty lines,
+    otherwise you will have import errors.</p>
 <p class="Pp">Since each game and each variant of each game had its own list of
     accepted characters (usually a subset of an MS-DOS code page), it is not
     possible to know if a character is available without testing it in the game.

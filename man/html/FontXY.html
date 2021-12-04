@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html>
+<!-- This is an automatically generated file.  Do not edit.
+   SPDX-License-Identifier: MIT
+  
+   Copyright (c) 2020-2021 Donovan Watteau
+  
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+  
+   The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
+  
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   THE SOFTWARE.
+ -->
 <head>
   <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
     table.head, table.foot { width: 100%; }
     td.head-rtitle, td.foot-os { text-align: right; }
     td.head-vol { text-align: center; }
-    div.Pp { margin: 1ex 0ex; }
-    div.Nd, div.Bf, div.Op { display: inline; }
-    span.Pa, span.Ad { font-style: italic; }
-    span.Ms { font-weight: bold; }
-    dl.Bl-diag > dt { font-weight: bold; }
-    code.Nm, code.Fl, code.Cm, code.Ic, code.In, code.Fd, code.Fn,
-    code.Cd { font-weight: bold; font-family: inherit; }
+    .Nd, .Bf, .Op { display: inline; }
+    .Pa, .Ad { font-style: italic; }
+    .Ms { font-weight: bold; }
+    .Bl-diag > dt { font-weight: bold; }
+    code.Nm, .Fl, .Cm, .Ic, code.In, .Fd, .Fn, .Cd { font-weight: bold;
+      font-family: inherit; }
   </style>
   <title>FONTXY(1)</title>
 </head>
@@ -27,8 +50,8 @@
 <div class="manual-text">
 <section class="Sh">
 <h1 class="Sh" id="NAME"><a class="permalink" href="#NAME">NAME</a></h1>
-<code class="Nm">FontXY</code> &#x2014;
-<div class="Nd">adjust glyph dimensions inside SCUMM fonts</div>
+<p class="Pp"><code class="Nm">FontXY</code> &#x2014; <span class="Nd">adjust
+    glyph dimensions inside SCUMM fonts</span></p>
 </section>
 <section class="Sh">
 <h1 class="Sh" id="SYNOPSIS"><a class="permalink" href="#SYNOPSIS">SYNOPSIS</a></h1>
@@ -48,14 +71,14 @@
 </section>
 <section class="Sh">
 <h1 class="Sh" id="DESCRIPTION"><a class="permalink" href="#DESCRIPTION">DESCRIPTION</a></h1>
-The <code class="Nm">FontXY</code> tool lets you adjust the relative size of
-  each glyph (or character) inside a SCUMM character file. The mode of operation
-  is chosen with one of the following options:
+<p class="Pp">The <code class="Nm">FontXY</code> tool lets you adjust the
+    relative size of each glyph (or character) inside a SCUMM character file.
+    The mode of operation is chosen with one of the following options:</p>
 <dl class="Bl-tag">
-  <dt><a class="permalink" href="#i"><code class="Cm" id="i">i</code></a></dt>
+  <dt id="i"><a class="permalink" href="#i"><code class="Cm">i</code></a></dt>
   <dd>Import glyph dimensions from a <span class="Pa">XY.txt</span> file into
       the specified <var class="Ar">CHARFILE</var> resource.</dd>
-  <dt><a class="permalink" href="#o"><code class="Cm" id="o">o</code></a></dt>
+  <dt id="o"><a class="permalink" href="#o"><code class="Cm">o</code></a></dt>
   <dd>Export glyph dimensions from the specified <var class="Ar">CHARFILE</var>
       resource into a <span class="Pa">XY.txt</span> file.</dd>
 </dl>
@@ -67,14 +90,20 @@ The <code class="Nm">FontXY</code> tool lets you adjust the relative size of
     empty lines.</p>
 </section>
 <section class="Sh">
+<h1 class="Sh" id="SEE_ALSO"><a class="permalink" href="#SEE_ALSO">SEE
+  ALSO</a></h1>
+<p class="Pp"><a class="Xr">scummfont(1)</a></p>
+</section>
+<section class="Sh">
 <h1 class="Sh" id="HISTORY"><a class="permalink" href="#HISTORY">HISTORY</a></h1>
-The <code class="Nm">FontXY</code> tool was written in 2006 by Thomas Combeleran
-  for the ATP team, and was open-sourced in 2020 under an MIT license.
+<p class="Pp">The <code class="Nm">FontXY</code> tool was written in 2006 by
+    Thomas Combeleran for the ATP team, and was open-sourced in 2020 under an
+    MIT license.</p>
 </section>
 <section class="Sh">
 <h1 class="Sh" id="CAVEATS"><a class="permalink" href="#CAVEATS">CAVEATS</a></h1>
-Only newline characters native to the current platform are accepted (CRLF on
-  Windows and LF on most other systems).
+<p class="Pp">Only newline characters native to the current platform are
+    accepted (CRLF on Windows and LF on most other systems).</p>
 <p class="Pp"><span class="Pa">XY.txt</span> pathname is hardcoded.</p>
 </section>
 </div>
