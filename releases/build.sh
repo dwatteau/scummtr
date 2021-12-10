@@ -14,6 +14,11 @@ VERSION="$1"
 
 export BUILDKIT_PROGRESS=plain
 
+if [ ! -f releases/build.sh ]; then
+	echo "ERROR: This script must be run from the root of the project" >&2
+	exit 1
+fi
+
 for builder in linux86 win32 ; do
 	echo "===> Building for $builder"
 
@@ -23,6 +28,8 @@ for builder in linux86 win32 ; do
 		sleep 5
 	fi
 
-	docker build --tag "scummtr-$builder:$VERSION" -f "Dockerfile.$builder" .
-	docker run -v"$(pwd)/..:/scummtr/project" -v"$(pwd)/output:/scummtr/output" --rm "scummtr-$builder:$VERSION"
+	docker build --tag "scummtr-$builder:$VERSION" -f "releases/Dockerfile.$builder" .
+	docker run -v"$(pwd)/releases/output:/scummtr/output" --rm "scummtr-$builder:$VERSION"
+
+	echo
 done

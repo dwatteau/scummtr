@@ -3,7 +3,7 @@
 #
 # note: this Dockerfile requires a Linux kernel with vsyscall=emulate
 
-FROM --platform=linux/amd64 centos:6.10
+FROM --platform=linux/amd64 centos:6.10 AS scummtr-linux86-base
 
 # CentOS 6 is EOLd, so we need to use Vault mirrors
 RUN sed -i -e 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf \
@@ -15,8 +15,12 @@ RUN yum makecache \
 	&& yum install -y gcc-c++ glibc-devel libgcc libstdc++-devel cmake3 glibc-devel.i686 libgcc.i686 libstdc++-devel.i686 \
 	&& yum clean all
 
+FROM scummtr-linux86-base
+
 RUN mkdir -p /scummtr/project /scummtr/build /scummtr/output
 WORKDIR /scummtr
+
+COPY . /scummtr/project
 
 CMD cd /scummtr/build \
 	&& cmake3 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS="-m64" /scummtr/project \

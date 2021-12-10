@@ -2,14 +2,18 @@
 # older 5.0.1 version of Mingw-w64 on Debian 9 is intentional).  Also
 # uses CMake 3.7.2.
 
-FROM debian:9.13-slim
+FROM debian:9.13-slim AS scummtr-win32-base
 
 RUN apt-get update \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cmake make mingw-w64 \
 	&& rm -rf /var/lib/apt/lists/*
 
+FROM scummtr-win32-base
+
 RUN mkdir -p /scummtr/project /scummtr/build /scummtr/output
 WORKDIR /scummtr
+
+COPY . /scummtr/project
 
 CMD cd /scummtr/build \
 	&& cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_INSTALL_PREFIX="" -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++ -DCMAKE_CXX_FLAGS="-DWINVER=0x0501 -D_WIN32_WINNT=0x0501" -DCMAKE_EXE_LINKER_FLAGS="-static-libgcc -static-libstdc++ -static" /scummtr/project \

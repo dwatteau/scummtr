@@ -1,0 +1,6 @@
+**
+# note: everything required for a build must be explicitly listed here 
+!CMakeLists.txt
+!doc/
+!man/
+!src/

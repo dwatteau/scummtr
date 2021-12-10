@@ -56,13 +56,12 @@ MSVC builds require MSVC 2015 or later.
 
 ## Building
 
-First, you need [to install Docker](https://docs.docker.com/get-docker/).
+First, you need [to install Docker](https://docs.docker.com/get-docker/). Linux users will also probably need a kernel with a `vsyscall=emulate` boot parameter.
 
-Then (with `0.0.1` as a version number example), run:
+Then, from the root of the project, and with `0.0.1` as a version number example, run:
 
 ```sh
-cd releases
-./build.sh 0.0.1
+./releases/build.sh 0.0.1
 ```
 
 Binaries will then appear in the `releases/output/` directory.
