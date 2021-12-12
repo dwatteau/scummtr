@@ -535,8 +535,8 @@ void ScummTr::_usage()
 	std::cout << " -i         " << "import text into the game files (input)\n";
 	std::cout << " -o         " << "export text from the game files (output)\n";
 	std::cout << " -L         " << "list supported games\n\n";
-	std::cout << " -a [oav]   " << "pad objects, actors, verbs with @ for extra safety\n";
-	std::cout << " -A [oav]   " << "same as -a, with variable IDs taken into account\n";
+	std::cout << " -a [aov]   " << "protect actors/objects/verbs for safer renames\n";
+	std::cout << " -A [aov]   " << "same as -a, but with extra safety\n";
 	std::cout << " -b         " << "binary mode (may not work with all games)\n";
 	std::cout << " -c         " << "convert some Western European characters to Windows-1252\n";
 	std::cout << " -f path    " << "path to the text file (default: " << ScummTr::_paramTextFile << ")\n";
@@ -555,6 +555,6 @@ void ScummTr::_usage()
 // 	std::cout << " -V         " << "more verbose (lists blocks)\n";
 	std::cout << " -w         " << "use Windows CRLF newline characters\n\n";
 	std::cout << "Examples:\n";
-	std::cout << "scummtr -cw -h -g monkey2 -of mi2.txt\n";
-	std::cout << "scummtr -cw -h -g zaktowns -A ov -of zak.txt" << std::endl;
+	std::cout << "scummtr -g monkey2 -cwh -A aov -of mi2.txt\n";
+	std::cout << "scummtr -g zakv2 -l de -cwh -A aov -of zak_de.txt" << std::endl;
 }

@@ -70,8 +70,8 @@
   <tr>
     <td><code class="Nm">scummtr</code></td>
     <td><code class="Fl">-o</code> [<code class="Fl">-bchHIqvw</code>]
-      [<code class="Fl">-a</code> <var class="Ar">resource</var>]
-      [<code class="Fl">-A</code> <var class="Ar">resource</var>]
+      [<code class="Fl">-a</code> <var class="Ar">restypes</var>]
+      [<code class="Fl">-A</code> <var class="Ar">restypes</var>]
       [<code class="Fl">-l</code> <var class="Ar">language</var>]
       <code class="Fl">-g</code> <var class="Ar">gameid</var>
       <code class="Fl">-p</code> <var class="Ar">gamedir</var>
@@ -103,31 +103,34 @@
 <p class="Pp">The other options are as follows:</p>
 <dl class="Bl-tag">
   <dt id="a"><a class="permalink" href="#a"><code class="Fl">-a</code></a>
-    <var class="Ar">resource</var></dt>
+    <var class="Ar">restypes</var></dt>
   <dd>Protect the specified SCUMM resource types with extra padding, when
       exporting.
     <p class="Pp">Some game resources are created with a short name and use a
-        longer name later in the game. By default, this must be handled with
-        manual &#x2018;<code class="Li">@</code>&#x2019; character padding, to
-        prevent game errors when the resource is renamed. The
-        <code class="Fl">-a</code> option just applies extra padding to all
-        specified resource types to make things easier, at the cost of increased
-        memory usage.</p>
+        longer name later in the game. In such cases,
+        &#x2018;<code class="Li">@</code>&#x2019; padding characters must be
+        added to prevent game errors when the resource is renamed (this is
+        especially true with the original interpreters). The
+        <code class="Fl">-a</code> option does this action automatically.</p>
     <p class="Pp">Valid resource types for the <code class="Fl">-a</code> option
         are:</p>
     <dl class="Bl-tag">
       <dt id="a~2"><a class="permalink" href="#a~2"><code class="Ic">a</code></a></dt>
-      <dd>Pad all actor resources.</dd>
+      <dd>Pad actor resources.</dd>
       <dt id="o~2"><a class="permalink" href="#o~2"><code class="Ic">o</code></a></dt>
-      <dd>Pad all object resources.</dd>
+      <dd>Pad object resources.</dd>
       <dt id="v"><a class="permalink" href="#v"><code class="Ic">v</code></a></dt>
-      <dd>Pad all verb resources.</dd>
+      <dd>Pad verb resources.</dd>
     </dl>
   </dd>
   <dt id="A"><a class="permalink" href="#A"><code class="Fl">-A</code></a>
-    <var class="Ar">resource</var></dt>
-  <dd>Same as <code class="Fl">-a</code>, with variable IDs taken into
-    account.</dd>
+    <var class="Ar">restypes</var></dt>
+  <dd>Same as <code class="Fl">-a</code>, with variable IDs taken into account.
+      This protects even more resources, at the cost of a slight memory increase
+      which is negligible nowadays.
+    <p class="Pp">Using <code class="Fl">-A</code> <var class="Ar">aov</var> by
+        default is recommended.</p>
+  </dd>
   <dt id="b"><a class="permalink" href="#b"><code class="Fl">-b</code></a></dt>
   <dd>Translation file will be handled in binary mode, instead of text.
     <p class="Pp">Note that this makes most other options inoperative. This flag
@@ -135,11 +138,11 @@
   </dd>
   <dt id="c"><a class="permalink" href="#c"><code class="Fl">-c</code></a></dt>
   <dd>Ease the use of some Western European characters, by interpreting the text
-      as Windows-1252/ISO-8859-1. If neither <code class="Fl">-c</code> nor
+      in the Windows-1252 encoding. If neither <code class="Fl">-c</code> nor
       <code class="Fl">-r</code> is used, non-ASCII characters will be handled
       as escape sequences.
-    <p class="Pp">Note that you can only use the characters which are part of
-        the internal fonts.</p>
+    <p class="Pp">Note that you can only use the characters available in your
+        current SCUMM fonts.</p>
   </dd>
   <dt id="f"><a class="permalink" href="#f"><code class="Fl">-f</code></a>
     <var class="Ar">file</var></dt>
@@ -150,8 +153,8 @@
   <dd>The ID of the game variant to be translated, as given by
       <code class="Fl">-L</code>.</dd>
   <dt id="h"><a class="permalink" href="#h"><code class="Fl">-h</code></a></dt>
-  <dd>Include a small header at the start of each line, indicating the internal
-      script context of the current string.</dd>
+  <dd>Include a small header at the start of each line, indicating the script
+      context of the current string.</dd>
   <dt id="H"><a class="permalink" href="#H"><code class="Fl">-H</code></a></dt>
   <dd>Represent escape sequences as hexadecimal codes, instead of decimal
     codes.</dd>
@@ -185,38 +188,35 @@
         ASCII characters and some internal SCUMM sequences, which remain
         escaped), and you must configure your text editor to recognize the
         intended encoding (usually an older MS-DOS code page).</p>
-    <p class="Pp">This can be useful for languages not based on Western European
-        characters.</p>
+    <p class="Pp">This can be useful for non-Western-European languages.</p>
   </dd>
   <dt id="v~2"><a class="permalink" href="#v~2"><code class="Fl">-v</code></a></dt>
   <dd>Verbose mode.</dd>
   <dt id="w"><a class="permalink" href="#w"><code class="Fl">-w</code></a></dt>
-  <dd>Use Windows-type newline characters (CRLF).
-    <p class="Pp">By default, Unix-type newline characters (LF) are used, which
-        may be compatible with fewer text editors.</p>
-  </dd>
+  <dd>Use Windows newline characters (CRLF). This is usually compatible with
+      more text editors, and thus recommended.</dd>
 </dl>
 </section>
 <section class="Sh">
 <h1 class="Sh" id="EXAMPLES"><a class="permalink" href="#EXAMPLES">EXAMPLES</a></h1>
 <p class="Pp">Extract the text of the original Monkey Island 2 game to a
-    Windows-1252 file compatible with Microsoft Notepad, with added context:</p>
+    Windows-1252 file, with added context and protected resource names:</p>
 <p class="Pp"></p>
-<div class="Bd Bd-indent"><code class="Li">$ scummtr -cw -h -g monkey2 -p
+<div class="Bd Bd-indent"><code class="Li">$ scummtr -g monkey2 -cwh -A aov -p
   /path/to/MI2 -of mi2_orig.txt</code></div>
 <p class="Pp">Import a new French translation into the game files:</p>
 <p class="Pp"></p>
-<div class="Bd Bd-indent"><code class="Li">$ scummtr -cw -h -g monkey2 -p
+<div class="Bd Bd-indent"><code class="Li">$ scummtr -g monkey2 -cwh -A aov -p
   /path/to/MI2 -if mi2_fr.txt</code></div>
 <p class="Pp">Extract the text of the Japanese version of Monkey Island 2
     (FM-TOWNS) in Shift_JIS, from the current directory:</p>
 <p class="Pp"></p>
-<div class="Bd Bd-indent"><code class="Li">$ scummtr -w -g monkey2 -r -of
+<div class="Bd Bd-indent"><code class="Li">$ scummtr -g monkey2 -rw -of
   mi2_towns_jpn.txt</code></div>
-<p class="Pp">Export the text of a German Zak McKracken V2 game, padding objects
-    and verbs, and using default paths:</p>
+<p class="Pp">Export the text of a German Zak McKracken V2 game, padding
+    resources, with default paths:</p>
 <p class="Pp"></p>
-<div class="Bd Bd-indent"><code class="Li">$ scummtr -cw -g zakv2 -l de -A ov
+<div class="Bd Bd-indent"><code class="Li">$ scummtr -g zakv2 -l de -cw -A aov
   -o</code></div>
 </section>
 <section class="Sh">
