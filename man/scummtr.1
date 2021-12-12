@@ -36,8 +36,8 @@
 .Nm scummtr
 .Fl o
 .Op Fl bchHIqvw
-.Op Fl a Ar resource
-.Op Fl A Ar resource
+.Op Fl a Ar restypes
+.Op Fl A Ar restypes
 .Op Fl l Ar language
 .Fl g Ar gameid
 .Fl p Ar gamedir
@@ -61,35 +61,41 @@ List all supported games with their respective
 .Pp
 The other options are as follows:
 .Bl -tag -width Dslanguage
-.It Fl a Ar resource
+.It Fl a Ar restypes
 Protect the specified SCUMM resource types with extra padding, when
 exporting.
 .Pp
 Some game resources are created with a short name and use a longer
 name later in the game.
-By default, this must be handled with manual
+In such cases,
 .Ql @
-character padding, to prevent game errors when the resource is renamed.
+padding characters must be added to prevent game errors when the resource
+is renamed (this is especially true with the original interpreters).
 The
 .Fl a
-option just applies extra padding to all specified resource types to
-make things easier, at the cost of increased memory usage.
+option does this action automatically.
 .Pp
 Valid resource types for the
 .Fl a
 option are:
 .Bl -tag -width Ds
 .It Ic a
-Pad all actor resources.
+Pad actor resources.
 .It Ic o
-Pad all object resources.
+Pad object resources.
 .It Ic v
-Pad all verb resources.
+Pad verb resources.
 .El
-.It Fl A Ar resource
+.It Fl A Ar restypes
 Same as
 .Fl a ,
 with variable IDs taken into account.
+This protects even more resources, at the cost of a slight memory increase
+which is negligible nowadays.
+.Pp
+Using
+.Fl A Ar aov
+by default is recommended.
 .It Fl b
 Translation file will be handled in binary mode, instead of text.
 .Pp
@@ -97,7 +103,7 @@ Note that this makes most other options inoperative.
 This flag may not correctly work with all games.
 .It Fl c
 Ease the use of some Western European characters, by interpreting
-the text as Windows-1252/ISO-8859-1.
+the text in the Windows-1252 encoding.
 If neither
 .Fl c
 nor
@@ -105,8 +111,8 @@ nor
 is used,
 non-ASCII characters will be handled as escape sequences.
 .Pp
-Note that you can only use the characters which are part of the
-internal fonts.
+Note that you can only use the characters available in
+your current SCUMM fonts.
 .It Fl f Ar file
 The path to the translation file (default:
 .Pa scummtr.txt ) .
@@ -114,7 +120,7 @@ The path to the translation file (default:
 The ID of the game variant to be translated, as given by
 .Fl L .
 .It Fl h
-Include a small header at the start of each line, indicating the internal script
+Include a small header at the start of each line, indicating the script
 context of the current string.
 .It Fl H
 Represent escape sequences as hexadecimal codes, instead of decimal codes.
@@ -152,34 +158,32 @@ SCUMM sequences, which remain escaped),
 and you must configure your text editor to recognize
 the intended encoding (usually an older MS-DOS code page).
 .Pp
-This can be useful for languages not based on Western European characters.
+This can be useful for non-Western-European languages.
 .It Fl v
 Verbose mode.
 .It Fl w
-Use Windows-type newline characters (CRLF).
-.Pp
-By default, Unix-type newline characters (LF) are used, which may
-be compatible with fewer text editors.
+Use Windows newline characters (CRLF).
+This is usually compatible with more text editors, and thus recommended.
 .El
 .Sh EXAMPLES
 Extract the text of the original Monkey Island 2 game to a
-Windows-1252 file compatible with Microsoft Notepad, with added context:
+Windows-1252 file, with added context and protected resource names:
 .Pp
-.Dl $ scummtr -cw -h -g monkey2 -p /path/to/MI2 -of mi2_orig.txt
+.Dl $ scummtr -g monkey2 -cwh -A aov -p /path/to/MI2 -of mi2_orig.txt
 .Pp
 Import a new French translation into the game files:
 .Pp
-.Dl $ scummtr -cw -h -g monkey2 -p /path/to/MI2 -if mi2_fr.txt
+.Dl $ scummtr -g monkey2 -cwh -A aov -p /path/to/MI2 -if mi2_fr.txt
 .Pp
 Extract the text of the Japanese version of Monkey Island 2 (FM-TOWNS)
 in Shift_JIS, from the current directory:
 .Pp
-.Dl $ scummtr -w -g monkey2 -r -of mi2_towns_jpn.txt
+.Dl $ scummtr -g monkey2 -rw -of mi2_towns_jpn.txt
 .Pp
-Export the text of a German Zak McKracken V2 game, padding objects
-and verbs, and using default paths:
+Export the text of a German Zak McKracken V2 game, padding resources,
+with default paths:
 .Pp
-.Dl $ scummtr -cw -g zakv2 -l de -A ov -o
+.Dl $ scummtr -g zakv2 -l de -cw -A aov -o
 .Sh HISTORY
 The
 .Nm
