@@ -1,0 +1,42 @@
+SCUMMFONT(1)                General Commands Manual               SCUMMFONT(1)
+
+NAME
+     scummfont - transform SCUMM fonts to bitmap image files
+
+SYNOPSIS
+     scummfont i FONTFILE image.bmp
+     scummfont o FONTFILE image.bmp
+
+DESCRIPTION
+     The scummfont tool transforms SCUMM CHARv1 and CHARv3 font files between
+     their internal format and a bitmap representation.  The mode of operation
+     is chosen with one of the following options:
+
+     i       Import the content of an image.bmp bitmap file into the specified
+             FONTFILE SCUMM resource.
+
+     o       Extract a font from a FONTFILE SCUMM resource into an image.bmp
+             bitmap file.
+
+     FONTFILE can either be a "CHAR_*" block extracted by scummrp(1), or an
+     LFL file containing a font resource.
+
+     Generated bitmap files contain every character available in the selected
+     font.  Characters are sorted in the ascending order of the font table;
+     that is, the 19th displayed character is always accessible in a
+     scummtr(1) translation file by using the "\019" decimal sequence.
+
+HISTORY
+     The scummfont tool was written between 2003 and 2004 by Thomas Combeleran
+     for the ATP team, and was open-sourced in 2020 under an MIT license.
+
+CAVEATS
+     Only simple, uncompressed 8-bit per pixel BMPv3 bitmap files (also known
+     as Windows 3.x bitmap files) with 256 colors are supported.
+
+     If your input file is rejected after having been modified by an external
+     tool, Netpbm can be used to revert it to a compatible format:
+
+           $ bmptoppm input.bmp | ppmtobmp -windows -bpp 8 > output.bmp
+
+ScummTR                        December 27, 2020                       ScummTR

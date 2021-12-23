@@ -4,7 +4,7 @@ New features:
 
 - The ScummTR tools are now open-source (using the MIT License), thanks to Thomas Combeleran, their original author.
 - macOS and Linux binaries are now available too. The new Windows binaries are compatible with Windows XP and later systems.
-- Manual pages are now available, with HTML versions for systems where the original format is impractical.
+- Manual pages are now available, with TXT versions for systems where the original format is impractical.
 - ScummTr/ScummRP: make "XX.LFL should actually end at 0x1234" a warning which is always displayed, instead of being only printed in verbose mode.
 - ScummTR: add a new `-r` option, which interprets the text of the game "as-is", in its original encoding. This can be useful for non-Latin languages such as Japanese.
 - ScummTR: make it possible to import back a translation file created with the `-h` and/or `-I` options.

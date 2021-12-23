@@ -1,0 +1,40 @@
+FONTXY(1)                   General Commands Manual                  FONTXY(1)
+
+NAME
+     FontXY - adjust glyph dimensions inside SCUMM fonts
+
+SYNOPSIS
+     FontXY i CHARFILE
+     FontXY o CHARFILE
+
+DESCRIPTION
+     The FontXY tool lets you adjust the relative size of each glyph (or
+     character) inside a SCUMM character file.  The mode of operation is
+     chosen with one of the following options:
+
+     i       Import glyph dimensions from a XY.txt file into the specified
+             CHARFILE resource.
+
+     o       Export glyph dimensions from the specified CHARFILE resource into
+             a XY.txt file.
+
+     CHARFILE must be a "CHAR_*" resource file, as extracted by scummrp(1).
+
+     Glyph dimensions are represented as a series of `X;Y' coordinates,
+     relative to zero, each glyph being separated by a new line.  Empty glyphs
+     are represented as empty lines.
+
+SEE ALSO
+     scummfont(1)
+
+HISTORY
+     The FontXY tool was written in 2006 by Thomas Combeleran for the ATP
+     team, and was open-sourced in 2020 under an MIT license.
+
+CAVEATS
+     Only newline characters native to the current platform are accepted (CRLF
+     on Windows and LF on most other systems).
+
+     XY.txt pathname is hardcoded.
+
+ScummTR                        November 19, 2020                       ScummTR

@@ -1,0 +1,69 @@
+SCUMMRP(1)                  General Commands Manual                 SCUMMRP(1)
+
+NAME
+     scummrp - pack and unpack SCUMM game data resources
+
+SYNOPSIS
+     scummrp -i [-qvV] [-t tag] -g gameid -p gamedir -d dumpdir
+     scummrp -o [-qvV] [-t tag] -g gameid -p gamedir -d dumpdir
+     scummrp -L
+
+DESCRIPTION
+     The scummrp tool imports and exports game data resources for SCUMM engine
+     games.  The mode of operation is chosen with one of the following
+     options:
+
+     -i      Import resources into the game files.
+
+     -o      Export resources from the game files.
+
+     -L      List all supported games with their respective gameid.
+
+     The other options are as follows:
+
+     -d dumpdir
+                The path to the dump directory (default: DUMP).  Game content
+                is represented as a hierarchy of multiple files and
+                subdirectories.  If it doesn't exist, the directory will be
+                created.
+
+     -g gameid  The ID of the game variant to pack or unpack, as given by -L.
+
+     -p gamedir
+                The path to the game (default: current directory).
+
+     -q         Quiet mode.  Suppress informational output.
+
+     -t tag     Only export/import game resources matching the specified tag.
+                A tag is the internal name of a resource type inside SCUMM,
+                such as "SCRP" or "CHAR".
+
+     -v         Verbose mode.
+
+     -V         Same as -v, but list resource names as they're being treated,
+                too.
+
+EXAMPLES
+     Dump all the resources of the original Monkey Island 2 game to the
+     DUMP_MI2 directory:
+
+           $ scummrp -g monkey2 -p /path/to/MI2 -od DUMP_MI2
+
+     Dump the script resources of the Talkie CD version of Loom, using default
+     paths:
+
+           $ scummrp -g loomcd -t SCRP -o
+
+SEE ALSO
+     descumm (https://github.com/scummvm/scummvm-tools), NUTCracker
+     (https://github.com/BLooperZ/nutcracker)
+
+HISTORY
+     The scummrp tool was written in 2003 by Thomas Combeleran for the ATP
+     team, and was open-sourced in 2020 under an MIT license.
+
+CAVEATS
+     On case-sensitive file systems, game data files must currently follow the
+     DOS convention of being all-uppercase to be properly detected.
+
+ScummTR                        November 19, 2020                       ScummTR

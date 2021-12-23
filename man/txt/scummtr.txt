@@ -1,0 +1,151 @@
+SCUMMTR(1)                  General Commands Manual                 SCUMMTR(1)
+
+NAME
+     scummtr - import and export fan translations for SCUMM engine games
+
+SYNOPSIS
+     scummtr -i [-bcqvw] [-l language] -g gameid -p gamedir -f input
+     scummtr -o [-bchHIqvw] [-a restypes] [-A restypes] [-l language]
+             -g gameid -p gamedir -f output
+     scummtr -L
+
+DESCRIPTION
+     The scummtr tool imports and exports text for SCUMM engine games.  The
+     mode of operation is chosen with one of the following options:
+
+     -i      Import text into the game data files.
+
+     -o      Export text from the game data files.
+
+     -L      List all supported games with their respective gameid.
+
+     The other options are as follows:
+
+     -a restypes
+                 Protect the specified SCUMM resource types with extra
+                 padding, when exporting.
+
+                 Some game resources are created with a short name and use a
+                 longer name later in the game.  In such cases, `@' padding
+                 characters must be added to prevent game errors when the
+                 resource is renamed (this is especially true with the
+                 original interpreters).  The -a option does this action
+                 automatically.
+
+                 Valid resource types for the -a option are:
+
+                 a       Pad actor resources.
+
+                 o       Pad object resources.
+
+                 v       Pad verb resources.
+
+     -A restypes
+                 Same as -a, with variable IDs taken into account.  This
+                 protects even more resources, at the cost of a slight memory
+                 increase which is negligible nowadays.
+
+                 Using -A aov by default is recommended.
+
+     -b          Translation file will be handled in binary mode, instead of
+                 text.
+
+                 Note that this makes most other options inoperative.  This
+                 flag may not correctly work with all games.
+
+     -c          Ease the use of some Western European characters, by
+                 interpreting the text in the Windows-1252 encoding.  If
+                 neither -c nor -r is used, non-ASCII characters will be
+                 handled as escape sequences.
+
+                 Note that you can only use the characters available in your
+                 current SCUMM fonts.
+
+     -f file     The path to the translation file (default: scummtr.txt).
+
+     -g gameid   The ID of the game variant to be translated, as given by -L.
+
+     -h          Include a small header at the start of each line, indicating
+                 the script context of the current string.
+
+     -H          Represent escape sequences as hexadecimal codes, instead of
+                 decimal codes.
+
+     -I          Include the current SCUMM instruction opcode, before each
+                 line.
+
+     -l language
+                 V1 and V2 games only.  The name of the language charset to be
+                 used for this translation.
+
+                 Possible values are:
+
+                 de      Original German charset.
+
+                 en      Original English charset (default).
+
+                 fr      Original French charset.
+
+                 it      Original Italian charset.
+
+     -p gamedir  The path to the game (default: current directory).
+
+     -q          Quiet mode.  Suppress informational output.
+
+     -r          Raw text.  Preserve the original text encoding of the game.
+
+                 This disables any text encoding conversion and escaping: the
+                 text is interpreted "as-is" (except for non-printable ASCII
+                 characters and some internal SCUMM sequences, which remain
+                 escaped), and you must configure your text editor to
+                 recognize the intended encoding (usually an older MS-DOS code
+                 page).
+
+                 This can be useful for non-Western-European languages.
+
+     -v          Verbose mode.
+
+     -w          Use Windows newline characters (CRLF).  This is usually
+                 compatible with more text editors, and thus recommended.
+
+EXAMPLES
+     Extract the text of the original Monkey Island 2 game to a Windows-1252
+     file, with added context and protected resource names:
+
+           $ scummtr -g monkey2 -cwh -A aov -p /path/to/MI2 -of mi2_orig.txt
+
+     Import a new French translation into the game files:
+
+           $ scummtr -g monkey2 -cwh -A aov -p /path/to/MI2 -if mi2_fr.txt
+
+     Extract the text of the Japanese version of Monkey Island 2 (FM-TOWNS) in
+     Shift_JIS, from the current directory:
+
+           $ scummtr -g monkey2 -rw -of mi2_towns_jpn.txt
+
+     Export the text of a German Zak McKracken V2 game, padding resources,
+     with default paths:
+
+           $ scummtr -g zakv2 -l de -cw -A aov -o
+
+HISTORY
+     The scummtr tool was written between 2003 and 2005 by Thomas Combeleran
+     for the ATP team, and was open-sourced in 2020 under an MIT license.
+
+CAVEATS
+     Your text editor must not remove trailing spaces or empty lines,
+     otherwise you will have import errors.
+
+     Since each game and each variant of each game had its own list of
+     accepted characters (usually a subset of an MS-DOS code page), it is not
+     possible to know if a character is available without testing it in the
+     game.  See also scummfont(1) in order to visualize or modify the included
+     font tables.
+
+     Unicode files are not supported, and non-Latin-script alphabets need
+     extra work for convenient use.
+
+     On case-sensitive file systems, game data files must currently follow the
+     DOS convention of being all-uppercase to be properly detected.
+
+ScummTR                        December 27, 2020                       ScummTR
