@@ -12,7 +12,7 @@ RUN sed -i -e 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf 
 
 RUN yum makecache \
 	&& yum install -y epel-release \
-	&& yum install -y gcc-c++ glibc-devel libgcc libstdc++-devel cmake3 glibc-devel.i686 libgcc.i686 libstdc++-devel.i686 \
+	&& yum install -y cmake3 gcc-c++ glibc-devel glibc-devel.i686 libgcc libgcc.i686 libstdc++-devel libstdc++-devel.i686 make \
 	&& yum clean all
 
 FROM scummtr-linux86-base
