@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 cmake_minimum_required (VERSION 3.1 FATAL_ERROR)
 
 if (NOT CMAKE_BUILD_TYPE)
@@ -5,11 +7,21 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build type" FORCE)
 endif()
 
+option(SCUMMTR_COMPILER_IS_DJGPP "Compiler is DJGPP" OFF)
+if (SCUMMTR_COMPILER_IS_DJGPP)
+    set(CMAKE_SYSTEM_NAME "Generic")
+endif()
+
 project ("ScummTR" CXX)
 
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+if (SCUMMTR_COMPILER_IS_DJGPP)
+    set(CMAKE_CXX_EXTENSIONS ON) # for mkdir()
+    set(CMAKE_EXECUTABLE_SUFFIX ".exe")
+endif()
 
 string(TIMESTAMP SCUMMTR_BUILD_DATE "%Y%m%d-%H%M" UTC)
 add_definitions(-DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
@@ -48,8 +60,8 @@ else()
         add_definitions(-D__USE_MINGW_ANSI_STDIO)
     elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "OpenBSD")
         # OpenBSD just does its hardening all by itself. However, we need -Wno-system-headers, there
-        add_compile_options(-Wno-system-headers) 
-    else()
+        add_compile_options(-Wno-system-headers)
+    elseif(NOT SCUMMTR_COMPILER_IS_DJGPP)
         add_definitions(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS)
         set(SCUMMTR_HARDENING_FLAGS "-fstack-protector;--param=ssp-buffer-size=4")
         CHECK_CXX_COMPILER_FLAG("${SCUMMTR_HARDENING_FLAGS}" COMPILER_SUPPORTS_HARDENING_FLAGS)
@@ -67,7 +79,7 @@ else()
     endif()
 endif()
 
-if (WIN32)
+if (NOT UNIX)
     set(CMAKE_INSTALL_BINDIR ".")
     set(CMAKE_INSTALL_DATADIR ".")
 endif()

@@ -16,6 +16,12 @@ We use an older release of [Mingw-W64](http://mingw-w64.org) for this, to make s
 
 Live debug is not expected to happen with Windows release builds, so our default Win32 binaries are built in `Release` mode.
 
+### MS-DOS (DJGPP)
+
+`Dockerfile.msdos` builds MS-DOS binaries thanks to [DJGPP](http://www.delorie.com/djgpp/).
+
+Note that these binaries require a DOS Protected Mode Interface (DPMI) to properly run.
+
 ### Linux x86-32/x86-64
 
 `Dockerfile.linux86` builds x86-32 and x86-64 dynamic binaries for Linux.

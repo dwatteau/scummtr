@@ -33,7 +33,7 @@
 #include <stdexcept>
 #include <string>
 
-#if defined(_WIN32)
+#if defined(_WIN32) && !defined(__DJGPP__)
 # include <direct.h>
 # define mkdir(path, mode) _mkdir(path)
 #else /* assume Unix */

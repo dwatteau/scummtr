@@ -19,7 +19,7 @@ if [ ! -f releases/build.sh ]; then
 	exit 1
 fi
 
-for builder in linux86 win32 ; do
+for builder in linux86 msdos win32 ; do
 	echo "===> Building for $builder"
 
 	if [ "$builder" = "linux86" ] && [ "$(uname -s)" = "Linux" ] && ! grep -q vsyscall /proc/self/maps ; then

@@ -30,6 +30,10 @@
 #  error "This code is not compatible with C++20 and later versions"
 #endif
 
+#if defined(__MSDOS__) && !defined(__DJGPP__)
+#  error "Building for DOS is currently only supported with DJGPP"
+#endif
+
 #if defined(_MSC_VER) && _MSC_VER < 1900
 #  error "Visual Studio 2015 or better is required"
 #endif

@@ -540,7 +540,7 @@ void ScummRp::_getOptions(int argc, const char **argv, const ScummRp::Parameter 
 				{
 					strncpy(params[k].value, argv[i], params[k].maxSize - 1);
 					params[k].value[params[k].maxSize - 1] = '\0';
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__MSDOS__)
 					if (params[k].isPath)
 						for (char *p = strchr(params[k].value, '\\'); p; p = strchr(params[k].value, '\\'))
 							*p++ = '/';

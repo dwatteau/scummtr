@@ -1,0 +1,30 @@
+# MS-DOS build with DJGPP.  Uses g++ 7.3.0 and CMake 3.13.4.
+
+FROM --platform=linux/amd64 debian:10-slim AS scummtr-msdos-base
+
+RUN apt-get update \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends bzip2 ca-certificates cmake make wget \
+	&& rm -rf /var/lib/apt/lists/*
+
+ARG DJGPP_VERSION=3.0
+ARG DJGPP_SYSTYPE=linux64-gcc730
+ARG DJGPP_SUM=cc605720ae465378e2e4039c236a52edb7861f9232df1a5081e4082e114f168a
+
+RUN wget --no-hsts --progress=dot:mega "https://github.com/andrewwutw/build-djgpp/releases/download/v${DJGPP_VERSION}/djgpp-${DJGPP_SYSTYPE}.tar.bz2" \
+	&& test x"$(openssl dgst -sha256 djgpp-${DJGPP_SYSTYPE}.tar.bz2)" = x"SHA256(djgpp-${DJGPP_SYSTYPE}.tar.bz2)= ${DJGPP_SUM}" \
+	&& tar -C /usr/local -xjf "djgpp-${DJGPP_SYSTYPE}.tar.bz2" \
+	&& rm -f "djgpp-${DJGPP_SYSTYPE}.tar.bz2"
+
+FROM scummtr-msdos-base
+
+RUN mkdir -p /scummtr/project /scummtr/build /scummtr/output
+WORKDIR /scummtr
+
+ENV PATH="/usr/local/djgpp/bin:${PATH}"
+
+COPY . /scummtr/project
+
+CMD cd /scummtr/build \
+	&& cmake -DCMAKE_BUILD_TYPE=Release -DSCUMMTR_COMPILER_IS_DJGPP=ON -DCMAKE_INSTALL_PREFIX="" -DCMAKE_CXX_COMPILER=i586-pc-msdosdjgpp-g++ /scummtr/project \
+	&& make VERBOSE=1 \
+	&& make install DESTDIR=/scummtr/output/msdos
