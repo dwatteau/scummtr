@@ -5,7 +5,7 @@ New features:
 - The ScummTR tools are now open-source (using the MIT License), thanks to Thomas Combeleran, their original author.
 - macOS, Linux and MS-DOS binaries are now available too.
 - Manual pages are now available, with TXT versions for systems where the original format is impractical.
-- ScummTr/ScummRP: make "XX.LFL should actually end at 0x1234" a warning which is always displayed, instead of being only printed in verbose mode.
+- ScummTR/ScummRP: make "XX.LFL should actually end at 0x1234" a warning which is always displayed, instead of being only printed in verbose mode.
 - ScummTR: add a new `-r` option, which interprets the text of the game "as-is", in its original encoding. This can be useful for non-Latin languages such as Japanese.
 - ScummTR: make it possible to import back a translation file created with the `-h` and/or `-I` options.
 - ScummTR: add some encoding headers at the start of the translation file, so that most text editors will properly detect its encoding.
@@ -14,8 +14,9 @@ New features:
 
 Bugfixes:
 
-- ScummTr/ScummRP: fix a fatal "Duplicate offset in index" error with MONKEY1-FLOPPY-VGA.
-- ScummTr/ScummRP: fix a fatal "Duplicate offset in index" error with LOOM-EGA-EN.
+- ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with MONKEY1-FLOPPY-VGA.
+- ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with LOOM-EGA-EN.
+- ScummTR/ScummRP: don't fail when the DISK09.LEC file is missing for MONKEY1-EGA, since it was only available through the Roland Update.
 - ScummFont: reject more cases of incompatible BMP files, instead of silently corrupting the internal SCUMM fonts.
 
 Incompatibilities with the previous version:

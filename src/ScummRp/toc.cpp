@@ -23,8 +23,10 @@
  *
  */
 
+#include "common/io.hpp"
 #include "common/toolbox.hpp"
 
+#include "scummrp.hpp"
 #include "toc.hpp"
 
 #include <cstring>
@@ -501,8 +503,20 @@ int GlobalRoomIndex::numberOfDisks() const
 
 	max = 0;
 	for (int i = 0; i < _size; ++i)
+	{
 		if (_toc[i].roomId > max)
+		{
+			// Ignore the requirement on DISK09.LEC for MONKEY1-EGA: it was only available with
+			// the "Roland Update" and we don't need its content here.
+			if (i == 94 && _toc[i].roomId == 9 && ScummRp::game.id == GID_MONKEY && ScummRp::game.version == 4)
+			{
+				ScummIO::info(INF_DETAIL, "Ignoring dependency on DISK09.LEC");
+				continue;
+			}
+
 			max = _toc[i].roomId;
+		}
+	}
 
 	return ++max;
 }
