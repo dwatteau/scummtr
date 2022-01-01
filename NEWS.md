@@ -1,4 +1,4 @@
-## ScummTR 0.5 (2021-XX-XX)
+## ScummTR 0.5 (2022-XX-XX)
 
 New features:
 
@@ -16,7 +16,8 @@ Bugfixes:
 
 - ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with MONKEY1-FLOPPY-VGA.
 - ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with LOOM-EGA-EN.
-- ScummTR/ScummRP: don't fail when the DISK09.LEC file is missing for MONKEY1-EGA, since it was only available through the Roland Update.
+- ScummTR/ScummRP: don't fail when the DISK09.LEC file is missing for MONKEY1-FLOPPIES, since it was only available through the Roland Update.
+- ScummTR/ScummRP: don't fail reporting missing files for the 4-disk floppy versions of MONKEY1, because only the 8-disk floppy versions need them.
 - ScummFont: reject more cases of incompatible BMP files, instead of silently corrupting the internal SCUMM fonts.
 
 Incompatibilities with the previous version:
