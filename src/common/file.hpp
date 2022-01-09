@@ -233,10 +233,10 @@ public:
 	File &write(FilePart &f, std::streamsize n);
 	char get();
 	File &put(char c);
+	void move(std::streamoff offset, std::streamsize n);
+	void moveEnd(std::streamoff offset);
 	virtual void open(const char *filename, std::ios::openmode mode = std::ios::in | std::ios::out | std::ios::binary);
 	virtual void close();
-	virtual void move(std::streamoff offset, std::streamsize n);
-	virtual void moveEnd(std::streamoff offset);
 	virtual File &read(char *s, std::streamsize n);
 	virtual File &write(const char *s, std::streamsize n);
 	virtual File &getline(std::string &s, char delim);
@@ -449,11 +449,11 @@ public:
 
 		return *this;
 	}
-	virtual void move(std::streamoff, std::streamsize)
+	void move(std::streamoff, std::streamsize)
 	{
 		throw std::logic_error("SeqFile::move: Shouldn't be here");
 	}
-	virtual void moveEnd(std::streamoff offset)
+	void moveEnd(std::streamoff offset)
 	{
 		std::streamoff ppos;
 		std::streamsize oldSize;

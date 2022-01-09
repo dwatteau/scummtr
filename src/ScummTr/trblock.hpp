@@ -129,10 +129,10 @@ protected:
 	template <class T, int I> void _tListVerbs(std::list<int32> &l, int32 scriptOffset);
 	template <class T, int I> void _tUpdateVerbs(const std::list<int32> &l, int32 scriptOffset, int n);
 	template <class T, int I> int32 _tFindScriptOffset();
+	void _importText(Text &input, int32 oldSize, int32 scriptOffset);
 	virtual void _listVerbs(std::list<int32> &l, int32 scriptOffset);
 	virtual void _updateVerbs(const std::list<int32> &l, int32 scriptOffset, int n);
 	virtual int32 _findScriptOffset();
-	virtual void _importText(Text &input, int32 oldSize, int32 scriptOffset);
 
 public:
 	void importText(Text &input) override;
