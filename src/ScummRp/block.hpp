@@ -127,13 +127,13 @@ public:
 	static const char *tagToStr(uint32 tag);
 
 protected:
-	virtual const char *_fileName() const;
+	const char *_fileName() const;
 
 public:
-	virtual int32 getHeaderSize() const;
-	virtual int32 getSize() const;
-	virtual uint32 getTag() const;
-	virtual int getId() const;
+	int32 getHeaderSize() const;
+	int32 getSize() const;
+	uint32 getTag() const;
+	int getId() const;
 
 public:
 	Block();
@@ -141,7 +141,7 @@ public:
 
 public:
 	Block(const Block &block);
-	virtual Block &operator=(const Block &block);
+	Block &operator=(const Block &block);
 };
 
 /*
@@ -203,19 +203,19 @@ protected:
 protected:
 	virtual void _init();
 	virtual int _findSubblockId(TreeBlock &subblock) const;
-	virtual void _makeSubblock(TreeBlock &subblock, BlockFormat blockFormat, int32 headerSize);
 	virtual bool _readNextSubblock(TreeBlock &subblock);
 	virtual void _subblockUpdated(TreeBlock &subblock, int32 sizeDiff);
-	virtual void _leaveParent();
 	virtual void _adopt(TreeBlock &subblock);
+	void _makeSubblock(TreeBlock &subblock, BlockFormat blockFormat, int32 headerSize);
+	void _leaveParent();
 	template <class T> T *_nextBlock();
 public:
-	virtual void makePath(std::string &dir, std::string &name) const;
-	virtual void dump(const char *basePath);
-	virtual void update(const char *basePath);
 	virtual TreeBlock *nextBlock();
 	virtual bool nextBlock(TreeBlock &subblock);
 	virtual void firstBlock();
+	void makePath(std::string &dir, std::string &name) const;
+	void dump(const char *basePath);
+	void update(const char *basePath);
 
 public:
 	TreeBlock();
@@ -384,7 +384,7 @@ protected:
 	SeqFile<RAMFile> _ownSeqRAMFile;
 
 protected:
-	virtual void _init(const char *path, int opts, BackUp *bak, int id, uint32 tag, byte xorKey);
+	void _init(const char *path, int opts, BackUp *bak, int id, uint32 tag, byte xorKey);
 
 public:
 	BlocksFile(const char *path, int opts, BackUp &bak, int id, uint32 tag, byte xorKey);
@@ -960,7 +960,7 @@ class LeafBlock : public TreeBlock
 	{
 		throw TreeBlock::ForbiddenMethod("LeafBlock::_findSubblockId: shouldn't be here");
 	}
-	virtual void _readSubblockHeader(TreeBlock &, BlockFormat, unsigned int)
+	void _readSubblockHeader(TreeBlock &, BlockFormat, unsigned int)
 	{
 		throw TreeBlock::ForbiddenMethod("LeafBlock::_readSubblockHeader: shouldn't be here");
 	}

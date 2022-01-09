@@ -208,38 +208,38 @@ public:
 	static std::streamsize fileSize(const char *path);
 
 protected:
-	virtual std::streamsize _getStreamSize();
-	virtual void _onOpen(const char *filename, std::ios::openmode mode);
-	virtual void _truncateAndClose();
+	std::streamsize _getStreamSize();
+	void _onOpen(const char *filename, std::ios::openmode mode);
+	void _truncateAndClose();
+	void _moveFwd(std::streamoff offset, std::streamsize n);
+	void _moveBwd(std::streamoff offset, std::streamsize n);
+	void _setSize(std::streamsize newSize);
 	virtual void _zap();
-	virtual void _moveFwd(std::streamoff offset, std::streamsize n);
-	virtual void _moveBwd(std::streamoff offset, std::streamsize n);
-	virtual void _setSize(std::streamsize newSize);
 
 public:
 	FilePart *operator->() override { return &_part; }
 	FilePart &operator*() override { return _part; }
 	const FilePart *operator->() const override { return &_part; }
 	const FilePart &operator*() const override { return _part; }
-	virtual void truncate(std::streamsize newSize);
-	virtual std::streamsize size() const;
-	virtual File &seekg(std::streamoff off, std::ios::seekdir dir);
-	virtual File &seekp(std::streamoff off, std::ios::seekdir dir);
-	virtual std::streamoff tellg(std::ios::seekdir dir);
-	virtual std::streamoff tellp(std::ios::seekdir dir);
+	void truncate(std::streamsize newSize);
+	std::streamsize size() const;
+	File &seekg(std::streamoff off, std::ios::seekdir dir);
+	File &seekp(std::streamoff off, std::ios::seekdir dir);
+	std::streamoff tellg(std::ios::seekdir dir);
+	std::streamoff tellp(std::ios::seekdir dir);
+	bool is_open();
+	File &write(const std::string &s);
+	File &write(File &f, std::streamsize n);
+	File &write(FilePart &f, std::streamsize n);
+	char get();
+	File &put(char c);
 	virtual void open(const char *filename, std::ios::openmode mode = std::ios::in | std::ios::out | std::ios::binary);
 	virtual void close();
-	virtual bool is_open();
 	virtual void move(std::streamoff offset, std::streamsize n);
 	virtual void moveEnd(std::streamoff offset);
 	virtual File &read(char *s, std::streamsize n);
 	virtual File &write(const char *s, std::streamsize n);
-	virtual File &write(const std::string &s);
-	virtual File &write(File &f, std::streamsize n);
-	virtual File &write(FilePart &f, std::streamsize n);
 	virtual File &getline(std::string &s, char delim);
-	virtual char get();
-	virtual File &put(char c);
 
 public:
 	File();
@@ -304,10 +304,10 @@ protected:
 
 protected:
 	void _zap() override;
-	virtual void _zapRAM();
-	virtual void _load();
-	virtual void _save();
-	virtual void _reallocAtLeast(std::streamsize sz);
+	void _zapRAM();
+	void _load();
+	void _save();
+	void _reallocAtLeast(std::streamsize sz);
 
 public:
 	void open(const char *filename, std::ios::openmode mode = std::ios::in | std::ios::out | std::ios::binary) override;

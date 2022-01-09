@@ -85,33 +85,33 @@ protected:
 	bool _accessed[256];
 
 protected:
-	virtual bool _idInRange(int id) const;
-	virtual bool _validItem(int id) const;
-	virtual bool _validId(int id) const;
+	bool _idInRange(int id) const;
+	bool _validItem(int id) const;
+	bool _validId(int id) const;
+	void _load16Sep32(FilePart &file);
+	void _load8Sep16(FilePart &file, int size);
+	void _load8Mix32(FilePart &file);
+	void _load16Mix32(FilePart &file);
+	void _save16Sep32(FilePart &file) const;
+	void _save8Sep16(FilePart &file, bool fixedSize) const;
+	void _save8Mix32(FilePart &file) const;
+	void _save16Mix32(FilePart &file) const;
 	virtual void _zap();
-	virtual void _load16Sep32(FilePart &file);
-	virtual void _load8Sep16(FilePart &file, int size);
-	virtual void _load8Mix32(FilePart &file);
-	virtual void _load16Mix32(FilePart &file);
-	virtual void _save16Sep32(FilePart &file) const;
-	virtual void _save8Sep16(FilePart &file, bool fixedSize) const;
-	virtual void _save8Mix32(FilePart &file) const;
-	virtual void _save16Mix32(FilePart &file) const;
 
 public:
-	virtual TableOfContent::Type getType() const;
-	virtual bool accessed(byte roomId) const;
-	virtual void accessing(byte roomId);
+	TableOfContent::Type getType() const;
+	bool accessed(byte roomId) const;
+	void accessing(byte roomId);
+	int getSize() const;
+	void load(FilePart &file, GlobalTocFormat format);
+	void save(FilePart &file, GlobalTocFormat format);
 	virtual void merge(const TableOfContent &t);
 	virtual int count(byte roomId, int32 offset) const;
-	virtual int getSize() const;
 	virtual int findId(byte roomId, int32 offset) const;
 	virtual void firstId(byte roomId);
 	virtual bool nextId(int &id, byte roomId);
 	virtual TableOfContent::TocElement &operator[](int id);
 	virtual TableOfContent::TocElement operator[](int id) const;
-	virtual void load(FilePart &file, GlobalTocFormat format);
-	virtual void save(FilePart &file, GlobalTocFormat format);
 	virtual void load(FilePart &file, GlobalTocFormat format, int size);
 	virtual void save(FilePart &file, GlobalTocFormat format, bool fixedSize);
 
@@ -124,7 +124,7 @@ private:
 
 public:
 	TableOfContent(const TableOfContent &t);
-	virtual TableOfContent &operator=(const TableOfContent &t);
+	TableOfContent &operator=(const TableOfContent &t);
 };
 
 /*
