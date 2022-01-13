@@ -517,7 +517,7 @@ void ScummRp::_usage()
 	std::cout << " -v         " << "verbose mode\n";
 	std::cout << " -V         " << "more verbose mode (lists blocks)\n\n";
 	std::cout << "Examples:\n";
-	std::cout << "scummrp -g monkey2 -p MI2 -od MI2_DUMP" << std::endl;
+	std::cout << "scummrp -g monkey2 -p MI2 -od MI2_DUMP\n";
 	std::cout << "scummrp -g loomcd -t SCRP -o" << std::endl;
 }
 
@@ -574,7 +574,7 @@ void ScummRp::_listGames()
 
 	std::cout << "supported games:\n\n";
 	std::cout << "id" << std::setw(12) << "| " << std::setw(0) << "description"
-		 << std::setw(42) << "| " << std::setw(0) << "file" << std::endl;
+		 << std::setw(42) << "| " << std::setw(0) << "file" << "\n";
 	std::cout << "------------|-------------------------------------"
 		"---------------|-------------\n";
 
