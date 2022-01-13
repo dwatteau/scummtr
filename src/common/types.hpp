@@ -75,7 +75,7 @@ typedef int int32;
 #define MKTAG4(a,b,c,d) ((uint32)((d) | ((c) << 8) | ((b) << 16) | ((a) << 24)))
 
 #if __cplusplus < 201103L && !defined(_MSC_VER)
-#  ifndef nullptr
+#  if !defined(nullptr) && !defined(_NATIVE_NULLPTR_SUPPORTED)
 #    define nullptr       0
 #  endif
 #  define override
