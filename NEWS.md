@@ -26,6 +26,7 @@ Incompatibilities with the previous version:
 - ScummTR: the default value for the `-f` option is now the `scummtr.txt` file, instead of `./text`.
 - ScummTR: the `-h` and `-I` options are now ignored, when the `-b` option is used.
 - ScummRP: the default value for the `-d` option is now the `DUMP` directory, instead of the current (`.`) directory.
+- ScummTR/ScummRP: unrecognized options now produce an immediate fatal error, instead of being silently ignored.
 
 Known bugs:
 

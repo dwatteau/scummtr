@@ -476,6 +476,9 @@ bool ScummTr::_readOption(const char *arg, char *pendingParams)
 		case 'f':
 			ScummRp::_queueParam(pendingParams, c);
 			break;
+		default:
+			ScummIO::fatal(xsprintf("Unrecognized \"-%c\" option", c));
+			break;
 		}
 	}
 
