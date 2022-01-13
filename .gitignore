@@ -22,11 +22,13 @@ _deps
 *.exe
 .gdb_history
 gdb.txt
+*.lib
 *.ncb
 *.o
 *.obj
 *.suo
 tags
+*.zip
 # IDE files
 .idea*
 .metadata
@@ -53,7 +55,9 @@ Testing
 CHAR_????
 *.[eExXeE]
 *.[iImMsS]
+*.[lLaA]*
 *.[lLfFlL]
+*.[lLeEcC]
 *.log
 *-new
 *-tmp
