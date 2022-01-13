@@ -26,6 +26,8 @@ gdb.txt
 *.ncb
 *.o
 *.obj
+*.pdb
+*.pch
 *.suo
 tags
 *.zip
