@@ -282,6 +282,7 @@ static void saveBmp(const char *path)
 		memcpy(buf + i * roundTo4(glWidth), glFontBitmap + (glHeight - i - 1) * glWidth, glWidth);
 
 	file.write((char *)buf, roundTo4(glWidth) * glHeight);
+	delete[] buf;
 
 	file.close();
 }
@@ -337,6 +338,7 @@ static void loadBmp(const char *path)
 	file.read((char *)buf, roundTo4(glWidth) * glHeight);
 	for (int i = 0; i < glHeight; ++i)
 		memcpy(glFontBitmap + i * glWidth, buf + (glHeight - i - 1) * roundTo4(glWidth), glWidth);
+	delete[] buf;
 
 	file.close();
 }
@@ -551,8 +553,6 @@ static void loadFont(const char *path)
 
 	getFontInfo(baseOffset, file, version, bpp, maxHeight, maxWidth, bytesPerChar, numChars);
 
-	delete[] glFontBitmap;
-	glFontBitmap = nullptr;
 #ifdef SCUMMFONT_256
 	glFontBitmap = new byte[128 * 128];
 	memset(glFontBitmap, 0, 128 * 128);
@@ -649,11 +649,13 @@ int main(int argc, char **argv) try
 	{
 		loadBmp(argv[3]);
 		saveFont(argv[2]);
+		delete[] glFontBitmap;
 	}
 	else if (argv[1][0] == 'o')
 	{
 		loadFont(argv[2]);
 		saveBmp(argv[3]);
+		delete[] glFontBitmap;
 	}
 	else
 	{
