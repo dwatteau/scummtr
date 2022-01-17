@@ -2,6 +2,11 @@
 
 cmake_minimum_required (VERSION 3.1 FATAL_ERROR)
 
+# Don't export symbols, unless ENABLE_EXPORTS is used
+if (POLICY CMP0065)
+    cmake_policy(SET CMP0065 NEW)
+endif()
+
 if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "No explicit CMAKE_BUILD_TYPE selected, default to RelWithDebInfo")
     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build type" FORCE)
