@@ -40,6 +40,10 @@ string(TIMESTAMP SCUMMTR_BUILD_DATE "%Y%m%d-%H%M" UTC)
 include(CheckCXXCompilerFlag)
 
 if(MSVC)
+    if(MSVC_VERSION LESS 1900)
+        message(FATAL_ERROR "Refusing to build: Visual Studio 2015 or better is required")
+    endif()
+
     add_definitions(/DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN)
 
