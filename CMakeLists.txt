@@ -7,6 +7,11 @@ if (POLICY CMP0065)
     cmake_policy(SET CMP0065 NEW)
 endif()
 
+# Don't hardcode /W3 by default for MSVC
+if(POLICY CMP0092)
+    cmake_policy(SET CMP0092 NEW)
+endif()
+
 if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "No explicit CMAKE_BUILD_TYPE selected, default to RelWithDebInfo")
     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build type" FORCE)
@@ -29,16 +34,22 @@ if (SCUMMTR_COMPILER_IS_DJGPP)
 endif()
 
 string(TIMESTAMP SCUMMTR_BUILD_DATE "%Y%m%d-%H%M" UTC)
-add_definitions(-DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
 
 include(CheckCXXCompilerFlag)
 
 if (MSVC)
-    add_compile_options(/wd4244 /wd4267 /wd26451 /wd26495)
+    add_definitions(/DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN)
+
+    add_compile_options(/W3 /wd4244 /wd4267)
 else()
+    add_definitions(-DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
+    if(WIN32)
+        add_definitions(-D_CRT_SECURE_NO_WARNINGS -DWIN32_LEAN_AND_MEAN)
+    endif()
+
     # GCC 2.95 compatible warnings we always want
     add_compile_options(-Wall -pedantic -Wpointer-arith -Wcast-qual -Wcast-align -Wundef -Wmultichar -Wwrite-strings -Wctor-dtor-privacy -Wredundant-decls -Wunused -Wsign-compare)
     # GCC 2.95 compatible warnings we don't want (yet)
@@ -78,10 +89,6 @@ else()
                 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now")
             endif()
         endif()
-    endif()
-
-    if (WIN32)
-        add_definitions(-D_CRT_SECURE_NO_WARNINGS -DWIN32_LEAN_AND_MEAN)
     endif()
 endif()
 
