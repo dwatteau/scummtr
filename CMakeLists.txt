@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: MIT
 
-cmake_minimum_required (VERSION 3.1 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
 # Don't export symbols, unless ENABLE_EXPORTS is used
-if (POLICY CMP0065)
+if(POLICY CMP0065)
     cmake_policy(SET CMP0065 NEW)
 endif()
 
@@ -12,34 +12,34 @@ if(POLICY CMP0092)
     cmake_policy(SET CMP0092 NEW)
 endif()
 
-if (NOT CMAKE_BUILD_TYPE)
+if(NOT CMAKE_BUILD_TYPE)
     message(STATUS "No explicit CMAKE_BUILD_TYPE selected, default to RelWithDebInfo")
     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build type" FORCE)
 endif()
 
 option(SCUMMTR_COMPILER_IS_DJGPP "Compiler is DJGPP" OFF)
-if (SCUMMTR_COMPILER_IS_DJGPP)
+if(SCUMMTR_COMPILER_IS_DJGPP)
     set(CMAKE_SYSTEM_NAME "Generic")
 endif()
 
-project ("ScummTR" CXX)
+project("ScummTR" CXX)
 
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-if (SCUMMTR_COMPILER_IS_DJGPP)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
+
+if(SCUMMTR_COMPILER_IS_DJGPP)
     set(CMAKE_CXX_EXTENSIONS ON) # for mkdir()
     set(CMAKE_EXECUTABLE_SUFFIX ".exe")
 endif()
 
 string(TIMESTAMP SCUMMTR_BUILD_DATE "%Y%m%d-%H%M" UTC)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
-
 include(CheckCXXCompilerFlag)
 
-if (MSVC)
+if(MSVC)
     add_definitions(/DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN)
 
@@ -73,9 +73,9 @@ else()
         add_compile_options("${SCUMMTR_MODERN_WARNING_FLAGS};-Wshadow;-Wuninitialized")
     endif()
 
-    if (MINGW)
+    if(MINGW)
         add_definitions(-D__USE_MINGW_ANSI_STDIO)
-    elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "OpenBSD")
+    elseif(CMAKE_HOST_SYSTEM_NAME MATCHES "OpenBSD")
         # OpenBSD just does its hardening all by itself. However, we need -Wno-system-headers, there
         add_compile_options(-Wno-system-headers)
     elseif(NOT SCUMMTR_COMPILER_IS_DJGPP)
@@ -84,7 +84,7 @@ else()
         CHECK_CXX_COMPILER_FLAG("${SCUMMTR_HARDENING_FLAGS}" COMPILER_SUPPORTS_HARDENING_FLAGS)
         if(COMPILER_SUPPORTS_HARDENING_FLAGS)
             add_compile_options("${SCUMMTR_HARDENING_FLAGS}")
-            if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+            if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
                 add_compile_options(-fPIE)
                 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now")
             endif()
@@ -92,20 +92,20 @@ else()
     endif()
 endif()
 
-if (NOT UNIX)
+if(NOT UNIX)
     set(CMAKE_INSTALL_BINDIR ".")
     set(CMAKE_INSTALL_DATADIR ".")
 endif()
 include(GNUInstallDirs)
 
-include_directories ("src")
-add_subdirectory ("src/common")
-add_subdirectory ("src/FontXY")
-add_subdirectory ("src/ScummFont")
-add_subdirectory ("src/ScummRp")
-add_subdirectory ("src/ScummTr")
+include_directories("src")
+add_subdirectory("src/common")
+add_subdirectory("src/FontXY")
+add_subdirectory("src/ScummFont")
+add_subdirectory("src/ScummRp")
+add_subdirectory("src/ScummTr")
 
-if (UNIX)
+if(UNIX)
     install(FILES man/FontXY.1 man/scummfont.1 man/scummrp.1 man/scummtr.1 DESTINATION "${CMAKE_INSTALL_MANDIR}/man1")
 else()
     install(DIRECTORY man/txt DESTINATION "${CMAKE_INSTALL_DATADIR}" FILES_MATCHING PATTERN "*.txt")
