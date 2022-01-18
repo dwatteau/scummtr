@@ -1039,7 +1039,7 @@ void LFLFPack::_subblockUpdated(TreeBlock &subblock, int32 sizeDiff)
  */
 
 LECFPack::LECFPack() :
-    TreeBlock(), _firstBlockOffset(0), _loff()
+    TreeBlock(), _firstBlockOffset(0), _loff(), _LOFFOffset(0)
 {
 }
 
@@ -1048,7 +1048,7 @@ LECFPack::~LECFPack()
 }
 
 LECFPack::LECFPack(const TreeBlock &block) :
-    TreeBlock(block), _firstBlockOffset(0), _loff()
+    TreeBlock(block), _firstBlockOffset(0), _loff(), _LOFFOffset(0)
 {
 	_init();
 }
@@ -1058,6 +1058,7 @@ LECFPack &LECFPack::operator=(const TreeBlock &block)
 	TreeBlock::operator=(block);
 
 	_firstBlockOffset = 0;
+	_LOFFOffset = 0;
 	_init();
 
 	return *this;
