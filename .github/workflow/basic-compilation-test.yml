@@ -3,6 +3,7 @@ name: Basic compilation test for most common platforms
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 env:
   BUILD_TYPE: RelWithDebInfo
