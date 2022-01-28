@@ -26,6 +26,7 @@
 #ifndef SCUMMTR_COMMON_TYPES_HPP
 #define SCUMMTR_COMMON_TYPES_HPP
 
+// test
 #warning "this is just a temporary test"
 
 #if __cplusplus > 201703L
