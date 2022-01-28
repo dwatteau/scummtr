@@ -479,7 +479,7 @@ static void saveFont(const char *path)
 			{
 				for (int k = 0; k < width; ++k)
 				{
-					int l = k + maxWidth * (j + maxHeight * i);
+					const int l = k + maxWidth * (j + maxHeight * i);
 
 					if ((glFontBitmap[l] & ((1 << bpp) - 1)) == glFontBitmap[l])
 						b |= glFontBitmap[l] << (8 - bpp - p);
