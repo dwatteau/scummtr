@@ -9,9 +9,10 @@ They are known as `scummtr`, `scummrp`, `scummfont`, and `FontXY`. They were ori
 This currently requires [CMake](https://cmake.org) and a C++98 compatible compiler. It should build on Windows and most POSIX systems.
 
 ```sh
-mkdir -p build
-cd build && cmake ..
-make
+mkdir build
+cd build
+cmake ..
+cmake --build .
 ```
 
 ## Current goals
