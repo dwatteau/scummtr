@@ -362,6 +362,9 @@ int ScummTr::main(int argc, const char **argv)
 		case 'v':
 			ScummTr::_paddedRsc |= 1 << ScummTr::RSCT_VERB;
 			break;
+		default:
+			ScummIO::fatal("-a/-A values must be: a, o, v");
+			break;
 		}
 	}
 
