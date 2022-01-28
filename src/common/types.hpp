@@ -26,6 +26,8 @@
 #ifndef SCUMMTR_COMMON_TYPES_HPP
 #define SCUMMTR_COMMON_TYPES_HPP
 
+#warning "this is just a temporary test"
+
 #if __cplusplus > 201703L
 #  error "This code is not compatible with C++20 and later versions"
 #endif
