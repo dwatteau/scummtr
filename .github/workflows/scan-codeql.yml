@@ -1,0 +1,30 @@
+name: CodeQL scan
+
+on: workflow_dispatch
+
+jobs:
+  analyze:
+    name: Run a CodeQL scan
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: cpp
+
+      - name: Build (autobuild)
+        uses: github/codeql-action/autobuild@v1
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v1
