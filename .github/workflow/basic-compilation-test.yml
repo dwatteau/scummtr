@@ -1,0 +1,46 @@
+name: Basic compilation test for most common platforms
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'CMakeLists.txt'
+      - 'src/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'CMakeLists.txt'
+      - 'src/**'
+
+env:
+  BUILD_TYPE: RelWithDebInfo
+
+jobs:
+  build:
+    name: Build on ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        include:
+          - name: 'Ubuntu 18.04 (default)'
+            os: ubuntu-18.04
+            extraargs: ''
+          - name: 'Windows Server 2019 (win32)'
+            os: windows-2019
+            extraargs: '-DCMAKE_GENERATOR_PLATFORM=Win32'
+          - name: 'macOS 11 (x86_64 and arm64)'
+            os: macos-11
+            extraargs: '-DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Print CMake version
+        run: cmake --version
+
+      - name: Configure for ${{env.BUILD_TYPE}}
+        run: cmake -S . -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{ matrix.extraargs }}
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build -v -j2
