@@ -158,6 +158,8 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 				else if (action == ScummTr::ACT_RSCNAMELIMITS)
 					OldObjectCodeBlockV1(*blockPtr).getRscNameLimits();
 				break;
+			default:
+				break;
 			}
 		}
 	}

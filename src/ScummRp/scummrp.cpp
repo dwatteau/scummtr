@@ -228,6 +228,8 @@ void ScummRp::_exploreIndex(TreeBlock &index)
 			else if (A == ScummRp::ACT_LOAD)
 				tocBlockPtr->exportToc(ScummRp::_mainTocSet.charToc);
 			break;
+		default:
+			break;
 		}
 	}
 }
