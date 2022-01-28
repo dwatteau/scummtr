@@ -1,0 +1,14 @@
+name: Blank
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - users: actions/checkout@v2
+      - name: Test
+        run: echo "hello, world"
