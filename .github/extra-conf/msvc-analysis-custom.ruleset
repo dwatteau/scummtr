@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="ScummTR ruleset" Description="Tweak default recommended rules" ToolsVersion="10.0">
+	<!-- https://docs.microsoft.com/en-us/cpp/code-quality/using-rule-sets-to-specify-the-cpp-rules-to-run -->
+	<Include Path="NativeRecommendedRules.ruleset" Action="Default" />
+	<Rules AnalyzerId="Microsoft.Analyzers.NativeCodeAnalysis" RuleNamespace="Microsoft.Rules.Native">
+		<!-- disable some recommendations about C++11 keywords -->
+		<Rule Id="C26439" Action="None" />
+		<Rule Id="C26447" Action="None" />
+		<Rule Id="C26455" Action="None" />
+		<Rule Id="C26814" Action="None" />
+		<!-- This one is way too noisy -->
+		<Rule Id="C26451" Action="None" />
+		<!-- Enable some extra warnings -->
+		<Rule Id="C26433" Action="Warning" />
+		<Rule Id="C26495" Action="Warning" />
+		<Rule Id="C26818" Action="Warning" />
+	</Rules>
+</RuleSet>

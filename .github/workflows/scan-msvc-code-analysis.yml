@@ -1,0 +1,39 @@
+name: Microsoft C++ Code Analysis
+
+on: workflow_dispatch
+
+env:
+  BUILD_TYPE: Debug
+
+jobs:
+  analyze:
+    name: Run MSVC code analysis
+    runs-on: windows-latest
+
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure CMake
+        run: cmake -S . -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+      - name: Initialize MSVC Code Analysis
+        uses: microsoft/msvc-code-analysis-action@47ecec99bf7ce0399ed85cbb5012b6f24eab5959
+        # Provide a unique ID to access the sarif output path
+        id: run-analysis
+        with:
+          cmakeBuildDirectory: ${{github.workspace}}/build
+          buildConfiguration: ${{env.BUILD_TYPE}}
+          ruleset: .github/extra-conf/msvc-analysis-custom.ruleset
+
+      - name: Upload SARIF file to GitHub Code Scanning Alerts
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ${{ steps.run-analysis.outputs.sarif }}
