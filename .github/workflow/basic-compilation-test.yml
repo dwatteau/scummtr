@@ -3,16 +3,8 @@ name: Basic compilation test for most common platforms
 on:
   push:
     branches: [ main ]
-    paths:
-      - '.github/workflow/basic-compilation-test.yml'
-      - 'CMakeLists.txt'
-      - 'src/**'
   pull_request:
     branches: [ main ]
-    paths:
-      - '.github/workflow/basic-compilation-test.yml'
-      - 'CMakeLists.txt'
-      - 'src/**'
 
 env:
   BUILD_TYPE: RelWithDebInfo
