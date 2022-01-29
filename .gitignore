@@ -30,6 +30,8 @@ gdb.txt
 *.pch
 *.suo
 tags
+*.tar
+*.tar.*
 *.zip
 # IDE files
 .idea*
