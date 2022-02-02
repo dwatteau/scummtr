@@ -2,14 +2,13 @@
 
 New features:
 
-- The ScummTR tools are now open-source (using the MIT License), thanks to Thomas Combeleran, their original author.
-- macOS, Linux and MS-DOS binaries are now available too.
-- Manual pages are now available, with TXT versions for systems where the original format is impractical.
-- ScummTR/ScummRP: make "XX.LFL should actually end at 0x1234" a warning which is always displayed, instead of being only printed in verbose mode.
+- MS-DOS binaries have been added, on top of the new macOS, Linux and Windows binaries.
+- Manual pages have been added (with .txt versions for systems where the original format is impractical).
 - ScummTR: add a new `-r` option, which interprets the text of the game "as-is", in its original encoding. This can be useful for non-Latin languages such as Japanese.
 - ScummTR: make it possible to import back a translation file created with the `-h` and/or `-I` options.
 - ScummTR: add some encoding headers at the start of the translation file, so that most text editors will properly detect its encoding.
-- ScummFont: when importing a font, you now don't have to replace the original file with the `-new` file anymore.
+- ScummTR/ScummRP: make "XX.LFL should actually end at 0x1234" a warning which is always displayed, instead of being only printed in verbose mode.
+- ScummFont: when importing a font, you now don't have to manually replace the original file with the `-new` file anymore.
 - ScummFont: provide more details if an unsupported BMP file is given as an input.
 
 Bugfixes:
@@ -18,7 +17,7 @@ Bugfixes:
 - ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with LOOM-EGA-EN.
 - ScummTR/ScummRP: don't fail when the DISK09.LEC file is missing for MONKEY1-EGA, since it was only available through the Roland Update.
 - ScummTR/ScummRP: don't fail reporting missing files for the 4-disk floppy versions of MONKEY1, because only the 8-disk floppy versions need them.
-- ScummFont: reject more cases of incompatible BMP files, instead of silently corrupting the internal SCUMM fonts.
+- ScummFont: reject more incompatible BMP files, instead of trying to use them and then silently corrupting the internal SCUMM fonts.
 
 Incompatibilities with the previous version:
 
@@ -30,12 +29,56 @@ Incompatibilities with the previous version:
 
 Known bugs:
 
-- ScummTR: the `-b` option may not correctly work with all games.
+- ScummTR: the `-b` option may not correctly work with all games. Possible workaround: use the `-r` option.
 
 Portability (for developers):
 
-- Compatibility fixes for modern compilers. C++98 is still used by default.
 - Big-endian systems are now completely supported.
-- Fix a possible incompatibility with some strict-alignment systems.
-- Fix some 64-bit errors on non-Windows systems.
 - Drop support for MSVC versions lower than 2015, because of their improper support for safe constructs such as `snprintf()`.
+
+### ScummTR 0.4.2 (2020-11-28)
+
+New features:
+
+- The original sources have been modified to be compatible with most modern systems.
+- 64-bit binaries for macOS and Linux are now available.
+
+Bugfixes:
+
+- None.
+
+Portability (for developers):
+
+- Compatibility fixes for modern compilers, and CMake configuration. C++98 is still used by default.
+- Fix a possible incompatibility with some strict-alignment systems.
+- Fix fatal 64-bit errors on non-Windows systems.
+
+### ScummTR 0.4.1 (2020-11-08)
+
+New features:
+
+- The ScummTR tools are now open-source (using the MIT License), thanks to Thomas Combeleran, their original author.
+- The original sources have been recompiled "as-is" on circa-2003 x86-32 systems. That's it.
+
+Bugfixes:
+
+- None.
+
+Known bugs:
+
+- The Linux and macOS binaries of this release being built on much older systems, they may fail to work on modern systems.
+
+Incompatibilities with the previous version:
+
+- None.
+
+## ScummTR 0.4.0 (2003-10-12)
+
+Until 2020, the ScummTR tools were only available as win32 binaries, unmodified since their original upload.
+
+They're still available from their original server (with the associated SHA256 sums), as of 2022:
+
+* <http://hibernatus34.free.fr/scumm/scummtr.exe> (`0b96ae59e889908cb806988a0b8b54c6d5c98b62b86779975889cfbb7d0abe65`)
+* <http://hibernatus34.free.fr/scumm/scummrp.exe> (`cc0ef22670715eaedc85682ce8641c10b761d7b3960809464a4f2a98113c2797`)
+* <http://hibernatus34.free.fr/scumm/scummfont.exe> (`ef86343d0c152b19102c7defa46a44f1476639464929b3bcb2a4c1e558278d3c`)
+* <http://hibernatus34.free.fr/scumm/FontXY.exe> (`5e162b3c018dad36eab799a7384869fbd9591e0db136ec1e8df90f0e39915897`)
