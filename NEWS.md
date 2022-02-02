@@ -1,6 +1,6 @@
 ## ScummTR 0.5.0 (2022-02-??)
 
-New features:
+### New features:
 
 - MS-DOS binaries have been added, on top of the new macOS, Linux and Windows binaries.
 - Manual pages have been added (with .txt versions for systems where the original format is impractical).
@@ -11,7 +11,7 @@ New features:
 - ScummFont: when importing a font, you now don't have to manually replace the original file with the `-new` file anymore.
 - ScummFont: provide more details if an unsupported BMP file is given as an input.
 
-Bugfixes:
+### Bugfixes:
 
 - ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with MONKEY1-FLOPPY-VGA.
 - ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with LOOM-EGA-EN.
@@ -19,7 +19,7 @@ Bugfixes:
 - ScummTR/ScummRP: don't fail reporting missing files for the 4-disk floppy versions of MONKEY1, because only the 8-disk floppy versions need them.
 - ScummFont: reject more incompatible BMP files, instead of trying to use them and then silently corrupting the internal SCUMM fonts.
 
-Incompatibilities with the previous version:
+### Incompatibilities with the previous version:
 
 - ScummTR: a translation file created by an earlier version of ScummTR will not necessarily be compatible with this new version. It is recommended to make a backup, import (`-i`) your current translation with the old ScummTR, and extract (`-o`) it again with the new ScummTR.
 - ScummTR: the default value for the `-f` option is now the `scummtr.txt` file, instead of `./text`.
@@ -27,48 +27,48 @@ Incompatibilities with the previous version:
 - ScummRP: the default value for the `-d` option is now the `DUMP` directory, instead of the current (`.`) directory.
 - ScummTR/ScummRP: unrecognized options now produce an immediate fatal error, instead of being silently ignored.
 
-Known bugs:
+### Known bugs:
 
 - ScummTR: the `-b` option may not correctly work with all games. Possible workaround: use the `-r` option.
 
-Portability (for developers):
+### Portability (for developers):
 
 - Big-endian systems are now completely supported.
 - Drop support for MSVC versions lower than 2015, because of their improper support for safe constructs such as `snprintf()`.
 
-### ScummTR 0.4.2 (2020-11-28)
+## ScummTR 0.4.2 (2020-11-28)
 
-New features:
+### New features:
 
 - The original sources have been modified to be compatible with most modern systems.
 - 64-bit binaries for macOS and Linux are now available.
 
-Bugfixes:
+### Bugfixes:
 
 - None.
 
-Portability (for developers):
+### Portability (for developers):
 
 - Compatibility fixes for modern compilers, and CMake configuration. C++98 is still used by default.
 - Fix a possible incompatibility with some strict-alignment systems.
 - Fix fatal 64-bit errors on non-Windows systems.
 
-### ScummTR 0.4.1 (2020-11-08)
+## ScummTR 0.4.1 (2020-11-08)
 
-New features:
+### New features:
 
 - The ScummTR tools are now open-source (using the MIT License), thanks to Thomas Combeleran, their original author.
 - The original sources have been recompiled "as-is" on circa-2003 x86-32 systems. That's it.
 
-Bugfixes:
+### Bugfixes:
 
 - None.
 
-Known bugs:
+### Known bugs:
 
 - The Linux and macOS binaries of this release being built on much older systems, they may fail to work on modern systems.
 
-Incompatibilities with the previous version:
+### Incompatibilities with the previous version:
 
 - None.
 
