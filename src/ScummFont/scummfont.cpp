@@ -120,7 +120,7 @@ static int32 glHeight = 0;
 
 static int usage()
 {
-	std::cout << "ScummFont 0.2 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran\n\n";
+	std::cout << "ScummFont 0.5.0 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran\n\n";
 	std::cout << "usage:\n";
 	std::cout << "  scummfont {i|o} font bitmap.bmp\n\n";
 	std::cout << "  o: Export bitmap.bmp from font\n";

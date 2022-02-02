@@ -40,7 +40,7 @@
  */
 
 const char *const ScummTr::NAME = "ScummTr";
-const char *const ScummTr::VERSION = "0.4";
+const char *const ScummTr::VERSION = "0.5.0";
 const char *const ScummTr::AUTHOR = "Thomas Combeleran";
 
 const ScummRp::Parameter ScummTr::_trParameters[] =

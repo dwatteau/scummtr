@@ -41,7 +41,7 @@
  */
 
 const char *const ScummRp::NAME = "ScummRp";
-const char *const ScummRp::VERSION = "0.2";
+const char *const ScummRp::VERSION = "0.5.0";
 const char *const ScummRp::AUTHOR = "Thomas Combeleran";
 
 const GameDefinition &ScummRp::game = ScummRp::_game;

@@ -1,4 +1,4 @@
-## ScummTR 0.5 (2022-XX-XX)
+## ScummTR 0.5.0 (2022-02-??)
 
 New features:
 
