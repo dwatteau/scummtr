@@ -23,7 +23,7 @@ More information: <https://support.apple.com/en-us/HT202491>.
 
 The symptom is a `Load error: no DPMI - Get csdpmi*b.zip` message.
 
-You need a [DOS Protected Mode Interface](https://en.wikipedia.org/wiki/DOS_Protected_Mode_Interface) in order to use the MS-DOS binaries. Windows 3.x, 95, 98, ME and NT already have one, but if you something like DOSBox, you may encounter the error above.
+You need a [DOS Protected Mode Interface](https://en.wikipedia.org/wiki/DOS_Protected_Mode_Interface) in order to use the MS-DOS binaries. Windows 3.x, 95, 98, ME and NT already have one, but if you use something like DOSBox, you may encounter the error above.
 
 [CWSDPMI](http://sandmann.dotster.com/cwsdpmi/) can be used in this case. Just put the `CWSDPMI.EXE` file next to the ScummTR binaries.
 
@@ -34,7 +34,7 @@ You need a [DOS Protected Mode Interface](https://en.wikipedia.org/wiki/DOS_Prot
 Make sure that you have:
 
 * a Windows or [POSIX](https://en.wikipedia.org/wiki/POSIX#POSIX-oriented_operating_systems) system
-* a C++98 compiler (such as g++, clang++, or [https://www.mingw-w64.org](Mingw-w64) or MSVC 2015 or later for Windows)
+* a C++98 compiler (such as g++, clang++, or [Mingw-w64](https://www.mingw-w64.org) or MSVC 2015 or later for Windows)
 * [CMake](https://cmake.org).
 
 Then, read the [release documentation](releases/README.md) for more information.
@@ -131,7 +131,7 @@ For example, in *Zak*:
 You don't have the Blue Crystal.\001Come back when you have it.
 ```
 
-Here, the `\001` sequence will force a newline between the two sentences. You can put a `\001` wherever you would but a space.
+Here, the `\001` sequence will force a newline between the two sentences. You can put a `\001` wherever you would put a space.
 
 Later games try to automatically handle newline placements (as a modern word processor would do), but it may not always suit your needs, especially when dealing with some objects, or when you need to choose a dialogue option from the verb interface.
 
@@ -210,7 +210,7 @@ TODO
 
 ### What are all these weird `\123\456\789` symbols?
 
-If it starts with the `\254` or `\255` number, then it's probably an internal "escape sequence" of the game. It triggers some special actions, such as a new line, clearing the screen, triggering a special character movement, or launching some audio. You can change most of the game around them, but **don't** change the number sequences themselves.
+If it starts with the `\254` or `\255` number, then it's probably an internal "escape sequence" of the game. It triggers some special actions, such as a new line, clearing the screen, a special character movement, or some speech. You can change most of the text around these sequences, but **don't** change the sequences themselves.
 
 If it's a lower number, such as `\120`, then it's probably (but not necessarily) a way of representing a character outside of the Latin alphabet, such as an `é`.
 
@@ -218,11 +218,11 @@ If it's a lower number, such as `\120`, then it's probably (but not necessarily)
 
 Yes, but as far as I know, only *Indiana Jones and the Fate of Atlantis* had "official" support for it.
 
-Fortunately, it's possible to replicate it in some other games, if you need it. I will write a guide about this at some point, but if you need this information, feel free to contact me.
+Fortunately, it's possible to replicate it in some other games, if you need it. I will write a guide about this at some point, but if you need this information in the meantime, feel free to contact me.
 
 ### My savegames crash, when I translate my game scene by scene
 
-Yes, the SCUMM savegames embed the names of the various objects/verbs/actors that you've encountered, so if you've translated/renamed them after they appeared in a savegame, then the game will get lost and crash. You need to start the game from scratch, while translating it.
+Yes, the SCUMM savegames embed the names of the various objects/verbs/actors that you've encountered, so if you've translated/renamed them after they appeared in a savegame, then the game will get lost and crash when you load it back. You need to start the game from scratch, while translating it.
 
 This is quite tedious, indeed, but fortunately, the SCUMM games also provide some Boot Params which let you "teleport" to any scene at any time. Read the [ScummVM documentation about Boot Params](https://wiki.scummvm.org/index.php/Boot_Params) to learn more about this.
 
