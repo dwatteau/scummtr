@@ -34,15 +34,18 @@ tags
 *.tar.*
 *.zip
 # IDE files
+[Dd]ebug/
 .idea*
 .metadata
 *.njsproj
 .project
 *.properties
+[Rr]elease/
 .settings
 *.sln*
 .vscode*
 .vs
+*.xcodeproj
 # CMake build stuff
 build/
 *.cmake
