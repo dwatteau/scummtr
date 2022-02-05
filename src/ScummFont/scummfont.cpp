@@ -30,6 +30,7 @@
 //
 // https://wiki.scummvm.org/index.php?title=SCUMM/Technical_Reference/Charset_resources
 // https://wiki.scummvm.org/index.php/SCUMM/Technical_Reference/SCUMM_6_resource_files#3.2.20_CHAR
+// https://formats.kaitai.io/bmp/index.html
 
 #include "common/types.hpp"
 #include "common/file.hpp"
