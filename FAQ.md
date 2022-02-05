@@ -58,6 +58,18 @@ Humongous Entertainment games (Putt-Putt, Pajama Sam…) are not supported. *The
 
 No, unless you extract their original content with some of the [Quickandeasysoftware Explorers](https://quickandeasysoftware.net/software).
 
+### How do I report a problem with ScummTR, ScummRP, ScummFont or FontXY?
+
+First:
+
+1. Download and make sure that your problem hasn't been solved in [the latest release](https://github.com/dwatteau/scummtr/releases) of the ScummTR tools.
+2. Read [this FAQ](FAQ.md) again, in case something could help you there.
+3. Explore the [list of current known issues](https://github.com/dwatteau/scummtr/issues) in case someone already reported this problem.
+
+If you still have a problem after following all these steps, then please [create an account on GitHub](https://github.com/signup) and [open a new issue](https://github.com/dwatteau/scummtr/issues/new/choose) with all the information you can give.
+
+> **Note:** any issue regarding illegal copies of the games will be ignored, closed and deleted.
+
 ### Is this tool part of ScummVM?
 
 No, but I also make some contributions to ScummVM, from time to time.
