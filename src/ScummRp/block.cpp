@@ -809,7 +809,7 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 		}
 		n += j;
 		if (n > 1)
-			throw RoomPack::BadOffset(xsprintf("Duplicate offset in index: 0x%X in room %i", offset, roomId));
+			throw RoomPack::BadOffset(xsprintf("Duplicate offset in index: 0x%X in room %i. Please report this bug with your exact version of the game", offset, roomId));
 	}
 }
 
