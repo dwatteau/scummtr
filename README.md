@@ -1,12 +1,24 @@
 # ScummTR – Fan translation tools for SCUMM engine games
 
-This project hosts the sources of Thomas Combeleran's fan translation tools for most [SCUMM engine](https://en.wikipedia.org/wiki/SCUMM) games.
+This project hosts the sources of Thomas Combeleran's fan translation tools for most [SCUMM engine](https://en.wikipedia.org/wiki/SCUMM) games.
 
-They are known as `scummtr`, `scummrp`, `scummfont`, and `FontXY`. They were originally only available as Win32 binaries (built with Visual C++ 7.10).
+They are known as `scummtr`, `scummrp`, `scummfont`, and `FontXY`. They were originally only available as Win32 binaries (built with Visual C++ 7.10), but they're now open-source and available for various systems.
+
+## Download
+
+Downloads for various systems are available [on the Releases page](https://github.com/dwatteau/scummtr/releases). It is recommended to always use the latest version.
+
+Note that you need to know how to use [a command-line interface](https://en.wikipedia.org/wiki/Command-line_interface) in order to use ScummTR, though.
+
+## How to use
+
+[The FAQ](FAQ.md) is here to answer the most usual questions. Please read it first if you have any problem.
+
+Some [manual pages](man/txt/) are also available.
 
 ## Compiling
 
-This currently requires [CMake](https://cmake.org) and a C++98 compatible compiler. It should build on Windows and most POSIX systems.
+If you'd like to compile ScummTR yourself, it requires [CMake](https://cmake.org) and a C++98 compatible compiler. It should build on Windows and most POSIX systems.
 
 ```sh
 mkdir build
@@ -14,6 +26,8 @@ cd build
 cmake ..
 cmake --build .
 ```
+
+See also [how releases are made](releases/README.md).
 
 ## Current goals
 
@@ -26,6 +40,14 @@ However, it is known that the tools currently don't support some game versions, 
 ## License
 
 This project has been [licensed under the MIT License](COPYING) in 2020 by its original author, Thomas Combeleran.
+
+## Alternatives
+
+[NUTCracker](https://github.com/BLooperZ/nutcracker) is a more general set of tools, with an emphasis on later SCUMM games (v5-v8, HE), while ScummTR mainly targets translations and earlier SCUMM games.
+
+[ScummSpeaks](http://www.jestarjokin.net/apps/scummspeaks/) uses ScummTR in order “to assist in adding or replacing speech” to the later SCUMM games. See also [ScummPacker](http://www.jestarjokin.net/apps/scummpacker/), from the same author.
+
+[Quickandeasysoftware](https://quickandeasysoftware.net/software) has also been providing extremely nice tools, for years.
 
 ## Disclaimer
 
