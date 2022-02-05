@@ -29,6 +29,7 @@
 
 ### Known bugs:
 
+- MANIAC-V2-EN is unsupported. This is because of an existing bug in the original game: any change made to the resources would amplify it and corrupt the game. Possible workaround: work from MANIAC-V1-EN or from a non-English version of Maniac Mansion V2.
 - ScummTR: the `-b` option may not correctly work with all games. Possible workaround: use the `-r` option.
 
 ### Portability (for developers):
