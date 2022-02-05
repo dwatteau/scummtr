@@ -4,8 +4,7 @@ labels: ["bug"]
 body:
   - type: markdown
     attributes:
-      value: |
-        "*Please always write your bug report in English if you can. Note that this software is provided with NO WARRANTY, and that we don't owe you any kind of immediate reply.*"
+      value: "*Please always write your bug report in English if you can. Note that this software is provided with NO WARRANTY, and that we don't owe you any kind of immediate reply.*"
   - type: textarea
     id: summary
     attributes:
@@ -17,7 +16,7 @@ body:
     id: games
     attributes:
       label: Games
-      description: What SCUMM games are you seeing the problem on?
+      description: What SCUMM games are you seeing the problem on? Multiple selections allowed.
       multiple: true
       options:
         - Maniac Mansion
@@ -40,7 +39,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: What version of ScummTR did you have this problem with?
+      description: What version of ScummTR did you have this problem with? Multiple selections allowed.
       multiple: true
       options:
         - v0.5.0
