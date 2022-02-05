@@ -2,7 +2,7 @@
 
 ### New features:
 
-- MS-DOS binaries have been added, on top of the new macOS, Linux and Windows binaries.
+- MS-DOS binaries have been added, on top of the macOS, Linux and Windows binaries.
 - Manual pages have been added (with .txt versions for systems where the original format is impractical).
 - ScummTR: add a new `-r` option, which interprets the text of the game "as-is", in its original encoding. This can be useful for non-Latin languages such as Japanese.
 - ScummTR: make it possible to import back a translation file created with the `-h` and/or `-I` options.
@@ -41,7 +41,8 @@
 ### New features:
 
 - The original sources have been modified to be compatible with most modern systems.
-- 64-bit binaries for macOS and Linux are now available.
+- New binaries for Mac Intel systems.
+- 64-bit binaries for Linux are now available too.
 
 ### Bugfixes:
 
@@ -58,15 +59,11 @@
 ### New features:
 
 - The ScummTR tools are now open-source (using the MIT License), thanks to Thomas Combeleran, their original author.
-- The original sources have been recompiled "as-is" on circa-2003 x86-32 systems. That's it.
+- The original sources have been recompiled "as-is" on circa-2003 Intel 32-bit systems. That's it.
 
 ### Bugfixes:
 
 - None.
-
-### Known bugs:
-
-- The Linux and macOS binaries of this release being built on much older systems, they may fail to work on modern systems.
 
 ### Incompatibilities with the previous version:
 
