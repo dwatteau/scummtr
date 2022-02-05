@@ -1,0 +1,70 @@
+name: Bug Report
+description: Report a problem in ScummTR
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        "*Please always write your bug report in English if you can. Note that this software is provided with NO WARRANTY, and that we don't owe you any kind of immediate reply.*"
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Please summarize here what is your problem, and what you were trying to do in the first place.
+    validations:
+      required: true
+  - type: dropdown
+    id: games
+    attributes:
+      label: Games
+      description: What SCUMM games are you seeing the problem on?
+      multiple: true
+      options:
+        - Maniac Mansion
+        - Zak McKracken and the Alien Mindbenders
+        - Passport to Adventure (demo, unsupported)
+        - Indiana Jones and the Last Crusade
+        - Loom
+        - The Secret of Monkey Island
+        - "Monkey Island 2: LeChuck's Revenge"
+        - Indiana Jones and the Fate of Atlantis
+        - Day of the Tentacle
+        - "Sam & Max Hit the Road"
+        - Full Throttle
+        - The Dig
+        - Some other game (unsupported!)
+        - Not related to a specific game
+    validations:
+      required: true
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: What version of ScummTR did you have this problem with?
+      multiple: true
+      options:
+        - v0.5.0
+        - v0.4.2
+        - v0.4.1
+        - v0.4.0
+        - I don't know
+        - A specific Git commit
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: additional-output
+    attributes:
+      label: Relevant output (error messages, warnings, or any useful info)
+      description: Please copy and paste any relevant output, such as error messages, warnings, or any other kind of useful information.
+      render: shell
+    validations:
+      required: false
+  - type: checkboxes
+    id: no-abandonware
+    attributes:
+      label: I own a legitimate game
+      description: 'Any issue regarding a game obtained from "somewhere", where "somewhere" is not one of your OWN original media or a legal seller such as GOG or Steam, will be immediately ignored, closed and deleted.'
+      options:
+        - label: 'I promise that my game does NOT come from an illegal source, such as "abandonware" websites'
+          required: true
