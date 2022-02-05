@@ -2,8 +2,6 @@
 
 ## Installation
 
-*The following cases could appear if you download a ScummTR release from <https://github.com/dwatteau/scummtr/releases>.*
-
 ### Windows tells me that it needs to scan the ScummTR files when I try to use them!
 
 Yes, that's just Windows doing a quick analysis in order to make sure that the program that you've downloaded is safe. Just wait a few seconds, and it will start. This warning should just appear once, for each new ScummTR release.
@@ -26,20 +24,6 @@ The symptom is a `Load error: no DPMI - Get csdpmi*b.zip` message.
 You need a [DOS Protected Mode Interface](https://en.wikipedia.org/wiki/DOS_Protected_Mode_Interface) in order to use the MS-DOS binaries. Windows 3.x, 95, 98, ME and NT already have one, but if you use something like DOSBox, you may encounter the error above.
 
 [CWSDPMI](http://sandmann.dotster.com/cwsdpmi/) can be used in this case. Just put the `CWSDPMI.EXE` file next to the ScummTR binaries.
-
-## Compilation
-
-### Compiling ScummTR for my system doesn't work
-
-Make sure that you have:
-
-* a Windows or [POSIX](https://en.wikipedia.org/wiki/POSIX#POSIX-oriented_operating_systems) system
-* a C++98 compiler (such as g++, clang++, or [Mingw-w64](https://www.mingw-w64.org) or MSVC 2015 or later for Windows)
-* [CMake](https://cmake.org).
-
-Then, read the [release documentation](releases/README.md) for more information.
-
-Alternatively, just use a [pre-built binary](https://github.com/dwatteau/scummtr/releases) for your system, if it exists. This is recommended.
 
 ## Usage
 
@@ -76,7 +60,7 @@ No, unless you extract their original content with some of the [Quickandeasysoft
 
 ### Is this tool part of ScummVM?
 
-No, but I also make some contributions to ScummVM.
+No, but I also make some contributions to ScummVM, from time to time.
 
 ### Is this an official tool?
 
@@ -119,7 +103,7 @@ The possible `scummtr` options for this are:
 * `-l de` for German
 * `-l it` for Italian.
 
-If you target some other language, then you'll need to work from one of these versions (non-English versions recommended for a larger number of available characters), and modify its font tables with `scummfont` to draw your own characters.
+If you target some other language, then you'll need to work from one of these versions (non-English versions are recommended, for a larger number of available characters), and modify its font tables with `scummfont` to draw your own characters.
 
 ### When a sentence is too long, the game doesn't display it properly
 
@@ -143,11 +127,11 @@ For example, in *Indiana Jones and the Fate of Atlantis*:
 The wrong people\255\001might be waiting for me.
 ```
 
-i.e. it's the same thing as for Zak, but there you need to use `\255\001` instead of `\001`.
+i.e. it's the same thing as for Zak, but there you need to use `\255\001` instead of `\001`, because it's a later game.
 
 The main possible sequences for this are:
 
-* `\255\001`: insert a newline character, and go to the next line
+* `\255\001`: insert a newline character, and go to the next line.
 * `\255\002`: once a line has been "told" by a character, it normally disappears from the screen. This sequence forces the game to keep it on the screen until the following line is told too.
 * `\255\003`: "clears the page", i.e. clear the current two lines of dialogue and go back to the first line.
 
@@ -191,6 +175,8 @@ Sushi in a bowl # <== 15 characters
 
 This is what the `@` characters are about.
 
+If in doubt, you can always add more `@` characters that necessary, as long as the object/actor/verb has the same final length everywhere.
+
 So, in theory, you need to keep track of all the possible object/actor/verb renames that could happen during the game. That's quite tedious, but very fortunately, `scummtr` offers a `-A ao` option that automates this. Search for `-A ao` below for more information.
 
 > **Note:** ScummVM tolerates missing padding symbols, but the original interpreters (such as the original EXE files for MS-DOS) are very sensitive to this, and will very often crash if they're missing.
@@ -202,7 +188,7 @@ This probably means that:
 * you've maybe deleted an original sentence from your translation, intentionally or by mistake. You can't use `scummtr` to add or remove some lines from the games. You can just *change* the content of the lines of the game.
    * Your translation file need to have the same number of lines as your source. Restore the missing (or extra) lines from a backup.
 * your text editor is maybe doing some things behind your back (such as removing some [whitespace characters](https://en.wikipedia.org/wiki/Whitespace_character)), but `scummtr` expects your text editor to "respect" its original format.
-   * Use a text editor which is known not to break the content of the files, such as Microsoft Notepad, Notepad++, Gedit, CotEditor, `vim`…
+   * Use a text editor which is known not to break the content of the files, such as Microsoft Notepad, Notepad++, Gedit, CotEditor, vim…
 
 ### How do I properly translate the verb interface?
 
@@ -216,15 +202,23 @@ If it's a lower number, such as `\120`, then it's probably (but not necessarily)
 
 ### Is it possible to have some non-breaking spaces, for better typography?
 
-Yes, but as far as I know, only *Indiana Jones and the Fate of Atlantis* had "official" support for it.
+Yes, but as far as I know, only *Indiana Jones and the Fate of Atlantis* had "official" support for this.
 
-Fortunately, it's possible to replicate it in some other games, if you need it. I will write a guide about this at some point, but if you need this information in the meantime, feel free to contact me.
+Fortunately, it's possible to replicate this in some other games. I will write a guide about this at some point, but if you need this information in the meantime, feel free to contact me.
 
 ### My savegames crash, when I translate my game scene by scene
 
-Yes, the SCUMM savegames embed the names of the various objects/verbs/actors that you've encountered, so if you've translated/renamed them after they appeared in a savegame, then the game will get lost and crash when you load it back. You need to start the game from scratch, while translating it.
+Yes, the SCUMM savegames embed the names of the various objects/verbs/actors that you've encountered, so if you've translated/renamed them after they appeared in a savegame, then the game will get lost and crash when you load it back. You need to start the game from scratch, over and over, while translating it.
 
 This is quite tedious, indeed, but fortunately, the SCUMM games also provide some Boot Params which let you "teleport" to any scene at any time. Read the [ScummVM documentation about Boot Params](https://wiki.scummvm.org/index.php/Boot_Params) to learn more about this.
+
+### Maniac Mansion starts in demo mode after modifying it with ScummTR!
+
+Yes, there is a very unfortunate bug in the original English version of Maniac Mansion "V2": its `07.LFL` file appears to contain some invalid code that happens to work "by accident" (see <https://github.com/dwatteau/scummtr/issues/12>).
+
+When `scummrp` or `scummtr` see this code, though, they don't know how to handle it, and the original bug is now triggered, giving weird results in the game. You will need to restore a backup, and avoid modifying this version for now.
+
+The "V1" English version of the game, and the "V2" non-English versions of the game, appear to be OK, though. So, as a work-around, you could maybe make your changes to a German or French *Maniac Mansion*, for example.
 
 ### My game works fine in ScummVM, but crashes in an original interpreter (such as DOSBox)
 
@@ -232,7 +226,7 @@ First, make sure that the game wasn't already crashing before you modified it (y
 
 If your error really only appears with your translation, did the game give an error message similar to `new name of object 127 too long`?
 
-If that's the case, then forcing some extra padding (with the `-A ao` option) may just fix the problem:
+If that's the case, then forcing some extra padding (with the `-A ao` option) may just fix the problem, as long as you re-export/re-import your translation with it:
 
 ```sh
 scummtr -g monkey2 -cw -A ao -of translation-with-added-padding.txt
@@ -241,6 +235,26 @@ scummtr -g monkey2 -cw -A ao -if translation-with-added-padding.txt
 
 If if still crashes, then maybe something corrupted the game somehow (such as some invalid characters or an invalid font). Please note any error message, [open an issue](https://github.com/dwatteau/scummtr/issues) and give as much context as you can. Thanks.
 
+### I'm on Linux, I do have the various `000.lfl` files, but `scummtr`/`scummrp` won't see them
+
+The ScummTR tools currently expect all-uppercase files, that is, you need to have `.LFL` files, and not `.lfl` files (same thing applies to `.LEC` files, `MONKEY2.000` files, and so on).
+
+Linux filesystems are case-sensitive by default, and the ScummTR tools don't do a case-insensitive lookup yet. So you have to rename your local files.
+
 ### There was a bug in one of the ScummTR tools, and it corrupted my original game / I lost many hours of work!!
 
 Sorry! But this is free software, [*without warranty of any kind*](COPYING). Please file a [bug report](https://github.com/dwatteau/scummtr/issues), and always make regular backups of the stuff you care about!
+
+## Compilation
+
+### Compiling ScummTR for my system doesn't work
+
+Make sure that you have:
+
+* a Windows or [POSIX](https://en.wikipedia.org/wiki/POSIX#POSIX-oriented_operating_systems) system
+* a C++98 compiler (such as g++, clang++, or [Mingw-w64](https://www.mingw-w64.org) or MSVC 2015 or later for Windows)
+* [CMake](https://cmake.org).
+
+Then, read the [release documentation](releases/README.md) for more information.
+
+Alternatively, just use a [pre-built binary](https://github.com/dwatteau/scummtr/releases) for your system, if it exists. This is recommended.
