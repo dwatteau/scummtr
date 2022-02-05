@@ -523,7 +523,9 @@ void ScummRp::_usage()
 	std::cout << " -V         " << "more verbose mode (lists blocks)\n\n";
 	std::cout << "Examples:\n";
 	std::cout << "scummrp -g monkey2 -p MI2 -od MI2_DUMP\n";
-	std::cout << "scummrp -g loomcd -t SCRP -o" << std::endl;
+	std::cout << "scummrp -g loomcd -t SCRP -o\n\n";
+
+	std::cout << "ALWAYS MAKE BACKUPS before making changes to your games!" << std::endl;
 }
 
 void ScummRp::_getOptions(int argc, const char **argv, const ScummRp::Parameter *params)

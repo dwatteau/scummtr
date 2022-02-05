@@ -564,5 +564,7 @@ void ScummTr::_usage()
 	std::cout << " -w         " << "use Windows CRLF newline characters\n\n";
 	std::cout << "Examples:\n";
 	std::cout << "scummtr -g monkey2 -cwh -A aov -of mi2.txt\n";
-	std::cout << "scummtr -g zakv2 -l de -cwh -A aov -of zak_de.txt" << std::endl;
+	std::cout << "scummtr -g zakv2 -l de -cwh -A aov -of zak_de.txt\n\n";
+
+	std::cout << "ALWAYS MAKE BACKUPS before making changes to your games!" << std::endl;
 }
