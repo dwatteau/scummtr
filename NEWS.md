@@ -36,6 +36,7 @@
 
 - Big-endian systems are now completely supported.
 - Drop support for MSVC versions lower than 2015, because of their improper support for safe constructs such as `snprintf()`.
+- Replace some `std::sort()` calls with `std::stable_sort()`, to fix a behavior change with modern g++ and libstdc++ versions, which could corrupt LOOM-EGA.
 
 ## ScummTR 0.4.2 (2020-11-28)
 

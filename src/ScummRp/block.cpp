@@ -2096,7 +2096,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 	}
 
 	oiInfo.push_back(OldRoom::OIInfo(-1, firstOCOffset, 0)); // (2)
-	std::sort(oiInfo.begin(), oiInfo.end());
+	std::stable_sort(oiInfo.begin(), oiInfo.end());
 
 	for (int i = 0, j = 0; i < (int)oiInfo.size() - 1; i = j)
 	{
