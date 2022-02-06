@@ -760,35 +760,37 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 				j = 1;
 				ScummIO::info(INF_DETAIL, "Removed SCRP_0008 from index (duplicate of SCRP_0009)");
 			}
-			// Hacks for Maniac Mansion CGA
+			// Hack for Maniac Mansion V1 (1)
 			else if (roomId == 8 && ScummRp::tocs[i]->getSize() == 200
-					 && (*ScummRp::tocs[i])[7].offset == (*ScummRp::tocs[i])[12].offset
-					 && (*ScummRp::tocs[i])[7].roomId == (*ScummRp::tocs[i])[12].roomId)
+				 && (*ScummRp::tocs[i])[7].offset == (*ScummRp::tocs[i])[12].offset
+				 && (*ScummRp::tocs[i])[7].roomId == (*ScummRp::tocs[i])[12].roomId)
 			{
 				(*ScummRp::tocs[i])[7].offset = -1;
 				j = 1;
 				ScummIO::info(INF_DETAIL, "Removed SC_0007 from index (duplicate of SC_0012)");
 			}
+			// Hack for Maniac Mansion V1 (2)
 			else if (roomId == 8 && ScummRp::tocs[i]->getSize() == 200
-					 && (*ScummRp::tocs[i])[8].offset == (*ScummRp::tocs[i])[13].offset
-					 && (*ScummRp::tocs[i])[8].roomId == (*ScummRp::tocs[i])[13].roomId)
+				 && (*ScummRp::tocs[i])[8].offset == (*ScummRp::tocs[i])[13].offset
+				 && (*ScummRp::tocs[i])[8].roomId == (*ScummRp::tocs[i])[13].roomId)
 			{
 				(*ScummRp::tocs[i])[8].offset = -1;
 				j = 1;
 				ScummIO::info(INF_DETAIL, "Removed SC_0008 from index (duplicate of SC_0013)");
 			}
-			// Hacks for Loom EGA English
+			// Hack for Loom EGA English (1)
 			else if (roomId == 11 && ScummRp::tocs[i]->getSize() == 200
-					 && (*ScummRp::tocs[i])[51].offset == (*ScummRp::tocs[i])[52].offset
-					 && (*ScummRp::tocs[i])[51].roomId == (*ScummRp::tocs[i])[52].roomId)
+				 && (*ScummRp::tocs[i])[51].offset == (*ScummRp::tocs[i])[52].offset
+				 && (*ScummRp::tocs[i])[51].roomId == (*ScummRp::tocs[i])[52].roomId)
 			{
 				(*ScummRp::tocs[i])[51].offset = -1;
 				j = 1;
 				ScummIO::info(INF_DETAIL, "Removed SC_0051 from index (duplicate of SC_0052)");
 			}
+			// Hack for Loom EGA English (2).  This one only appears in Loom 1.0 (8 Mar 90)
 			else if (roomId == 18 && ScummRp::tocs[i]->getSize() == 200
-					 && (*ScummRp::tocs[i])[55].offset == (*ScummRp::tocs[i])[56].offset
-					 && (*ScummRp::tocs[i])[55].roomId == (*ScummRp::tocs[i])[56].roomId)
+				 && (*ScummRp::tocs[i])[55].offset == (*ScummRp::tocs[i])[56].offset
+				 && (*ScummRp::tocs[i])[55].roomId == (*ScummRp::tocs[i])[56].roomId)
 			{
 				(*ScummRp::tocs[i])[55].offset = -1;
 				j = 1;
@@ -2114,7 +2116,6 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 			else
 			{
 				// FIXME Hack for zakv2 which has two bad OI blocks in room 35.
-				// Could it be because the OI decoder from scumm16 is not perfect?
 				if (ScummRp::game.id == GID_ZAK && ScummRp::game.version == 2
 					&& oiInfo[k].size == 0x308
 					&& oiInfo[k].num == 11 && _oiId[oiInfo[k].num] == 553
@@ -2125,9 +2126,9 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 					v.push_back(oiInfo[k].num);
 				}
 				else if (ScummRp::game.id == GID_ZAK && ScummRp::game.version == 2
-						 && oiInfo[k].size == 0x3DE
-						 && oiInfo[k].num == 12 && _oiId[oiInfo[k].num] == 554
-						 && oiInfo[j].offset - oiInfo[k].offset == 0x3C2)
+					 && oiInfo[k].size == 0x3DE
+					 && oiInfo[k].num == 12 && _oiId[oiInfo[k].num] == 554
+					 && oiInfo[j].offset - oiInfo[k].offset == 0x3C2)
 				{
 					ScummIO::warning("Erroneous OI #554?");
 					oiInfo[k].size = 0x3C2;
