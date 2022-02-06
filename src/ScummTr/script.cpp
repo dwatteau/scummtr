@@ -1481,7 +1481,7 @@ void Script::_opv12()
 	case 0x62: // stopScript
 		if (ScummRp::game.version == 2 && ScummRp::game.id == GID_MANIAC && _file->name() == "07.LFL" && _file->fullOffset() == 0x2351)
 		{
-			byte b;
+			int32 b;
 			b = _eatByteOrVar(opcode & 0x80);
 			if (b == 0x00 && _peekByte() != 0xD8)
 			{
