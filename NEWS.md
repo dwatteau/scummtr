@@ -13,8 +13,9 @@
 
 ### Bugfixes
 
+- ScummTR/ScummRP: Fix a game corruption bug with at least LOOM-EGA (and possibly some earlier games too), such as clicking on the hole of the leftmost tree of the forest at the start of the game. In the official pre-built binaries, only `scummtr-0.4.2-win32.zip` was impacted by this corruption issue.
 - ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with MONKEY1-FLOPPY-VGA.
-- ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with LOOM-EGA-EN.
+- ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with some versions of LOOM-EGA-EN.
 - ScummTR/ScummRP: don't fail when the DISK09.LEC file is missing for MONKEY1-EGA, since it was only available through the Roland Update.
 - ScummTR/ScummRP: don't fail reporting missing files for the 4-disk floppy versions of MONKEY1, because only the 8-disk floppy versions need them.
 - ScummFont: reject more incompatible BMP files, instead of trying to use them and then silently corrupting the internal SCUMM fonts.
@@ -36,7 +37,7 @@
 
 - Big-endian systems are now completely supported.
 - Drop support for MSVC versions lower than 2015, because of their improper support for safe constructs such as `snprintf()`.
-- Replace some `std::sort()` calls with `std::stable_sort()`, to fix a behavior change with modern g++ and libstdc++ versions, which could corrupt LOOM-EGA.
+- Fix an incorrect usage of `std::sort()`, which could (at least) occur with g++ >= 4.5 and associated libstdc++.
 
 ## ScummTR 0.4.2 (2020-11-28)
 
