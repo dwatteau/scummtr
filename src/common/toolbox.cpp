@@ -109,7 +109,7 @@ int xmkdir(const char *path)
 		{
 			tmpPath[i] = '\0';
 			ret = mkdir(tmpPath, 0755);
-			if (ret == -1 && errno != EEXIST)
+			if (ret != 0 && errno != EEXIST)
 			{
 				std::string what("Cannot create ");
 				what += tmpPath;
@@ -123,7 +123,7 @@ int xmkdir(const char *path)
 	if (prevChar != '/')
 	{
 		ret = mkdir(tmpPath, 0755);
-		if (ret == -1 && errno != EEXIST)
+		if (ret != 0 && errno != EEXIST)
 		{
 			std::string what("Cannot create ");
 			what += tmpPath;
