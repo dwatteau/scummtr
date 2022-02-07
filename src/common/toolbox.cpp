@@ -25,6 +25,7 @@
 
 #include "common/toolbox.hpp"
 
+#include <cerrno>
 #include <cstdarg>
 #include <cstdio>
 #include <cstring>
@@ -34,11 +35,11 @@
 #include <string>
 
 #if defined(_WIN32) && !defined(__DJGPP__)
-# include <direct.h>
-# define mkdir(path, mode) _mkdir(path)
+#  include <direct.h>
+#  define mkdir(path, mode) _mkdir(path)
 #else /* assume Unix */
-# include <sys/types.h>
-# include <sys/stat.h>
+#  include <sys/types.h>
+#  include <sys/stat.h>
 #endif
 
 const char *xsprintf(const char *format, ...)
@@ -108,6 +109,13 @@ int xmkdir(const char *path)
 		{
 			tmpPath[i] = '\0';
 			ret = mkdir(tmpPath, 0755);
+			if (ret != 0 && errno != EEXIST)
+			{
+				std::string what("Cannot create ");
+				what += tmpPath;
+				what += " directory";
+				throw std::runtime_error(what);
+			}
 			tmpPath[i] = '/';
 		}
 		prevChar = tmpPath[i];
@@ -115,6 +123,13 @@ int xmkdir(const char *path)
 	if (prevChar != '/')
 	{
 		ret = mkdir(tmpPath, 0755);
+		if (ret != 0 && errno != EEXIST)
+		{
+			std::string what("Cannot create ");
+			what += tmpPath;
+			what += " directory";
+			throw std::runtime_error(what);
+		}
 	}
 
 	delete[] tmpPath;
