@@ -799,14 +799,20 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 		}
 		else if (j == 2 && ScummRp::tocs[i]->getType() == TableOfContent::TOCT_COST)
 		{
-			// Hack for Monkey1 Floppy VGA
+			// Hack for Monkey1 Floppy VGA (some versions only; possibly only 1.0?)
 			if (roomId == 59 && ScummRp::tocs[i]->getSize() == 199
 				&& (*ScummRp::tocs[i])[10].offset == (*ScummRp::tocs[i])[117].offset
 				&& (*ScummRp::tocs[i])[10].roomId == (*ScummRp::tocs[i])[117].roomId)
 			{
+#ifdef SCUMMRP_OK_TO_CORRUPT_SOME_MONKEY1_VGA_GAMES
+				// XXX: Doing this appears to leave invalid content inside 000.LFL, and makes the
+				// game glitch inside ScummVM. https://github.com/dwatteau/scummtr/issues/47
 				(*ScummRp::tocs[i])[117].offset = -1;
 				j = 1;
 				ScummIO::info(INF_DETAIL, "Removed CO_0117 from index (duplicate of CO_0010)");
+#else
+				ScummIO::fatal("This version of Monkey Island 1 is currently unsupported because of a corruption bug");
+#endif
 			}
 		}
 		n += j;

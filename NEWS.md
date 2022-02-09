@@ -14,7 +14,6 @@
 ### Bugfixes
 
 - ScummTR/ScummRP: Fix a game corruption bug with at least LOOM-EGA (and possibly some earlier games too), such as clicking on the hole of the leftmost tree of the forest at the start of the game. In the official pre-built binaries, only `scummtr-0.4.2-win32.zip` was impacted by this corruption issue.
-- ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with MONKEY1-FLOPPY-VGA.
 - ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with some versions of LOOM-EGA-EN.
 - ScummTR/ScummRP: don't fail when the DISK09.LEC file is missing for MONKEY1-EGA, since it was only available through the Roland Update.
 - ScummTR/ScummRP: don't fail reporting missing files for the 4-disk floppy versions of MONKEY1, because only the 8-disk floppy versions need them.
@@ -31,6 +30,7 @@
 ### Known bugs
 
 - MANIAC-V2-EN is unsupported. This is because of an existing bug in the original game: any change made to the resources would amplify it and corrupt the game. Possible workaround: work from MANIAC-V1-EN or from a non-English version of Maniac Mansion V2.
+- Some versions of MONKEY1-FLOPPY-VGA are currently unsupported. Possible workaround: work from a later version of MONKEY1-FLOPPY-VGA (it should display a higher number than "1.0" when doing Ctrl-V in-game).
 - ScummTR: the `-b` option may not correctly work with all games. Possible workaround: use the `-r` option.
 
 ### Portability (for developers)
