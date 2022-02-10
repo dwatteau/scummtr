@@ -327,7 +327,13 @@ void TreeBlock::_makeSubblock(TreeBlock &subblock, BlockFormat blockFormat, int3
 	Block::_readHeader(subblock._blockFormat, *_file, size, subblock._tag);
 
 	if (size < 0 || size + _nextSubblockOffset > _file->size())
+	{
+		if (ScummRp::game.id == GID_MONKEY && _file->fullOffset() == 0x442D4 && size == 0x218B490D && _file->name() == "DISK04.LEC")
+			ScummIO::fatal("The MONKEY1-EGA version from Limited Run Games contains a corrupted DISK04.LEC\nSee: https://dwatteau.github.io/scummfixes/corrupted-monkey1-ega-files-limitedrungames.html");
+
 		throw Block::InvalidDataFromGame(xsprintf("Block too big: 0x%X", size), _file->name(), _nextSubblockOffset + _file->fullOffset());
+	}
+
 	if (size < (int32)headerSize)
 		throw Block::InvalidDataFromGame(xsprintf("Block too short: 0x%X", size), _file->name(), _nextSubblockOffset + _file->fullOffset());
 
