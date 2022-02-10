@@ -40,8 +40,8 @@ public:
 	static void info(int slots, const char *msg);
 	static void warning(const char *msg);
 	static void error(const char *msg);
-	static void fatal(const char *msg) __attribute__((noreturn));
-	static void crash(const char *msg) __attribute__((noreturn));
+	static void fatal(const char *msg) SCUMMTR_NORETURN_ATTRIBUTE;
+	static void crash(const char *msg) SCUMMTR_NORETURN_ATTRIBUTE;
 	static void setQuiet(bool q);
 	static void setInfoSlots(uint32 infoSlots);
 };

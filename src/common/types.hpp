@@ -71,6 +71,12 @@ typedef int int32;
 #  define  __attribute__(x)  /* NOTHING */
 #endif
 
+#ifdef _MSC_VER
+#  define SCUMMTR_NORETURN_ATTRIBUTE  __declspec(noreturn)
+#else
+#  define SCUMMTR_NORETURN_ATTRIBUTE  __attribute__((noreturn))
+#endif
+
 #define MKTAG2(a,b)     ((uint16)((b) | ((a) << 8)))
 #define MKTAG4(a,b,c,d) ((uint32)((d) | ((c) << 8) | ((b) << 16) | ((a) << 24)))
 
