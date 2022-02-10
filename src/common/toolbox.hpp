@@ -28,7 +28,7 @@
 
 #include "common/types.hpp"
 
-const char *xsprintf(const char *format, ...) __attribute__((format(printf, 1, 2)));
+const char *xsprintf(_Printf_format_string_ const char *format, ...) __attribute__((format(printf, 1, 2)));
 char *xstrdup(const char *src);
 void xremove(const char *path);
 void xrename(const char *oldname, const char *newname);

@@ -75,6 +75,7 @@ typedef int int32;
 #  define SCUMMTR_NORETURN_ATTRIBUTE  __declspec(noreturn)
 #else
 #  define SCUMMTR_NORETURN_ATTRIBUTE  __attribute__((noreturn))
+#  define _Printf_format_string_
 #endif
 
 #define MKTAG2(a,b)     ((uint16)((b) | ((a) << 8)))
