@@ -360,7 +360,7 @@ bool TreeBlock::nextBlock(TreeBlock &subblock)
 	}
 	catch (Block::InvalidDataFromGame &e)
 	{
-		ScummIO::warning(xsprintf("Bad data was found and ignored at 0x%X in %s", e.offset(), e.file().c_str()));
+		ScummIO::warning(xsprintf("Bad data was found and ignored at 0x%X in %s (%s)", e.offset(), e.file().c_str(), e.what()));
 		return false;
 	}
 
