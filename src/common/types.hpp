@@ -72,9 +72,9 @@ typedef int int32;
 #endif
 
 #ifdef _MSC_VER
-#  define SCUMMTR_NORETURN_ATTRIBUTE  __declspec(noreturn)
+#  define SCUMMTR_NORETURN_PREFIX  __declspec(noreturn)
 #else
-#  define SCUMMTR_NORETURN_ATTRIBUTE  __attribute__((noreturn))
+#  define SCUMMTR_NORETURN_PREFIX
 #  define _Printf_format_string_
 #endif
 
