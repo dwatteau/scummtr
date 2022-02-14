@@ -319,7 +319,7 @@ static void loadBmp(const char *path)
 	file->getLE32(sdw);
 	glHeight = sdw;
 	if (glWidth <= 0 || glHeight <= 0)
-		throw std::runtime_error(xsprintf("Unsupported \"%i\" per \"%i\" width/height", glWidth, glHeight));
+		throw std::runtime_error(xsprintf("%i per %i width/height detected, but negative values are not supported", glWidth, glHeight));
 
 	file->getLE16(w);
 	if (w != 1)
