@@ -64,6 +64,8 @@ else()
         add_compile_options(-fcheck-new)
     elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
         add_compile_options(-Widiomatic-parentheses -Wparentheses -Wimplicit-int-conversion)
+    else()
+        message(WARNING "Assuming that your ${CMAKE_CXX_COMPILER_ID} compiler is GCC-compatible, but this may fail")
     endif()
 
     # -O3 has no benefit, and it's sometimes buggy
