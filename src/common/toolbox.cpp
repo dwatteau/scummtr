@@ -42,7 +42,7 @@
 #  include <sys/stat.h>
 #endif
 
-const char *xsprintf(const char *format, ...)
+const char *xsprintf(_Printf_format_string_ const char *format, ...)
 {
 	static const int MAX_MSG_SIZE = 1024;
 	static const int MAX_USES = 8;
