@@ -329,8 +329,8 @@ static void loadBmp(const char *path)
 		throw std::runtime_error("This is not a valid BMP file");
 
 	file->getLE32(udw);
-	if (udw != 0x28)
-		throw std::runtime_error(xsprintf("This is not a BMPv3 file: version 0x%x was found", udw));
+	if (udw != 40)
+		throw std::runtime_error(xsprintf("A 40-byte BITMAPINFOHEADER was expected, but %i bytes were found instead", udw));
 
 	file->getLE32(sdw);
 	glWidth = sdw;
@@ -345,7 +345,7 @@ static void loadBmp(const char *path)
 
 	file->getLE16(w);
 	if (w != 8)
-		throw std::runtime_error(xsprintf("This is not an 8bpp BMP file: %hubpp found", w));
+		throw std::runtime_error(xsprintf("This is not an 8-bpp BMP file: %hu bpp found", w));
 
 	file->getLE32(udw);
 	if (udw != 0)
@@ -354,7 +354,7 @@ static void loadBmp(const char *path)
 	file.seekg(12, std::ios::cur);
 	file->getLE32(udw);
 	if (udw != 0 && udw != 256)
-		throw std::runtime_error(xsprintf("Palette must have 256 colors, but %u colors were found", udw));
+		throw std::runtime_error(xsprintf("Palette must have exactly 256 colors, but %u colors were found", udw));
 
 	file.seekg(4, std::ios::cur);
 	file.read((char *)paletteCheck, PALETTE_SIZE);
