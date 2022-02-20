@@ -132,7 +132,10 @@ static int usage()
 	std::cout << "  scummfont {i|o} font bitmap.bmp\n\n";
 	std::cout << "  o: Export bitmap.bmp from font\n";
 	std::cout << "  i: Import bitmap.bmp into font\n\n";
-	std::cout << "\"font\" is either a CHAR block extracted with scummrp, or an LFL file" << std::endl;
+	std::cout << "\"font\" is either a CHAR block extracted with scummrp, or an LFL file\n\n";
+
+	std::cout << "Using the GIMP image editor (www.gimp.org) with its \"Do not write\n";
+	std::cout << "color space information\" compatibility option is highly recommended!" << std::endl;
 
 	return 0;
 }

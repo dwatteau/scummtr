@@ -80,8 +80,11 @@ Windows 3.x bitmap files) preserving the original 256-color ScummFont palette
 are supported.
 .Pp
 Note that most modern image editors will change some settings anyway, but
-ScummFont doesn't accept this; thus ScummFont's usage of the BMP format is
-mostly unreliable.
+ScummFont doesn't accept this, so many BMP files will be rejected, at the
+moment.
 .Pp
-Older versions of Microsoft Paint are recommended if you have problems
-creating a compatible BMP file, at the moment.
+However, the GIMP image editor, with its
+.Qq "Do not write color space information"
+BMP export setting, can be used to edit the original BMP files while
+preserving their original settings.
+Old versions of Microsoft Paint may also work.
