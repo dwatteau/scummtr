@@ -259,6 +259,21 @@ The ScummTR tools currently expect all-uppercase files, that is, you need to hav
 
 Linux filesystems are case-sensitive by default, and the ScummTR tools don't do a case-insensitive lookup yet. So you have to rename your local files.
 
+### ScummFont rejects every BMP file that I give to it
+
+Currently, ScummFont expects your image editor to preserve all the settings of the original BMP file.
+
+The problem is that most modern BMP editors *do* change some settings, but ScummFont doesn't handle this, which means that your game could get corrupted. In order to avoid this, ScummFont 0.5.0 tries to detect and reject any BMP that doesn't meet its strict requirements.
+
+(ScummFont should actually use a better format, or have a better BMP implementation, but this means that most of ScummFont should be rewritten, and this isn't going to happen for now.)
+
+If you're looking for a compatible image editor, you can try editing the original BMP file with:
+
+* The [GIMP image editor](https://www.gimp.org), as long as you export it as BMP with the "Do not write color space information" compatibility option,
+* or an older version of Microsoft Paint (such as the one from Windows XP or earlier).
+
+![Enabling the "Do not write color space information" setting in GIMP](doc/img/gimp-bmp-no-color-space-info.png)
+
 ### There was a bug in one of the ScummTR tools, and it corrupted my original game / I lost many hours of work!!
 
 Sorry! But this is free software, [*without warranty of any kind*](COPYING). Please file a [bug report](https://github.com/dwatteau/scummtr/issues), and always make regular backups of the stuff you care about!

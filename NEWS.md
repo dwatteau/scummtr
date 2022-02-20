@@ -17,7 +17,7 @@
 - ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with some versions of LOOM-EGA-EN.
 - ScummTR/ScummRP: don't fail when the DISK09.LEC file is missing for MONKEY1-EGA, since it was only available through the Roland Update.
 - ScummTR/ScummRP: don't fail reporting missing files for the 4-disk floppy versions of MONKEY1, because only the 8-disk floppy versions need them.
-- ScummFont: reject more incompatible BMP files, instead of trying to use them and then silently corrupting the internal SCUMM fonts.
+- ScummFont: reject more incompatible BMP files, instead of trying to use them and then silently corrupting the internal SCUMM fonts. Note that this makes ScummFont very strict; at the moment, it is recommended to use older versions of Microsoft Paint if you need to edit a BMP font.
 
 ### Incompatibilities with the previous version
 
