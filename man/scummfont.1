@@ -76,9 +76,12 @@ tool was written between 2003 and 2004 by Thomas Combeleran for the ATP team,
 and was open-sourced in 2020 under an MIT license.
 .Sh CAVEATS
 Only simple, uncompressed 8-bit per pixel BMPv3 bitmap files (also known as
-Windows 3.x bitmap files) with 256 colors are supported.
+Windows 3.x bitmap files) preserving the original 256-color ScummFont palette
+are supported.
 .Pp
-If your input file is rejected after having been modified by an external tool,
-Netpbm can be used to revert it to a compatible format:
+Note that most modern image editors will change some settings anyway, but
+ScummFont doesn't accept this; thus ScummFont's usage of the BMP format is
+mostly unreliable.
 .Pp
-.Dl $ bmptoppm input.bmp | ppmtobmp -windows -bpp 8 > output.bmp
+Older versions of Microsoft Paint are recommended if you have problems
+creating a compatible BMP file, at the moment.

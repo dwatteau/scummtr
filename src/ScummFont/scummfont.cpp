@@ -46,7 +46,8 @@
 #include <stdexcept>
 #include <string>
 
-static byte glPalette[0x400] =
+static const int PALETTE_SIZE = 4 * 256;
+static byte glPalette[PALETTE_SIZE] =
 {
 	0xFF, 0x00, 0xFF, 0, 0xFF, 0xFF, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0xFF, 0x00, 0,
 	0x00, 0x00, 0xFF, 0, 0x00, 0xFF, 0xFF, 0, 0x00, 0x7F, 0x7F, 0, 0x7F, 0x00, 0x00, 0,
@@ -112,7 +113,12 @@ static byte glPalette[0x400] =
 	0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0,
 	0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0,
 /* }}} */
+#ifdef SCUMMFONT_NEW_PALETTE_CHANGE_AFTER_RELEASE
 	0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x10, 0x00, 0,
+#else
+	// note: starts at offset 00415450 through dumpbin in original scummfont.exe .data section
+	0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0, 0x00, 0x00, 0x00, 0,
+#endif
 	0xFF, 0xBF, 0xFF, 0, 0xFF, 0xDF, 0xFF, 0, 0x00, 0x00, 0x00, 0, 0xDF, 0x00, 0xDF, 0
 };
 static byte *glFontBitmap = nullptr;
@@ -129,6 +135,14 @@ static int usage()
 	std::cout << "\"font\" is either a CHAR block extracted with scummrp, or an LFL file" << std::endl;
 
 	return 0;
+}
+
+static void changePaletteBpp1()
+{
+	glPalette[4] = glPalette[5] = glPalette[6] =  0x00;
+	glPalette[8] = 0xFF;
+	glPalette[9] = 0xFF;
+	glPalette[10] = 0x00;
 }
 
 static void getFontInfo(int32 &baseOffset, File &file, int &version, int &bpp, int &maxHeight, int &maxWidth, int &bytesPerChar, int16 &numChars)
@@ -275,7 +289,7 @@ static void saveBmp(const char *path)
 	udw = 256;
 	file->putLE32(udw);
 
-	file.write((char *)glPalette, 0x400);
+	file.write((char *)glPalette, PALETTE_SIZE);
 
 	buf = new byte[roundTo4(glWidth) * glHeight];
 	memset(buf, 0, roundTo4(glWidth) * glHeight);
@@ -290,6 +304,7 @@ static void saveBmp(const char *path)
 
 static void loadBmp(const char *path)
 {
+	byte paletteCheck[PALETTE_SIZE];
 	File file;
 	uint32 udw;
 	int32 sdw;
@@ -332,6 +347,20 @@ static void loadBmp(const char *path)
 	file->getLE32(udw);
 	if (udw != 0)
 		throw std::runtime_error(xsprintf("This BMP file must be uncompressed, but \"%u\" compression was found", udw));
+
+	file.seekg(12, std::ios::cur);
+	file->getLE32(udw);
+	if (udw != 0 && udw != 256)
+		throw std::runtime_error(xsprintf("Palette must have 256 colors, but %u colors were found", udw));
+
+	file.seekg(4, std::ios::cur);
+	file.read((char *)paletteCheck, PALETTE_SIZE);
+	if (memcmp(glPalette, paletteCheck, PALETTE_SIZE) != 0) {
+		changePaletteBpp1();
+
+		if (memcmp(glPalette, paletteCheck, PALETTE_SIZE) != 0)
+			throw std::runtime_error("This file doesn't contain an original ScummFont palette");
+	}
 
 	file.seekg(off, std::ios::beg);
 	buf = new byte[roundTo4(glWidth) * glHeight];
@@ -562,14 +591,7 @@ static void loadFont(const char *path)
 	memset(glFontBitmap, 0, maxWidth * maxHeight * numChars);
 #endif
 	if (bpp == 1)
-	{
-		glPalette[4] = 0x00;
-		glPalette[5] = 0x00;
-		glPalette[6] = 0x00;
-		glPalette[8] = 0xFF;
-		glPalette[9] = 0xFF;
-		glPalette[10] = 0x00;
-	}
+		changePaletteBpp1();
 #ifdef SCUMMFONT_256
 	glHeight = 128;
 	glWidth = 128;
