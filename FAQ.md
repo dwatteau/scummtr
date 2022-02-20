@@ -17,6 +17,17 @@ There are two ways to work around this.
 
 More information: <https://support.apple.com/en-us/HT202491>.
 
+### When I run the macOS binary, I have a "Bad CPU type" error
+
+You may have downloaded an incorrect version for your macOS system.
+
+Two macOS archives are usually provided (except for the earliest ScummTR releases):
+
+* `scummtr-X.X.X-macos.zip`: this is for macOS 10.9 (Mavericks) and newer. The binaries are compatible with Intel 64-bit CPUs and Apple silicon.
+* `scummtr-X.X.X-oldmacos.zip`: this is intended for macOS 10.4 (Tiger) until macOS 10.8 (Mountain Lion), although it may also work until Mojave. The binaries are compatible with Intel 32-bit CPUs and PowerPC CPUs. This version has **no 64-bit binaries**.
+
+Try using the binaries from the other achive if you have any problem.
+
 ### The MS-DOS binaries give me a "No DPMI" error
 
 The symptom is a `Load error: no DPMI - Get csdpmi*b.zip` message.
