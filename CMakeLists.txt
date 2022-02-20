@@ -35,7 +35,7 @@ if(SCUMMTR_COMPILER_IS_DJGPP)
     set(CMAKE_EXECUTABLE_SUFFIX ".exe")
 endif()
 
-string(TIMESTAMP SCUMMTR_BUILD_DATE "%Y%m%d-%H%M" UTC)
+string(TIMESTAMP SCUMMTR_BUILD_DATE "%Y%m%d-WIP%H%M" UTC)
 
 include(CheckCXXCompilerFlag)
 
