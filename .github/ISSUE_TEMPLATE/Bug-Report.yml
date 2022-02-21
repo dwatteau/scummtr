@@ -51,14 +51,6 @@ body:
         - Other
     validations:
       required: true
-  - type: textarea
-    id: additional-output
-    attributes:
-      label: Relevant output (error messages, warnings, or any useful info)
-      description: Please copy and paste any relevant output, such as error messages, warnings, or any other kind of useful information.
-      render: shell
-    validations:
-      required: false
   - type: checkboxes
     id: no-abandonware
     attributes:
