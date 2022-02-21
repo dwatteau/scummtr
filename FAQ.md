@@ -26,7 +26,7 @@ Two macOS archives are usually provided (except for the earliest ScummTR release
 * `scummtr-X.X.X-macos.zip`: this is for macOS 10.9 (Mavericks) and newer. The binaries are compatible with Intel 64-bit CPUs and Apple silicon.
 * `scummtr-X.X.X-oldmacos.zip`: this is intended for macOS 10.4 (Tiger) until macOS 10.8 (Mountain Lion), although it may also work until Mojave. The binaries are compatible with Intel 32-bit CPUs and PowerPC CPUs. This version has **no 64-bit binaries**.
 
-Try using the binaries from the other achive if you have any problem.
+Try using the binaries from the other archive if you have any problem.
 
 ### The MS-DOS binaries give me a "No DPMI" error
 
@@ -213,9 +213,11 @@ This probably means that:
 * your text editor is maybe doing some things behind your back (such as removing some [whitespace characters](https://en.wikipedia.org/wiki/Whitespace_character)), but `scummtr` expects your text editor to “respect” its original format.
    * Use a text editor which is known not to break the content of the files, such as Microsoft Notepad, Notepad++, Gedit, CotEditor, vim…
 
+<!--
 ### How do I properly translate the verb interface?
 
 TODO
+-->
 
 ### What are all these weird `\123\456\789` symbols?
 
