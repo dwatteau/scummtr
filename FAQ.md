@@ -89,6 +89,12 @@ Humongous Entertainment games (Putt-Putt, Pajama Sam…) are not supported. *The
 
 No, unless you extract their original content with some of the [Quickandeasysoftware Explorers](https://quickandeasysoftware.net/software).
 
+### Are demo versions supported?
+
+Some of them may work, but you may need to rename some files.
+
+For example, the current detection code for *Indiana Jones and the Fate of Atlantis* expects `ATLANTIS.000` files, but the demo files may be named `indydemo.000`, instead. So, in this case, `indydemo.000` needs to be temporarily renamed to `ATLANTIS.000` and `indydemo.001` needs to be temporarily renamed to `ATLANTIS.001`, so that the ScummTR/ScummRP tools can read them.
+
 ### How do I report a problem with ScummTR, ScummRP, ScummFont or FontXY?
 
 First:
@@ -250,6 +256,20 @@ If it's a lower number, such as `\120`, then it's probably (but not necessarily)
 Yes, but as far as I know, only *Indiana Jones and the Fate of Atlantis* had some “official” support for this.
 
 Fortunately, it's possible to replicate this in some other games. I will write a guide about this at some point, but if you need this information in the meantime, feel free to contact me.
+
+### How do I extract a Japanese game?
+
+ScummTR 0.5.0 added a `-r` to make this (a bit) easier.
+
+For example, with the Japanese FM-TOWNS version of Indy4, use this command:
+
+```sh
+scummtr -g atlantis -rw -of atlantis-japanese.txt
+```
+
+The resulting `atlantis-japanese.txt` file will then use the original encoding of the game, which is, in this case, [Shift JIS](https://en.wikipedia.org/wiki/Shift_JIS). So, your text editor will needs proper support for this encoding.
+
+> **Note:** the Shift JIS encoding replaces backslash characters (`\`) with yen signs (`¥`), so all SCUMM escape sequences will appear with a yen sign, instead. This is an inherent behavior of this encoding, and can't really be worked around.
 
 ### My savegames crash, when I translate my game scene by scene
 
