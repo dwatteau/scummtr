@@ -147,10 +147,10 @@ The *Maniac Mansion* and *Zak McKracken* games (except the FM-Towns version of Z
 
 The possible `scummtr` options for this are:
 
-* `-l en` for English
-* `-l fr` for French
-* `-l de` for German
-* `-l it` for Italian.
+* `-c -l en` for English
+* `-c -l fr` for French
+* `-c -l de` for German
+* `-c -l it` for Italian.
 
 If you target some other language, then you'll need to work from one of these versions (non-English versions are recommended, for a larger number of available characters), and modify its font tables with `scummfont` to draw your own characters.
 
