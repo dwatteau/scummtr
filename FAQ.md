@@ -93,7 +93,7 @@ No, unless you extract their original content with some of the [Quickandeasysoft
 
 Some of them may work, but you may need to rename some files.
 
-For example, the current detection code for *Indiana Jones and the Fate of Atlantis* expects `ATLANTIS.000` files, but the demo files may be named `indydemo.000`, instead. So, in this case, `indydemo.000` needs to be temporarily renamed to `ATLANTIS.000` and `indydemo.001` needs to be temporarily renamed to `ATLANTIS.001`, so that the ScummTR/ScummRP tools can read them.
+For example, the current detection code for Indy4 expects `ATLANTIS.000` files, but the demo files may be named `indydemo.000`, instead. So, in this case, `indydemo.000` needs to be temporarily renamed to `ATLANTIS.000` and `indydemo.001` needs to be temporarily renamed to `ATLANTIS.001`, so that the ScummTR/ScummRP tools can read them.
 
 ### How do I report a problem with ScummTR, ScummRP, ScummFont or FontXY?
 
@@ -156,9 +156,9 @@ If you target some other language, then you'll need to work from one of these ve
 
 ### When a sentence is too long, the game doesn't display it properly
 
-*Maniac Mansion*, *Zak McKracken* and *Indiana Jones and the Last Crusade* force you to handle the newline placement by yourself, otherwise the text will just be truncated.
+Maniac Mansion, Zak and Indy3 force you to handle the newline placement by yourself, otherwise the text will just be truncated.
 
-For example, in *Zak*:
+For example, in Zak:
 
 ```
 You don't have the Blue Crystal.\001Come back when you have it.
@@ -170,7 +170,7 @@ Later games try to automatically handle newline placements (as a modern word pro
 
 So, you can still force a newline in the later games when you really need it.
 
-For example, in *Indiana Jones and the Fate of Atlantis*:
+For example, in Indy4:
 
 ```
 The wrong people\255\001might be waiting for me.
@@ -247,19 +247,19 @@ TODO
 
 ### What are all these weird `\123\456\789` symbols?
 
-If it starts with the `\254` or `\255` number, then it's probably an internal *escape sequence* of the game. It triggers some special actions, such as a new line, clearing the screen, a special character movement, or some speech. You can change most of the text around these sequences, but **don't** change the sequences themselves.
+If it starts with the `\254` or `\255` number, then it's probably an internal *escape sequence* of the game. It triggers some special actions, such as a new line, clearing the screen, an actor movement, or some speech. You can change most of the text around these sequences, but **don't** change the sequences themselves.
 
 If it's a lower number, such as `\120`, then it's probably (but not necessarily) a way of representing a character outside of the Latin alphabet, such as an `é`.
 
 ### Is it possible to have some non-breaking spaces, for better typography?
 
-Yes, but as far as I know, only *Indiana Jones and the Fate of Atlantis* had some “official” support for this.
+Yes, but as far as I know, only Indy4 had some “official” support for this.
 
 Fortunately, it's possible to replicate this in some other games. I will write a guide about this at some point, but if you need this information in the meantime, feel free to contact me.
 
 ### How do I extract a Japanese game?
 
-ScummTR 0.5.0 added a `-r` to make this (a bit) easier.
+ScummTR 0.5.0 added a `-r` option to make this (a bit) easier.
 
 For example, with the Japanese FM-TOWNS version of Indy4, use this command:
 
@@ -267,7 +267,7 @@ For example, with the Japanese FM-TOWNS version of Indy4, use this command:
 scummtr -g atlantis -rw -of atlantis-japanese.txt
 ```
 
-The resulting `atlantis-japanese.txt` file will then use the original encoding of the game, which is, in this case, [Shift JIS](https://en.wikipedia.org/wiki/Shift_JIS). So, your text editor will needs proper support for this encoding.
+The resulting `atlantis-japanese.txt` file will then use the original encoding of the game, which is, in this case, [Shift JIS](https://en.wikipedia.org/wiki/Shift_JIS). Because of this, your text editor will needs proper support for this encoding.
 
 > **Note:** the Shift JIS encoding replaces backslash characters (`\`) with yen signs (`¥`), so all SCUMM escape sequences will appear with a yen sign, instead. This is an inherent behavior of this encoding, and can't really be worked around.
 
