@@ -742,7 +742,7 @@ protected:
 		uint16 offset;
 		uint16 size;
 
-		bool operator<(const OIInfo &right) const { return offset < right.offset && num < right.num; }
+		bool operator<(const OIInfo &right) const { return offset < right.offset; }
 		OIInfo(int n, uint16 o, uint16 s) : num(n), offset(o), size(s) { }
 	};
 
