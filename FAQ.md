@@ -6,6 +6,26 @@
 
 Yes, that's just Windows doing a quick analysis in order to make sure that the program that you've downloaded is safe. Just wait a few seconds, and it will start. This warning should just appear once, for each new ScummTR release.
 
+### When I click on any ScummTR tool, nothing happens
+
+The ScummTR tools require the use of a [command-line interface](https://en.wikipedia.org/wiki/Command-line_interface).
+
+This means that you need experience with the following programs, in order to use ScummTR:
+
+* on Windows: install [Windows Terminal](https://docs.microsoft.com/windows/terminal/get-started) (Windows 10 and later) and start it.
+    * On older versions of Windows, hold the Windows and `R` keys together, type `cmd.exe` and hit Enter.
+* on macOS: hold the `⌘` and Spacebar keys together, type `Terminal` and hit Enter.
+* on other systems: look for a "Terminal" program among your applications.
+
+Once you're inside this Terminal program, type the following commands:
+
+```sh
+cd "path/to/the/scummtr/files"
+scummtr
+```
+
+If you don't understand this, sorry! ScummTR doesn't provide an easier way to use it yet.
+
 ### macOS blocks the program, saying that it can't be verified and may be malware!
 
 This a security measure of later macOS versions, because the ScummTR binaries are not signed.
