@@ -271,6 +271,12 @@ The resulting `atlantis-japanese.txt` file will then use the original encoding o
 
 > **Note:** the Shift JIS encoding replaces backslash characters (`\`) with yen signs (`¥`), so all SCUMM escape sequences will appear with a yen sign, instead. This is an inherent behavior of this encoding, and can't really be worked around.
 
+### How do I use Unicode characters?
+
+At the moment, you just can't. Most SCUMM games predate common Unicode usage, and rely on [DOS code pages](https://en.wikipedia.org/wiki/Code_page#DOS_code_pages), most of the time.
+
+Moreover, a glyph will only appear in a SCUMM game if it's part of the included SCUMM fonts.
+
 ### My savegames crash, when I translate my game scene by scene
 
 Yes, the SCUMM savegames embed the names of the various objects/verbs/actors that you've encountered, so if you've translated/renamed them after they appeared in a savegame, then the game will get lost and crash when you load it back. You need to start the game from scratch, over and over, while translating it.
