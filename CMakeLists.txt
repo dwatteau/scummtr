@@ -55,7 +55,7 @@ else()
     endif()
 
     # GCC 2.95 compatible warnings we always want
-    add_compile_options(-Wall -pedantic -Wpointer-arith -Wcast-qual -Wcast-align -Wundef -Wmultichar -Wwrite-strings -Wctor-dtor-privacy -Wredundant-decls -Wunused -Wsign-compare)
+    add_compile_options(-Wall -pedantic -Wpointer-arith -Wcast-qual -Wcast-align -Wundef -Wmultichar -Wwrite-strings -Wredundant-decls -Wunused -Wsign-compare)
     # GCC 2.95 compatible warnings we don't want (yet)
     add_compile_options(-Wno-non-virtual-dtor -Wno-conversion -Wno-overloaded-virtual -Wno-old-style-cast -Wno-format)
 
@@ -76,7 +76,8 @@ else()
     set(SCUMMTR_MODERN_WARNING_FLAGS "-Winit-self;-Wtype-limits;-Wignored-qualifiers") # -Wzero-as-null-pointer-constant for C++11
     CHECK_CXX_COMPILER_FLAG("${SCUMMTR_MODERN_WARNING_FLAGS}" COMPILER_SUPPORTS_MODERN_WARNING_FLAGS)
     if(COMPILER_SUPPORTS_MODERN_WARNING_FLAGS)
-        add_compile_options("${SCUMMTR_MODERN_WARNING_FLAGS};-Wshadow;-Wuninitialized")
+        # Also add some old flags which only became reliable in more recent versions
+        add_compile_options("${SCUMMTR_MODERN_WARNING_FLAGS};-Wshadow;-Wuninitialized;-Wctor-dtor-privacy")
     endif()
 
     if(MINGW)
