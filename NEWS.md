@@ -1,3 +1,9 @@
+## ScummTR 0.5.1 (2022-02-XX)
+
+### Bugfixes
+
+- ScummTR/ScummRP: Fix a fatal "Bad OIv2 offset" error with (at least) some versions of Maniac Mansion. This regression was introduced in 0.5.0.
+
 ## ScummTR 0.5.0 (2022-02-22)
 
 ### New features
