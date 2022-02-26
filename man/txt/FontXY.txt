@@ -29,7 +29,7 @@ SEE ALSO
 
 HISTORY
      The FontXY tool was written in 2006 by Thomas Combeleran for the ATP
-     team, and was open-sourced in 2020 under an MIT license.
+     team, and was open-sourced in 2020 under the MIT license.
 
 CAVEATS
      Only newline characters native to the current platform are accepted (CRLF

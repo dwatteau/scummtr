@@ -26,9 +26,12 @@ DESCRIPTION
      that is, the 19th displayed character is always accessible in a
      scummtr(1) translation file by using the "\019" decimal sequence.
 
+SEE ALSO
+     ScummImg (http://www.jestarjokin.net/apps/scummimg/)
+
 HISTORY
      The scummfont tool was written between 2003 and 2004 by Thomas Combeleran
-     for the ATP team, and was open-sourced in 2020 under an MIT license.
+     for the ATP team, and was open-sourced in 2020 under the MIT license.
 
 CAVEATS
      Only simple, uncompressed 8-bit per pixel BMPv3 bitmap files (also known

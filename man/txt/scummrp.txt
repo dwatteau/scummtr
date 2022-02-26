@@ -56,11 +56,12 @@ EXAMPLES
 
 SEE ALSO
      descumm (https://github.com/scummvm/scummvm-tools), NUTCracker
-     (https://github.com/BLooperZ/nutcracker)
+     (https://github.com/BLooperZ/nutcracker), ScummPacker
+     (http://www.jestarjokin.net/apps/scummpacker/)
 
 HISTORY
      The scummrp tool was written in 2003 by Thomas Combeleran for the ATP
-     team, and was open-sourced in 2020 under an MIT license.
+     team, and was open-sourced in 2020 under the MIT license.
 
 CAVEATS
      On case-sensitive file systems, game data files must currently follow the

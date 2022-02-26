@@ -130,7 +130,7 @@ EXAMPLES
 
 HISTORY
      The scummtr tool was written between 2003 and 2005 by Thomas Combeleran
-     for the ATP team, and was open-sourced in 2020 under an MIT license.
+     for the ATP team, and was open-sourced in 2020 under the MIT license.
 
 CAVEATS
      Your text editor must not remove trailing spaces or empty lines,

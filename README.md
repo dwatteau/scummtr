@@ -45,7 +45,7 @@ This project has been [licensed under the MIT License](COPYING) in 2020 by its o
 
 [NUTCracker](https://github.com/BLooperZ/nutcracker) is a more general set of tools, with an emphasis on later SCUMM games (v5-v8, HE), while ScummTR mainly targets translations and earlier SCUMM games.
 
-[ScummSpeaks](http://www.jestarjokin.net/apps/scummspeaks/) uses ScummTR in order “to assist in adding or replacing speech” to the later SCUMM games. See also [ScummPacker](http://www.jestarjokin.net/apps/scummpacker/), from the same author.
+[ScummSpeaks](http://www.jestarjokin.net/apps/scummspeaks/) uses ScummTR in order “to assist in adding or replacing speech” to the later SCUMM games. See also [ScummPacker](http://www.jestarjokin.net/apps/scummpacker/), [Scummbler](http://www.jestarjokin.net/apps/scummbler/) and [ScummImg](http://www.jestarjokin.net/apps/scummimg/) from the same author.
 
 [Quickandeasysoftware](https://quickandeasysoftware.net/software) has also been providing extremely nice tools, for years.
 
