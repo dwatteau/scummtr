@@ -2,7 +2,11 @@
 
 ### Bugfixes
 
-- ScummTR/ScummRP: Fix a fatal "Bad OIv2 offset" error with (at least) some versions of Maniac Mansion. This regression was introduced in 0.5.0.
+- ScummTR/ScummRP: Fix a fatal "Bad OIv2 offset" error with (at least) some versions of Maniac Mansion and Zak McKracken. This regression was introduced in 0.5.0.
+
+### Known bugs
+
+- ScummTR/ScummRP: Mark all V2 versions of Maniac Mansions as unsupported, and not just the English V2 version. The French V2 version has the same corruption problem as the English version, for example.
 
 ## ScummTR 0.5.0 (2022-02-22)
 

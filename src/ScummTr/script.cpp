@@ -1479,23 +1479,6 @@ void Script::_opv12()
 		_eatWordOrVar(opcode & 0x80);
 		break;
 	case 0x62: // stopScript
-		if (ScummRp::game.version == 2 && ScummRp::game.id == GID_MANIAC && _file->name() == "07.LFL" && _file->fullOffset() == 0x2351)
-		{
-			int32 b;
-			b = _eatByteOrVar(opcode & 0x80);
-			if (b == 0x00 && _peekByte() != 0xD8)
-			{
-#ifndef SCUMMTR_OK_TO_CORRUPT_MANIAC_V2_EN
-				// https://github.com/dwatteau/scummtr/issues/12
-				throw Script::Error("This version of Maniac Mansion V2 has an original bug that corrupts it if you modify it");
-#endif
-			}
-		}
-		else
-		{
-			_eatByteOrVar(opcode & 0x80);
-		}
-		break;
 	case 0xE2: // stopScript
 		_eatByteOrVar(opcode & 0x80);
 		break;

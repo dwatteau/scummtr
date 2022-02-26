@@ -285,13 +285,11 @@ This is quite tedious, indeed, but fortunately, the SCUMM games also provide som
 
 ### Maniac Mansion starts in demo mode after modifying it with ScummTR!
 
-Yes, there is a very unfortunate bug in the original English version of Maniac Mansion “V2”: its `07.LFL` file appears to contain some invalid code that happens to work “by accident” (see <https://github.com/dwatteau/scummtr/issues/12>).
+Yes, ScummTR and ScummRP have problems with the “V2” version of Maniac Mansion.
 
-When `scummrp` or `scummtr` see this code, though, they don't know how to handle it, and the original bug is now triggered, giving weird results in the game. You will need to restore a backup, and avoid modifying this version for now.
+The “V1” version of the game appears to be OK, though.
 
-The “V1” English version of the game, and the “V2” non-English versions of the game, appear to be OK, though. So, as a work-around, you could maybe make your changes to a German or French *Maniac Mansion*, for example.
-
-### When I extract the text from my non-English copy of The Dig, I still get English text
+### When I extract the text from The Dig, I get English text although my game is not in English
 
 It appears that *The Dig* contains both the original text and its translation, and that ScummTR only deals with the former.
 

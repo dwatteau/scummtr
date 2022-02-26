@@ -40,7 +40,7 @@
  */
 
 const char *const ScummTr::NAME = "ScummTr";
-const char *const ScummTr::VERSION = "0.5.0";
+const char *const ScummTr::VERSION = "0.5.1";
 const char *const ScummTr::AUTHOR = "Thomas Combeleran";
 
 const ScummRp::Parameter ScummTr::_trParameters[] =
@@ -376,6 +376,12 @@ int ScummTr::main(int argc, const char **argv)
 	}
 
 	ScummRp::_game = ScummRp::_gameDef[g];
+
+#ifndef SCUMMRP_OK_TO_CORRUPT_MANIACV2
+	if (ScummRp::_game.version == 2 && ScummRp::_game.id == GID_MANIAC && ScummRp::_options & ScummRp::OPT_IMPORT)
+		ScummIO::fatal("Modifying Maniac Mansion V2 is known to corrupt it");
+#endif
+
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
 	{
 		ScummRp::_fileOptions |= BlocksFile::BFOPT_BACKUP;
