@@ -16,7 +16,7 @@ body:
     id: games
     attributes:
       label: Impacted games
-      description: What SCUMM games are you seeing the problem on? Multiple selections allowed.
+      description: What SCUMM games are you seeing the problem on? (Multiple selections allowed.)
       multiple: true
       options:
         - Maniac Mansion
@@ -39,9 +39,10 @@ body:
     id: version
     attributes:
       label: ScummTR versions
-      description: What versions of ScummTR did you have this problem with? Multiple selections allowed.
+      description: What versions of ScummTR did you have this problem with? (Multiple selections allowed.)
       multiple: true
       options:
+        - v0.5.1
         - v0.5.0
         - v0.4.2
         - v0.4.1
