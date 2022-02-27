@@ -13,6 +13,7 @@
 ### New features
 
 - MS-DOS binaries have been added, on top of the macOS, Linux and Windows binaries.
+- macOS binaries now have support for PowerPC and Apple silicon processors.
 - Manual pages have been added (with .txt versions for systems where the original format is impractical).
 - ScummTR: add a new `-r` option, which interprets the text of the game "as-is", in its original encoding. This can be useful for non-Latin languages such as Japanese.
 - ScummTR: make it possible to import back a translation file created with the `-h` and/or `-I` options.
@@ -26,7 +27,8 @@
 - ScummTR/ScummRP: Fix a game corruption bug with at least LOOM-EGA (and possibly some earlier games too), such as clicking on the hole of the leftmost tree of the forest at the start of the game. In the official pre-built binaries, only `scummtr-0.4.2-win32.zip` was impacted by this corruption issue.
 - ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with some versions of LOOM-EGA-EN.
 - ScummTR/ScummRP: don't fail when the DISK09.LEC file is missing for MONKEY1-EGA, since it was only available through the Roland Update.
-- ScummTR/ScummRP: don't fail reporting missing files for the 4-disk floppy versions of MONKEY1, because only the 8-disk floppy versions need them.
+- ScummTR/ScummRP: don't fail and report missing files for the 4-disk floppy versions of MONKEY1, because only the 8-disk floppy versions need them.
+- ScummTR/ScummRP: detect and reject the default version of MONKEY1-EGA that Limited Run Games sold in its Monkey Island Anthology; its DISK04.LEC file is known to be corrupted, but we have a guide describing how to recover it.
 - ScummFont: reject more incompatible BMP files, instead of trying to use them and then silently corrupting the internal SCUMM fonts. Note that this makes ScummFont very strict; at the moment, it is recommended to use GIMP (with the "Do not write color space information" export option), or older versions of Microsoft Paint if you need to edit a BMP font.
 
 ### Incompatibilities with the previous version
