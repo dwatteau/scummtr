@@ -289,6 +289,20 @@ Yes, ScummTR and ScummRP have problems with the “V2” version of Maniac Mansi
 
 The “V1” version of the game appears to be OK, though.
 
+### I see `Bad data was found and ignored` messages, is anything wrong?
+
+This may happen with some games, because of original error in the official game resources, or because of a bug on our side.
+
+For example, the FM-TOWNS of Zak McKracken (as sold by GOG) will output this warning:
+
+```
+WARNING: Bad data was found and ignored at 0x6 in 47.LFL
+```
+
+As long as it's printed as a `WARNING` (and not as an `ERROR`), and as long as the game appears to play fine even after modifying it, then you can probably ignore this.
+
+However, this kind of warnings can also hint at a possible game corruption, or a bug. Please [open an issue](https://github.com/dwatteau/scummtr/issues) if you're stuck.
+
 ### When I extract the text from The Dig, I get English text although my game is not in English
 
 It appears that *The Dig* contains both the original text and its translation, and that ScummTR only deals with the former.
