@@ -1,4 +1,4 @@
-## ScummTR 0.5.1 (2022-02-XX)
+## ScummTR 0.5.1 (2022-02-27)
 
 ### Bugfixes
 
