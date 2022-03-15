@@ -260,12 +260,12 @@ void Text::_writeEscChar(byte b)
 	if (_hex)
 	{
 		_file.write("\\x", 2);
-		c = (char)(b / 0x10) + '0';
+		c = (char)(b / 16) + '0';
 		if (c > '9')
 			c += 'A' - '9' - 1;
 		_file.write(&c, 1);
 
-		b %= 0x10;
+		b %= 16;
 		c = (char)b + '0';
 		if (c > '9')
 			c += 'A' - '9' - 1;
@@ -524,7 +524,7 @@ void Text::_unEsc(std::string &s, Text::LineType t) const
 
 				if (s[i] == 'x')
 				{
-					base = 0x10;
+					base = 16;
 
 					a = 0;
 
@@ -536,7 +536,7 @@ void Text::_unEsc(std::string &s, Text::LineType t) const
 					if (c > 9)
 						c -= 'a' - '9' - 1;
 
-					n = b * 0x10 + c;
+					n = b * 16 + c;
 				}
 				else
 				{
