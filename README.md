@@ -2,7 +2,7 @@
 
 This project hosts the sources of Thomas Combeleran's fan translation tools for most [SCUMM engine](https://en.wikipedia.org/wiki/SCUMM) games.
 
-They are known as `scummtr`, `scummrp`, `scummfont`, and `FontXY`. They were originally only available as Win32 binaries (built with Visual C++ 7.10), but they're now open-source and available for various systems.
+They are known as `scummtr`, `scummrp`, `scummfont`, and `FontXY`. They were originally only available as Windows executables, but they're now open-source and available for various systems.
 
 ## Download
 
@@ -15,6 +15,8 @@ Note that you need to know how to use [a command-line interface](https://en.wiki
 [The FAQ](FAQ.md) is here to answer the most usual questions. Please read it first if you have any problem.
 
 Some [manual pages](man/txt/) are also available.
+
+If you have any question, feel free to [open a discussion](https://github.com/dwatteau/scummtr/discussions/new) or [report an issue](https://github.com/dwatteau/scummtr/issues/new/choose).
 
 ## Compiling
 
@@ -31,7 +33,7 @@ See also [how releases are made](releases/README.md).
 
 ## Current goals
 
-The current purpose of this repository is to host the original sources of the ScummTR tools, and provide a simple and portable way of compiling them on most platforms.
+The current purpose of this repository is to host the original sources of the ScummTR tools, and provide a simple way of using them on most platforms.
 
 My C++ skills are very modest, and the tools are mostly “done”, so for the moment no real evolution is planned, except for compilation fixes and portability improvements.
 

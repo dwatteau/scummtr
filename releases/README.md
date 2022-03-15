@@ -12,7 +12,7 @@ This lets you do local release builds, with no dependency on Travis or Github Ac
 
 Out of simplicity for users, no 64-bit binaries are built, since the benefit would be low, and Win32 binaries are more portable, especially since Windows is really good at backward compatibility.
 
-We use an older release of [Mingw-W64](http://mingw-w64.org) for this, to make sure Windows XP support remains OK. For the same reason, we don't enable too “modern” compiler settings on this environment.
+Although the ScummTR tools can be built with a modern version of Microsoft Visual C++ (MSVC), we use an older release of [Mingw-W64](http://mingw-w64.org) for the official releases, in order to make sure Windows XP support remains OK. For the same reason, we don't enable too “modern” compiler settings on this environment.
 
 Live debug is not expected to happen with Windows release builds, so our default Win32 binaries are built in `Release` mode.
 
