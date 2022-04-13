@@ -1,8 +1,8 @@
 # Win32 build, with best-effort support for Windows XP (thus, using the
-# older 5.0.1 version of Mingw-w64 on Debian 9 is intentional).  Also
-# uses CMake 3.7.2.
+# older 6.0.0 version of Mingw-w64 on Debian 10 is intentional).  Also
+# uses CMake 3.13.4.
 
-FROM debian:9.13-slim AS scummtr-win32-base
+FROM debian:10-slim AS scummtr-win32-base
 
 RUN apt-get update \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cmake make mingw-w64 \
