@@ -1,7 +1,7 @@
 #!/bin/sh
 #
-# Convert man pages to simple TXT files, for systems where man pages
-# are not convenient.
+# Convert man pages to simple .txt files, for systems where man pages
+# are not convenient (e.g. Windows).
 #
 # Requires: https://mandoc.bsd.lv/
 #

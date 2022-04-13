@@ -68,6 +68,9 @@ DESCRIPTION
      -h          Include a small header at the start of each line, indicating
                  the script context of the current string.
 
+                 The first sequence is the SCUMM room number, and the other
+                 one is the SCUMM resource containing this text string.
+
      -H          Represent escape sequences as hexadecimal codes, instead of
                  decimal codes.
 
@@ -75,8 +78,8 @@ DESCRIPTION
                  line.
 
      -l language
-                 V1 and V2 games only.  The name of the language charset to be
-                 used for this translation.
+                 V1 and V2 games only (Maniac Mansion and Zak McKracken).
+                 Choose the language charset to be used for this translation.
 
                  Possible values are:
 

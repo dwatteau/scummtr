@@ -122,13 +122,16 @@ The ID of the game variant to be translated, as given by
 .It Fl h
 Include a small header at the start of each line, indicating the script
 context of the current string.
+.Pp
+The first sequence is the SCUMM room number, and the other one
+is the SCUMM resource containing this text string.
 .It Fl H
 Represent escape sequences as hexadecimal codes, instead of decimal codes.
 .It Fl I
 Include the current SCUMM instruction opcode, before each line.
 .It Fl l Ar language
-V1 and V2 games only.
-The name of the language charset to be used for this translation.
+V1 and V2 games only (Maniac Mansion and Zak McKracken).
+Choose the language charset to be used for this translation.
 .Pp
 Possible values are:
 .Bl -tag -width Ds
