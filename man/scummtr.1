@@ -35,7 +35,7 @@
 .Fl f Ar input
 .Nm scummtr
 .Fl o
-.Op Fl bchHIqvw
+.Op Fl bchHInqvw
 .Op Fl a Ar restypes
 .Op Fl A Ar restypes
 .Op Fl l Ar language
@@ -145,6 +145,16 @@ Original French charset.
 .It Ic it
 Original Italian charset.
 .El
+.It Fl n
+Never include any
+.Dq ";; ScummTR note:"
+comment.
+.Pp
+These comments are added by default to help some text editors infer
+the proper encoding of the translation files, but they may interfere with
+some derivative tools which do not expect them.
+.Fl n
+restores the original ScummTR 0.4.0 behavior of not emitting those lines.
 .It Fl p Ar gamedir
 The path to the game (default: current directory).
 .It Fl q

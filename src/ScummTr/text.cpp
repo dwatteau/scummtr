@@ -161,7 +161,8 @@ const char *const Text::CHARSETS[] =
 Text::Text(const char *path, int flags, Text::Charset charset) :
     _file(path, (flags & Text::TXT_OUT) != 0 ? (std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc) : (std::ios::in | std::ios::binary)),
     _cur(0), _lineCount(0), _lflfId(-1), _tag(0), _id(-1),
-    _binary((flags & Text::TXT_BINARY) != 0), _crlf((flags & Text::TXT_CRLF) != 0),
+    _binary((flags & Text::TXT_BINARY) != 0), _comments((flags & Text::TXT_NO_COMMENT) == 0),
+    _crlf((flags & Text::TXT_CRLF) != 0),
     _header((flags & Text::TXT_HEADER) != 0), _hex((flags & Text::TXT_HEXA) != 0),
     _opcode((flags & Text::TXT_OPCODE) != 0),
     _rawText((flags & Text::TXT_RAW) != 0),
@@ -791,7 +792,7 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 
 void Text::addExportHeaders()
 {
-	if (!_binary)
+	if (_comments && !_binary)
 		_file.write(internalCommentHeader());
 }
 

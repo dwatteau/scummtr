@@ -5,7 +5,7 @@ NAME
 
 SYNOPSIS
      scummtr -i [-bcqvw] [-l language] -g gameid -p gamedir -f input
-     scummtr -o [-bchHIqvw] [-a restypes] [-A restypes] [-l language]
+     scummtr -o [-bchHInqvw] [-a restypes] [-A restypes] [-l language]
              -g gameid -p gamedir -f output
      scummtr -L
 
@@ -90,6 +90,14 @@ DESCRIPTION
                  fr      Original French charset.
 
                  it      Original Italian charset.
+
+     -n          Never include any ";; ScummTR note:" comment.
+
+                 These comments are added by default to help some text editors
+                 infer the proper encoding of the translation files, but they
+                 may interfere with some derivative tools which do not expect
+                 them.  -n restores the original ScummTR 0.4.0 behavior of not
+                 emitting those lines.
 
      -p gamedir  The path to the game (default: current directory).
 

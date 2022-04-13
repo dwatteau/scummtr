@@ -459,6 +459,9 @@ bool ScummTr::_readOption(const char *arg, char *pendingParams)
 			ScummRp::_fileOptions &= ~BlocksFile::BFOPT_AUTO;
 			ScummRp::_fileOptions |= BlocksFile::BFOPT_RAM;
 			break;
+		case 'n':
+			ScummTr::_textOptions |= Text::TXT_NO_COMMENT;
+			break;
 		case 'O':
 			ScummRp::_fileOptions &= ~BlocksFile::BFOPT_AUTO;
 			ScummRp::_fileOptions |= BlocksFile::BFOPT_SEQFILE;
@@ -560,6 +563,7 @@ void ScummTr::_usage()
 	std::cout << " -I         " << "include SCUMM instruction opcode before each line\n";
 	std::cout << " -l xx      " << "language (V1/V2 games only): en, de, it, fr\n";
 // 	std::cout << " -m         " << "work in memory (whole game files are loaded in RAM)\n";
+	std::cout << " -n         " << "never output any \"ScummTR note\" comment\n";
 // 	std::cout << " -O         " << "optimize for sequential access (with -i)\n";
 	std::cout << " -p path    " << "path to the game (default: current directory)\n";
 	std::cout << " -q         " << "quiet mode\n";

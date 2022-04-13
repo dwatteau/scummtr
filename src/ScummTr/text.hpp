@@ -59,7 +59,8 @@ public:
 		TXT_OUT = 1 << 4,
 		TXT_OPCODE = 1 << 5,
 		TXT_CHARSET1252 = 1 << 6,
-		TXT_RAW = 1 << 7
+		TXT_RAW = 1 << 7,
+		TXT_NO_COMMENT = 1 << 8
 	};
 	enum LineType
 	{
@@ -91,6 +92,7 @@ private:
 	uint32 _tag;
 	int _id;
 	bool _binary;
+	bool _comments;
 	bool _crlf;
 	bool _header;
 	bool _hex;
