@@ -79,7 +79,7 @@ DESCRIPTION
 
      -l language
                  V1 and V2 games only (Maniac Mansion and Zak McKracken).
-                 Choose the language charset to be used for this translation.
+                 Choose the language charset to be used by -c.
 
                  Possible values are:
 
