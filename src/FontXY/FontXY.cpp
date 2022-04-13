@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * Note: the last "official" binary was built on: 2006-02-19 16:25:03.
+ * Note: the last "original" binary was built on: 2006-02-19 16:25:03.
  */
 
 #include "common/types.hpp"
@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 
 	if (argc != 3 || argv[1][0] == '\0' || argv[1][1] != '\0' || (argv[1][0] != 'i' && argv[1][0] != 'o'))
 	{
-		std::cout << "FontXY 0.5.1 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran\n\n";
+		std::cout << "FontXY 0.6.0 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran\n\n";
 		std::cout << "Usage: FontXY {i|o} <CHAR file>\n\nExamples:\tFontXY o CHAR_0002\n\t\tFontXY i CHAR_0003" << std::endl;
 		return 0;
 	}

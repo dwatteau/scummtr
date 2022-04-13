@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * Note: the last "official" binary was built on: 2003-10-05 23:40:55.
+ * Note: the last "original" binary was built on: 2003-10-05 23:40:55.
  * The #ifdef additions appear to have been done after that build, but they
  * were never released.
  */
@@ -127,7 +127,7 @@ static int32 glHeight = 0;
 
 static int usage()
 {
-	std::cout << "ScummFont 0.5.1 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran\n\n";
+	std::cout << "ScummFont 0.6.0 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran\n\n";
 	std::cout << "usage:\n";
 	std::cout << "  scummfont {i|o} font bitmap.bmp\n\n";
 	std::cout << "  o: Export bitmap.bmp from font\n";

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * Note: the last "official" binary was built on: 2003-10-12 13:54:10.
+ * Note: the last "original" binary was built on: 2003-10-12 13:54:10.
  * Various changes were made in 2004 and in 2005, but were never released,
  * except maybe to some translation team members. Look for the SCUMMTR_
  * #ifdef's to learn more about the changes.
@@ -40,7 +40,7 @@
  */
 
 const char *const ScummTr::NAME = "ScummTr";
-const char *const ScummTr::VERSION = "0.5.1";
+const char *const ScummTr::VERSION = "0.6.0";
 const char *const ScummTr::AUTHOR = "Thomas Combeleran";
 
 const ScummRp::Parameter ScummTr::_trParameters[] =

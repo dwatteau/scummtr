@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * Note: the last "official" binary was built on: 2003-10-12 13:54:34.
+ * Note: the last "original" binary was built on: 2003-10-12 13:54:34.
  * It seems that no functional change was made after that date.
  */
 
@@ -41,7 +41,7 @@
  */
 
 const char *const ScummRp::NAME = "ScummRp";
-const char *const ScummRp::VERSION = "0.5.1";
+const char *const ScummRp::VERSION = "0.6.0";
 const char *const ScummRp::AUTHOR = "Thomas Combeleran";
 
 const GameDefinition &ScummRp::game = ScummRp::_game;
