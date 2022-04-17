@@ -66,16 +66,20 @@ DESCRIPTION
      -g gameid   The ID of the game variant to be translated, as given by -L.
 
      -h          Include a small header at the start of each line, indicating
-                 the script context of the current string.
+                 the script/block context of the current string.
 
-                 The first sequence is the SCUMM room number, and the other
-                 one is the SCUMM resource containing this text string.
+                 It starts with the room number (e.g. "001:"), then the SCUMM
+                 object type (e.g. "ONv2"), and finally the unique ID of that
+                 object (e.g. "#0394").
 
      -H          Represent escape sequences as hexadecimal codes, instead of
                  decimal codes.
 
      -I          Include the current SCUMM instruction opcode, before each
-                 line.
+                 line (e.g. "(D8)" for that opcode).
+
+                 If the current string is not part of an opcode, "(__)" will
+                 be used.
 
      -l language
                  V1 and V2 games only (Maniac Mansion and Zak McKracken).
