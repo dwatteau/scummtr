@@ -2133,7 +2133,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 					&& oiInfo[k].num == 11 && _oiId[oiInfo[k].num] == 553
 					&& oiInfo[j].offset - oiInfo[k].offset == 0x384)
 				{
-					ScummIO::warning("Erroneous OI #553?");
+					ScummIO::warning("Working around OI #553 size");
 					oiInfo[k].size = 0x384;
 					v.push_back(oiInfo[k].num);
 				}
@@ -2142,7 +2142,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 					 && oiInfo[k].num == 12 && _oiId[oiInfo[k].num] == 554
 					 && oiInfo[j].offset - oiInfo[k].offset == 0x3C2)
 				{
-					ScummIO::warning("Erroneous OI #554?");
+					ScummIO::warning("Working around OI #554 size");
 					oiInfo[k].size = 0x3C2;
 					v.push_back(oiInfo[k].num);
 				}

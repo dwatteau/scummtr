@@ -439,7 +439,7 @@ void Text::_checkMsg(const std::string &s, int l)
 	}
 
 	if (countdown > 0 || func)
-		throw Text::Error(xsprintf("Truncated function in line %i", l));
+		throw Text::Error(xsprintf("Truncated function in line %i (msg)", l));
 }
 
 void Text::_checkRsc(const std::string &s, int l)
@@ -461,7 +461,7 @@ void Text::_checkRsc(const std::string &s, int l)
 	}
 
 	if (countdown > 0)
-		throw Text::Error(xsprintf("Truncated function in line %i", l));
+		throw Text::Error(xsprintf("Truncated function in line %i (rsc)", l));
 }
 
 void Text::_checkOldMsg(const std::string &s, int l)
@@ -481,7 +481,7 @@ void Text::_checkOldMsg(const std::string &s, int l)
 	}
 
 	if (countdown > 0)
-		throw Text::Error(xsprintf("Truncated function in line %i", l));
+		throw Text::Error(xsprintf("Truncated function in line %i (oldmsg)", l));
 }
 
 void Text::_checkPlain(const std::string &s, int l)

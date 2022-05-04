@@ -84,12 +84,12 @@ void TableOfContent::merge(const TableOfContent &t)
 	for (int i = 0; i < _size; ++i)
 	{
 		if (_toc[i].roomId != t._toc[i].roomId)
-			throw std::logic_error("TableOfContent::merge: different roomIds");
+			throw std::logic_error(xsprintf("TableOfContent::merge: different roomIds for TOC %i (%i vs %i)", i, _toc[i].roomId, t._toc[i].roomId));
 
 		if (t._accessed[_toc[i].roomId])
 		{
 			if (_accessed[_toc[i].roomId] && _toc[i].offset != t._toc[i].offset)
-				throw TableOfContent::Error(xsprintf("LFLF %i differently indexed from one file to another", _toc[i].roomId));
+				throw TableOfContent::Error(xsprintf("LFLF %i differently indexed from one file to another (offset %i vs %i)", _toc[i].roomId, _toc[i].offset, t._toc[i].offset));
 
 			_toc[i].offset = t._toc[i].offset;
 			a[_toc[i].roomId] = true;
@@ -427,7 +427,7 @@ void GlobalRoomIndex::merge(const TableOfContent &t)
 		if (t.accessed((byte)i))
 		{
 			if (_accessed[i] && _toc[i].offset != t[i].offset)
-				throw TableOfContent::Error(xsprintf("LFLF %i differently indexed from one file to another", i));
+				throw TableOfContent::Error(xsprintf("LFLF %i differently indexed from one file to another (offset %i vs %i)", i, _toc[i].offset, t[i].offset));
 
 			_toc[i].offset = t[i].offset;
 			_accessed[i] = true;
