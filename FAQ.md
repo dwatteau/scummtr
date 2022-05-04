@@ -63,7 +63,7 @@ You need a [DOS Protected Mode Interface](https://en.wikipedia.org/wiki/DOS_Prot
 * `scummtr`: imports/exports text for SCUMM engine games
     * It's mainly meant for fan translations. Or re-translations. Or typo fixes. Or finding some unknown jokes in the games.
 * `scummrp`: packs/unpacks SCUMM game data resources.
-    * This lets you dump the *raw* contents of the games. But they're very raw, you'll still need some other tools to decode or transform them. It's only meant for advanced SCUMM users.
+    * This lets you dump the *raw* contents of the games. But they're very raw, you'll still need some other tools to decode or transform them (such as [`descumm`](https://wiki.scummvm.org/index.php?title=ScummVM_Tools#descumm)). It's only meant for advanced SCUMM users.
 * `scummfont`: extracts original SCUMM fonts, and lets you transform them through `.bmp` files.
 * `FontXY`: lets you adjust the dimensions of the various *glyphs* inside a SCUMM font, such as the width of a space character in pixels. Almost a typographer's tool!
 
@@ -83,7 +83,13 @@ The main support is for the PC/DOS/Windows variants, though. Some Macintosh/Amig
 
 > **Note:** the NES variant of *Maniac Mansion* and the Turbografx/PC Engine variant of *Loom* are known **not** to work, at the moment. The *Passport to Adventure* demo is also mostly unsupported.
 
-Humongous Entertainment games (Putt-Putt, Pajama Sam…) are not supported. *The Curse of Monkey Island* is not supported. *Grim Fandango* and *Escape from Monkey Island* are not SCUMM games, and thus they're not supported.
+Humongous Entertainment games are not supported (see below). *The Curse of Monkey Island* is not supported. *Grim Fandango* and *Escape from Monkey Island* are not SCUMM games, and thus they're not supported.
+
+### Are Humongous Entertainment games supported? (Putt-Put, Freddi Fish, Pajama Sam…)
+
+No. I'm personally not interested in implementing support for them, but contributions are welcome, of course.
+
+I suggest that you look at the [NUTcracker](https://github.com/BLooperZ/nutcracker) project, instead, since there's active work for HE games.
 
 ### Are the remastered editions of the games supported?
 
@@ -109,12 +115,6 @@ There is currently no support for reimporting the resources back into the origin
 Some of them may work, but you may need to rename some files.
 
 For example, the current detection code for Indy4 expects `ATLANTIS.000` files, but the demo files may be named `indydemo.000`, instead. So, in this case, `indydemo.000` needs to be temporarily renamed to `ATLANTIS.000` and `indydemo.001` needs to be temporarily renamed to `ATLANTIS.001`, so that the ScummTR/ScummRP tools can read them.
-
-### Are Humongous Entertainment games supported? (Putt-Put, Freddi Fish, Pajama Sam…)
-
-No. I'm personally not interested in implementing support for them, but contributions are welcome, of course.
-
-I suggest that you look at the [NUTcracker](https://github.com/BLooperZ/nutcracker) project, instead, since there's active work for HE games.
 
 ### How do I report a problem with ScummTR, ScummRP, ScummFont or FontXY?
 
@@ -158,7 +158,7 @@ Basically, if your original source in an English version of the game, then the i
 
 If you work from a French, German, Italian, Portuguese or Spanish variant, you will have more Western-European characters at your disposal, if this is what you need. People living in the Nordic countries of Europe will probably need to draw some customs characters with `scummfont`, though.
 
-If your language isn't built around Latin letters, this is getting harder, but not impossible. Some communities of SCUMM translators are known to exist for Cyrillic script languages, as well as CJK languages. They may probably help you on their dedicated forums.
+If your language isn't built around Latin letters, this is getting harder, but not impossible. Some communities of SCUMM translators are known to exist for Cyrillic script languages, Hebrew, as well as CJK languages. They may probably help you on their dedicated forums.
 
 > Note that, the SCUMM games mostly coming from the MS-DOS area, they have almost no support for Unicode, and thus the ScummTR tools also have this limitation, at the moment.
 
