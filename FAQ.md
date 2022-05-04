@@ -89,11 +89,32 @@ Humongous Entertainment games (Putt-Putt, Pajama Sam…) are not supported. *The
 
 No, unless you extract their original content with some of the [Quickandeasysoftware Explorers](https://quickandeasysoftware.net/software).
 
+### Are the Steam versions supported?
+
+For *Sam & Max Hit the Road*, I believe that it should work out of the box, since it appears to rely on ScummVM.
+
+For *Indiana Jones and the Last Crusade*, *Loom*, *Indiana Jones and the Fate of Atlantis* and *The Dig*, the following links may help extract the original resources, but the instructions are a bit rough for non-technical users:
+
+* <https://forums.scummvm.org/viewtopic.php?t=16576>
+* <https://github.com/symm/LAAExtract>
+
+(So I'd recommend buying them from GOG, instead.)
+
+For the Monkey Island 1 & 2 games, *Day of the Tentacle* and *Full Throttle*, see the previous section.
+
+There is currently no support for reimporting the resources back into the original Steam executables.
+
 ### Are demo versions supported?
 
 Some of them may work, but you may need to rename some files.
 
 For example, the current detection code for Indy4 expects `ATLANTIS.000` files, but the demo files may be named `indydemo.000`, instead. So, in this case, `indydemo.000` needs to be temporarily renamed to `ATLANTIS.000` and `indydemo.001` needs to be temporarily renamed to `ATLANTIS.001`, so that the ScummTR/ScummRP tools can read them.
+
+### Are Humongous Entertainment games supported? (Putt-Put, Freddi Fish, Pajama Sam…)
+
+No. I'm personally not interested in implementing support for them, but contributions are welcome, of course.
+
+I suggest that you look at the [NUTcracker](https://github.com/BLooperZ/nutcracker) project, instead, since there's active work for HE games.
 
 ### How do I report a problem with ScummTR, ScummRP, ScummFont or FontXY?
 
