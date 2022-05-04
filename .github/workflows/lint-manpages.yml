@@ -23,9 +23,9 @@ jobs:
       - name: Install mandoc and print its version
         run: |
           sudo apt-get -qq update
-          sudo apt-get -qq install -y mandoc
+          sudo apt-get -qq install -o=Dpkg::Use-Pty=0 -y mandoc
           sudo apt-get clean
-          dpkg-query -W -f='Current mandoc is ${binary:Package} ${Version}\n' mandoc
+          dpkg-query -W -f='\nCurrent mandoc is ${binary:Package} ${Version}\n' mandoc
 
       - name: Run mandoc linter
         working-directory: ${{github.workspace}}/man
