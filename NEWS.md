@@ -8,7 +8,7 @@
 
 ### Bugfixes
 
-- ScummTR/ScummRP: Fix a fatal "Bad OIv2 offset" error with (at least) some versions of Maniac Mansion and Zak McKracken. This regression was introduced in 0.5.0.
+- ScummTR/ScummRP: Fix a fatal "Bad OIv2 offset" error with (at least) some versions of Maniac Mansion, Zak McKracken and Indy3. This regression was introduced in 0.5.0.
 
 ### Known bugs
 
