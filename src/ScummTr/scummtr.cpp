@@ -561,7 +561,7 @@ void ScummTr::_usage()
 	std::cout << " -h         " << "include SCUMM script context before each line\n";
 	std::cout << " -H         " << "use hexadecimal values for escape sequences\n";
 	std::cout << " -I         " << "include SCUMM instruction opcode before each line\n";
-	std::cout << " -l xx      " << "language (V1/V2 games only): en, de, it, fr\n";
+	std::cout << " -l xx      " << "language for -c (V1/V2 games only): en, de, it, fr\n";
 // 	std::cout << " -m         " << "work in memory (whole game files are loaded in RAM)\n";
 	std::cout << " -n         " << "never output any \"ScummTR note\" comment\n";
 // 	std::cout << " -O         " << "optimize for sequential access (with -i)\n";
