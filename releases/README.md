@@ -14,11 +14,13 @@ Out of simplicity for users, no 64-bit binaries are built, since the benefit wou
 
 Although the ScummTR tools can be built with a modern version of Microsoft Visual C++ (MSVC), we use an older release of [Mingw-W64](http://mingw-w64.org) for the official releases, in order to make sure Windows XP support remains OK. For the same reason, we don't enable too “modern” compiler settings on this environment.
 
-Live debug is not expected to happen with Windows release builds, so our default Win32 binaries are built in `Release` mode.
+Live debug is not expected to happen with Windows release builds, so the binaries are built in `Release` mode.
 
 ### MS-DOS (DJGPP)
 
 `Dockerfile.msdos` builds MS-DOS binaries thanks to [DJGPP](http://www.delorie.com/djgpp/).
+
+Live debug is not expected to happen here either, so `Release` mode is used too.
 
 Note that these binaries require a DOS Protected Mode Interface (DPMI) to properly run.
 
@@ -42,7 +44,7 @@ cmake -DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64
 make -j2
 ```
 
-Mac OS X 10.4–10.8 builds for ppc32 and i386 are done on a Mac OS X 10.5 system (Xcode 3.1.4 and [CMake 3.3.2](https://cmake.org/files/v3.3/cmake-3.3.2-Darwin-universal.dmg) must be installed), although building it on Mac OS X 10.4 should work, too:
+Mac OS X 10.4–10.8 builds for ppc32 and i386 are done on a Mac OS X 10.5 system (Xcode 3.1.4 and [CMake 3.3.2](https://cmake.org/files/v3.3/cmake-3.3.2-Darwin-universal.dmg) must be installed), although building on Mac OS X 10.4 should work, too:
 
 ```sh
 rm -rf build && mkdir build && cd build
