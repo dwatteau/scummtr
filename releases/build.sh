@@ -29,7 +29,7 @@ for builder in linux86 msdos win32 ; do
 	fi
 
 	docker build --tag "scummtr-$builder:$VERSION" -f "releases/Dockerfile.$builder" .
-	docker run -v"$(pwd)/releases/output:/scummtr/output" --rm "scummtr-$builder:$VERSION"
+	docker run -it -v"$(pwd)/releases/output:/scummtr/output" --rm "scummtr-$builder:$VERSION"
 
 	echo
 done
