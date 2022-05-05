@@ -83,7 +83,7 @@ The main support is for the PC/DOS/Windows variants, though. Some Macintosh/Amig
 
 > **Note:** the NES variant of *Maniac Mansion* and the Turbografx/PC Engine variant of *Loom* are known **not** to work, at the moment. The *Passport to Adventure* demo is also mostly unsupported.
 
-Humongous Entertainment games are not supported (see below). *The Curse of Monkey Island* is not supported. *Grim Fandango* and *Escape from Monkey Island* are not SCUMM games, and thus they're not supported.
+Humongous Entertainment games are not supported (see below). *The Curse of Monkey Island* is not supported (but it looks like [NUTcracker](https://github.com/BLooperZ/nutcracker) has support for it). *Grim Fandango* and *Escape from Monkey Island* are not SCUMM games, and thus they're not supported.
 
 ### Are Humongous Entertainment games supported? (Putt-Put, Freddi Fish, Pajama Sam…)
 
