@@ -2,12 +2,12 @@ name: Run mandoc linter on manual pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - '.github/workflows/lint-manpages.yml'
       - 'man/*.1'
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
       - '.github/workflows/lint-manpages.yml'
       - 'man/*.1'
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install mandoc and print its version
         run: |

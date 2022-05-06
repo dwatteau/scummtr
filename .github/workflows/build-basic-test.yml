@@ -2,13 +2,13 @@ name: Basic compilation test for most common platforms
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - '.github/workflows/build-basic-test.yml'
       - 'CMakeLists.txt'
       - 'src/**'
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
       - '.github/workflows/build-basic-test.yml'
       - 'CMakeLists.txt'
@@ -36,7 +36,7 @@ jobs:
             extraargs: '-DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Print CMake version
         run: cmake --version
