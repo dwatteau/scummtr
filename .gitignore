@@ -16,6 +16,7 @@ Thumbs.db
 # Binaries or build/debug artefacts
 *.a
 *.core
+*.d
 .deps
 _deps
 *.dSYM
@@ -43,6 +44,7 @@ tags
 [Rr]elease/
 .settings
 *.sln*
+*.vcxproj
 .vscode*
 .vs
 *.xcodeproj
@@ -57,14 +59,20 @@ CMakeSettings.json
 Testing
 # Test files. Take care of the .txt case...
 *.0*
-*.[bBaAtT]
+*.BAT
+*.bat
 *.bmp
 CHAR_????
-*.[eExXeE]
-*.[iImMsS]
-*.[lLaA]*
-*.[lLfFlL]
-*.[lLeEcC]
+*.EXE
+*.exe
+*.IMS
+*.ims
+*.LA*
+*.la*
+*.LFL
+*.lfl
+*.LEC
+*.lec
 *.log
 *-new
 *-tmp
