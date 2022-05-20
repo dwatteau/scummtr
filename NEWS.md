@@ -2,7 +2,7 @@
 
 ### New features
 
-- ScummTR: add a new `-n` option, which prevents ScummTR from emitting any `;; ScummTR note:` comment. This may help some older derivate tools, such as ScummSpeaks or LanguageBundleBuilder, which don't expect them (since original ScummTR 0.4 never produced them).
+- ScummTR: add a new `-n` option, which prevents ScummTR from emitting any `;; ScummTR note:` comment. This may help some older derivative tools, such as ScummSpeaks or LanguageBundleBuilder, which don't expect them (since original ScummTR 0.4 never produced them).
 
 ## ScummTR 0.5.1 (2022-02-27)
 
