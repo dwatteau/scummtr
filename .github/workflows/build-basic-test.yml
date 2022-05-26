@@ -25,9 +25,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: 'Ubuntu 18.04 (default)'
+          - name: 'Ubuntu 18.04 (default settings)'
             os: ubuntu-18.04
             extraargs: ''
+          - name: 'Ubuntu 22.04 (g++ 12)'
+            os: ubuntu-22.04
+            extraargs: '-DCMAKE_CXX_COMPILER=g++-12'
           - name: 'Windows Server 2019 (win32)'
             os: windows-2019
             extraargs: '-DCMAKE_GENERATOR_PLATFORM=Win32'
@@ -37,6 +40,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: 'Install g++-12 (Ubuntu 22.04 only)'
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get -qq install -o=Dpkg::Use-Pty=0 -y g++-12
+          sudo apt-get clean
 
       - name: Print CMake version
         run: cmake --version
