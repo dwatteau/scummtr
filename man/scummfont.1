@@ -37,7 +37,7 @@
 .Sh DESCRIPTION
 The
 .Nm
-tool transforms SCUMM CHARv1 and CHARv3 font files between their internal
+tool transforms SCUMM font files between their internal
 format and a bitmap representation.
 The mode of operation is chosen with one of the following options:
 .Bl -tag -width Ds
@@ -61,6 +61,8 @@ can either be a
 block extracted by
 .Xr scummrp 1 ,
 or an LFL file containing a font resource.
+The high-resolution fonts from the Macintosh versions of Indy 3 and Loom
+are not supported.
 .Pp
 Generated bitmap files contain every character available in the selected font.
 Characters are sorted in the ascending order of the font table; that is, the

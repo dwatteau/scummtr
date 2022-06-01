@@ -8,9 +8,9 @@ SYNOPSIS
      scummfont o FONTFILE image.bmp
 
 DESCRIPTION
-     The scummfont tool transforms SCUMM CHARv1 and CHARv3 font files between
-     their internal format and a bitmap representation.  The mode of operation
-     is chosen with one of the following options:
+     The scummfont tool transforms SCUMM font files between their internal
+     format and a bitmap representation.  The mode of operation is chosen with
+     one of the following options:
 
      i       Import the content of an image.bmp bitmap file into the specified
              FONTFILE SCUMM resource.
@@ -19,7 +19,8 @@ DESCRIPTION
              bitmap file.
 
      FONTFILE can either be a "CHAR_*" block extracted by scummrp(1), or an
-     LFL file containing a font resource.
+     LFL file containing a font resource.  The high-resolution fonts from the
+     Macintosh versions of Indy 3 and Loom are not supported.
 
      Generated bitmap files contain every character available in the selected
      font.  Characters are sorted in the ascending order of the font table;
