@@ -1,11 +1,17 @@
 # Win32 build, with best-effort support for Windows XP (thus, using the
-# older 6.0.0 version of Mingw-w64 on Debian 10 is intentional).  Also
-# uses CMake 3.13.4.
+# older 6.0.0 version of Mingw-w64 is intentional). Uses CMake 3.13.4.
 
-FROM debian:10-slim AS scummtr-win32-base
+# Try to keep this in sync with Dockerfile.msdos for better reuse
+FROM ubuntu:19.04 AS scummtr-win32-base
 
+RUN sed -i -E 's|^deb http://(.*) disco|deb http://old-releases.ubuntu.com/ubuntu/ disco|' /etc/apt/sources.list \
+	&& apt-get update \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cmake make \
+	&& rm -rf /var/lib/apt/lists/*
+
+# We just need the Win32 C++ compiler from Mingw-w64
 RUN apt-get update \
-	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cmake make g++-mingw-w64-i686 \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends g++-mingw-w64-i686 \
 	&& rm -rf /var/lib/apt/lists/*
 
 FROM scummtr-win32-base
