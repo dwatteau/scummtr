@@ -5,7 +5,7 @@
 FROM debian:10-slim AS scummtr-win32-base
 
 RUN apt-get update \
-	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cmake make mingw-w64 \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cmake make g++-mingw-w64-i686 \
 	&& rm -rf /var/lib/apt/lists/*
 
 FROM scummtr-win32-base
