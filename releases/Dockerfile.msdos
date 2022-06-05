@@ -1,26 +1,30 @@
-# MS-DOS build with DJGPP.  Uses g++ 7.3.0 and CMake 3.13.4.
+# MS-DOS build with DJGPP.  Uses g++ 9.2.0 and CMake 3.13.4.
 
-FROM --platform=linux/amd64 debian:10-slim AS scummtr-msdos-base
+# Don't update this until the ppa below has arm64 packages again
+FROM ubuntu:19.04 AS scummtr-msdos-base
 
-RUN apt-get update \
-	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends bzip2 ca-certificates cmake make wget \
+RUN sed -i -E 's|^deb http://(.*) disco|deb http://old-releases.ubuntu.com/ubuntu/ disco|' /etc/apt/sources.list \
+	&& apt-get update \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cmake make \
 	&& rm -rf /var/lib/apt/lists/*
 
-ARG DJGPP_VERSION=3.0
-ARG DJGPP_SYSTYPE=linux64-gcc730
-ARG DJGPP_SUM=cc605720ae465378e2e4039c236a52edb7861f9232df1a5081e4082e114f168a
-
-RUN wget --no-hsts --progress=dot:mega "https://github.com/andrewwutw/build-djgpp/releases/download/v${DJGPP_VERSION}/djgpp-${DJGPP_SYSTYPE}.tar.bz2" \
-	&& test x"$(openssl dgst -sha256 djgpp-${DJGPP_SYSTYPE}.tar.bz2)" = x"SHA256(djgpp-${DJGPP_SYSTYPE}.tar.bz2)= ${DJGPP_SUM}" \
-	&& tar -C /usr/local -xjf "djgpp-${DJGPP_SYSTYPE}.tar.bz2" \
-	&& rm -f "djgpp-${DJGPP_SYSTYPE}.tar.bz2"
+# Use https://launchpad.net/~jwt27/+archive/ubuntu/djgpp-toolchain for DJGPP
+RUN apt-get update \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends software-properties-common \
+	&& add-apt-repository ppa:jwt27/djgpp-toolchain \
+	&& apt-get update \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends gcc-djgpp \
+	&& i586-pc-msdosdjgpp-ranlib \
+		/usr/i386-pc-msdosdjgpp/lib/libc.a \
+		/usr/i386-pc-msdosdjgpp/lib/libm.a \
+		/usr/lib/gcc/i386-pc-msdosdjgpp/*/libstdc++.a \
+		/usr/lib/gcc/i386-pc-msdosdjgpp/*/libgcc.a \
+	&& rm -rf /var/lib/apt/lists/*
 
 FROM scummtr-msdos-base
 
 RUN mkdir -p /scummtr/project /scummtr/build /scummtr/output
 WORKDIR /scummtr
-
-ENV PATH="/usr/local/djgpp/bin:${PATH}"
 
 COPY . /scummtr/project
 
