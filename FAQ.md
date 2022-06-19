@@ -152,15 +152,29 @@ Any question, issue, bug report or e-mail about an illegally obtained SCUMM game
 
 ### When I use some non-Latin characters in my translation, the game won't show them
 
-That's a very common problem when trying to make your own translation of a SCUMM game.
+That's a very common problem when starting your own translation of a SCUMM game: you can only use the characters which were drawn in the SCUMM resource files (see `scummfont`).
 
-Basically, if your original source in an English version of the game, then the internal fonts will just have the Latin alphabet, and a few extra characters (most of the time).
+Basically, if you work from an English version of the game, the internal fonts will just have the Latin alphabet and a few extra characters (most of the time). If you need more letters from the usual Western-European alphabet, then it's maybe advisable to use the official font resource from a French or German release of the game, for example.
 
-If you work from a French, German, Italian, Portuguese or Spanish variant, you will have more Western-European characters at your disposal, if this is what you need. People living in the Nordic countries of Europe will probably need to draw some customs characters with `scummfont`, though.
+As as I as know, LucasArts never made an official release for North-Germanic, Central-European or Eastern-European languages, so you'll have to draw your own characters in that case.
 
-If your language isn't built around Latin letters, this is getting harder, but not impossible. Some communities of SCUMM translators are known to exist for Cyrillic script languages, Hebrew, as well as CJK languages. They may probably help you on their dedicated forums.
+The basic idea is to look for the most common [DOS code page](https://en.wikipedia.org/wiki/Code_page#DOS_code_pages) for your language, and draw each character that you need in that order.
+
+If your language isn't built around the Latin alphabet at all, this is getting harder, but not impossible. Some communities of SCUMM translators are known to exist for Cyrillic script languages, Hebrew, as well as CJK languages. They may probably help you on their dedicated forums.
 
 > Note that, the SCUMM games mostly coming from the MS-DOS area, they have almost no support for Unicode, and thus the ScummTR tools also have this limitation, at the moment.
+
+### Where are the fonts stored?
+
+* Usually in the `901.LFL`, `902.LFL`, `903.LFL`, `904.LFL` files if your game have them:
+    * `scummfont o 904.LFL 904.bmp`
+* Otherwise, if you have `98.LFL`, `99.LFL` files, it's often there:
+    * `scummfont o 98.LFL 98.bmp`
+* For later games without `.LFL` files, you need to extract a `CHAR` resource first:
+    * `scummrp -g monkey2 -t CHAR -od fonts`
+    * `scummfont o fonts/CHAR_0004 CHAR_0004.bmp`
+
+[NUTcracker](https://github.com/BLooperZ/nutcracker#fonts) also works for V5-V7 games and is probably a better option.
 
 ### Some really weird characters appear in my translation file for Maniac Mansion or Zak McKracken
 
