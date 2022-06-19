@@ -19,13 +19,18 @@ DESCRIPTION
              bitmap file.
 
      FONTFILE can either be a "CHAR_*" block extracted by scummrp(1), or an
-     LFL file containing a font resource.  The high-resolution fonts from the
-     Macintosh versions of Indy 3 and Loom are not supported.
+     LFL file containing a font resource (usually 98.LFL+ or 901.LFL+).
+
+     The high-resolution fonts from the Macintosh versions of Indy 3 and Loom
+     are not supported.
 
      Generated bitmap files contain every character available in the selected
      font.  Characters are sorted in the ascending order of the font table;
      that is, the 19th displayed character is always accessible in a
      scummtr(1) translation file by using the "\019" decimal sequence.
+
+     The original SCUMM games usually followed an MS-DOS code page for
+     reference.
 
 SEE ALSO
      ScummImg (http://www.jestarjokin.net/apps/scummimg/)
