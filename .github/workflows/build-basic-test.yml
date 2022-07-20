@@ -30,7 +30,7 @@ jobs:
             extraargs: ''
           - name: 'Ubuntu 22.04 (g++ 12)'
             os: ubuntu-22.04
-            extraargs: '-DCMAKE_CXX_COMPILER=g++-12'
+            extraargs: '-DCMAKE_CXX_COMPILER=g++-12 -DCMAKE_CXX_FLAGS="-fanalyzer"'
           - name: 'Windows Server 2019 (win32)'
             os: windows-2019
             extraargs: '-DCMAKE_GENERATOR_PLATFORM=Win32'
