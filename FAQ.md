@@ -320,7 +320,7 @@ This is quite tedious, indeed, but fortunately, the SCUMM games also provide som
 
 ### Maniac Mansion starts in demo mode after modifying it with ScummTR!
 
-Yes, ScummTR and ScummRP have problems with the “V2” version of Maniac Mansion.
+ScummTR and ScummRP have problems with the “V2” version of Maniac Mansion, which will make the game glitch in random ways. Until this is fixed, current versions of ScummTR and ScummRP don't let you modify the original game resources for this game, since it would just corrupt it.
 
 The “V1” version of the game appears to be OK, though.
 

@@ -12,7 +12,7 @@
 
 ### Known bugs
 
-- ScummTR/ScummRP: Mark all V2 versions of Maniac Mansions as unsupported, and not just the English V2 version. The French V2 version has the same corruption problem as the English version, for example.
+- ScummTR/ScummRP: Mark all V2 versions of Maniac Mansion as unsupported, and not just the English V2 version. The French V2 version has the same corruption problem as the English version, for example.
 
 ## ScummTR 0.5.0 (2022-02-22)
 

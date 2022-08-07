@@ -410,7 +410,7 @@ int ScummRp::main(int argc, const char **argv)
 
 #ifndef SCUMMRP_OK_TO_CORRUPT_MANIACV2
 	if (ScummRp::_game.version == 2 && ScummRp::_game.id == GID_MANIAC && ScummRp::_options & ScummRp::OPT_IMPORT)
-		ScummIO::fatal("Modifying Maniac Mansion V2 is known to corrupt it");
+		ScummIO::fatal("Sorry, modifying Maniac Mansion V2 currently corrupts it (bug #16)");
 #endif
 
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
