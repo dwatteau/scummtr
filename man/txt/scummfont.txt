@@ -22,7 +22,7 @@ DESCRIPTION
      LFL file containing a font resource (usually 98.LFL+ or 901.LFL+).
 
      The high-resolution fonts from the Macintosh versions of Indy 3 and Loom
-     are not supported.
+     are currently not supported.
 
      Generated bitmap files contain every character available in the selected
      font.  Characters are sorted in the ascending order of the font table;
@@ -30,7 +30,7 @@ DESCRIPTION
      scummtr(1) translation file by using the "\019" decimal sequence.
 
      The original SCUMM games usually followed an MS-DOS code page for
-     reference.
+     reference (such as CP437 or CP850), with local modifications.
 
 SEE ALSO
      ScummImg (http://www.jestarjokin.net/apps/scummimg/)
