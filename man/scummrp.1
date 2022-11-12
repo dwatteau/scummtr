@@ -77,11 +77,29 @@ Suppress informational output.
 .It Fl t Ar tag
 Only export/import game blocks matching the specified
 .Ar tag .
-A tag is the internal name of a block type inside SCUMM,
-such as
-.Dq SCRP
-or
-.Dq CHAR .
+.Pp
+A tag is the internal name of a SCUMM block type.
+Tag names went from 2 to 4 letters starting with SCUMM v5.
+.Pp
+Common tags name include:
+.Bl -tag -width "SC,_SCRP" -offset indent
+.It Ic CHAR
+Charset (or font).
+.It Ic CO , COST
+Character costume and related animation.
+.It Ic EN , ENCD
+Local entry script (run when entering the room).
+.It Ic EX , EXCD
+Local exit script (run when leaving the room).
+.It Ic LS , LSCR
+Local script.
+.It Ic OC , OBCD
+Object code (name, interactions).
+.It Ic OI , OBIM
+Object image.
+.It Ic SC , SCRP
+Global script.
+.El
 .It Fl v
 Verbose mode.
 .It Fl V

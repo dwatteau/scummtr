@@ -35,9 +35,29 @@ DESCRIPTION
 
      -q         Quiet mode.  Suppress informational output.
 
-     -t tag     Only export/import game blocks matching the specified tag.  A
-                tag is the internal name of a block type inside SCUMM, such as
-                "SCRP" or "CHAR".
+     -t tag     Only export/import game blocks matching the specified tag.
+
+                A tag is the internal name of a SCUMM block type.  Tag names
+                went from 2 to 4 letters starting with SCUMM v5.
+
+                Common tags name include:
+
+                      CHAR      Charset (or font).
+
+                      CO, COST  Character costume and related animation.
+
+                      EN, ENCD  Local entry script (run when entering the
+                                room).
+
+                      EX, EXCD  Local exit script (run when leaving the room).
+
+                      LS, LSCR  Local script.
+
+                      OC, OBCD  Object code (name, interactions).
+
+                      OI, OBIM  Object image.
+
+                      SC, SCRP  Global script.
 
      -v         Verbose mode.
 
