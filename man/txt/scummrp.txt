@@ -40,17 +40,15 @@ DESCRIPTION
 
      -v         Verbose mode.
 
-     -V         Same as -v, but list block names as they're being treated,
-                too.
+     -V         Same as -v, but list block names as they're being treated.
 
 EXAMPLES
-     Dump all the blocks of the original Monkey Island 2 game to the DUMP_MI2
-     directory:
+     Dump all the blocks from Monkey Island 2 to the DUMP_MI2 directory:
 
            $ scummrp -g monkey2 -p /path/to/MI2 -od DUMP_MI2
 
-     Dump the global script blocks of the Talkie CD version of Loom, using
-     default paths:
+     Dump the global scripts from the Talkie CD version of Loom, using default
+     paths:
 
            $ scummrp -g loomcd -t SCRP -o
 
