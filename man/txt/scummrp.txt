@@ -10,8 +10,9 @@ SYNOPSIS
 
 DESCRIPTION
      The scummrp tool imports and exports game data blocks for SCUMM engine
-     games.  The mode of operation is chosen with one of the following
-     options:
+     games, in their original, raw format.
+
+     The mode of operation is chosen with one of the following options:
 
      -i      Import blocks into the game files.
 
