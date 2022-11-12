@@ -24,7 +24,7 @@
 .Os
 .Sh NAME
 .Nm scummrp
-.Nd pack and unpack SCUMM game data resources
+.Nd pack and unpack SCUMM game data blocks
 .Sh SYNOPSIS
 .Nm scummrp
 .Fl i
@@ -45,13 +45,13 @@
 .Sh DESCRIPTION
 The
 .Nm
-tool imports and exports game data resources for SCUMM engine games.
+tool imports and exports game data blocks for SCUMM engine games.
 The mode of operation is chosen with one of the following options:
 .Bl -tag -width Ds
 .It Fl i
-Import resources into the game files.
+Import blocks into the game files.
 .It Fl o
-Export resources from the game files.
+Export blocks from the game files.
 .It Fl L
 List all supported games with their respective
 .Ar gameid .
@@ -73,9 +73,9 @@ The path to the game (default: current directory).
 Quiet mode.
 Suppress informational output.
 .It Fl t Ar tag
-Only export/import game resources matching the specified
+Only export/import game blocks matching the specified
 .Ar tag .
-A tag is the internal name of a resource type inside SCUMM,
+A tag is the internal name of a block type inside SCUMM,
 such as
 .Dq SCRP
 or
@@ -85,16 +85,16 @@ Verbose mode.
 .It Fl V
 Same as
 .Fl v ,
-but list resource names as they're being treated, too.
+but list block names as they're being treated, too.
 .El
 .Sh EXAMPLES
-Dump all the resources of the original Monkey Island 2 game to the
+Dump all the blocks of the original Monkey Island 2 game to the
 .Pa DUMP_MI2
 directory:
 .Pp
 .Dl $ scummrp -g monkey2 -p /path/to/MI2 -od DUMP_MI2
 .Pp
-Dump the script resources of the Talkie CD version of Loom, using
+Dump the global script blocks of the Talkie CD version of Loom, using
 default paths:
 .Pp
 .Dl $ scummrp -g loomcd -t SCRP -o

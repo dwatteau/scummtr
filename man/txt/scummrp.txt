@@ -1,7 +1,7 @@
 SCUMMRP(1)                  General Commands Manual                 SCUMMRP(1)
 
 NAME
-     scummrp - pack and unpack SCUMM game data resources
+     scummrp - pack and unpack SCUMM game data blocks
 
 SYNOPSIS
      scummrp -i [-qvV] [-t tag] -g gameid -p gamedir -d dumpdir
@@ -9,13 +9,13 @@ SYNOPSIS
      scummrp -L
 
 DESCRIPTION
-     The scummrp tool imports and exports game data resources for SCUMM engine
+     The scummrp tool imports and exports game data blocks for SCUMM engine
      games.  The mode of operation is chosen with one of the following
      options:
 
-     -i      Import resources into the game files.
+     -i      Import blocks into the game files.
 
-     -o      Export resources from the game files.
+     -o      Export blocks from the game files.
 
      -L      List all supported games with their respective gameid.
 
@@ -34,23 +34,23 @@ DESCRIPTION
 
      -q         Quiet mode.  Suppress informational output.
 
-     -t tag     Only export/import game resources matching the specified tag.
-                A tag is the internal name of a resource type inside SCUMM,
-                such as "SCRP" or "CHAR".
+     -t tag     Only export/import game blocks matching the specified tag.  A
+                tag is the internal name of a block type inside SCUMM, such as
+                "SCRP" or "CHAR".
 
      -v         Verbose mode.
 
-     -V         Same as -v, but list resource names as they're being treated,
+     -V         Same as -v, but list block names as they're being treated,
                 too.
 
 EXAMPLES
-     Dump all the resources of the original Monkey Island 2 game to the
-     DUMP_MI2 directory:
+     Dump all the blocks of the original Monkey Island 2 game to the DUMP_MI2
+     directory:
 
            $ scummrp -g monkey2 -p /path/to/MI2 -od DUMP_MI2
 
-     Dump the script resources of the Talkie CD version of Loom, using default
-     paths:
+     Dump the global script blocks of the Talkie CD version of Loom, using
+     default paths:
 
            $ scummrp -g loomcd -t SCRP -o
 

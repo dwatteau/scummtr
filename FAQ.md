@@ -62,7 +62,7 @@ You need a [DOS Protected Mode Interface](https://en.wikipedia.org/wiki/DOS_Prot
 
 * `scummtr`: imports/exports text for SCUMM engine games
     * It's mainly meant for fan translations. Or re-translations. Or typo fixes. Or finding some unknown jokes in the games.
-* `scummrp`: packs/unpacks SCUMM game data resources.
+* `scummrp`: packs/unpacks SCUMM game data blocks.
     * This lets you dump the *raw* contents of the games. But they're very raw, you'll still need some other tools to decode or transform them (such as [`descumm`](https://wiki.scummvm.org/index.php?title=ScummVM_Tools#descumm)). It's only meant for advanced SCUMM users.
 * `scummfont`: extracts original SCUMM fonts, and lets you transform them through `.bmp` files.
 * `FontXY`: lets you adjust the dimensions of the various *glyphs* inside a SCUMM font, such as the width of a space character in pixels. Almost a typographer's tool!

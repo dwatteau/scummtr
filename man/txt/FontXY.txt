@@ -13,12 +13,12 @@ DESCRIPTION
      chosen with one of the following options:
 
      i       Import glyph dimensions from a XY.txt file into the specified
-             CHARFILE resource.
+             CHARFILE block.
 
-     o       Export glyph dimensions from the specified CHARFILE resource into
-             a XY.txt file.
+     o       Export glyph dimensions from the specified CHARFILE block into a
+             XY.txt file.
 
-     CHARFILE must be a "CHAR_*" resource file, as extracted by scummrp(1).
+     CHARFILE must be a "CHAR_*" SCUMM block, as extracted by scummrp(1).
 
      Glyph dimensions are represented as a series of `X;Y' coordinates,
      relative to zero, each glyph being separated by a new line.  Empty glyphs
