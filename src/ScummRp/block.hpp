@@ -1068,14 +1068,14 @@ public:
 	bool operator!=(Block *p) const { return _ptr != p; }
 	bool operator==(Block *p) const { return _ptr == p; }
 public:
-	BlockPtr<T>() : _ptr(nullptr) { }
-	~BlockPtr<T>()
+	BlockPtr() : _ptr(nullptr) { }
+	~BlockPtr()
 	{
 		::delete _ptr;
 	}
 
 private: // Not copiable
-	BlockPtr<T>(const BlockPtr<T> &);
+	BlockPtr(const BlockPtr &);
 	BlockPtr<T> &operator=(const BlockPtr<T> &);
 };
 

@@ -26,10 +26,6 @@
 #ifndef SCUMMTR_COMMON_TYPES_HPP
 #define SCUMMTR_COMMON_TYPES_HPP
 
-#if __cplusplus > 201703L
-#  error "This code is not compatible with C++20 and later versions"
-#endif
-
 #if defined(__MSDOS__) && !defined(__DJGPP__)
 #  error "Building for DOS is currently only supported with DJGPP"
 #endif
