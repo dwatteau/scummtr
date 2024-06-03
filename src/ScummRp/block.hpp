@@ -103,7 +103,7 @@ public:
 		{
 		}
 		const std::string &file() { return _file; }
-		int32 offset() { return _offset; }
+		int32 offset() const { return _offset; }
 		~InvalidDataFromGame() throw() override { }
 	};
 	class InvalidDataFromDump : public std::runtime_error
