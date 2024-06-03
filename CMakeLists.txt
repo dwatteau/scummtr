@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 
-cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.3..3.5 FATAL_ERROR)
 
 # Don't export symbols, unless ENABLE_EXPORTS is used
 if(POLICY CMP0065)
