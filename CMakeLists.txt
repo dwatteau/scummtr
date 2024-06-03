@@ -2,11 +2,6 @@
 
 cmake_minimum_required(VERSION 3.3...3.5 FATAL_ERROR)
 
-# Don't export symbols, unless ENABLE_EXPORTS is used
-if(POLICY CMP0065)
-    cmake_policy(SET CMP0065 NEW)
-endif()
-
 # Don't hardcode /W3 by default for MSVC
 if(POLICY CMP0092)
     cmake_policy(SET CMP0092 NEW)
