@@ -24,7 +24,9 @@
  */
 
 #include "common/toolbox.hpp"
+#include "common/io.hpp"
 #include "ScummRp/block.hpp" // for tagToStr
+#include "ScummRp/scummrp.hpp"
 
 #include "text.hpp"
 
@@ -362,25 +364,41 @@ void Text::_writeEscMsg(const std::string &s)
 	size = s.size();
 	for (size_t i = 0; i < size; ++i)
 	{
+		byte b = (byte)s[i];
 		if (countdown > 0)
 		{
-			_writeEscChar((byte)s[i]);
+			_writeEscChar(b);
 			--countdown;
 		}
 		else if (func)
 		{
-			_writeEscChar((byte)s[i]);
-			countdown = Text::funcLen((byte)s[i]);
+			_writeEscChar(b);
+			countdown = Text::funcLen(b);
 			func = false;
 		}
-		else if ((byte)s[i] == 0xFF || (byte)s[i] == 0xFE)
+		else if (b == 0xFF || b == 0xFE)
 		{
-			_writeEscChar((byte)s[i]);
+			// Ignore badly-encoded German Eszett (0xFF instead of 0xE1) in Indy3 German.
+			// This is a bug in the original and official German releases of the game.
+			// See issue #58, https://bugs.scummvm.org/ticket/1675, and
+			// https://bugs.scummvm.org/ticket/2715.
+			if (ScummRp::game.id == GID_INDY3 && b == 0xFF && i < size - 1)
+			{
+				byte nextByte = (byte)s[i + 1];
+				if (nextByte == 0x2E || nextByte == 0x20)
+				{
+					ScummIO::warning("Fixing likely misencoded German Eszett character for Indy3");
+					b = 0xE1;
+					_writeChar(b);
+					continue;
+				}
+			}
+			_writeEscChar(b);
 			func = true;
 		}
 		else
 		{
-			_writeChar((byte)s[i]);
+			_writeChar(b);
 		}
 	}
 }
@@ -625,7 +643,7 @@ int Text::getLengthOldMsg(FileHandle &f)
 
 int Text::getLengthMsg(FileHandle &f)
 {
-	byte b;
+	byte b, nextByte;
 	int32 start;
 	int i;
 
@@ -634,7 +652,17 @@ int Text::getLengthMsg(FileHandle &f)
 	{
 		if (b == 0xFF || b == 0xFE)
 		{
-			i = Text::funcLen(f->getByte(b));
+			f->getByte(nextByte);
+
+			// Ignore badly encoded German Eszett characters that would be interpreted
+			// as a \255 escape sequence. See also Text::_writeEscMsg() comment above.
+			if (ScummRp::game.id == GID_INDY3 && b == 0xFF && (nextByte == 0x2E || nextByte == 0x20))
+			{
+				ScummIO::info(INF_DETAIL, xsprintf("Ignoring 0x%.2X%.2X sequence in Indy3 (likely a bogus German Eszett)", b, nextByte));
+				continue;
+			}
+
+			i = Text::funcLen(nextByte);
 			f->seekg(i, std::ios::cur);
 		}
 	}
