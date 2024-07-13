@@ -1,8 +1,13 @@
 ## ScummTR 0.6.0 (2022-0?-??)
 
+### Bugfixes
+
+- ScummTR: Fix a fatal "ERROR: Unknown function id 0x2E" error when trying to import/export text for the German releases of Indy3. This is because of an original issue in the official German releases of the game, where some Eszett characters were badly encoded.
+
 ### New features
 
 - ScummTR: add a new `-n` option, which prevents ScummTR from emitting any `;; ScummTR note:` comment. This may help some older derivative tools, such as ScummSpeaks or LanguageBundleBuilder, which don't expect them (since original ScummTR 0.4 never produced them).
+- Various manual page and warning improvements.
 
 ## ScummTR 0.5.1 (2022-02-27)
 
