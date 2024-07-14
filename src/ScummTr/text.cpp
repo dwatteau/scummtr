@@ -307,24 +307,37 @@ void Text::_writeEscRsc(const std::string &s)
 	size = s.size();
 	for (size_t i = 0; i < size; ++i)
 	{
+		byte b = (byte)s[i];
 		if (countdown > 0)
 		{
-			_writeEscChar((byte)s[i]);
+			_writeEscChar(b);
 			--countdown;
 		}
-		else if ((byte)s[i] == 0xFF)
+		else if (b == 0xFF)
 		{
-			_writeEscChar((byte)s[i]);
+			if (ScummRp::game.id == GID_INDY3 && i < size - 1)
+			{
+				byte nextByte = (byte)s[i + 1];
+				if (nextByte == 0x20)
+				{
+					ScummIO::warning("Fixing likely misencoded German Eszett character for Indy3");
+					b = 0xE1;
+					_writeChar(b);
+					continue;
+				}
+			}
+
+			_writeEscChar(b);
 			countdown = 3;
 		}
-		else if ((byte)s[i] == 0xFE)
+		else if (b == 0xFE)
 		{
-			_writeEscChar((byte)s[i]);
+			_writeEscChar(b);
 			countdown = 1;
 		}
 		else
 		{
-			_writeChar((byte)s[i]);
+			_writeChar(b);
 		}
 	}
 }
