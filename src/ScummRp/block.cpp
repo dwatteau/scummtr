@@ -1496,7 +1496,7 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 		++_nextSubblockOffset;
 	}
 	if (gap)
-		ScummIO::warning(xsprintf("Gap at 0x%X in %.2i.LFL", o, _id));
+		ScummIO::info(INF_DETAIL, xsprintf("Gap at 0x%X in %.2i.LFL", o, _id));
 
 	_checkDupOffset((byte)_id, _nextSubblockOffset);
 
