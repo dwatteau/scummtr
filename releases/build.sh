@@ -19,6 +19,15 @@ if [ ! -f releases/build.sh ]; then
 	exit 1
 fi
 
+use_buildx=''
+docker_version=$(docker version --format '{{.Server.Version}}')
+if [ "${docker_version%%.*}" -ge 23 ]; then
+	# Docker now warns you to use buildx, but doesn't necessarily install it by default...
+	if docker buildx version >/dev/null 2>&1 ; then
+		use_buildx=buildx
+	fi
+fi
+
 for builder in linux86 msdos win32 ; do
 	echo "===> Building for $builder"
 
@@ -28,7 +37,7 @@ for builder in linux86 msdos win32 ; do
 		sleep 5
 	fi
 
-	docker build --tag "scummtr-$builder:$VERSION" -f "releases/Dockerfile.$builder" .
+	docker $use_buildx build --tag "scummtr-$builder:$VERSION" -f "releases/Dockerfile.$builder" .
 	docker run -it -v"$(pwd)/releases/output:/scummtr/output" --rm "scummtr-$builder:$VERSION"
 
 	echo
