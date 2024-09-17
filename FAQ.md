@@ -314,23 +314,11 @@ At the moment, you just can't. Most SCUMM games predate common Unicode usage, an
 
 Moreover, a glyph will only appear in a SCUMM game if it's part of the included SCUMM fonts.
 
-### How do I deal with a right-to-left or CJK language?
-
-external help
-
 ### My savegames crash, when I translate my game scene by scene
 
 Yes, the SCUMM savegames embed the names of the various objects/verbs/actors that you've encountered, so if you've translated/renamed them after they appeared in a savegame, then the game will get lost and crash when you load it back. You need to start the game from scratch, over and over, while translating it.
 
 This is quite tedious, indeed, but fortunately, the SCUMM games also provide some Boot Params which let you “teleport” to any scene at any time. Read the [ScummVM documentation about Boot Params](https://wiki.scummvm.org/index.php/Boot_Params) to learn more about this.
-
-### ScummVM doesn't recognize my game anymore after using ScummTR
-
-XXX
-
-not exactly, but suggestions
-add orig, edit path
-scummvm-md5.txt old trick?
 
 ### Maniac Mansion starts in demo mode after modifying it with ScummTR!
 
