@@ -57,7 +57,7 @@ This project has been [licensed under the MIT License](COPYING) in 2020 by its o
 
 This project is not affiliated in any way with LucasArts Entertainment Company, LucasFilm Ltd, or Humongous Entertainment.
 
-This project is made out of love and respect for the old LucasArts adventure games. LucasArts and Humongous Entertainment games can be bought on wonderful places such as [GOG](https://www.gog.com/games?devpub=lucasfilm&page=1&sort=title).
+This project is made out of love and respect for the old LucasArts adventure games. LucasArts and Humongous Entertainment games can be bought on wonderful places such as [GOG](https://www.gog.com/games?genres=adventure&developers=lucasfilm&order=asc:releaseDate).
 
 This project doesn't contain and doesn't distribute any kind of game data. This project asks all of its users to respect the games, Intellectual Property and Copyright laws.
 
