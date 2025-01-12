@@ -55,6 +55,12 @@ jobs:
           sudo apt-get -qq install -o=Dpkg::Use-Pty=0 -y g++-14
           sudo apt-get clean
 
+      - name: 'Use latest available Xcode release (macOS only)'
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -n 1)/Contents/Developer"
+          system_profiler SPDeveloperToolsDataType
+
       - name: Print CMake version
         run: cmake --version
 
