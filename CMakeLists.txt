@@ -3,8 +3,10 @@
 cmake_minimum_required(VERSION 3.3...3.5 FATAL_ERROR)
 
 # Don't hardcode /W3 by default for MSVC
-if(POLICY CMP0092)
-    cmake_policy(SET CMP0092 NEW)
+if(NOT CMAKE_VERSION VERSION_LESS 3.15)
+    if(POLICY CMP0092)
+        cmake_policy(SET CMP0092 NEW)
+    endif()
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -39,7 +41,7 @@ if(MSVC)
         message(FATAL_ERROR "Refusing to build: Visual Studio 2015 or better is required")
     endif()
 
-    if (MSVC_VERSION GREATER_EQUAL 1914)
+    if (MSVC_VERSION GREATER 1913)
         add_compile_options(/Zc:__cplusplus)
     endif()
 
