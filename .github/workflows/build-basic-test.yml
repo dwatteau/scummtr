@@ -34,8 +34,8 @@ jobs:
           - name: 'Windows Server 2019 (win32)'
             os: windows-2019
             extraargs: '-DCMAKE_GENERATOR_PLATFORM=Win32'
-          - name: 'macOS 13 (x86_64 and arm64)'
-            os: macos-13
+          - name: 'macOS 14 (x86_64 and arm64)'
+            os: macos-14
             extraargs: '-DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"'
 
     steps:
