@@ -25,37 +25,32 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: 'Ubuntu 22.04 (default settings)'
+          - name: 'Ubuntu 22.04 (oldest g++)'
             os: ubuntu-22.04
+            gccver: 9
             extraargs: '-DCMAKE_CXX_COMPILER=g++-9'
-          - name: 'Ubuntu 24.04 (g++ 14)'
+          - name: 'Ubuntu 24.04 (newest g++)'
             os: ubuntu-24.04
+            gccver: 14
             extraargs: '-DCMAKE_CXX_COMPILER=g++-14'
           - name: 'Windows Server 2019 (win32)'
             os: windows-2019
             extraargs: '-DCMAKE_GENERATOR_PLATFORM=Win32'
-          - name: 'macOS 14 (x86_64 and arm64)'
+          - name: 'macOS 14 (x86_64-arm64 / newest Xcode)'
             os: macos-14
             extraargs: '-DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"'
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: 'Install oldest available g++ (Ubuntu 22.04 only)'
-        if: matrix.os == 'ubuntu-22.04'
+      - name: 'Install different g++ release (Ubuntu only)'
+        if: startsWith(matrix.os, 'ubuntu')
         run: |
           sudo apt-get -qq update
-          sudo apt-get -qq install -o=Dpkg::Use-Pty=0 -y g++-9
+          sudo apt-get -qq install -o=Dpkg::Use-Pty=0 -y g++-${{ matrix.gccver }}
           sudo apt-get clean
 
-      - name: 'Install newest available g++ (Ubuntu 24.04 only)'
-        if: matrix.os == 'ubuntu-24.04'
-        run: |
-          sudo apt-get -qq update
-          sudo apt-get -qq install -o=Dpkg::Use-Pty=0 -y g++-14
-          sudo apt-get clean
-
-      - name: 'Use latest available Xcode release (macOS only)'
+      - name: 'Switch to newest available Xcode (macOS only)'
         if: startsWith(matrix.os, 'macos')
         run: |
           sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -n 1)/Contents/Developer"
