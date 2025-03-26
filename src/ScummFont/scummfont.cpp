@@ -26,11 +26,17 @@
  * were never released.
  */
 
-// Some useful references:
+// SCUMM charset format references:
 //
 // https://wiki.scummvm.org/index.php?title=SCUMM/Technical_Reference/Charset_resources
 // https://wiki.scummvm.org/index.php/SCUMM/Technical_Reference/SCUMM_6_resource_files#3.2.20_CHAR
+//
+// BMP format references:
+//
 // https://formats.kaitai.io/bmp/index.html
+// https://freeimage.sourceforge.io/fnet/html/4720264E.htm
+// https://github.com/HexFiend/HexFiend/blob/v2.18.1/templates/Images/BMP.tcl
+// https://github.com/synalysis/Grammars/blob/35e53acbad8d25faefefdf0863d2a08cc71918a8/bitmap.grammar
 
 #include "common/types.hpp"
 #include "common/file.hpp"
