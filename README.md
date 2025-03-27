@@ -1,6 +1,11 @@
 # ScummTR – Fan translation tools for LucasArts SCUMM games
 
 This project hosts the sources of Thomas Combeleran's fan translation tools for most LucasArts [SCUMM engine](https://en.wikipedia.org/wiki/SCUMM) games, from *Maniac Mansion* to *The Dig*.
+<!--
+> [!CAUTION]
+> [!IMPORTANT]
+> [!WARNING]
+-->
 
 They are known as `scummtr`, `scummrp`, `scummfont`, and `FontXY`. They were originally only available as Windows programs, but they're now open-source and available for various systems.
 
@@ -12,9 +17,10 @@ Note that you need to know how to use [a command-line interface](https://en.wiki
 
 ## How to use
 
-👉 [The FAQ](FAQ.md) is here to answer the most usual questions. Please read it first if you have any problem.
-
-Some [manual pages](man/txt/) are also available.
+> [!IMPORTANT]
+> 👉 Please [**read the FAQ first**](FAQ.md). It has answers to many questions and situations that almost every ScummTR user _has_ at some point.
+>
+> Some [manual pages](man/txt/) are also available.
 
 If you have any problem, suggestion or question, feel free to [open a discussion](https://github.com/dwatteau/scummtr/discussions/new) or [report an issue](https://github.com/dwatteau/scummtr/issues/new/choose)!
 

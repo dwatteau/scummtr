@@ -392,9 +392,10 @@ Sorry! But this is free software, [*without warranty of any kind*](COPYING). Ple
 
 Make sure that you have:
 
-* a Windows or [POSIX](https://en.wikipedia.org/wiki/POSIX#POSIX-oriented_operating_systems) system
-* a C++98 compiler (such as g++, clang++, or [Mingw-w64](https://www.mingw-w64.org) or MSVC 2015 or later for Windows)
-* [CMake](https://cmake.org).
+* a Windows, Mac or [POSIX](https://en.wikipedia.org/wiki/POSIX#POSIX-oriented_operating_systems) system
+* a C++ compiler (such as g++, clang++, or [Mingw-w64](https://www.mingw-w64.org) or MSVC 2015 or later for Windows)
+    * (ScummTR only needs C++98, so that should be pretty portable, even for older systems.)
+* [CMake](https://cmake.org) (3.3 or newer).
 
 Then, read the [release documentation](releases/README.md) for more information.
 
