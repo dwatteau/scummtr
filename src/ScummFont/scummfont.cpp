@@ -134,14 +134,21 @@ static int32 glHeight = 0;
 static int usage()
 {
 	std::cout << "ScummFont 0.6.0 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran\n\n";
+
 	std::cout << "usage:\n";
 	std::cout << "  scummfont {i|o} font bitmap.bmp\n\n";
 	std::cout << "  o: Export bitmap.bmp from font\n";
 	std::cout << "  i: Import bitmap.bmp into font\n\n";
-	std::cout << "\"font\" is either a CHAR block extracted with scummrp, or an LFL file\n\n";
+	std::cout << "\"font\" is either a CHAR block extracted with scummrp, or an LFL file\n";
+	std::cout << "(usually 901.LFL/98.LFL, or higher numbers)\n\n";
 
 	std::cout << "Using the GIMP image editor (www.gimp.org) with its \"Do not write\n";
-	std::cout << "color space information\" compatibility option is highly recommended!" << std::endl;
+	std::cout << "color space information\" compatibility option is highly recommended!\n\n";
+
+	std::cout << "For questions about supported encodings, or missing characters for your\n";
+	std::cout << "language, read the official ScummTR documentation.\n\n";
+
+	printCommonDisclaimer();
 
 	return 0;
 }

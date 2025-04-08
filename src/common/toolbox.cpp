@@ -136,3 +136,11 @@ int xmkdir(const char *path)
 
 	return ret;
 }
+
+void printCommonDisclaimer()
+{
+	std::cout << "ALWAYS MAKE BACKUPS before making changes to your games!\n\n";
+
+	std::cout << "For documentation, answers to common problems, or reporting issues,\n";
+	std::cout << "please visit: <https://github.com/dwatteau/scummtr>" << std::endl;
+}

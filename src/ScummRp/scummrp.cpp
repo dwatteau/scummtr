@@ -530,7 +530,7 @@ void ScummRp::_usage()
 	std::cout << "scummrp -g monkey2 -p MI2 -od MI2_DUMP\n";
 	std::cout << "scummrp -g loomcd -t SCRP -o\n\n";
 
-	std::cout << "ALWAYS MAKE BACKUPS before making changes to your games!" << std::endl;
+	printCommonDisclaimer();
 }
 
 void ScummRp::_getOptions(int argc, const char **argv, const ScummRp::Parameter *params)

@@ -29,6 +29,7 @@
 
 #include "common/backup.hpp"
 #include "common/io.hpp"
+#include "common/toolbox.hpp"
 
 #include "scummtr.hpp"
 #include "trblock.hpp"
@@ -572,9 +573,11 @@ void ScummTr::_usage()
 	std::cout << " -v         " << "verbose mode\n";
 // 	std::cout << " -V         " << "more verbose (lists blocks)\n";
 	std::cout << " -w         " << "use Windows CRLF newline characters\n\n";
-	std::cout << "Examples:\n";
-	std::cout << "scummtr -g monkey2 -cwh -A aov -of mi2.txt\n";
-	std::cout << "scummtr -g zakv2 -l de -cwh -A aov -of zak_de.txt\n\n";
 
-	std::cout << "ALWAYS MAKE BACKUPS before making changes to your games!" << std::endl;
+	std::cout << "Examples:\n";
+	std::cout << "scummtr -g zakv2    -l de -c -wh -A aov -of zak_v2_de.txt\n";
+	std::cout << "scummtr -g monkeycd       -c -wh -A aov -of mi1_cd_en.txt\n";
+	std::cout << "scummtr -g atlantis       -r -wh -A aov -of atlantis_jpn_shift_jis.txt\n\n";
+
+	printCommonDisclaimer();
 }

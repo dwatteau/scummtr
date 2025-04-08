@@ -33,5 +33,6 @@ char *xstrdup(const char *src);
 void xremove(const char *path);
 void xrename(const char *oldname, const char *newname);
 int xmkdir(const char *path);
+void printCommonDisclaimer();
 
 #endif

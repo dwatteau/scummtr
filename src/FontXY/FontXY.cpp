@@ -26,6 +26,7 @@
 
 #include "common/types.hpp"
 #include "common/file.hpp"
+#include "common/toolbox.hpp"
 
 #include <clocale>
 #include <cstdlib>
@@ -44,7 +45,10 @@ int main(int argc, char **argv)
 	if (argc != 3 || argv[1][0] == '\0' || argv[1][1] != '\0' || (argv[1][0] != 'i' && argv[1][0] != 'o'))
 	{
 		std::cout << "FontXY 0.6.0 (build " << SCUMMTR_BUILD_DATE << ") by Thomas Combeleran\n\n";
-		std::cout << "Usage: FontXY {i|o} <CHAR file>\n\nExamples:\tFontXY o CHAR_0002\n\t\tFontXY i CHAR_0003" << std::endl;
+		std::cout << "Usage: FontXY {i|o} <CHAR file>\n\n";
+		std::cout << "Examples:\tFontXY o CHAR_0002\n";
+		std::cout << "         \tFontXY i CHAR_0003\n\n";
+		printCommonDisclaimer();
 		return 0;
 	}
 
