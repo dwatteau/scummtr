@@ -25,6 +25,7 @@ jobs:
     strategy:
       matrix:
         include:
+          # TODO: reuse my ScummVM CI trick to use an even older GCC?
           - name: 'Ubuntu 22.04 (arm64, oldest g++)'
             os: ubuntu-22.04-arm
             gccver: 9
