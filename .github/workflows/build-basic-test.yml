@@ -37,6 +37,9 @@ jobs:
           - name: 'Windows Server 2019 (win32)'
             os: windows-2019
             extraargs: '-DCMAKE_GENERATOR_PLATFORM=Win32'
+          - name: 'Windows Server 2025 (x64)'
+            os: windows-2025
+            extraargs: '-DCMAKE_GENERATOR_PLATFORM=x64'
           - name: 'macOS 14 (x86_64-arm64 / newest Xcode)'
             os: macos-14
             extraargs: '-DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"'
