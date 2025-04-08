@@ -43,7 +43,7 @@ public:
 	enum Charset
 	{
 		CHS_NULL = 0,
-		CHS_V3ANSI = 1,
+		CHS_V3_WIN1252 = 1,
 		CHS_V1EN = 2,
 		CHS_V1DE = 3,
 		CHS_V1IT = 4,
@@ -77,7 +77,7 @@ public:
 
 private:
 	static const char CT_NULL[256];
-	static const char CT_V3ANSI[256];
+	static const char CT_V3_WIN1252[256];
 	static const char CT_V1EN[256];
 	static const char CT_V1DE[256];
 	static const char CT_V1IT[256];

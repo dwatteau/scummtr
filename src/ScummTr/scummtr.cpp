@@ -281,7 +281,7 @@ void ScummTr::_processGameFilesV4567()
 Text::Charset ScummTr::_selectCharset()
 {
 	if (ScummRp::_game.version > 2)
-		return Text::CHS_V3ANSI;
+		return Text::CHS_V3_WIN1252;
 
 	if (strcmp(ScummTr::_paramLanguage, "en") == 0)
 		return Text::CHS_V1EN;

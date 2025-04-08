@@ -130,7 +130,7 @@ const char Text::CT_V1IT[256] =
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
-const char Text::CT_V3ANSI[256] =
+const char Text::CT_V3_WIN1252[256] =
 {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, '\xa9', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -153,7 +153,7 @@ const char Text::CT_V3ANSI[256] =
 const char *const Text::CHARSETS[] =
 {
 	Text::CT_NULL,
-	Text::CT_V3ANSI,
+	Text::CT_V3_WIN1252,
 	Text::CT_V1EN,
 	Text::CT_V1DE,
 	Text::CT_V1IT,
