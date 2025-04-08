@@ -130,6 +130,16 @@ const char Text::CT_V1IT[256] =
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
+// Note: according to the following source, Borland BRIEF was the editor used
+// to write the various SCUMM scripts, back then. So it's quite likely that
+// the original Western-European SCUMM fonts were made after the way BRIEF
+// would display the 437 or 850 DOS code pages.
+//
+// See:
+// <https://forums.mixnmojo.com/topic/200688-what-scumm-actually-looked-like>
+//
+// So, ideally, this must be taken into account, when deciding to map one
+// of these CP437/CP850 characters to Windows-1252.
 const char Text::CT_V3_WIN1252[256] =
 {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
