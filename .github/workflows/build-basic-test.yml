@@ -47,8 +47,8 @@ jobs:
       - name: 'Install different g++ release (Ubuntu only)'
         if: startsWith(matrix.os, 'ubuntu')
         run: |
-          sudo apt-get -qq update
-          sudo apt-get -qq install -o=Dpkg::Use-Pty=0 -y g++-${{ matrix.gccver }}
+          sudo apt-get update
+          sudo apt-get install -y g++-${{ matrix.gccver }}
           sudo apt-get clean
 
       - name: 'Switch to newest available Xcode (macOS only)'
