@@ -123,6 +123,11 @@ DESCRIPTION
      -w          Use Windows newline characters (CRLF).  This is usually
                  compatible with more text editors, and thus recommended.
 
+                 Note: if using this option, it's important to use it both for
+                 output (-o) and input (-i) calls.  Otherwise, bogus "\013"
+                 would be added at the end of each game string, possibly
+                 causing issues.
+
 EXAMPLES
      Extract the text of the original Monkey Island 2 game to a Windows-1252
      file, with added context and protected resource names:
@@ -163,4 +168,4 @@ CAVEATS
      On case-sensitive file systems, game data files must currently follow the
      DOS convention of being all-uppercase to be properly detected.
 
-ScummTR                        December 27, 2020                       ScummTR
+ScummTR                         April 12, 2025                         ScummTR
