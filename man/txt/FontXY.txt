@@ -37,4 +37,4 @@ CAVEATS
 
      XY.txt pathname is hardcoded.
 
-ScummTR                        November 19, 2020                       ScummTR
+ScummTR                        November 12, 2022                       ScummTR

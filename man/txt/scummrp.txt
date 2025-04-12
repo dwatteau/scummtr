@@ -88,4 +88,4 @@ CAVEATS
 
      SCUMM v0, SCUMM v8 and Humongous games are not supported.
 
-ScummTR                        November 19, 2020                       ScummTR
+ScummTR                        November 12, 2022                       ScummTR

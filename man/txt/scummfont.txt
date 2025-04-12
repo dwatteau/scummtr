@@ -53,4 +53,4 @@ CAVEATS
      files while preserving their original settings.  Old versions of
      Microsoft Paint may also work.
 
-ScummTR                        December 27, 2020                       ScummTR
+ScummTR                        November 12, 2022                       ScummTR
