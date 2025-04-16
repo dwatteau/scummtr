@@ -28,6 +28,7 @@
 #include "common/io.hpp"
 #include "common/toolbox.hpp"
 
+#include <cstddef>
 #include <cstring>
 
 #include <algorithm>
@@ -783,7 +784,7 @@ void FilePart::_xorBuffer(char *buffer, byte xorKey, std::streamsize n)
 	{
 		// If the buffer isn't already 4-byte aligned, process all the
 		// bytes, before hitting a 4-byte boundary
-		alignBytes = (-(reinterpret_cast<size_t>(buffer))) & (sizeof(uint32) - 1);
+		alignBytes = static_cast<std::streamsize>((-reinterpret_cast<ptrdiff_t>(buffer)) & (sizeof(uint32) - 1));
 		if (alignBytes > 0 && alignBytes <= n)
 		{
 			for ( ; i < alignBytes; ++i)
