@@ -2,6 +2,7 @@
  * SPDX-License-Identifier: MIT
  *
  * Copyright (c) 2003 Thomas Combeleran
+ * Copyright (c) 2025 Donovan Watteau
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -765,10 +766,49 @@ bool FilePart::eof()
 
 void FilePart::_xorBuffer(char *buffer, byte xorKey, std::streamsize n)
 {
+	uint32 xorKeyd;
+	uint32 tmp;
+	std::streamsize alignBytes;
+	std::streamsize i;
+
+	// Nothing to do, if it's an empty key
 	if (xorKey == 0)
 		return;
 
-	for (std::streamsize i = 0; i < n; i++)
+	i = 0;
+
+	// Don't bother setting up an optimization if there are just
+	// a few bytes to copy.
+	if (n >= 16)
+	{
+		// If the buffer isn't already 4-byte aligned, process all the
+		// bytes, before hitting a 4-byte boundary
+		alignBytes = (-(reinterpret_cast<size_t>(buffer))) & (sizeof(uint32) - 1);
+		if (alignBytes > 0 && alignBytes <= n)
+		{
+			for ( ; i < alignBytes; ++i)
+				buffer[i] ^= xorKey;
+
+			// If everything has been processed while aligning, it
+			// means we're done
+			if (i == n)
+				return;
+		}
+
+		// Now that the buffer is aligned, continue working on 4-byte
+		// values at once, for better performance.  If there are some
+		// bytes left, they will be handled in the last run below.
+		xorKeyd = xorKey | (uint32)xorKey << 8 | (uint32)xorKey << 16 | (uint32)xorKey << 24;
+		for ( ; i + 4 <= n; i += 4)
+		{
+			memcpy(&tmp, buffer + i, sizeof tmp);
+			tmp ^= xorKeyd;
+			memcpy(buffer + i, &tmp, sizeof tmp);
+		}
+	}
+
+	// Process any remaining bytes
+	for ( ; i < n; ++i)
 		buffer[i] ^= xorKey;
 }
 
@@ -859,7 +899,8 @@ FilePart &FilePart::write(const char *s, std::streamsize n)
 		{
 			xored = new char[n];
 			std::memcpy(xored, s, n);
-			FilePart::_xorBuffer(xored, _xorKey, n);
+			if (_xorKey != 0)
+				FilePart::_xorBuffer(xored, _xorKey, n);
 			_file->write(xored, n);
 		}
 		catch (...)
