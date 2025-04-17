@@ -84,8 +84,19 @@ if(MSVC)
         message(FATAL_ERROR "Refusing to build: Visual Studio 2015 or better is required")
     endif()
 
-    if (MSVC_VERSION GREATER 1913)
+    if(MSVC_VERSION GREATER 1913)
         add_compile_options(/Zc:__cplusplus)
+    endif()
+
+    # Looks like CMake doesn't set up all the proper LTO flags for MSVC...
+    # e.g. "Not all modules are compiled with -Gy"...
+    # https://discourse.cmake.org/t/cmake-ipo-issue-msvc-ltcg-incremental/826/2
+    # https://gitlab.kitware.com/cmake/cmake/-/issues/20484
+    if(CMAKE_INTERPROCEDURAL_OPTIMIZATION)
+        add_compile_options(/GL /Gy)
+        if(CMAKE_BUILD_TYPE STREQUAL "Release")
+            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LTCG")
+        endif()
     endif()
 
     add_definitions(/DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
