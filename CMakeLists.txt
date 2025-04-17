@@ -110,6 +110,11 @@ if(MSVC)
         endif()
     endif()
 
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        # Report when an uninitialized variable is used -- implies /Od
+        add_compile_options(/RTC1)
+    endif()
+
     add_definitions(/DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN)
 
