@@ -166,6 +166,12 @@ void ScummTr::_explore(TreeBlock &tree, int action, Text &text)
 	}
 }
 
+#ifdef SCUMMTR_HAS_GOOD_GCC_DIAGNOSTIC_PRAGMA_FEATURES
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat"
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+#pragma GCC diagnostic ignored "-Wformat-security"
+#endif
 void ScummTr::_processGameFilesV123()
 {
 	char dataFileName[32];
@@ -277,6 +283,9 @@ void ScummTr::_processGameFilesV4567()
 		ScummIO::setQuiet(false);
 	}
 }
+#ifdef SCUMMTR_HAS_GOOD_GCC_DIAGNOSTIC_PRAGMA_FEATURES
+#pragma GCC diagnostic pop
+#endif
 
 Text::Charset ScummTr::_selectCharset()
 {

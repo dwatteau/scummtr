@@ -102,7 +102,7 @@ if(MSVC)
     add_definitions(/DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN)
 
-    add_compile_options(/W3 /wd4244 /wd4267)
+    add_compile_options(/W3 /wd4244 /wd4267 /wd4068)
 else()
     add_definitions(-DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
     if(WIN32)
@@ -110,9 +110,9 @@ else()
     endif()
 
     # GCC 2.95 compatible warnings we always want
-    add_compile_options(-Wall -pedantic -Wpointer-arith -Wcast-qual -Wcast-align -Wundef -Wmultichar -Wwrite-strings -Wredundant-decls -Wunused -Wsign-compare)
+    add_compile_options(-Wall -pedantic -Wpointer-arith -Wcast-qual -Wcast-align -Wundef -Wmultichar -Wwrite-strings -Wredundant-decls -Wunused -Wsign-compare -Wformat)
     # GCC 2.95 compatible warnings we don't want (yet)
-    add_compile_options(-Wno-non-virtual-dtor -Wno-conversion -Wno-overloaded-virtual -Wno-old-style-cast -Wno-format)
+    add_compile_options(-Wno-non-virtual-dtor -Wno-conversion -Wno-overloaded-virtual -Wno-old-style-cast -Wno-unknown-pragmas)
 
     # Flags which are compiler-specific, or only meaningful with a particular compiler
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -131,7 +131,7 @@ else()
     endforeach()
 
     # Warnings requiring a recent compiler. Do a single test, it's not critical
-    set(SCUMMTR_MODERN_WARNING_FLAGS "-Winit-self;-Wtype-limits;-Wignored-qualifiers") # -Wzero-as-null-pointer-constant for C++11
+    set(SCUMMTR_MODERN_WARNING_FLAGS "-Wformat=2;-Winit-self;-Wtype-limits;-Wignored-qualifiers") # -Wzero-as-null-pointer-constant for C++11
     CHECK_CXX_COMPILER_FLAG("${SCUMMTR_MODERN_WARNING_FLAGS}" COMPILER_SUPPORTS_MODERN_WARNING_FLAGS)
     if(COMPILER_SUPPORTS_MODERN_WARNING_FLAGS)
         # Also add some old flags which only became reliable in more recent versions

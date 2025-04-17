@@ -806,6 +806,10 @@ FilePart &FilePart::write(const std::string &s)
 	return *this;
 }
 
+#ifdef SCUMMTR_HAS_GOOD_GCC_DIAGNOSTIC_PRAGMA_FEATURES
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat"
+#endif
 // only method which directly reads from _file
 FilePart &FilePart::read(char *s, std::streamsize n)
 {
@@ -824,6 +828,9 @@ FilePart &FilePart::read(char *s, std::streamsize n)
 
 	return *this;
 }
+#ifdef SCUMMTR_HAS_GOOD_GCC_DIAGNOSTIC_PRAGMA_FEATURES
+#pragma GCC diagnostic pop
+#endif
 
 // only method which directly writes to _file
 FilePart &FilePart::write(const char *s, std::streamsize n)
