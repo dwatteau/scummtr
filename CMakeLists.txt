@@ -124,9 +124,11 @@ else()
         message(WARNING "Assuming that your ${CMAKE_CXX_COMPILER_ID} compiler is GCC-compatible, but this may fail")
     endif()
 
-    # -O3 has no benefit, and it's sometimes buggy
-    string(REPLACE "-O3" "-O2" "CMAKE_CXX_FLAGS_RELEASE" "${CMAKE_CXX_FLAGS_RELEASE}")
-    string(REPLACE "-O3" "-O2" "CMAKE_CXX_FLAGS_RELWITHDEBINFO" "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+    # -O3 has no benefit for us, and it's sometimes buggy
+    foreach(cfg RELEASE RELWITHDEBINFO MINSIZEREL DEBUG)
+        string(TOUPPER "${cfg}" UCFG)
+        string(REPLACE "-O3" "-O2" "CMAKE_CXX_FLAGS_${UCFG}" "${CMAKE_CXX_FLAGS_${UCFG}}")
+    endforeach()
 
     # Warnings requiring a recent compiler. Do a single test, it's not critical
     set(SCUMMTR_MODERN_WARNING_FLAGS "-Winit-self;-Wtype-limits;-Wignored-qualifiers") # -Wzero-as-null-pointer-constant for C++11
