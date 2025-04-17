@@ -9,11 +9,19 @@ if(NOT CMAKE_VERSION VERSION_LESS 3.15)
     endif()
 endif()
 
+# For CheckIPOSupported, in CMake 3.9+
+if(NOT CMAKE_VERSION VERSION_LESS 3.9)
+    if(POLICY CMP0069)
+        cmake_policy(SET CMP0069 NEW)
+    endif()
+endif()
+
 if(NOT CMAKE_BUILD_TYPE)
     message(STATUS "No explicit CMAKE_BUILD_TYPE selected, default to RelWithDebInfo")
     set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build type" FORCE)
 endif()
 
+option(ENABLE_LTO "Enable Link Time Optimization, if available" ON)
 option(SCUMMTR_COMPILER_IS_DJGPP "Compiler is DJGPP" OFF)
 if(SCUMMTR_COMPILER_IS_DJGPP)
     set(CMAKE_SYSTEM_NAME "Generic")
@@ -35,6 +43,22 @@ endif()
 string(TIMESTAMP SCUMMTR_BUILD_DATE "%Y%m%d-WIP%H%M" UTC)
 
 include(CheckCXXCompilerFlag)
+
+if(ENABLE_LTO)
+    if(CMAKE_VERSION VERSION_LESS 3.9)
+        message(STATUS "LTO support: disabled (CMake 3.9 or later is required)")
+    else()
+        include(CheckIPOSupported)
+        check_ipo_supported(RESULT LTO_SUPPORTED OUTPUT LTO_CHECK_OUTPUT)
+
+        if(LTO_SUPPORTED)
+            message(STATUS "LTO support: enabled")
+            set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+        else()
+            message(STATUS "LTO support: disabled (reason: ${LTO_CHECK_OUTPUT})")
+        endif()
+    endif()
+endif()
 
 if(MSVC)
     if(MSVC_VERSION LESS 1900)

@@ -22,13 +22,16 @@ WORKDIR /scummtr
 
 COPY . /scummtr/project
 
+# TODO: LTO is not available, because CMake (and maybe the toolchain itself?)
+# is too old. Maybe revisit this, once we've moved to a newer RHEL base?
+
 CMD cd /scummtr/build \
-	&& cmake3 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS="-m64" /scummtr/project \
+	&& cmake3 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DENABLE_LTO=OFF -DCMAKE_CXX_FLAGS="-m64" /scummtr/project \
 	&& make VERBOSE=1 \
 	&& make install DESTDIR=/scummtr/output/linux-x64 \
 	\
 	&& rm -rf /scummtr/build/* \
 	\
-	&& cmake3 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS="-m32" /scummtr/project \
+	&& cmake3 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DENABLE_LTO=OFF -DCMAKE_CXX_FLAGS="-m32" /scummtr/project \
 	&& make VERBOSE=1 \
 	&& make install DESTDIR=/scummtr/output/linux-x86
