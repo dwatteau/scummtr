@@ -93,6 +93,12 @@ if(MSVC)
         add_compile_options(/Zc:__cplusplus)
     endif()
 
+    if(MSVC_VERSION GREATER 1919)
+        # Print better diagnosis, like modern GCC/Clang do
+        # XXX: it may have been added earlier, but good luck finding any info about this
+       add_compile_options(/diagnostics:caret)
+    endif()
+
     # Looks like CMake doesn't set up all the proper LTO flags for MSVC...
     # e.g. "Not all modules are compiled with -Gy"...
     # https://discourse.cmake.org/t/cmake-ipo-issue-msvc-ltcg-incremental/826/2
@@ -107,8 +113,14 @@ if(MSVC)
     add_definitions(/DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN)
 
-    # TODO: any good MSVC flag to enable, on top of /W3?
     add_compile_options(/W3)
+
+    # Some /W4 flags we bring to /W3 -- courtesy of Wireshark
+    # /w34295 (no equivalent):             array is too small to include a terminating null character
+    # /w34100 (like -Wunused-parameter):   unreferenced formal parameter
+    # /w34189 (like -Wunused-variable):    local variable is initialized but not referenced
+    # TODO: anything else?
+    add_compile_options(/w34295 /w34100 /w34189)
 
     # /wd4244 (like -Wno-conversion):      conversion from 'type1' to 'type2', possible loss of data
     # /wd4267 (like -Wno-sign-conversion): conversion from 'size_t' to 'type', possible loss of data
