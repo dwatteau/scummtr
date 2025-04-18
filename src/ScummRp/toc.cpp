@@ -80,7 +80,7 @@ void TableOfContent::merge(const TableOfContent &t)
 {
 	bool a[256];
 
-	memcpy(a, _accessed, sizeof a);
+	std::memcpy(a, _accessed, sizeof a);
 	for (int i = 0; i < _size; ++i)
 	{
 		if (_toc[i].roomId != t._toc[i].roomId)
@@ -95,7 +95,7 @@ void TableOfContent::merge(const TableOfContent &t)
 			a[_toc[i].roomId] = true;
 		}
 	}
-	memcpy(_accessed, a, sizeof a);
+	std::memcpy(_accessed, a, sizeof a);
 }
 
 void TableOfContent::_zap()
