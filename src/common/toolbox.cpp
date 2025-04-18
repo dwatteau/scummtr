@@ -65,7 +65,7 @@ char *xstrdup(const char *src)
 
 	size = strlen(src) + 1;
 	dest = new char[size];
-	memcpy(dest, src, size);
+	std::memcpy(dest, src, size);
 
 	return dest;
 }

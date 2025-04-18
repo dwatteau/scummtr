@@ -310,7 +310,7 @@ static void saveBmp(const char *path)
 	buf = new byte[roundTo4(glWidth) * glHeight];
 	memset(buf, 0, roundTo4(glWidth) * glHeight);
 	for (int i = 0; i < glHeight; ++i)
-		memcpy(buf + i * roundTo4(glWidth), glFontBitmap + (glHeight - i - 1) * glWidth, glWidth);
+		std::memcpy(buf + i * roundTo4(glWidth), glFontBitmap + (glHeight - i - 1) * glWidth, glWidth);
 
 	file.write((char *)buf, roundTo4(glWidth) * glHeight);
 	delete[] buf;
@@ -371,10 +371,11 @@ static void loadBmp(const char *path)
 
 	file.seekg(4, std::ios::cur);
 	file.read((char *)paletteCheck, PALETTE_SIZE);
-	if (memcmp(glPalette, paletteCheck, PALETTE_SIZE) != 0) {
+	if (std::memcmp(glPalette, paletteCheck, PALETTE_SIZE) != 0)
+	{
 		changePaletteBpp1();
 
-		if (memcmp(glPalette, paletteCheck, PALETTE_SIZE) != 0)
+		if (std::memcmp(glPalette, paletteCheck, PALETTE_SIZE) != 0)
 			throw std::runtime_error("This file doesn't contain an original ScummFont palette");
 	}
 
@@ -383,7 +384,7 @@ static void loadBmp(const char *path)
 	glFontBitmap = new byte[glWidth * glHeight];
 	file.read((char *)buf, roundTo4(glWidth) * glHeight);
 	for (int i = 0; i < glHeight; ++i)
-		memcpy(glFontBitmap + i * glWidth, buf + (glHeight - i - 1) * roundTo4(glWidth), glWidth);
+		std::memcpy(glFontBitmap + i * glWidth, buf + (glHeight - i - 1) * roundTo4(glWidth), glWidth);
 	delete[] buf;
 
 	file.close();
