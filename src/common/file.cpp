@@ -802,9 +802,9 @@ void FilePart::_xorBuffer(char *buffer, byte xorKey, std::streamsize n)
 		xorKeyd = xorKey | (uint32)xorKey << 8 | (uint32)xorKey << 16 | (uint32)xorKey << 24;
 		for ( ; i + 4 <= n; i += 4)
 		{
-			memcpy(&tmp, buffer + i, sizeof tmp);
+			std::memcpy(&tmp, buffer + i, sizeof tmp);
 			tmp ^= xorKeyd;
-			memcpy(buffer + i, &tmp, sizeof tmp);
+			std::memcpy(buffer + i, &tmp, sizeof tmp);
 		}
 	}
 
@@ -892,7 +892,7 @@ FilePart &FilePart::write(const char *s, std::streamsize n)
 		try
 		{
 			xored = new char[n];
-			memcpy(xored, s, n);
+			std::memcpy(xored, s, n);
 			if (_xorKey != 0)
 				FilePart::_xorBuffer(xored, _xorKey, n);
 			_file->write(xored, n);
@@ -1228,7 +1228,7 @@ void RAMFile::_reallocAtLeast(std::streamsize sz)
 	buffer = new byte[_capacity];
 
 	if (_mem != nullptr)
-		memcpy(buffer, _mem, oldCapacity);
+		std::memcpy(buffer, _mem, oldCapacity);
 
 	delete[] _mem;
 	_mem = buffer;
@@ -1306,7 +1306,7 @@ File &RAMFile::read(char *s, std::streamsize n)
 	if (_gpos < 0 || n < 0)
 		throw File::IOError(xsprintf("RAMFile::read: %s", _path));
 
-	memcpy(s, _mem + _gpos, n);
+	std::memcpy(s, _mem + _gpos, n);
 	_gpos += n;
 
 	return *this;
@@ -1321,7 +1321,7 @@ File &RAMFile::write(const char *s, std::streamsize n)
 	if (_capacity < (std::streamsize)_ppos + n)
 		_reallocAtLeast((std::streamsize)_ppos + n);
 
-	memcpy(_mem + _ppos, s, n);
+	std::memcpy(_mem + _ppos, s, n);
 	_ppos += n;
 	if (_size < _ppos)
 		_setSize(_ppos);
