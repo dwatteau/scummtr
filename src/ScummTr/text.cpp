@@ -184,7 +184,7 @@ Text::Text(const char *path, int flags, Text::Charset charset) :
     _file(path, (flags & Text::TXT_OUT) != 0 ? (std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc) : (std::ios::in | std::ios::binary)),
     _cur(0), _lineCount(0), _lflfId(-1), _tag(0), _id(-1),
     _binary((flags & Text::TXT_BINARY) != 0), _comments((flags & Text::TXT_NO_COMMENT) == 0),
-    _crlf((flags & Text::TXT_CRLF) != 0),
+    _handleCrlfFlag((flags & Text::TXT_CRLF) != 0),
     _header((flags & Text::TXT_HEADER) != 0), _hex((flags & Text::TXT_HEXA) != 0),
     _opcode((flags & Text::TXT_OPCODE) != 0),
     _rawText((flags & Text::TXT_RAW) != 0),
@@ -218,7 +218,7 @@ const char *Text::info() const
 
 const char *Text::internalCommentHeader() const
 {
-	const char *eol = (_crlf) ? "\r\n" : "\n";
+	const char *eol = (_handleCrlfFlag) ? "\r\n" : "\n";
 	const char *encoding = (_rawText) ? "RAW" : "Windows-1252/ISO-8859-1 (\xa1""caf\xe9-pi\xf1""ata Stra\xdf""e!)";
 
 	return xsprintf(
@@ -454,7 +454,7 @@ void Text::_writeEsc(const std::string &s, Text::LineType t)
 		break;
 	}
 
-	if (_crlf)
+	if (_handleCrlfFlag)
 		_file.write("\r\n", 2);
 	else
 		_file.write("\n", 1);
@@ -794,6 +794,94 @@ void Text::_spaceBitToChar(std::string &s) const
 	s = s2;
 }
 
+void Text::ensureNoCrlfMisuse()
+{
+	std::string s;
+	size_t size;
+	bool foundRealCrEnd, foundWeirdCrEnd;
+
+	// Don't bother; `-b` users are on their own
+	if (_binary)
+		return;
+
+	if (_cur != 0)
+		throw std::logic_error("Text::ensureNoCrlfMisuse: _cur != 0");
+
+	// Scan several lines, and look for any line ending with:
+	// - a real '\r' (for which the user may have forgotten to
+	//   set the corresponding `-w` flag)
+	// - and/or the "\013" string (yes, it's an escaped sequence,
+	//   and not a character), which means that a `scummtr -i`
+	//   call with CRs but no `-w` flag has already done damage
+	foundRealCrEnd = foundWeirdCrEnd = false;
+	for (int i = 0; i < MAX_QUICK_SAFETY_SCAN_LINES; i++)
+	{
+		_file.getline(s, '\n');
+
+		++_lineCount;
+		_cur = _file.tellg(std::ios::beg);
+
+		// (empty lines are forbidden, but here we don't care)
+		size = s.size();
+		if (size == 0)
+			continue;
+
+		if (s[size - 1] == '\r')
+		{
+			foundRealCrEnd = true;
+
+			// If lines end with `\r`, we need to look for "\013\r" too
+			if (size >= 5 && s.substr(size - 5) == "\\013\r")
+				foundWeirdCrEnd = true;
+		}
+
+		// Look for lines ending with "\013"
+		if (!foundWeirdCrEnd && size >= 4 && s.substr(size - 4) == "\\013")
+			foundWeirdCrEnd = true;
+
+		// We can stop if we've found any 'weird' CR, because it's
+		// a fatal error. But don't stop on the first 'plain' CR
+		// we may have, as the 'weird' ones may only appear later on
+		if (foundWeirdCrEnd)
+			break;
+
+		if (_cur >= _file.size())
+			break;
+	}
+
+	// Note: in theory, we could maybe fix this for users as well.
+	// But if the translation file has been "damaged" in some way,
+	// it feels better to require human intervention.
+	if (foundWeirdCrEnd)
+	{
+		ScummIO::fatal(xsprintf(
+		"This translation file appears to contain bogus '\\013' sequences\n"
+		"at the end of lines (e.g. line %d), which can cause game bugs.\n"
+		"\n"
+		"This means that the -w option was used during an export (-o), but\n"
+		"was then missing from a later import (-i).\n"
+		"\n"
+		"This requires a manual fix of your translation file, by removing\n"
+		"any '\\013' sequence being the LAST character of a line, making\n"
+		"sure not to leave any empty line (add a space to such lines if\n"
+		"your next `scummtr -i` call complains about this).\n"
+		"\n"
+		"Read the ScummTR documentation if you need help about this.",
+		_lineCount)
+		);
+	}
+
+	if (foundRealCrEnd && !_handleCrlfFlag)
+	{
+		ScummIO::info(INF_DETAIL, "Found CRLF newline characters; adding missing `-w` option");
+		_handleCrlfFlag = true;
+	}
+
+	// Go back to the first line, for "real" scummtr work next
+	_file->seekp(0, std::ios::beg);
+	firstLine();
+}
+
 bool Text::nextLine(std::string &s, Text::LineType lineType)
 {
 	if (_cur >= _file.size())
@@ -833,7 +921,7 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 				s.erase(0, endPos + 1);
 		}
 
-		if (_crlf)
+		if (_handleCrlfFlag)
 			s.resize(s.size() - 1);
 
 		_unEsc(s, lineType);

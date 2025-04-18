@@ -184,6 +184,9 @@ void ScummTr::_processGameFilesV123()
 		if (ScummRp::_options & ScummRp::OPT_EXPORT)
 			text.addExportHeaders();
 
+		if (ScummRp::_options & ScummRp::OPT_IMPORT)
+			text.ensureNoCrlfMisuse();
+
 		for (int i = 1; i < 98; ++i)
 		{
 			std::string dataPath(ScummRp::_paramGameDir);
@@ -241,6 +244,9 @@ void ScummTr::_processGameFilesV4567()
 
 		if (ScummRp::_options & ScummRp::OPT_EXPORT)
 			text.addExportHeaders();
+
+		if (ScummRp::_options & ScummRp::OPT_IMPORT)
+			text.ensureNoCrlfMisuse();
 
 		for (int i = 1; i < numberOfDisks; ++i)
 		{

@@ -126,7 +126,8 @@ DESCRIPTION
                  Note: if using this option, it's important to use it both for
                  output (-o) and input (-i) calls.  Otherwise, bogus "\013"
                  would be added at the end of each game string, possibly
-                 causing issues.
+                 causing issues.  ScummTR 0.6.0 tries to detect such cases,
+                 but there is no guarantee.
 
 EXAMPLES
      Extract the text of the original Monkey Island 2 game to a Windows-1252
@@ -168,4 +169,4 @@ CAVEATS
      On case-sensitive file systems, game data files must currently follow the
      DOS convention of being all-uppercase to be properly detected.
 
-ScummTR                         April 12, 2025                         ScummTR
+ScummTR                         April 18, 2025                         ScummTR

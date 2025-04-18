@@ -1,4 +1,4 @@
-## ScummTR 0.6.0 (2022-0?-??)
+## ScummTR 0.6.0 (202?-??-??)
 
 ### Bugfixes
 
@@ -6,8 +6,10 @@
 
 ### New features
 
+- ScummTR: try to detect and warn when lines end with bogus `\013` sequences, which can cause some subtle issues with ScummVM or the original interpreters. These sequences would appear when the `-w` option was used for an initial export, but forgotten in a subsequent import.
+- ScummTR: when doing an import, try to detect files with Windows CRLF end of lines, so that the `-w` option will be turned on, even if the user forgot to do so. (It's still recommended to explicitly add this option when working with such files, though.)
 - ScummTR: add a new `-n` option, which prevents ScummTR from emitting any `;; ScummTR note:` comment. This may help some older derivative tools, such as ScummSpeaks or LanguageBundleBuilder, which don't expect them (since original ScummTR 0.4 never produced them).
-- Various manual page and warning improvements.
+- Various manual page and warning message improvements.
 
 ## ScummTR 0.5.1 (2022-02-27)
 

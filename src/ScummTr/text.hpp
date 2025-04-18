@@ -93,7 +93,7 @@ private:
 	int _id;
 	bool _binary;
 	bool _comments;
-	bool _crlf;
+	bool _handleCrlfFlag;
 	bool _header;
 	bool _hex;
 	bool _opcode;
@@ -129,6 +129,8 @@ private:
 	void _writeEscChar(byte c);
 	void _getBinaryLine(std::string &s, Text::LineType lineType);
 
+	static const int MAX_QUICK_SAFETY_SCAN_LINES = 100;
+
 public:
 	void setInfo(int lflfId, uint32 tag, int id);
 	const char *info() const;
@@ -139,6 +141,7 @@ public:
 	void clear();
 	void addExportHeaders();
 	void addLine(std::string s, Text::LineType lineType, int op = -1);
+	void ensureNoCrlfMisuse();
 
 public:
 	Text(const char *path, int flags, Text::Charset charset);
