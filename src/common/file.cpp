@@ -561,7 +561,7 @@ void File::moveEnd(std::streamoff offset)
 	if (putPos > _size)
 		throw File::UnexpectedEOF(xsprintf("Unexpected EOF in: %s", _path));
 
-	move(offset, _size - putPos);
+	File::move(offset, _size - putPos);
 	if (offset < 0)
 		_setSize(_size + offset);
 }
