@@ -39,7 +39,7 @@ public:
 	static void info(const char *msg);
 	static void info(int slots, const char *msg);
 	static void warning(const char *msg);
-	static void error(const char *msg);
+	static void majorIssue(const char *msg);
 	SCUMMTR_NORETURN_PREFIX static void fatal(const char *msg) __attribute__((noreturn));
 	SCUMMTR_NORETURN_PREFIX static void crash(const char *msg) __attribute__((noreturn));
 	static void setQuiet(bool q);

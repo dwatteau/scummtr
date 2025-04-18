@@ -58,7 +58,7 @@ void ScummIO::fatal(const char *msg)
 	std::exit(EXIT_FAILURE);
 }
 
-void ScummIO::error(const char *msg)
+void ScummIO::majorIssue(const char *msg)
 {
 	if (!ScummIO::_quiet)
 		std::cerr << "ERROR: " << msg << std::endl;
