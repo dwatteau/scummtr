@@ -170,6 +170,20 @@ else()
         string(REPLACE "-O3" "${default_fallback_opt_flag}" "CMAKE_CXX_FLAGS_${UCFG}" "${CMAKE_CXX_FLAGS_${UCFG}}")
     endforeach()
 
+    # On the other hand, some systems have no -O option in their release flags
+    # at all (e.g. OpenBSD 6.3 with CMake 3.10.2)
+    foreach(cfg Release RelWithDebInfo MinSizeRel)
+        string(TOUPPER "${cfg}" UCFG)
+        string(REGEX MATCH "-O([0-4]|g|s|z|fast)?" has_opt_flag "${CMAKE_CXX_FLAGS_${UCFG}}")
+        if(NOT has_opt_flag)
+            if(cfg STREQUAL "MinSizeRel")
+                set(default_fallback_opt_flag "-Os")
+            endif()
+            message(STATUS "No optimization flag found in default ${cfg} flags; adding ${default_fallback_opt_flag} to them")
+            set(CMAKE_CXX_FLAGS_${UCFG} "${CMAKE_CXX_FLAGS_${UCFG}} ${default_fallback_opt_flag}" CACHE STRING "Flags used by the compiler during ${cfg} builds." FORCE)
+        endif()
+    endforeach()
+
     # Warnings requiring a recent compiler. Do a single test, it's not critical
     set(SCUMMTR_MODERN_WARNING_FLAGS "-Wformat=2;-Winit-self;-Wtype-limits;-Wignored-qualifiers") # -Wzero-as-null-pointer-constant for C++11
     check_cxx_compiler_flag("${SCUMMTR_MODERN_WARNING_FLAGS}" COMPILER_SUPPORTS_MODERN_WARNING_FLAGS)
