@@ -128,9 +128,8 @@ if(MSVC)
     add_compile_options(/w34295 /w34100 /w34189)
 
     # /wd4244 (like -Wno-conversion):      conversion from 'type1' to 'type2', possible loss of data
-    # /wd4267 (like -Wno-sign-conversion): conversion from 'size_t' to 'type', possible loss of data
     # /wd4068 (like -Wno-unknown-pragmas): ignore unknown `#pragma` directives
-    add_compile_options(/wd4244 /wd4267 /wd4068)
+    add_compile_options(/wd4244 /wd4068)
 
 else()
 
