@@ -984,9 +984,11 @@ void FilePart::_move(std::streamoff start, std::streamoff shift)
 template <bool B, class T>
 T FilePart::get(T &i)
 {
+	static const bool notSingleByte = sizeof(T) > 1; // MSVC C4127
+
 	read((char *)&i, sizeof i);
 
-	if (sizeof(T) > 1)
+	if (notSingleByte)
 	{
 		if (cpu_is_little_endian())
 		{
@@ -1006,7 +1008,9 @@ T FilePart::get(T &i)
 template <bool B, class T>
 void FilePart::put(T i)
 {
-	if (sizeof(T) > 1)
+	static const bool notSingleByte = sizeof(T) > 1; // MSVC C4127
+
+	if (notSingleByte)
 	{
 		if (cpu_is_little_endian())
 		{

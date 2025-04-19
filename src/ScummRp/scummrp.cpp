@@ -172,6 +172,10 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 	}
 }
 
+#ifdef _MSC_VER
+#  pragma warning(push)
+#  pragma warning(disable: 4127) // conditional expression is constant
+#endif
 template <int A>
 void ScummRp::_exploreIndex(TreeBlock &index)
 {
@@ -233,6 +237,9 @@ void ScummRp::_exploreIndex(TreeBlock &index)
 		}
 	}
 }
+#ifdef _MSC_VER
+#  pragma warning(pop)
+#endif
 
 int ScummRp::_findGameDef(const char *shortName)
 {
