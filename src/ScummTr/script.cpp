@@ -261,6 +261,10 @@ void Script::_checkJumps()
 }
 #endif // SCUMMTR_CHECK_SCRIPT_JUMPS
 
+#ifdef SCUMMTR_HAS_GOOD_GCC_DIAGNOSTIC_PRAGMA_FEATURES
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat"
+#endif
 void Script::parse()
 {
 	_text.resize(0);
@@ -304,6 +308,9 @@ void Script::parse()
 		throw Script::ParseError(xsprintf("Script error at 0x%X in %s (%s)", _file->fullOffset() + _file->tellg(std::ios::beg), _file->name().c_str(), e.what()));
 	}
 }
+#ifdef SCUMMTR_HAS_GOOD_GCC_DIAGNOSTIC_PRAGMA_FEATURES
+#pragma GCC diagnostic pop
+#endif
 
 byte Script::_getByte()
 {
@@ -361,6 +368,10 @@ void Script::_eatVar()
 		_getWord();
 }
 
+#ifdef SCUMMTR_HAS_GOOD_GCC_DIAGNOSTIC_PRAGMA_FEATURES
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat"
+#endif
 void Script::_eatArgList()
 {
 	byte b;
@@ -375,6 +386,9 @@ void Script::_eatArgList()
 		_eatWordOrVar(b & 0x80);
 	}
 }
+#ifdef SCUMMTR_HAS_GOOD_GCC_DIAGNOSTIC_PRAGMA_FEATURES
+#pragma GCC diagnostic pop
+#endif
 
 void Script::_eatJump()
 {

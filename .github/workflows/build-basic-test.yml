@@ -15,7 +15,8 @@ on:
       - 'src/**'
 
 env:
-  BUILD_TYPE: RelWithDebInfo
+  BUILD_TYPE: Release
+  ENABLE_LTO: 'ON'
 
 jobs:
   build:
@@ -64,7 +65,7 @@ jobs:
         run: cmake --version
 
       - name: Configure for ${{env.BUILD_TYPE}}
-        run: cmake -S . -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{ matrix.extraargs }}
+        run: cmake -S . -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DENABLE_LTO=${{env.ENABLE_LTO}} ${{ matrix.extraargs }}
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build -j1

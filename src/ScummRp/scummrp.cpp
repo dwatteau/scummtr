@@ -172,6 +172,10 @@ void ScummRp::_explore(TreeBlock &tree, int action)
 	}
 }
 
+#ifdef _MSC_VER
+#  pragma warning(push)
+#  pragma warning(disable: 4127) // conditional expression is constant
+#endif
 template <int A>
 void ScummRp::_exploreIndex(TreeBlock &index)
 {
@@ -233,6 +237,9 @@ void ScummRp::_exploreIndex(TreeBlock &index)
 		}
 	}
 }
+#ifdef _MSC_VER
+#  pragma warning(pop)
+#endif
 
 int ScummRp::_findGameDef(const char *shortName)
 {
@@ -294,6 +301,12 @@ void ScummRp::_updateMainIndex()
 	ScummRp::_tocs = ScummRp::_mainTocs;
 }
 
+#ifdef SCUMMTR_HAS_GOOD_GCC_DIAGNOSTIC_PRAGMA_FEATURES
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat"
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+#pragma GCC diagnostic ignored "-Wformat-security"
+#endif
 void ScummRp::_processGameFilesV123()
 {
 	char dataFileName[32];
@@ -373,6 +386,9 @@ void ScummRp::_processGameFilesV4567()
 		ScummIO::setQuiet(false);
 	}
 }
+#ifdef SCUMMTR_HAS_GOOD_GCC_DIAGNOSTIC_PRAGMA_FEATURES
+#pragma GCC diagnostic pop
+#endif
 
 int ScummRp::main(int argc, const char **argv)
 {

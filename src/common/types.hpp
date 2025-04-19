@@ -67,6 +67,10 @@ typedef int int32;
 #  define  __attribute__(x)  /* NOTHING */
 #endif
 
+#if defined(__clang__) || (defined(__GNUC__) && (__GNUC__ > 5 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)))
+#  define SCUMMTR_HAS_GOOD_GCC_DIAGNOSTIC_PRAGMA_FEATURES	1
+#endif
+
 #ifdef _MSC_VER
 #  define SCUMMTR_NORETURN_PREFIX  __declspec(noreturn)
 #else
