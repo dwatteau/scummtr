@@ -11,6 +11,10 @@
 - ScummTR: add a new `-n` option, which prevents ScummTR from emitting any `;; ScummTR note:` comment. This may help some older derivative tools, such as ScummSpeaks or LanguageBundleBuilder, which don't expect them (since original ScummTR 0.4 never produced them).
 - Various manual page and warning message improvements.
 
+### Developer notes
+
+- The project can now be built with Link-Time Optimizations (LTO), by giving the `ENABLE_LTO=ON` option to CMake (if your environment supports it).
+
 ## ScummTR 0.5.1 (2022-02-27)
 
 ### Bugfixes
@@ -58,7 +62,7 @@
 - Some versions of MONKEY1-FLOPPY-VGA are currently unsupported. Possible workaround: work from a later version of MONKEY1-FLOPPY-VGA (it should display a higher number than "1.0" when doing Ctrl-V in-game).
 - ScummTR: the `-b` option may not correctly work with all games. Possible workaround: use the `-r` option.
 
-### Portability (for developers)
+### Developer notes
 
 - Big-endian systems are now completely supported.
 - Drop support for MSVC versions lower than 2015, because of their improper support for safe constructs such as `snprintf()`.
@@ -76,7 +80,7 @@
 
 - None.
 
-### Portability (for developers)
+### Developer notes
 
 - Compatibility fixes for modern compilers, and CMake configuration. C++98 is still used by default.
 - Fix a possible incompatibility with some strict-alignment systems.
