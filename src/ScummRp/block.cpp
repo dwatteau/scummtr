@@ -1487,9 +1487,16 @@ bool OldLFLFile::nextBlock(TreeBlock &subblock)
 
 		// TODO Hack for Indy3 Mac. In 76.LFL SO_27 (0x4CA8) has a wrong size and hides 4 sounds.
 		// XXX: this isn't just triggered in Indy3 Mac, all EGA games appear to hit this...
+		// XXX: and it also appears to be related to <https://github.com/dwatteau/scummtr/issues/60>
 		if (w >= 4 && b == 0 && w + _nextSubblockOffset <= _file->size())
 		{
-			ScummIO::info(INF_DETAIL, xsprintf("Fixing unexpected size at 0x%X in %.2i.LFL", o, _id));
+			const char *msg = xsprintf("Fixing unexpected size at 0x%X in %.2i.LFL", o, _id);
+
+			if (ScummRp::game.id == GID_INDY3 && (ScummRp::game.features & GF_MACINTOSH))
+				ScummIO::info(INF_DETAIL, msg);
+			else
+				ScummIO::warning(msg);
+
 			break;
 		}
 
