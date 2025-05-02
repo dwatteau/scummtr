@@ -922,7 +922,7 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 				s.erase(0, endPos + 1);
 		}
 
-		if (_handleCrlfFlag)
+		if (_handleCrlfFlag && !s.empty())
 			s.resize(s.size() - 1);
 
 		_unEsc(s, lineType);
