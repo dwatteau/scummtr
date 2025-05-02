@@ -908,16 +908,16 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 			return Text::nextLine(s, lineType);
 		}
 
-		if (_header && s[0] == '[')
+		if (_header && s.find('[', 0) == 0)
 		{
-			size_t endHeader = s.find(']', 0);
-			if (endHeader != std::string::npos)
-				s.erase(0, endHeader + 1);
+			const size_t endPos = s.find(']', 0);
+			if (endPos != std::string::npos)
+				s.erase(0, endPos + 1);
 		}
 
-		if (_opcode && s[0] == '(')
+		if (_opcode && s.find('(', 0) == 0)
 		{
-			size_t endPos = s.find(')', 0);
+			const size_t endPos = s.find(')', 0);
 			if (endPos != std::string::npos)
 				s.erase(0, endPos + 1);
 		}
