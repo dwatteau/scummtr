@@ -874,7 +874,7 @@ void Text::ensureNoCrlfMisuse()
 
 	if (foundRealCrEnd && !_handleCrlfFlag)
 	{
-		ScummIO::info(INF_DETAIL, "Found CRLF newline characters; adding missing `-w` option");
+		ScummIO::warning("Found CRLF newline characters; adding missing `-w` option...");
 		_handleCrlfFlag = true;
 	}
 
