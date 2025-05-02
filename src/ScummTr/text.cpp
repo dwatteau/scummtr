@@ -832,12 +832,12 @@ void Text::ensureNoCrlfMisuse()
 			foundRealCrEnd = true;
 
 			// If lines end with `\r`, we need to look for "\013\r" too
-			if (size >= 5 && s.substr(size - 5) == "\\013\r")
+			if (size >= 5 && s.compare(size - 5, 5, "\\013\r") == 0)
 				foundWeirdCrEnd = true;
 		}
 
 		// Look for lines ending with "\013"
-		if (!foundWeirdCrEnd && size >= 4 && s.substr(size - 4) == "\\013")
+		if (!foundWeirdCrEnd && size >= 4 && s.compare(size - 4, 4, "\\013") == 0)
 			foundWeirdCrEnd = true;
 
 		// We can stop if we've found any 'weird' CR, because it's
