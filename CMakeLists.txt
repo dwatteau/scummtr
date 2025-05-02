@@ -26,7 +26,9 @@ if(SCUMMTR_COMPILER_IS_DJGPP)
     set(CMAKE_SYSTEM_NAME "Generic")
 endif()
 
-if(NOT DEFINED ENABLE_LTO)
+set(_ENABLE_LTO_DEFAULT OFF)
+# XXX: Turn on the following, once LTO's been tested a bit more
+#[[if(NOT DEFINED ENABLE_LTO)
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
         # Exclude DJGPP because of: https://gitlab.kitware.com/cmake/cmake/-/issues/21696
         if(NOT SCUMMTR_COMPILER_IS_DJGPP)
@@ -35,8 +37,8 @@ if(NOT DEFINED ENABLE_LTO)
     else()
         set(_ENABLE_LTO_DEFAULT OFF)
     endif()
-endif()
-option(ENABLE_LTO "Enable Link Time Optimization, if available" ${_ENABLE_LTO_DEFAULT})
+endif()]]
+option(ENABLE_LTO "Enable Link Time Optimization (platform must support it)" ${_ENABLE_LTO_DEFAULT})
 
 project("ScummTR" CXX)
 
