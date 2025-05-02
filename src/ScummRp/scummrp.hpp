@@ -42,8 +42,8 @@ protected:
 	{
 		char c;
 		char *value;
-		int maxSize;
-		int isPath;
+		size_t maxSize;
+		bool isPath;
 	};
 	enum
 	{

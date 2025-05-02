@@ -36,6 +36,8 @@
 
 #include <cstring>
 
+#include <algorithm>
+
 /*
  * ScummTr
  */
@@ -532,8 +534,10 @@ void ScummTr::_getOptions(int argc, const char **argv, const ScummRp::Parameter 
 				++i;
 				if (i < argc && argv[i])
 				{
-					strncpy(params[k].value, argv[i], params[k].maxSize - 1);
-					params[k].value[params[k].maxSize - 1] = '\0';
+					const size_t len = std::min(strlen(argv[i]), params[k].maxSize - 1);
+					std::memcpy(params[k].value, argv[i], len);
+					params[k].value[len] = '\0';
+
 #if defined(_WIN32) || defined(__MSDOS__)
 					if (params[k].isPath)
 						for (char *p = strchr(params[k].value, '\\'); p; p = strchr(params[k].value, '\\'))
