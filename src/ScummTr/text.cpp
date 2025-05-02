@@ -908,6 +908,7 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 			return Text::nextLine(s, lineType);
 		}
 
+		// Ignore header prefixes: "[PREFIX]Line of text..."
 		if (_header && s.find('[', 0) == 0)
 		{
 			const size_t endPos = s.find(']', 0);
@@ -915,6 +916,11 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 				s.erase(0, endPos + 1);
 		}
 
+		// Ignore opcode prefixes: "(PREFIX)Line of text..."
+		//
+		// Note: it's possible to have "[HEADER](opcode)Line of text..."
+		// but only in this order. The s.erase() above would already taken
+		// care of it.
 		if (_opcode && s.find('(', 0) == 0)
 		{
 			const size_t endPos = s.find(')', 0);
