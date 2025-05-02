@@ -540,8 +540,9 @@ void ScummTr::_getOptions(int argc, const char **argv, const ScummRp::Parameter 
 
 #if defined(_WIN32) || defined(__MSDOS__)
 					if (params[k].isPath)
-						for (char *p = strchr(params[k].value, '\\'); p; p = strchr(params[k].value, '\\'))
-							*p++ = '/';
+						for (char *p = params[k].value; *p != '\0'; ++p)
+							if (*p == '\\')
+								*p = '/';
 #endif
 				}
 				break;
