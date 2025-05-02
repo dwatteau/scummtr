@@ -923,7 +923,12 @@ bool Text::nextLine(std::string &s, Text::LineType lineType)
 		}
 
 		if (_handleCrlfFlag && !s.empty())
-			s.resize(s.size() - 1);
+		{
+			if (s[s.size() - 1] == '\r')
+				s.resize(s.size() - 1);
+			else
+				ScummIO::warning(xsprintf("`-w` option for Windows CRLF newlines is used, but no CRLF found on line %i", _lineCount));
+		}
 
 		_unEsc(s, lineType);
 	}
