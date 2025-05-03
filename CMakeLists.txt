@@ -40,7 +40,7 @@ set(_ENABLE_LTO_DEFAULT OFF)
 endif()]]
 option(ENABLE_LTO "Enable Link Time Optimization (platform must support it)" ${_ENABLE_LTO_DEFAULT})
 
-project("ScummTR" CXX)
+project("scummtr" CXX)
 
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -228,13 +228,16 @@ add_subdirectory("src/ScummTr")
 
 if(UNIX)
     install(FILES man/FontXY.1 man/scummfont.1 man/scummrp.1 man/scummtr.1 DESTINATION "${CMAKE_INSTALL_MANDIR}/man1")
+    install(FILES COPYING NEWS.md DESTINATION "${CMAKE_INSTALL_DOCDIR}")
 else()
     # When not on Unix-like systems, prefer CRLF line-endings for better compatibility
     file(GLOB MAN_TXT_FILES_LIST "man/txt/*.txt")
     foreach(txt_file ${MAN_TXT_FILES_LIST})
         get_filename_component(filename_only "${txt_file}" NAME)
-        configure_file("${txt_file}" "${CMAKE_CURRENT_BINARY_DIR}/crlf/${filename_only}" @ONLY NEWLINE_STYLE DOS)
+        configure_file("${txt_file}" "${CMAKE_CURRENT_BINARY_DIR}/crlf/manuals/${filename_only}" @ONLY NEWLINE_STYLE DOS)
     endforeach()
+    configure_file("COPYING" "${CMAKE_CURRENT_BINARY_DIR}/crlf/COPYING.txt" @ONLY NEWLINE_STYLE DOS)
+    configure_file("NEWS.md" "${CMAKE_CURRENT_BINARY_DIR}/crlf/NEWS.txt" @ONLY NEWLINE_STYLE DOS)
 
     install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/crlf/" DESTINATION "${CMAKE_INSTALL_DATADIR}" FILES_MATCHING PATTERN "*.txt")
 endif()
