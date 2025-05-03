@@ -1,6 +1,9 @@
 name: Build for most common platforms
 
 on:
+  schedule:
+    # Monthly run (UTC time) -- only on default branch
+    - cron: '34 12 2 * *'
   push:
     branches: [main]
     paths:
