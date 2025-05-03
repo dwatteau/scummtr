@@ -26,6 +26,6 @@ COPY . /scummtr/project
 
 CMD cd /scummtr/build \
 	&& cmake -DCMAKE_BUILD_TYPE=Release -DSCUMMTR_COMPILER_IS_DJGPP=ON -DCMAKE_INSTALL_PREFIX="" -DCMAKE_CXX_COMPILER=i586-pc-msdosdjgpp-g++ /scummtr/project \
-	&& make VERBOSE=1 \
+	&& make VERBOSE=1 -j"$(getconf _NPROCESSORS_ONLN)" \
 	&& make install DESTDIR=/scummtr/output/msdos \
 	&& i586-pc-msdosdjgpp-strip /scummtr/output/msdos/*.exe

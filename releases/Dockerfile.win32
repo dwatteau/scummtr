@@ -16,11 +16,10 @@ WORKDIR /scummtr
 COPY . /scummtr/project
 
 # Note: the -DCMAKE_AR trick is necessary to avoid the "plugin needed to
-# handle lto object" problem with i686-w64-mingw32-ar when using LTO
-#
-# source: <https://github.com/OpenRCT2/OpenRCT2/issues/10850>
+# handle lto object" problem with i686-w64-mingw32-ar when using LTO:
+# <https://github.com/OpenRCT2/OpenRCT2/issues/10850>
 CMD cd /scummtr/build \
 	&& cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_LTO=OFF -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_INSTALL_PREFIX="" -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++ -DCMAKE_AR="$(which i686-w64-mingw32-gcc-ar)" -DCMAKE_CXX_FLAGS="-DWINVER=0x0501 -D_WIN32_WINNT=0x0501" -DCMAKE_EXE_LINKER_FLAGS="-static-libgcc -static-libstdc++ -static" /scummtr/project \
-	&& make VERBOSE=1 \
+	&& make VERBOSE=1 -j"$(getconf _NPROCESSORS_ONLN)" \
 	&& make install DESTDIR=/scummtr/output/win32 \
 	&& i686-w64-mingw32-strip /scummtr/output/win32/*.exe
