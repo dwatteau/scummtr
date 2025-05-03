@@ -16,7 +16,7 @@ fi
 
 mkdir -p txt
 for manpage in *.1 ; do
-	mandoc -Tascii -I os=ScummTR "$manpage" | sed "s/\$/$(printf '\r')/; s/.$(printf '\b')//g;" > "txt/${manpage%.1}.txt"
+	mandoc -Tascii -I os=ScummTR "$manpage" | sed "s/.$(printf '\b')//g;" > "txt/${manpage%.1}.txt"
 done
 
 if command -v git >/dev/null 2>&1 ; then

@@ -6,4 +6,4 @@ CMakeLists.txt text eol=lf
 *.md text eol=lf
 *.sh text eol=lf
 *.yml text eol=lf
-man/txt/*.txt text eol=crlf
+man/txt/*.txt text eol=lf

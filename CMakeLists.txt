@@ -229,5 +229,12 @@ add_subdirectory("src/ScummTr")
 if(UNIX)
     install(FILES man/FontXY.1 man/scummfont.1 man/scummrp.1 man/scummtr.1 DESTINATION "${CMAKE_INSTALL_MANDIR}/man1")
 else()
-    install(DIRECTORY man/txt DESTINATION "${CMAKE_INSTALL_DATADIR}" FILES_MATCHING PATTERN "*.txt")
+    # When not on Unix-like systems, prefer CRLF line-endings for better compatibility
+    file(GLOB MAN_TXT_FILES_LIST "man/txt/*.txt")
+    foreach(txt_file ${MAN_TXT_FILES_LIST})
+        get_filename_component(filename_only "${txt_file}" NAME)
+        configure_file("${txt_file}" "${CMAKE_CURRENT_BINARY_DIR}/crlf/${filename_only}" @ONLY NEWLINE_STYLE DOS)
+    endforeach()
+
+    install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/crlf/" DESTINATION "${CMAKE_INSTALL_DATADIR}" FILES_MATCHING PATTERN "*.txt")
 endif()
