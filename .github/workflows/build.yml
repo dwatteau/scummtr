@@ -1,16 +1,16 @@
-name: Basic compilation test for most common platforms
+name: Build for most common platforms
 
 on:
   push:
     branches: [main]
     paths:
-      - '.github/workflows/build-basic-test.yml'
+      - '.github/workflows/build.yml'
       - 'CMakeLists.txt'
       - 'src/**'
   pull_request:
     branches: [main]
     paths:
-      - '.github/workflows/build-basic-test.yml'
+      - '.github/workflows/build.yml'
       - 'CMakeLists.txt'
       - 'src/**'
 
