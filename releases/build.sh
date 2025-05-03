@@ -1,4 +1,5 @@
 #!/bin/sh
+# SPDX-License-Identifier: MIT
 set -eu
 
 if ! command -v docker >/dev/null 2>&1 ; then
