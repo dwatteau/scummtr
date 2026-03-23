@@ -54,7 +54,7 @@ jobs:
             extraargs: '-DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: 'Install different g++ release (Ubuntu only)'
         if: startsWith(matrix.os, 'ubuntu')
