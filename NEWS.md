@@ -3,6 +3,7 @@
 ### Bugfixes
 
 - ScummTR: Fix a fatal "ERROR: Unknown function id 0x2E" error when trying to import/export text for the German releases of Indy3. This is because of an original issue in the official German releases of the game, where some Eszett characters were badly encoded.
+- ScummTR: Work around the "different roomIds" error when changing some lines in the floppy VGA releases of Monkey1. Use with caution, as this may unveil some other corruption issues in this particular game release.
 
 ### New features
 

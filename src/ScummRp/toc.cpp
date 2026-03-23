@@ -84,7 +84,35 @@ void TableOfContent::merge(const TableOfContent &t)
 	for (int i = 0; i < _size; ++i)
 	{
 		if (_toc[i].roomId != t._toc[i].roomId)
-			throw std::logic_error(xsprintf("TableOfContent::merge: different roomIds for TOC %i (%i vs %i)", i, _toc[i].roomId, t._toc[i].roomId));
+		{
+			// HACK: Changing some lines in the floppy VGA releases of Monkey Island 1
+			// (at least the English 1.0 and 1.1 ones) will eventually trigger the
+			// "different roomIds" exception below, with `t._toc[i].roomId` being equal
+			// to the "invalid" `(byte)-1` value, for some reason.
+			//
+			// It is not know whether this is due to MONKEY1-VGA (v4) having known,
+			// original packing bugs (see for reference how ScummPacker handled this
+			// in commit 96f34dc6a2b947dea259382387c574329c819efe), and/or if ScummRp
+			// is doing something wrong for v4.
+			//
+			// Moreover, fixing the roomId on the fly here, and doing this at this
+			// stage, could be wrong and harmful.  We'll try to be helpful to users
+			// and go on, but printing a warning is crucial, become it may corrupt the
+			// game resources in some ways.
+			//
+			// See:
+			// - <https://github.com/dwatteau/scummtr/issues/54>
+			// - <https://github.com/dwatteau/scummtr/issues/69>
+			if (t._toc[i].roomId == (byte)-1 && ScummRp::game.id == GID_MONKEY && ScummRp::game.version == 4)
+			{
+				ScummIO::warning("Original MONKEY1-VGA dodgy room data found during TOC merge; trying to work around it, but unexpected results may happen");
+				t._toc[i].roomId = _toc[i].roomId;
+			}
+			else
+			{
+				throw std::logic_error(xsprintf("TableOfContent::merge: different roomIds for TOC %i (%i vs %i)", i, _toc[i].roomId, t._toc[i].roomId));
+			}
+		}
 
 		if (t._accessed[_toc[i].roomId])
 		{
@@ -109,7 +137,7 @@ void TableOfContent::_zap()
 
 bool TableOfContent::_validItem(int id) const
 {
-	return _toc[id].offset > 0 && _toc[id].roomId != 0xFF;
+	return _toc[id].offset > 0 && _toc[id].roomId != (byte)-1;
 }
 
 bool TableOfContent::_idInRange(int id) const
