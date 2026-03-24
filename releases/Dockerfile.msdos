@@ -1,6 +1,6 @@
-# MS-DOS build with DJGPP.  Uses g++ 7.3.0 and CMake 3.13.4.
+# MS-DOS build with DJGPP.  Uses g++ 7.3.0 and CMake 3.25.1.
 
-FROM --platform=linux/amd64 debian:10-slim AS scummtr-msdos-base
+FROM --platform=linux/amd64 debian:12-slim AS scummtr-msdos-base
 
 RUN apt-get update \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends bzip2 ca-certificates cmake make openssl wget \
