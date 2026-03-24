@@ -1,17 +1,17 @@
 ## ScummTR 0.6.0 (202?-??-??)
 
-### Bugfixes
-
-- ScummTR: Fix a fatal "ERROR: Unknown function id 0x2E" error when trying to import/export text for the German releases of Indy3. This is because of an original issue in the official German releases of the game, where some Eszett characters were badly encoded.
-- ScummTR: Work around the "different roomIds" error when changing some lines in MONKEY1-FLOPPY-VGA. Use with caution, as this may unveil some other corruption issues in this particular game release.
-- ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with some versions of MONKEY1-FLOPPY-VGA.
-
 ### New features
 
 - ScummTR: try to detect and warn when lines end with bogus `\013` sequences, which can cause some subtle issues with ScummVM or the original interpreters. These sequences would appear when the `-w` option was used for an initial export, but forgotten in a subsequent import.
 - ScummTR: when doing an import, try to detect files with Windows CRLF end of lines, so that the `-w` option will be turned on, even if the user forgot to do so. (It's still recommended to explicitly add this option when working with such files, though.)
 - ScummTR: add a new `-n` option, which prevents ScummTR from emitting any `;; ScummTR note:` comment. This may help some older derivative tools, such as ScummSpeaks or LanguageBundleBuilder, which don't expect them (since original ScummTR 0.4 never produced them).
 - Various manual page and warning message improvements.
+
+### Bugfixes
+
+- ScummTR: Fix a fatal "ERROR: Unknown function id 0x2E" error when trying to import/export text for the German releases of Indy3. This is because of an original issue in the official German releases of the game, where some Eszett characters were badly encoded.
+- ScummTR: Work around the "different roomIds" error when changing some lines in MONKEY1-FLOPPY-VGA. Use with caution, as this may unveil some other corruption issues in this particular game release.
+- ScummTR/ScummRP: fix a fatal "Duplicate offset in index" error with some versions of MONKEY1-FLOPPY-VGA.
 
 ### Developer notes
 
