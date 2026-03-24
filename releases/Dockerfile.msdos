@@ -36,7 +36,7 @@ set -eux
 
 cd /scummtr/build || exit 1
 
-export PATH="/usr/local/djgpp/bin:$PATH"
+export PATH="$PATH:/usr/local/djgpp/bin"
 
 cmake \
    -DCMAKE_BUILD_TYPE=Release \
