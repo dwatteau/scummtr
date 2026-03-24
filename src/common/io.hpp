@@ -45,7 +45,6 @@ private:
 	static uint32 _infoSlots;
 
 public:
-	static void info(const char *msg);
 	static void info(int slots, const char *msg);
 	static void warning(const char *msg);
 	static void majorIssue(const char *msg);

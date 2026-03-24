@@ -35,11 +35,6 @@
 uint32 ScummIO::_infoSlots = 0;
 bool ScummIO::_quiet = false;
 
-void ScummIO::info(const char *msg)
-{
-	std::cout << msg << std::endl;
-}
-
 void ScummIO::info(int slots, const char *msg)
 {
 	if (ScummIO::_infoSlots & slots && !ScummIO::_quiet)
@@ -60,6 +55,7 @@ void ScummIO::fatal(const char *msg)
 
 void ScummIO::majorIssue(const char *msg)
 {
+	// XXX: shouldn't a majorIssue() ignore any quiet flag?
 	if (!ScummIO::_quiet)
 		std::cerr << "ERROR: " << msg << std::endl;
 }
