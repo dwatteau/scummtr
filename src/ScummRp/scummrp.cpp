@@ -430,6 +430,10 @@ int ScummRp::main(int argc, const char **argv)
 		ScummIO::fatal("Sorry, modifying Maniac Mansion V2 currently corrupts it (bug #16)");
 #endif
 
+	// FIXME: <https://github.com/dwatteau/scummtr/issues/47>
+	if (ScummRp::_game.version == 4 && ScummRp::_game.id == GID_MONKEY && ScummRp::_options & ScummRp::OPT_IMPORT)
+		ScummIO::warning("ScummVM may incorrectly display the floppy versions of Monkey1 when modifying them\nTest them with DREAMM/DOSBox instead, or add a ScummVM MD5 detection entry for them (bug #47)");
+
 	if (ScummRp::_options & ScummRp::OPT_IMPORT)
 		ScummRp::_fileOptions |= BlocksFile::BFOPT_BACKUP;
 	else
