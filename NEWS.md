@@ -2,8 +2,8 @@
 
 ### New features
 
-- ScummTR: try to detect and warn when lines end with bogus `\013` sequences, which can cause some subtle issues with ScummVM or the original interpreters. These sequences would appear when the `-w` option was used for an initial export, but forgotten in a subsequent import.
-- ScummTR: when doing an import, try to detect files with Windows CRLF end of lines, so that the `-w` option will be turned on, even if the user forgot to do so. (It's still recommended to explicitly add this option when working with such files, though.)
+- ScummTR: report when a translation contains bogus `\013` characters, which would appear when the `-w` option was used for an initial export, but forgotten in a subsequent import. Such characters could cause subtle issues with ScummVM or the original interpreters.
+- ScummTR: when doing an import, try to detect files using the Windows "CRLF" format, when the `-w` option was required but forgotten. (It's still recommended to explicitly use this option when working with such files, though.)
 - ScummTR: add a new `-n` option, which prevents ScummTR from emitting any `;; ScummTR note:` comment. This may help some older derivative tools, such as ScummSpeaks or LanguageBundleBuilder, which don't expect them (since original ScummTR 0.4 never produced them).
 - Various manual page and warning message improvements.
 
@@ -16,6 +16,7 @@
 ### Developer notes
 
 - The project can now be built with Link-Time Optimizations (LTO), by giving the `ENABLE_LTO=ON` option to CMake (if your environment supports it).
+- Improve build compatibility with modern CMake.
 
 ## ScummTR 0.5.1 (2022-02-27)
 
