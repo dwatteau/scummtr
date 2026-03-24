@@ -810,18 +810,9 @@ void RoomPack::_checkDupOffset(byte roomId, int32 offset)
 				&& (*ScummRp::tocs[i])[10].offset == (*ScummRp::tocs[i])[117].offset
 				&& (*ScummRp::tocs[i])[10].roomId == (*ScummRp::tocs[i])[117].roomId)
 			{
-#ifdef SCUMMRP_OK_TO_CORRUPT_SOME_MONKEY1_VGA_GAMES
-				// XXX: Doing this appears to leave invalid content inside 000.LFL, and makes the
-				// game glitch inside ScummVM. https://github.com/dwatteau/scummtr/issues/47
-				// XXX: may actually be fine, and "just" be a ScummVM detection fallback issue
-				// (such as: VGA title misdetected as EGA, in absence of a detection table entry
-				// for it).
 				(*ScummRp::tocs[i])[10].offset = -1;
 				j = 1;
 				ScummIO::info(INF_DETAIL, "Removed CO_0010 from index (duplicate of CO_0117)");
-#else
-				ScummIO::fatal("This version of Monkey Island 1 is currently unsupported because of a corruption bug");
-#endif
 			}
 		}
 		n += j;
