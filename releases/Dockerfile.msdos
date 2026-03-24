@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+#
 # MS-DOS build with DJGPP.  Uses g++ 7.3.0 and CMake 3.25.1.
 
 FROM --platform=linux/amd64 debian:12-slim AS scummtr-msdos-base
@@ -26,17 +28,26 @@ FROM scummtr-msdos-base
 RUN mkdir -p /scummtr/project /scummtr/build /scummtr/output
 WORKDIR /scummtr
 
-ENV PATH="/usr/local/djgpp/bin:${PATH}"
-
 COPY . /scummtr/project
 
-CMD cd /scummtr/build \
-	&& cmake \
-	   -DCMAKE_BUILD_TYPE=Release \
-	   -DSCUMMTR_COMPILER_IS_DJGPP=ON \
-	   -DCMAKE_INSTALL_PREFIX="" \
-	   -DCMAKE_CXX_COMPILER=i586-pc-msdosdjgpp-g++ \
-	   /scummtr/project \
-	&& make VERBOSE=1 -j"$(getconf _NPROCESSORS_ONLN)" \
-	&& make install DESTDIR=/scummtr/output/msdos \
-	&& i586-pc-msdosdjgpp-strip /scummtr/output/msdos/*.exe
+COPY --chmod=755 <<-"EOT" /entrypoint.sh
+#!/bin/sh
+set -eux
+
+cd /scummtr/build || exit 1
+
+export PATH="/usr/local/djgpp/bin:$PATH"
+
+cmake \
+   -DCMAKE_BUILD_TYPE=Release \
+   -DSCUMMTR_COMPILER_IS_DJGPP=ON \
+   -DCMAKE_INSTALL_PREFIX="" \
+   -DCMAKE_CXX_COMPILER=i586-pc-msdosdjgpp-g++ \
+   /scummtr/project
+
+make VERBOSE=1 -j"$(getconf _NPROCESSORS_ONLN)"
+make install DESTDIR=/scummtr/output/msdos
+i586-pc-msdosdjgpp-strip /scummtr/output/msdos/*.exe
+EOT
+
+ENTRYPOINT ["/entrypoint.sh"]
