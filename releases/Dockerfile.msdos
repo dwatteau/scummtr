@@ -3,7 +3,13 @@
 FROM --platform=linux/amd64 debian:12-slim AS scummtr-msdos-base
 
 RUN apt-get update \
-	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends bzip2 ca-certificates cmake make openssl wget \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+	   bzip2 \
+	   ca-certificates \
+	   cmake \
+	   make \
+	   openssl \
+	   wget \
 	&& rm -rf /var/lib/apt/lists/*
 
 ARG DJGPP_VERSION=3.0
@@ -25,7 +31,12 @@ ENV PATH="/usr/local/djgpp/bin:${PATH}"
 COPY . /scummtr/project
 
 CMD cd /scummtr/build \
-	&& cmake -DCMAKE_BUILD_TYPE=Release -DSCUMMTR_COMPILER_IS_DJGPP=ON -DCMAKE_INSTALL_PREFIX="" -DCMAKE_CXX_COMPILER=i586-pc-msdosdjgpp-g++ /scummtr/project \
+	&& cmake \
+	   -DCMAKE_BUILD_TYPE=Release \
+	   -DSCUMMTR_COMPILER_IS_DJGPP=ON \
+	   -DCMAKE_INSTALL_PREFIX="" \
+	   -DCMAKE_CXX_COMPILER=i586-pc-msdosdjgpp-g++ \
+	   /scummtr/project \
 	&& make VERBOSE=1 -j"$(getconf _NPROCESSORS_ONLN)" \
 	&& make install DESTDIR=/scummtr/output/msdos \
 	&& i586-pc-msdosdjgpp-strip /scummtr/output/msdos/*.exe
