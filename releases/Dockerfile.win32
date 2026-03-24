@@ -4,7 +4,9 @@
 
 FROM debian:10-slim AS scummtr-win32-base
 
-RUN apt-get update \
+# Debian 10 is EOLd, so we need to switch to archive.debian.org
+RUN sed -i 's/deb\.debian\.org/archive.debian.org/g' /etc/apt/sources.list \
+	&& apt-get update \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cmake make g++-mingw-w64-i686 \
 	&& rm -rf /var/lib/apt/lists/*
 
