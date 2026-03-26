@@ -48,7 +48,12 @@ Mac OS X 10.4–10.8 builds for ppc32 and i386 are done on a Mac OS X 10.5 
 
 ```sh
 rm -rf build && mkdir build && cd build
-/Applications/CMake.app/Contents/bin/cmake -DCMAKE_CXX_FLAGS="-Wa,-force_cpusubtype_ALL" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.4 -DCMAKE_OSX_SYSROOT=/Developer/SDKs/MacOSX10.4u.sdk -DCMAKE_OSX_ARCHITECTURES="ppc;i386" -DCOMPILER_SUPPORTS_HARDENING_FLAGS=0 ..
+/Applications/CMake.app/Contents/bin/cmake \
+   -DCMAKE_CXX_FLAGS="-Wa,-force_cpusubtype_ALL" \
+   -DCMAKE_OSX_DEPLOYMENT_TARGET=10.4 \
+   -DCMAKE_OSX_SYSROOT=/Developer/SDKs/MacOSX10.4u.sdk \
+   -DCMAKE_OSX_ARCHITECTURES="ppc;i386" \
+   -DCOMPILER_SUPPORTS_HARDENING_FLAGS=0 ..
 make
 ```
 
