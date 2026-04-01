@@ -44,6 +44,15 @@
 #  error "The types provided by your compiler are not supported"
 #endif
 
+#if (-1 & 3) != 3
+#  error "Building for CPUs not using two's complement is not supported"
+#endif
+
+// No EBCDIC, thanks (some value checks taken from Perl)
+#if !('A' == 65 && 'a' == 97 && '0' == 48 && 'M' == 0x4d && 'J'-'I' == 1 && 'S'-'R' == 1)
+#  error "Building with a non-ASCII-compatible character set is not supported"
+#endif
+
 #ifdef _MSC_VER
 typedef unsigned __int8 byte;
 typedef unsigned __int8 uint8;
