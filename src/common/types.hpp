@@ -76,6 +76,10 @@ typedef int int32;
 #  define  __attribute__(x)  /* NOTHING */
 #endif
 
+#ifndef __has_feature
+#  define __has_feature(x)      0
+#endif
+
 #ifdef __GNUC__
 #  define GCC_MIN(major, minor) (__GNUC__ > (major) || (__GNUC__ == (major) && __GNUC_MINOR__ >= (minor)))
 #else
@@ -97,7 +101,7 @@ typedef int int32;
 #define MKTAG4(a,b,c,d) ((uint32)((d) | ((c) << 8) | ((b) << 16) | ((a) << 24)))
 
 #if __cplusplus < 201103L && !defined(_MSC_VER)
-#  if !defined(nullptr) && !defined(_NATIVE_NULLPTR_SUPPORTED) && !(GCC_MIN(4,6) && defined(__GXX_EXPERIMENTAL_CXX0X__))
+#  if !defined(nullptr) && !defined(_NATIVE_NULLPTR_SUPPORTED) && !__has_feature(cxx_nullptr) && !(GCC_MIN(4,6) && defined(__GXX_EXPERIMENTAL_CXX0X__) && __GXX_EXPERIMENTAL_CXX0X__)
 #    define nullptr       0
 #  endif
 #  define override
