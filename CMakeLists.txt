@@ -87,23 +87,36 @@ if(MSVC)
         message(FATAL_ERROR "Refusing to build: Visual Studio 2015 or better is required")
     endif()
 
+    # MSVC 2017 15.0+:
+    if(MSVC_VERSION GREATER 1909)
+        # Disable Microsoft-specific C++ language extensions
+        add_compile_options(/permissive-)
+    else()
+        add_compile_options(-Zc:strictStrings)
+    endif()
+
+    # MSVC 2017 15.7+:
     if(MSVC_VERSION GREATER 1913)
-        # Don't lie about your `__cplusplus` value, MSVC...
-        #
-        # (Note: this means that some releases of Visual Studio 2017 (and earlier) will
-        # continue lying, since they don't have this flag... so their support is just
-        # best effort.)
+        # Tell MSVC not to lie about its `__cplusplus` value. (Note that some releases
+        # of Visual Studio 2017, and earlier, will continue lying, since they don't have
+        # this flag.  So, current code has to had specific MSVC cases when it checks the
+        # value of `__cplusplus`.)
         add_compile_options(/Zc:__cplusplus)
     endif()
 
+    # Quoting MSVC docs: without this, "thrown exceptions can result in undestroyed
+    # objects and resource leaks"
+    add_compile_options(/EHsc)
+
+    # MSVC 2019 16.0+:
     if(MSVC_VERSION GREATER 1919)
-        # Print better diagnosis, like modern GCC/Clang do
-        # XXX: it may have been added earlier, but good luck finding any info about this
+        # Print better diagnosis, like modern GCC/Clang do (XXX: it may have been added
+        # in an earlier MSVC release, but good luck finding any info about this
        add_compile_options(/diagnostics:caret)
     endif()
 
-    # Looks like CMake doesn't set up all the proper LTO flags for MSVC...
-    # e.g. "Not all modules are compiled with -Gy"...
+    # Looks like CMake doesn't set up all the proper LTO flags for MSVC (e.g. "Not all
+    # modules are compiled with -Gy")
     # https://discourse.cmake.org/t/cmake-ipo-issue-msvc-ltcg-incremental/826/2
     # https://gitlab.kitware.com/cmake/cmake/-/issues/20484
     if(CMAKE_INTERPROCEDURAL_OPTIMIZATION)
@@ -116,6 +129,9 @@ if(MSVC)
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         # Report when an uninitialized variable is used -- implies /Od
         add_compile_options(/RTC1)
+    elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+        # Enhanced debugging information for optimized code
+        add_compile_options(/Zo)
     endif()
 
     add_definitions(/DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
@@ -124,7 +140,7 @@ if(MSVC)
     add_compile_options(/W3)
 
     # Some /W4 flags we bring to /W3 -- courtesy of Wireshark
-    # /w34295 (no equivalent):             array is too small to include a terminating null character
+    # /w34295 (no GCC equivalent?):        array is too small to include a terminating null character
     # /w34100 (like -Wunused-parameter):   unreferenced formal parameter
     # /w34189 (like -Wunused-variable):    local variable is initialized but not referenced
     # TODO: anything else?
