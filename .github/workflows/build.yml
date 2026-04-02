@@ -61,7 +61,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y g++-${{ matrix.gccver }}
-          sudo apt-get clean
+
+      - name: 'Install Debian devscripts (Ubuntu-24.04 only)'
+        if: startsWith(matrix.os, 'ubuntu-24.04')
+        run: |
+          sudo apt-get install -y --no-install-recommends devscripts
 
       - name: 'Switch to newest available Xcode (macOS only)'
         if: startsWith(matrix.os, 'macos')
@@ -77,3 +81,11 @@ jobs:
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build -j1
+#        env:
+#          VERBOSE: 1
+
+      # TODO: Look at https://github.com/microsoft/binskim as well?
+      - name: 'Run hardening-check on main binary (Ubuntu-24.04 only)'
+        if: startsWith(matrix.os, 'ubuntu-24.04')
+        run: |
+          hardening-check ${{github.workspace}}/build/bin/scummtr
