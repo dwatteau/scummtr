@@ -221,7 +221,11 @@ else()
         # GCC < 4.1, or without optimizations
         if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.0))
             if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-                add_definitions(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2)
+                # Note: not using add_definitions() here is on purpose. Systems like
+                # Ubuntu need the -U flag before the -D one, but add_definitions() is
+                # too clever, and ends up switching them on some setups... which would
+                # disable the feature.
+                add_compile_options(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2)
             endif()
         endif()
 
