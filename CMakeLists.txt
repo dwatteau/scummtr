@@ -172,9 +172,9 @@ else()
     add_compile_options(-Wno-non-virtual-dtor)
 
     # Flags which are compiler-specific, or only meaningful with a particular compiler
-    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         add_compile_options(-fcheck-new)
-    elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         add_compile_options(-Widiomatic-parentheses -Wparentheses -Wimplicit-int-conversion)
         # TODO: fix this, instead of silencing
         add_compile_options(-Wno-shorten-64-to-32)
@@ -189,8 +189,7 @@ else()
         string(REPLACE "-O3" "${default_fallback_opt_flag}" "CMAKE_CXX_FLAGS_${UCFG}" "${CMAKE_CXX_FLAGS_${UCFG}}")
     endforeach()
 
-    # On the other hand, some systems have no -O option in their release flags
-    # at all (e.g. OpenBSD 6.3 with CMake 3.10.2)
+    # On the other hand, some systems have no -O option in their release flags at all
     foreach(cfg Release RelWithDebInfo MinSizeRel)
         string(TOUPPER "${cfg}" UCFG)
         string(REGEX MATCH "-O([0-4]|g|s|z|fast)?" has_opt_flag "${CMAKE_CXX_FLAGS_${UCFG}}")
@@ -217,7 +216,15 @@ else()
         # OpenBSD just does its hardening all by itself. However, we need -Wno-system-headers, there
         add_compile_options(-Wno-system-headers)
     elseif(NOT SCUMMTR_COMPILER_IS_DJGPP)
-        add_definitions(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -D_GLIBCXX_ASSERTIONS)
+        add_definitions(-D_GLIBCXX_ASSERTIONS)
+        # Glibc's include/features.h complains if _FORTIFY_SOURCE is used with
+        # GCC < 4.1, or without optimizations
+        if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.0))
+            if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+                add_definitions(-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2)
+            endif()
+        endif()
+
         set(SCUMMTR_HARDENING_FLAGS "-fstack-protector;--param=ssp-buffer-size=4")
         check_cxx_compiler_flag("${SCUMMTR_HARDENING_FLAGS}" COMPILER_SUPPORTS_HARDENING_FLAGS)
         if(COMPILER_SUPPORTS_HARDENING_FLAGS)
