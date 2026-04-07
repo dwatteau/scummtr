@@ -36,11 +36,17 @@
 #include <stdexcept>
 #include <string>
 
-#ifndef SCUMMTR_LAST_2005_CHANGE
 // note: this was enabled in the last official release from 2003, but after
 // some debugging in this area in 2004, it was disabled altogether on 2005-11-22.
-// No official release was ever shipped without SCUMMTR_CHECK_SCRIPT_JUMPS.
+//
+// However, no official release was ever shipped without SCUMMTR_CHECK_SCRIPT_JUMPS.
+// So it seems more prudent to continue using it, as it never received any wide
+// testing (it may have a just been a WIP test).
 #define SCUMMTR_CHECK_SCRIPT_JUMPS
+
+// You'll hit runtime errors when mixing the two...
+#if defined(SCUMMTR_CHANGED_JUST_AFTER_RELEASE) && defined(SCUMMTR_CHECK_SCRIPT_JUMPS)
+#  error "SCUMMTR_CHECK_SCRIPT_JUMPS can't be defined when building with SCUMMTR_CHANGED_JUST_AFTER_RELEASE"
 #endif
 
 /*
