@@ -9,6 +9,20 @@ if(NOT CMAKE_VERSION VERSION_LESS 3.15)
     endif()
 endif()
 
+# Don't hardcode /GR in default MSVC settings -- this RTTI flag is already a default in MSVC
+if(NOT CMAKE_VERSION VERSION_LESS 3.20)
+    if(POLICY CMP0117)
+        cmake_policy(SET CMP0117 NEW)
+    endif()
+endif()
+
+# Prefer all source files to have their extensions explicitly listed
+if(NOT CMAKE_VERSION VERSION_LESS 3.20)
+    if(POLICY CMP0115)
+        cmake_policy(SET CMP0115 NEW)
+    endif()
+endif()
+
 # LTO support through CheckIPOSupported -- requires CMake 3.9+
 if(NOT CMAKE_VERSION VERSION_LESS 3.9)
     if(POLICY CMP0069)
@@ -57,6 +71,7 @@ string(TIMESTAMP SCUMMTR_BUILD_DATE "%Y%m%d-WIP%H%M" UTC)
 
 include(CheckCXXCompilerFlag)
 
+# TODO: look at CMP0138 for LTO
 if(ENABLE_LTO)
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         message(FATAL_ERROR "LTO support with CMAKE_BUILD_TYPE set to \"Debug\" makes no sense: disable it, or use RelWithDebInfo")
