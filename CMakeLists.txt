@@ -248,13 +248,21 @@ else()
         check_cxx_compiler_flag("${SCUMMTR_HARDENING_FLAGS}" COMPILER_SUPPORTS_HARDENING_FLAGS)
         if(COMPILER_SUPPORTS_HARDENING_FLAGS)
             add_compile_options("${SCUMMTR_HARDENING_FLAGS}")
+
             if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0))
                 set(SCUMMTR_HARDENING_FLAGS_STACKCLASH_PROT "-fstack-clash-protection")
-                check_cxx_compiler_flag("${SCUMMTR_HARDENING_FLAGS_STACKCLASH_PROT}" COMPILER_SUPPORTS_HARDENING_FLAGS_STACKCLASH_PROT)
+
+                if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+                    check_cxx_compiler_flag("${SCUMMTR_HARDENING_FLAGS_STACKCLASH_PROT} -Werror=unused-command-line-argument" COMPILER_SUPPORTS_HARDENING_FLAGS_STACKCLASH_PROT)
+                else()
+                    check_cxx_compiler_flag("${SCUMMTR_HARDENING_FLAGS_STACKCLASH_PROT}" COMPILER_SUPPORTS_HARDENING_FLAGS_STACKCLASH_PROT)
+                endif()
+
                 if(COMPILER_SUPPORTS_HARDENING_FLAGS_STACKCLASH_PROT)
                     add_compile_options("${SCUMMTR_HARDENING_FLAGS_STACKCLASH_PROT}")
                 endif()
             endif()
+
             if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
                 add_compile_options(-fPIE)
                 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now")
