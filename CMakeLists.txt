@@ -113,9 +113,8 @@ if(MSVC)
     # MSVC 2017 15.7+:
     if(MSVC_VERSION GREATER 1913)
         # Tell MSVC not to lie about its `__cplusplus` value. (Note that some releases
-        # of Visual Studio 2017, and earlier, will continue lying, since they don't have
-        # this flag.  So, current code has to had specific MSVC cases when it checks the
-        # value of `__cplusplus`.)
+        # of Visual Studio 2017 and earlier don't have this flag.  So, current code
+        # still needs specific MSVC cases when it checks the value of `__cplusplus`.)
         add_compile_options(/Zc:__cplusplus)
     endif()
 
@@ -126,7 +125,7 @@ if(MSVC)
     # MSVC 2019 16.0+:
     if(MSVC_VERSION GREATER 1919)
         # Print better diagnosis, like modern GCC/Clang do (XXX: it may have been added
-        # in an earlier MSVC release, but good luck finding any info about this
+        # in an earlier MSVC release, but good luck finding any info about this)
        add_compile_options(/diagnostics:caret)
     endif()
 
