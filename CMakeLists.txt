@@ -161,13 +161,23 @@ if(MSVC)
 
     add_compile_options(/W3)
 
-    # Some /W4 flags we bring to /W3 -- courtesy of Wireshark
+    # Some /W4 flags we bring to /W3:
+    #
     # /w34295 (no GCC equivalent?):        array is too small to include a terminating null character
     # /w34100 (like -Wunused-parameter):   unreferenced formal parameter
     # /w34189 (like -Wunused-variable):    local variable is initialized but not referenced
+    #
     # TODO: anything else?
     add_compile_options(/w34295 /w34100 /w34189)
 
+    # Too much noise for now:
+    #
+    # /w34263:                             member function does not override any base class virtual member function
+    # /w34264:                             no override available for virtual member function
+    #add_compile_options(/w34263 /w34264)
+
+    # Some warnings we don't want:
+    #
     # /wd4244 (like -Wno-conversion):      conversion from 'type1' to 'type2', possible loss of data
     # /wd4068 (like -Wno-unknown-pragmas): ignore unknown `#pragma` directives
     add_compile_options(/wd4244 /wd4068)
@@ -238,6 +248,10 @@ else()
     if(COMPILER_SUPPORTS_MODERN_WARNING_FLAGS)
         # Also add some old flags which only became reliable in more recent versions
         add_compile_options("${SCUMMTR_MODERN_WARNING_FLAGS};-Wshadow;-Wuninitialized;-Wctor-dtor-privacy")
+        # Clang-only, as GCC is said to be too noisy for this
+        if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+            add_compile_options("${SCUMMTR_MODERN_WARNING_FLAGS};-Woverloaded-virtual")
+        endif()
     endif()
 
     if(MINGW)
