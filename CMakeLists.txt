@@ -159,7 +159,10 @@ if(MSVC)
     add_definitions(/DSCUMMTR_BUILD_DATE=\"${SCUMMTR_BUILD_DATE}\")
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /DWIN32_LEAN_AND_MEAN)
 
-    add_compile_options(/W3)
+    # Note: see CMP0092 policy use above, regarding this check
+    if(NOT CMAKE_VERSION VERSION_LESS 3.15)
+        add_compile_options(/W3)
+    endif()
 
     # Some /W4 flags we bring to /W3:
     #
