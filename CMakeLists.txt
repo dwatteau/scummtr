@@ -9,7 +9,8 @@ if(NOT CMAKE_VERSION VERSION_LESS 3.15)
     endif()
 endif()
 
-# Don't hardcode /GR in default MSVC settings -- this RTTI flag is already a default in MSVC
+# Don't hardcode /GR in default MSVC settings -- this RTTI flag already defaults to ON
+# TODO: check if this is true when using clang-cl.exe?
 if(NOT CMAKE_VERSION VERSION_LESS 3.20)
     if(POLICY CMP0117)
         cmake_policy(SET CMP0117 NEW)
