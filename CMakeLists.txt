@@ -125,8 +125,14 @@ if(MSVC)
     # MSVC 2019 16.0+:
     if(MSVC_VERSION GREATER 1919)
         # Print better diagnosis, like modern GCC/Clang do (XXX: it may have been added
-        # in an earlier MSVC release, but good luck finding any info about this)
+        # in some MSVC 2017 update, but good luck finding which one)
        add_compile_options(/diagnostics:caret)
+    endif()
+
+    # MSVC 2022 17.0+:
+    if(MSVC_VERSION GREATER 1930)
+        # Treat unrecognized compiler options as errors
+       add_compile_options(/options:strict)
     endif()
 
     # Looks like CMake doesn't set up all the proper LTO flags for MSVC (e.g. "Not all
