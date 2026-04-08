@@ -165,6 +165,14 @@ if(MSVC)
     # /wd4068 (like -Wno-unknown-pragmas): ignore unknown `#pragma` directives
     add_compile_options(/wd4244 /wd4068)
 
+    if(NOT CMAKE_BUILD_TYPE STREQUAL "Release")
+        # Enable Security Development Lifecycle checks, which "change security-relevant
+        # warnings into errors, and set additional secure code-generation features"
+        add_compile_options(/sdl)
+        # but don't error on deprecated function use yet
+        add_compile_options(/wd4995 /wd4996)
+    endif()
+
 else()
 
     #
