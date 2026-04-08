@@ -23,7 +23,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  BUILD_TYPE: Release
   ENABLE_LTO: 'ON'
 
 jobs:
@@ -37,20 +36,25 @@ jobs:
           # TODO: reuse my ScummVM CI trick to use an even older GCC?
           - name: 'Ubuntu 22.04 (arm64, oldest g++)'
             os: ubuntu-22.04-arm
+            buildtype: 'Release'
             gccver: 9
             extraargs: '-DCMAKE_CXX_COMPILER=g++-9'
           - name: 'Ubuntu 24.04 (newest g++)'
             os: ubuntu-24.04
+            buildtype: 'Release'
             gccver: 14
             extraargs: '-DCMAKE_CXX_COMPILER=g++-14'
           - name: 'Windows Server 2022 (win32)'
             os: windows-2022
+            buildtype: 'RelWithDebInfo'
             extraargs: '-DCMAKE_GENERATOR_PLATFORM=Win32'
           - name: 'Windows Server 2025 (x64)'
             os: windows-2025
+            buildtype: 'RelWithDebInfo'
             extraargs: '-DCMAKE_GENERATOR_PLATFORM=x64'
           - name: 'macOS 14 (x86_64-arm64 / newest Xcode)'
             os: macos-14
+            buildtype: 'Release'
             extraargs: '-DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"'
 
     steps:
@@ -76,8 +80,8 @@ jobs:
       - name: Print CMake version
         run: cmake --version
 
-      - name: Configure for ${{env.BUILD_TYPE}}
-        run: cmake -S . -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DENABLE_LTO=${{env.ENABLE_LTO}} ${{ matrix.extraargs }}
+      - name: Configure for ${{ matrix.buildtype }}
+        run: cmake -S . -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.buildtype }} -DENABLE_LTO=${{env.ENABLE_LTO}} ${{ matrix.extraargs }}
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build -j1
