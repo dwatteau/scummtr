@@ -119,7 +119,9 @@ if(MSVC)
     endif()
 
     # Quoting MSVC docs: without this, "thrown exceptions can result in undestroyed
-    # objects and resource leaks"
+    # objects and resource leaks".  CMake will often set it by default, but not in all
+    # configurations (e.g. clang-cl), and they may change this at some point (see:
+    # <https://gitlab.kitware.com/cmake/cmake/-/work_items/20610>)
     add_compile_options(/EHsc)
 
     # MSVC 2019 16.0+:
