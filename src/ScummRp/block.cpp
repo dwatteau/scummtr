@@ -2067,6 +2067,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 	uint16 firstOCOffset, w;
 	std::vector<OldRoom::OIInfo> oiInfo;
 	std::vector<int> v;
+	std::vector<bool> oiSizeValid;
 	int n;
 	bool ambiguousSize;
 
@@ -2106,7 +2107,9 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 	}
 
 	oiInfo.push_back(OldRoom::OIInfo(-1, firstOCOffset, 0)); // (2)
-	std::stable_sort(oiInfo.begin(), oiInfo.end());
+	std::sort(oiInfo.begin(), oiInfo.end());
+
+	oiSizeValid.resize(oiInfo.size(), false);
 
 	for (int i = 0, j = 0; i < (int)oiInfo.size() - 1; i = j)
 	{
@@ -2120,6 +2123,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 			if (oiInfo[k].offset + oiInfo[k].size == oiInfo[j].offset)
 			{
 				v.push_back(oiInfo[k].num);
+				oiSizeValid[k] = true;
 			}
 			else
 			{
@@ -2132,6 +2136,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 					ScummIO::warning("Working around OI #553 size");
 					oiInfo[k].size = 0x384;
 					v.push_back(oiInfo[k].num);
+					oiSizeValid[k] = true;
 				}
 				else if (ScummRp::game.id == GID_ZAK && ScummRp::game.version == 2
 					 && oiInfo[k].size == 0x3DE
@@ -2141,6 +2146,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 					ScummIO::warning("Working around OI #554 size");
 					oiInfo[k].size = 0x3C2;
 					v.push_back(oiInfo[k].num);
+					oiSizeValid[k] = true;
 				}
 			}
 		}
@@ -2152,8 +2158,13 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 			_findMostLikelyOIId(v);
 
 		for (int k = i; k < j; ++k)
+		{
 			if (oiInfo[k].num != v[0])
+			{
 				oiOffset[oiInfo[k].num] = 0;
+				oiSizeValid[k] = false;
+			}
+		}
 	}
 
 	for (int i = 0; i < n; ++i)
@@ -2166,7 +2177,7 @@ void OldRoom::_getOIInfo(uint16 bmLastOffset, std::vector<uint16> &oiOffset, con
 	}
 
 	for (int i = 0; i < (int)oiInfo.size() - 1; ++i)
-		if (oiOffset[oiInfo[i].num] != 0)
+		if (oiSizeValid[i])
 			_oiSize[oiInfo[i].num] = oiInfo[i].size;
 }
 
