@@ -384,7 +384,7 @@ protected:
 	SeqFile<RAMFile> _ownSeqRAMFile;
 
 protected:
-	void _init(const char *path, int opts, BackUp *bak, int id, uint32 tag, byte xorKey);
+	void _openFile(const char *path, int opts, BackUp *bak, int id, uint32 tag, byte xorKey);
 
 public:
 	BlocksFile(const char *path, int opts, BackUp &bak, int id, uint32 tag, byte xorKey);
@@ -489,6 +489,7 @@ protected:
 
 public:
 	TreeBlock *nextBlock() override;
+	bool nextBlock(TreeBlock &subblock) override { return OldLFLFile::nextBlock(subblock); }
 
 public:
 	OldLFLFileV1(const char *path, int opts, BackUp &bak, int id, byte xorKey);
@@ -517,6 +518,7 @@ protected:
 
 public:
 	TreeBlock *nextBlock() override;
+	bool nextBlock(TreeBlock &subblock) override { return OldLFLFile::nextBlock(subblock); }
 
 public:
 	OldLFLFileV2(const char *path, int opts, BackUp &bak, int id, byte xorKey);
@@ -545,6 +547,7 @@ protected:
 
 public:
 	TreeBlock *nextBlock() override;
+	bool nextBlock(TreeBlock &subblock) override { return OldLFLFile::nextBlock(subblock); }
 
 public:
 	OldLFLFileV3(const char *path, int opts, BackUp &bak, int id, byte xorKey);

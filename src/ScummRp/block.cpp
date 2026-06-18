@@ -586,16 +586,16 @@ BlocksFile::BlocksFile() :
 BlocksFile::BlocksFile(const char *path, int opts, BackUp &bak, int id, uint32 tag, byte xorKey) :
     TreeBlock(), _ownFile(), _ownRAMFile(), _ownSeqFile(), _ownSeqRAMFile()
 {
-	_init(path, opts, &bak, id, tag, xorKey);
+	_openFile(path, opts, &bak, id, tag, xorKey);
 }
 
 BlocksFile::BlocksFile(const char *path, int opts, int id, uint32 tag, byte xorKey) :
     TreeBlock(), _ownFile(), _ownRAMFile(), _ownSeqFile(), _ownSeqRAMFile()
 {
-	_init(path, opts, nullptr, id, tag, xorKey);
+	_openFile(path, opts, nullptr, id, tag, xorKey);
 }
 
-void BlocksFile::_init(const char *path, int opts, BackUp *bak, int id, uint32 tag, byte xorKey)
+void BlocksFile::_openFile(const char *path, int opts, BackUp *bak, int id, uint32 tag, byte xorKey)
 {
 	File *f;
 	int32 size;
