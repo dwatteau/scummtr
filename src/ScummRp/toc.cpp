@@ -107,28 +107,22 @@ void TableOfContent::merge(const TableOfContent &t)
 	{
 		if (_toc[i].roomId != t._toc[i].roomId)
 		{
-			// HACK: Changing some lines in the floppy VGA releases of Monkey Island 1
-			// (at least the English 1.0 and 1.1 ones) will eventually trigger the
-			// "different roomIds" exception below, with `t._toc[i].roomId` being equal
-			// to the "invalid" `(byte)-1` value, for some reason.
+			// HACK: It appears that MONKEY1-VGA (v4) had bugs in its index packer,
+			// leaving dead entries not pointing at any block header.  For this
+			// particular case, we need to let the invalidated entry be written back
+			// to the rebuilt index (as the game never used it anyway).
 			//
-			// It is not know whether this is due to MONKEY1-VGA (v4) having known,
-			// original packing bugs (see for reference how ScummPacker handled this
-			// in commit 96f34dc6a2b947dea259382387c574329c819efe), and/or if ScummRp
-			// is doing something wrong for v4.
-			//
-			// Moreover, fixing the roomId on the fly here, and doing this at this
-			// stage, could be wrong and harmful.  We'll try to be helpful to users
-			// and go on, but printing a warning is crucial, become it may corrupt the
-			// game resources in some ways.
+			// Note: ScummPacker also had to work around some oddities for this game
+			// (see its commit 96f34dc6a2b947dea259382387c574329c819efe), but it
+			// appears to have been related to the "RO" Roland sound resources,
+			// instead; a quirk which we seem to already handle fine.
 			//
 			// See:
 			// - <https://github.com/dwatteau/scummtr/issues/54>
 			// - <https://github.com/dwatteau/scummtr/issues/69>
-			if (t._toc[i].roomId == (byte)-1 && ScummRp::game.id == GID_MONKEY && ScummRp::game.version == 4)
+			if (t._toc[i].roomId == (byte)-1 && t._toc[i].offset == -1 && ScummRp::game.id == GID_MONKEY && ScummRp::game.version == 4)
 			{
-				ScummIO::warning("Original MONKEY1-VGA dodgy room data found during TOC merge; trying to work around it, but unexpected results may happen");
-				t._toc[i].roomId = _toc[i].roomId;
+				ScummIO::warning(xsprintf("Original dodgy room data found during TOC merge (%s #%i); ignoring it, but this is still experimental", TableOfContent::typeToStr(_type), i));
 			}
 			else
 			{
