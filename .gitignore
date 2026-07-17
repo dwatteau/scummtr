@@ -4,6 +4,7 @@
 \#*\#
 *.bak
 *.orig
+*.rej
 *.*.swp
 # OS cruft
 ._*
@@ -13,6 +14,7 @@ desktop.ini
 .Spotlight-V100
 Thumbs.db
 .Trashes
+*.lnk
 # Binaries or build/debug artefacts
 *.a
 *.core
@@ -35,6 +37,8 @@ tags
 *.tar.*
 *.zip
 # IDE files
+.cache/
+.claude/
 [Dd]ebug/
 .idea*
 .metadata
