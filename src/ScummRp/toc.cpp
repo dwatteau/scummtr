@@ -66,6 +66,28 @@ TableOfContent::Type TableOfContent::getType() const
 	return _type;
 }
 
+const char *TableOfContent::typeToStr(TableOfContent::Type t)
+{
+	switch (t)
+	{
+	case TOCT_LFLF:
+		return "LFLF";
+	case TOCT_ROOM:
+		return "room";
+	case TOCT_SCRP:
+		return "script";
+	case TOCT_SOUN:
+		return "sound";
+	case TOCT_COST:
+		return "costume";
+	case TOCT_CHAR:
+		return "charset";
+	case TOCT_NULL:
+	default:
+		return "unknown";
+	}
+}
+
 void TableOfContent::accessing(byte roomId)
 {
 	_accessed[roomId] = true;

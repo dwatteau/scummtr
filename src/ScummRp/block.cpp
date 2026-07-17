@@ -833,7 +833,8 @@ void RoomPack::_eraseOffsetsInRange(byte roomId, int32 start, int32 end)
 			TableOfContent::TocElement &el = (*ScummRp::tocs[i])[blockId];
 			if (el.offset >= start && el.offset < end)
 			{
-				ScummIO::info(INF_DETAIL, xsprintf("Removed (%.2u, 0x%X) from the index", el.roomId, el.offset));
+				ScummIO::info(INF_DETAIL, xsprintf("Removed %s #%i (room %.2u, offset 0x%X) from the index",
+				    TableOfContent::typeToStr(ScummRp::tocs[i]->getType()), blockId, el.roomId, el.offset));
 				el.offset = -1;
 				el.roomId = (byte)-1;
 			}

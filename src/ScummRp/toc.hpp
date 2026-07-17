@@ -99,6 +99,9 @@ protected:
 	virtual void _zap();
 
 public:
+	static const char *typeToStr(TableOfContent::Type t);
+
+public:
 	TableOfContent::Type getType() const;
 	bool accessed(byte roomId) const;
 	void accessing(byte roomId);
