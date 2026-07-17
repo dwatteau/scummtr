@@ -186,6 +186,11 @@ if(MSVC)
     # /wd4068 (like -Wno-unknown-pragmas): ignore unknown `#pragma` directives
     add_compile_options(/wd4244 /wd4068)
 
+    # Some warnings which should always be fatal:
+    #
+    # /we4715:                             'function': not all control paths return a value
+    add_compile_options(/we4715)
+
     if(NOT CMAKE_BUILD_TYPE STREQUAL "Release")
         # Enable Security Development Lifecycle checks, which "change security-relevant
         # warnings into errors, and set additional secure code-generation features"
